@@ -13,6 +13,8 @@ export interface Env {
   MODEL: Modelo
   ANSWER_MODEL: string
   DAILY_ANSWERS: string
+  ANTHROPIC_API_KEY?: string
+  ANTHROPIC_BASE_URL?: string
   DEV?: string
 }
 

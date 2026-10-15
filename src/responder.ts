@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql'
 import { encabezado } from './buscar.ts'
 import type { Ley } from './parse.ts'
-import { cargar, contexto, type Ctx } from './indice.ts'
+import { cargar, contexto, type Ctx, type Env } from './indice.ts'
 
 const SISTEMA = `Eres "fundamento", un buscador de la legislación fiscal federal mexicana (LISR, LIVA y CFF).
 Responde en español, en dos a cinco frases, usando solo los artículos que se te dan.
@@ -24,6 +24,18 @@ function salida(out: unknown): string {
   if (typeof o.response === 'string') return o.response
   if (o.choices?.[0]?.message?.content) return o.choices[0].message.content
   return (o.output ?? []).filter(p => p.type === 'message').flatMap(p => p.content ?? []).map(c => c.text ?? '').join('')
+}
+
+/** Claude through the Anthropic Messages API, or through scripts/claude.ts in dev (ANTHROPIC_BASE_URL). */
+async function claude(env: Env, model: string, system: string, content: string) {
+  const res = await fetch(`${env.ANTHROPIC_BASE_URL ?? 'https://api.anthropic.com'}/v1/messages`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY ?? '', 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model, system, max_tokens: 1024, temperature: 0.2, messages: [{ role: 'user', content }] }),
+  })
+  if (!res.ok) throw new Error(`${model}: ${res.status}`)
+  const j = (await res.json()) as { content: { type: string; text?: string }[] }
+  return j.content.flatMap(b => (b.type === 'text' ? [b.text ?? ''] : [])).join('')
 }
 
 /**
@@ -63,24 +75,28 @@ export async function responder(ctx: Ctx, pregunta: string) {
   const sat = criterios
     .map(c => `[SAT ${c.n}] ${c.anexo === 3 ? 'Práctica que el SAT considera indebida' : 'Criterio normativo del SAT'}: ${c.tema}\n${c.texto.slice(0, 1500)}`)
     .join('\n\n')
-  const out = await ctx.env.AI.run(
-    modelo as keyof AiModels,
-    {
-      messages: [
-        { role: 'system', content: SISTEMA },
-        { role: 'user', content: `Artículos:\n\n${articulos}${sat ? `\n\nCriterios del SAT:\n\n${sat}` : ''}\n\nPregunta: ${q}` },
-      ],
-      max_tokens: 2500,
-      temperature: 0.2,
-      reasoning: { effort: 'low' },
-    } as never,
+  const usuario = `Artículos:\n\n${articulos}${sat ? `\n\nCriterios del SAT:\n\n${sat}` : ''}\n\nPregunta: ${q}`
+  const out = await (modelo.startsWith('claude')
+    ? claude(ctx.env, modelo, SISTEMA, usuario)
+    : ctx.env.AI.run(
+        modelo as keyof AiModels,
+        {
+          messages: [
+            { role: 'system', content: SISTEMA },
+            { role: 'user', content: usuario },
+          ],
+          max_tokens: 2500,
+          temperature: 0.2,
+          reasoning: { effort: 'low' },
+        } as never,
+      ).then(salida)
   ).catch(() => {
     throw fuera()
   })
 
   const permitidas = new Set([...orden.map(k => k.replace(':', ' ')), ...criterios.map(c => `SAT ${c.n}`)])
   const usadas: string[] = []
-  const texto = salida(out)
+  const texto = out
     .replace(/[\u2010-\u2015\u2212]/g, '-')
     .replace(/[\u00a0\u202f]/g, ' ')
     .replace(/【([^】]+)】/g, ' [$1]')

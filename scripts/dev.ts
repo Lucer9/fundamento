@@ -19,3 +19,18 @@ export const texto = (out: any): string =>
     ? out.response
     : out.choices?.[0]?.message?.content ??
       (out.output ?? []).filter((p: any) => p.type === 'message').flatMap((p: any) => p.content ?? []).map((c: any) => c.text ?? '').join('')
+
+/** Claude through scripts/claude.ts (the Claude Code login on this machine): a system prompt and one message → text. */
+export async function claude(model: string, system: string, mensaje: string): Promise<string> {
+  const url = `${process.env.CLAUDE_URL ?? 'http://localhost:8799'}/v1/messages`
+  for (let intento = 0; ; intento++) {
+    try {
+      const res = await fetch(url, { method: 'POST', body: JSON.stringify({ model, system, messages: [{ role: 'user', content: mensaje }] }) })
+      if (res.ok) return ((await res.json()) as { content: { text: string }[] }).content.map(c => c.text).join('')
+      if (intento >= 3) throw new Error(`${model}: ${res.status} ${(await res.text()).slice(0, 200)}`)
+    } catch (e) {
+      if (intento >= 3) throw e
+    }
+    await new Promise(r => setTimeout(r, 3000 * (intento + 1)))
+  }
+}
