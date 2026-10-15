@@ -1,8 +1,7 @@
 import { esc, gql, numero, rutaClave, ubicacionCorta } from './lib.js'
 
-const PAGE = `query Red($c: LawCode!, $a: String) {
-  law(code: $c) { articles(first: 100, after: $a) { nodes { key location cites { key } } pageInfo { endCursor hasNextPage } } }
-}`
+const GRAFO = `{ laws { code articleKeys } citations { from to } }`
+const UBICACION = `query Ubicacion($l: LawCode!, $n: String!) { article(law: $l, number: $n) { location } }`
 const ORDEN = ['LISR', 'LIVA', 'CFF']
 const TAU = Math.PI * 2
 const HUECO = 0.045 * TAU
@@ -10,29 +9,18 @@ const HUECO = 0.045 * TAU
 let datos = null
 
 async function cargar() {
-  const porLey = await Promise.all(
-    ORDEN.map(async c => {
-      const nodes = []
-      let after = null
-      do {
-        const { law } = await gql(PAGE, { c, a: after })
-        nodes.push(...law.articles.nodes)
-        after = law.articles.pageInfo.hasNextPage ? law.articles.pageInfo.endCursor : null
-      } while (after)
-      return nodes
-    }),
-  )
-  const nodos = porLey.flat().map(n => ({ key: n.key, ley: n.key.split(':')[0], loc: ubicacionCorta(n.location), cites: n.cites.map(c => c.key), entra: [], sale: [] }))
+  const { laws, citations } = await gql(GRAFO)
+  const porLey = ORDEN.map(c => laws.find(l => l.code === c)?.articleKeys ?? [])
+  const nodos = porLey.flat().map(key => ({ key, ley: key.split(':')[0], loc: null, entra: [], sale: [] }))
   const idx = new Map(nodos.map(n => [n.key, n]))
   const aristas = []
-  for (const n of nodos) {
-    for (const k of new Set(n.cites)) {
-      const t = idx.get(k)
-      if (!t || t === n) continue
-      aristas.push([n, t])
-      n.sale.push(t)
-      t.entra.push(n)
-    }
+  for (const { from, to } of citations) {
+    const a = idx.get(from)
+    const b = idx.get(to)
+    if (!a || !b || a === b) continue
+    aristas.push([a, b])
+    a.sale.push(b)
+    b.entra.push(a)
   }
   const paso = (TAU - HUECO * ORDEN.length) / nodos.length
   let ang = -Math.PI / 2 + HUECO / 2
@@ -183,6 +171,23 @@ export function montarRed(root, { navigate, ley = '' }) {
     if (!pedido) pedido = requestAnimationFrame(dibujar)
   }
 
+  let espera = 0
+  const ubicar = n => {
+    if (n.loc != null || n.pidiendo) return
+    clearTimeout(espera)
+    espera = setTimeout(() => {
+      const [l, num] = n.key.split(':')
+      n.pidiendo = true
+      gql(UBICACION, { l, n: num })
+        .then(r => (n.loc = ubicacionCorta(r.article?.location ?? [])))
+        .catch(() => (n.loc = ''))
+        .finally(() => {
+          n.pidiendo = false
+          if (vivo && foco === n) describir()
+        })
+    }, 120)
+  }
+
   const describir = () => {
     if (!d) return
     if (!foco) {
@@ -190,7 +195,8 @@ export function montarRed(root, { navigate, ley = '' }) {
       return
     }
     const [ley, n] = foco.key.split(':')
-    info.innerHTML = `<strong class="net-key">${esc(`${ley} ${numero(n)}`)}</strong>${foco.loc ? ` <span class="muted">${esc(foco.loc)}</span>` : ''}<span class="net-counts"><span class="net-out">Cita ${foco.sale.length}</span><span class="net-in">Lo citan ${foco.entra.length}</span></span><a class="net-open" href="${rutaClave(foco.key)}">Abrir artículo</a>`
+    ubicar(foco)
+    info.innerHTML = `<strong class="net-key">${esc(`${ley} ${numero(n)}`)}</strong><span class="muted net-loc">${foco.loc == null ? '…' : esc(foco.loc)}</span><span class="net-counts"><span class="net-out">Cita ${foco.sale.length}</span><span class="net-in">Lo citan ${foco.entra.length}</span></span><a class="net-open" href="${rutaClave(foco.key)}">Abrir artículo</a>`
   }
 
   const elegir = (n, pin = fijo) => {
@@ -300,6 +306,7 @@ export function montarRed(root, { navigate, ley = '' }) {
     },
     destroy() {
       vivo = false
+      clearTimeout(espera)
       ro.disconnect()
       mq.removeEventListener('change', pintar)
       if (pedido) cancelAnimationFrame(pedido)

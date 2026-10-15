@@ -1338,6 +1338,10 @@ mark {
 }
 
 @media (max-width: 639px) {
+  .lawtext .is-nota {
+    padding-left: 2.2em;
+  }
+
   .lawtext .fr {
     padding-left: 2.2em;
     text-indent: -2.2em;
@@ -1355,6 +1359,17 @@ mark {
   .lawtext .inc > .num {
     min-width: 1.6em;
   }
+}
+
+.lawtext .is-nota {
+  margin-top: -0.5em;
+  padding-left: 2.6em;
+  line-height: 1.2;
+}
+
+.lawtext .is-nota span {
+  font: 400 12.5px/1.4 var(--sans);
+  color: var(--muted);
 }
 
 .lawtext .is-derogado {
@@ -1895,10 +1910,11 @@ mark {
 .years-axis {
   display: flex;
   justify-content: space-between;
+  gap: 8px;
   margin-top: 6px;
-  font: 500 12px/1 var(--sans);
+  font: 500 12px/1.3 var(--sans);
   color: var(--muted);
-  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 .amend li {
@@ -2097,7 +2113,171 @@ mark {
   font-family: var(--sans);
 }
 
+.findings {
+  margin-top: 40px;
+  font-family: var(--serif);
+}
+
+.findings ol {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: hallazgo;
+  border-top: 1px solid var(--ink);
+}
+
+.findings li {
+  position: relative;
+  padding: 12px 0 0 2.2em;
+  font: 400 18px/1.5 var(--serif);
+  counter-increment: hallazgo;
+}
+
+.findings li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.findings li::before {
+  content: counter(hallazgo);
+  position: absolute;
+  left: 0;
+  top: 15px;
+  font: 600 13px/1.3 var(--sans);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.set-note {
+  max-width: 70ch;
+  margin-top: 6px;
+}
+
+.defs--wide {
+  max-width: 880px;
+  margin-top: 14px;
+}
+
+.defs--wide div {
+  grid-template-columns: 7.5em minmax(0, 1fr);
+}
+
+.runs {
+  display: grid;
+  gap: 32px;
+  margin-top: 28px;
+}
+
+.run {
+  max-width: 880px;
+}
+
+.run-head {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.run-title {
+  font: 600 19px/1.3 var(--serif);
+}
+
+.run-desc {
+  margin-top: 2px;
+  font: 400 16px/1.45 var(--serif);
+  color: var(--ink-2);
+}
+
+.run-meta {
+  margin-top: 4px;
+  font: 400 13px/1.4 var(--sans);
+}
+
+.run-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.run-set {
+  font: 600 14px/1.3 var(--sans);
+}
+
+.stack {
+  display: flex;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--ink) 6%, transparent);
+}
+
+.stack i {
+  display: block;
+  height: 100%;
+}
+
+.stack i + i {
+  border-left: 2px solid var(--paper);
+}
+
+.s-ok {
+  background: var(--accent);
+}
+
+.s-part {
+  background: color-mix(in oklab, var(--accent) 38%, var(--paper));
+}
+
+.s-bad {
+  background: color-mix(in oklab, var(--ink) 30%, var(--paper));
+}
+
+.run-nums,
+.run-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  font: 400 13.5px/1.4 var(--sans);
+}
+
+.s-ok-t {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+@media (min-width: 768px) {
+  .run-row {
+    grid-template-columns: 8em minmax(0, 1fr) 25em;
+    grid-template-areas: "set bar nums" "set bar extra";
+    align-items: center;
+    column-gap: 20px;
+  }
+
+  .run-set {
+    grid-area: set;
+  }
+
+  .stack {
+    grid-area: bar;
+  }
+
+  .run-nums {
+    grid-area: nums;
+  }
+
+  .run-extra {
+    grid-area: extra;
+  }
+}
+
 @media (min-width: 1024px) {
+  .prose > .findings {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+  }
+
   .prose {
     display: grid;
     grid-template-columns: minmax(0, 62ch) minmax(0, 1fr);

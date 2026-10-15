@@ -15,6 +15,7 @@ const cache = new Map()
 const FRACCION = /^((?:[IVXL]+\.\s+)+)(?=\S)/
 const INCISO = /^([a-z]{1,2}\)|\d{1,2}\.)\s+(?=\S)/
 const DEROGA = /^(\(?\s*se deroga\s*\.?\)?\.?|derogad[oa]\.?)$/i
+const NOTA = /^(\d{2}-\d{2}-\d{4}\.\s*)?(cantidad(es)?\s+)?actualizad[oa]s?\s+(en el\s+)?DOF\s+\d{2}-\d{2}-\d{4}\.?$/i
 
 export default {
   nombre: 'articulo',
@@ -146,6 +147,7 @@ function texto(a, q, state) {
     const e = pos + par.length
     pos = e + 1
     if (!par.trim()) return ''
+    if (NOTA.test(par.trim())) return `<p class="is-nota"><span>${esc(par.trim())}</span></p>`
     const resaltar = desde >= 0 && e > desde && s < hasta
     if (resaltar && primero < 0) primero = idx
     const clases = [resaltar ? 'is-hit' : '', DEROGA.test(par.replace(/^([IVXL]+\.|[a-z]{1,2}\))\s*/, '').trim()) ? 'is-derogado' : '']
@@ -178,7 +180,9 @@ function listaHtml(titulo, id, lista, ley, vacio) {
 function reformasHtml(fechas, montos) {
   const fila = f => html`<li><time datetime="${f}" title="${fechaLargaDe(f)}">${fecha(f)}</time></li>`
   const lista = (xs, n = 6) =>
-    html`<ol class="dates">${xs.slice(0, n).map(fila)}</ol>${xs.length > n ? html`<details class="more"><summary>Ver ${xs.length - n} más</summary><ol class="dates">${xs.slice(n).map(fila)}</ol></details>` : ''}`
+    xs.length <= n + 2
+      ? html`<ol class="dates">${xs.map(fila)}</ol>`
+      : html`<ol class="dates">${xs.slice(0, n).map(fila)}</ol>${xs.length > n ? html`<details class="more"><summary>Ver ${xs.length - n} más</summary><ol class="dates">${xs.slice(n).map(fila)}</ol></details>` : ''}`
   const cantidades = montos.length
     ? html`<div class="amounts">
         <h3 class="amounts-h">Cantidades actualizadas por la RMF <span class="count">${montos.length}</span></h3>

@@ -172,7 +172,7 @@ function resultados(s, ctx) {
 
 function listaHtml(hits, s, degradada) {
   const stems = terminos(s.q)
-  const filtro = [s.modo.nombre.toLowerCase(), s.ley ? `solo ${s.ley}` : ''].filter(Boolean).join(', ')
+  const filtro = [degradada ? 'por palabras' : s.modo.nombre.toLowerCase(), s.ley ? `solo ${s.ley}` : ''].filter(Boolean).join(', ')
   const head = html`${degradada ? html`<p class="degraded" role="status">Búsqueda por palabras: el modelo semántico no está disponible en este momento.</p>` : ''}<div class="results-head"><h2 id="results-h" class="label">Artículos</h2><p class="results-count">${cuenta(hits.length, 'resultado')} <span class="muted">· búsqueda ${filtro}</span></p></div>`
   if (!hits.length) return html`${head}<div class="empty"><p>No encontramos artículos para esa búsqueda.</p><p class="muted">Prueba con otras palabras o con una pregunta más corta.</p></div>`
   return html`${head}<ol class="hits">${hits.map((h, i) => {
