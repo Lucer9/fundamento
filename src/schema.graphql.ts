@@ -1,0 +1,116 @@
+export const typeDefs = /* GraphQL */ `
+  "The three federal tax laws in the index."
+  enum LawCode {
+    "Ley del Impuesto sobre la Renta"
+    LISR
+    "Ley del Impuesto al Valor Agregado"
+    LIVA
+    "Código Fiscal de la Federación"
+    CFF
+  }
+
+  enum SearchMode {
+    "SQLite FTS5 over whole words minus stopwords, bm25-ranked."
+    KEYWORD
+    "Embedding similarity in Vectorize."
+    VECTOR
+    "Reciprocal rank fusion of KEYWORD and VECTOR."
+    HYBRID
+  }
+
+  type Query {
+    laws: [Law!]!
+    law(code: LawCode!): Law
+    article(law: LawCode!, number: String!): Article
+    "Plain-language search. Returns one hit per article, with the passage that matched best."
+    search(query: String!, mode: SearchMode = HYBRID, law: LawCode, first: Int = 10): [SearchHit!]!
+    "A short answer grounded in retrieved articles. Every citation in the text is one of the sources."
+    answer(question: String!): Answer!
+    "Articles other articles point to most."
+    mostCited(first: Int = 10, law: LawCode): [CitationCount!]!
+    "Every Diario Oficial date that amended at least one article, newest first."
+    amendments(law: LawCode): [Amendment!]!
+    criteria(law: LawCode): [Criterion!]!
+    stats: Stats!
+  }
+
+  type Law {
+    code: LawCode!
+    name: String!
+    articleCount: Int!
+    articles(first: Int = 50, after: String): ArticleConnection!
+  }
+
+  type Article {
+    "LISR:27"
+    key: ID!
+    law: Law!
+    number: String!
+    "Título, capítulo and sección headings the article sits under."
+    location: [String!]!
+    text: String!
+    repealed: Boolean!
+    "Diario Oficial dates of the amendments noted in the text (YYYY-MM-DD)."
+    amendedOn: [String!]!
+    "Character spans in text that cite another article."
+    links: [Link!]!
+    cites: [Article!]!
+    citedBy: [Article!]!
+    "SAT criterios normativos (Anexo 7, RMF 2026) that cite this article."
+    criteria: [Criterion!]!
+  }
+
+  type Link {
+    start: Int!
+    end: Int!
+    target: Article!
+  }
+
+  type SearchHit {
+    article: Article!
+    score: Float!
+    passage: String!
+  }
+
+  type Answer {
+    text: String!
+    sources: [Article!]!
+    model: String!
+    cached: Boolean!
+  }
+
+  type CitationCount {
+    article: Article!
+    count: Int!
+  }
+
+  type Amendment {
+    date: String!
+    articles: [Article!]!
+  }
+
+  type Criterion {
+    id: String
+    law: LawCode!
+    title: String!
+    text: String!
+    articles: [Article!]!
+  }
+
+  type ArticleConnection {
+    nodes: [Article!]!
+    pageInfo: PageInfo!
+  }
+
+  type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean!
+  }
+
+  type Stats {
+    articles: Int!
+    citations: Int!
+    chunks: Int!
+    criteria: Int!
+  }
+`

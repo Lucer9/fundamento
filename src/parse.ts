@@ -76,31 +76,52 @@ function resolver(det: string | undefined, word: string, rest: string, self: Ley
   return null
 }
 
+export type Mencion = Ref & { inicio: number; fin: number }
+
 /**
- * Article references in a passage, resolved to one of the three laws.
+ * Every article number mentioned in a passage, resolved to one of the three laws, with its character span.
  * A reference with no law named before the sentence ends counts as `self`; pass null to drop those.
  * Ranges ("artículos 27 a 31") yield only their ends.
  */
-export function citas(texto: string, self: Ley | null): Ref[] {
-  const t = texto.replace(/\s+/g, ' ')
-  const out = new Map<string, Ref>()
+export function menciones(texto: string, self: Ley | null): Mencion[] {
+  const t = texto.replace(/\s/g, ' ')
+  const out: Mencion[] = []
   let last = self
   for (const m of t.matchAll(/(?<!\p{L})[Aa]rt[íi]culos?\s+(?=\d)/gu)) {
-    const w = t.slice(m.index + m[0].length, m.index + m[0].length + 240)
+    const base = m.index + m[0].length
+    const w = t.slice(base, base + 240)
     const stop = w.search(STOP)
     const lm = LAW.exec(w)
     const aqui = lm && (stop < 0 || lm.index < stop)
     const ley = aqui ? resolver(lm[1], lm[2], lm[3], self, last) : self
     if (aqui) last = ley
     if (!ley) continue
-    const seg = w.slice(0, aqui ? lm.index : stop < 0 ? w.length : stop).replace(QUAL, ' ')
+    const seg = w.slice(0, aqui ? lm.index : stop < 0 ? w.length : stop).replace(QUAL, s => ' '.repeat(s.length))
     for (const n of (seg.match(LEAD)?.[0] ?? '').matchAll(NUM)) {
-      const id = normId(n[1], n[2])
-      out.set(`${ley}:${id}`, { ley, id })
+      const inicio = base + n.index
+      out.push({ ley, id: normId(n[1], n[2]), inicio, fin: inicio + n[0].length })
     }
   }
-  return [...out.values()]
+  return out
 }
+
+/** Distinct articles a passage cites. */
+export function citas(texto: string, self: Ley | null): Ref[] {
+  return [...new Map(menciones(texto, self).map(({ ley, id }) => [`${ley}:${id}`, { ley, id }])).values()]
+}
+
+/** Packs paragraphs into chunks of at most `max` characters, splitting overlong paragraphs at sentence ends. */
+export function fragmentos(texto: string, max = 1000): string[] {
+  const piezas = texto.split('\n').flatMap(p => (p.length > max ? p.split(/(?<=[.;:])\s+/) : [p]))
+  const out: string[] = []
+  for (const p of piezas) {
+    if (out.length && out[out.length - 1].length + p.length + 1 <= max) out[out.length - 1] += '\n' + p
+    else out.push(p)
+  }
+  return out
+}
+
+export const derogado = (texto: string) => /^\(?Se deroga\)?\.?$/i.test(texto.replace(/^-\s*/, '').trim())
 
 /** Splits a Cámara de Diputados law PDF's text into articles, stopping at the transitorios. */
 export function parseLey(raw: string, ley: Ley): Articulo[] {

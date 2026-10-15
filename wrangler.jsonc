@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fundamento",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/graphql", "/dev/*"]
+  },
+  "d1_databases": [{ "binding": "DB", "database_name": "fundamento", "database_id": "e2288d86-4719-436f-878e-4e342ca0a50b" }],
+  "vectorize": [{ "binding": "VEC", "index_name": "fundamento-bge-m3", "remote": true }],
+  "ai": { "binding": "AI" },
+  "ratelimits": [
+    { "name": "SEARCH_LIMITER", "namespace_id": "4331", "simple": { "limit": 60, "period": 60 } },
+    { "name": "ANSWER_LIMITER", "namespace_id": "4332", "simple": { "limit": 5, "period": 60 } }
+  ],
+  "vars": {
+    "MODEL": "bge-m3",
+    "ANSWER_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "DAILY_ANSWERS": "300"
+  },
+  "observability": { "enabled": true }
+}

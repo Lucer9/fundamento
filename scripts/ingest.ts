@@ -1,8 +1,9 @@
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { sql } from '../src/db.ts'
-import { ANEXO_7, LEYES, citas, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
+import { DatabaseSync } from 'node:sqlite'
+import { encabezado, terminos } from '../src/buscar.ts'
+import { ANEXO_7, LEYES, derogado, fragmentos, menciones, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
 
 const RAW = 'data/raw'
 mkdirSync(RAW, { recursive: true })
@@ -22,20 +23,72 @@ async function texto(url: string, nombre: string) {
 const leyes = Object.keys(LEYES) as Ley[]
 const articulos = (await Promise.all(leyes.map(async l => parseLey(await texto(LEYES[l].pdf, l), l)))).flat()
 const existe = new Set(articulos.map(a => `${a.ley}:${a.id}`))
-const todas = articulos.flatMap(a => citas(a.texto, a.ley).map(c => ({ de_ley: a.ley, de_id: a.id, a_ley: c.ley, a_id: c.id })))
-const aristas = todas.filter(c => existe.has(`${c.a_ley}:${c.a_id}`) && `${c.de_ley}:${c.de_id}` !== `${c.a_ley}:${c.a_id}`)
-const criterios = parseCriterios(await texto(ANEXO_7, 'anexo7')).filter(c => c.citas.some(r => existe.has(`${r.ley}:${r.id}`)))
+const enlaces = articulos.flatMap(a =>
+  menciones(a.texto, a.ley)
+    .filter(m => existe.has(`${m.ley}:${m.id}`) && !(m.ley === a.ley && m.id === a.id))
+    .map(m => ({ de_ley: a.ley, de_id: a.id, inicio: m.inicio, fin: m.fin, a_ley: m.ley, a_id: m.id })),
+)
+const criterios = parseCriterios(await texto(ANEXO_7, 'anexo7'))
+  .map(c => ({ ...c, citas: c.citas.filter(r => existe.has(`${r.ley}:${r.id}`)) }))
+  .filter(c => c.citas.length)
+const frags = articulos
+  .filter(a => !derogado(a.texto))
+  .flatMap(a => fragmentos(a.texto).map((t, n) => ({ ley: a.ley, id: a.id, n, texto: t, titulo: encabezado(a.ley, a.id, a.ubicacion) })))
+  .map((f, i) => ({ rowid: i + 1, ...f }))
 
-await sql.unsafe(readFileSync('schema.sql', 'utf8'))
-await sql.begin(async tx => {
-  await tx`truncate articulo, cita, criterio`
-  await tx`insert into articulo ${tx(articulos, 'ley', 'id', 'orden', 'ubicacion', 'texto', 'reformas')}`
-  await tx`insert into cita ${tx(aristas)}`
-  await tx`insert into criterio ${tx(criterios.map((c, n) => ({ n, ...c, citas: tx.json(c.citas) })), 'n', 'id', 'materia', 'tema', 'texto', 'citas')}`
-})
+const lit = (v: unknown) => (typeof v === 'number' ? String(v) : `'${String(v).replaceAll("'", "''")}'`)
+
+/** Multi-row INSERTs kept under D1's 100 KB statement limit. */
+function inserts(tabla: string, filas: Record<string, unknown>[], cols: string[]) {
+  const out: string[] = []
+  let lote: string[] = []
+  let tam = 0
+  const cerrar = () => lote.length && out.push(`insert into ${tabla} (${cols.join(', ')}) values\n${lote.join(',\n')};`)
+  for (const f of filas) {
+    const fila = `(${cols.map(c => lit(f[c])).join(', ')})`
+    if (tam + fila.length > 90_000) cerrar(), (lote = []), (tam = 0)
+    lote.push(fila)
+    tam += fila.length
+  }
+  cerrar()
+  return out.join('\n')
+}
+
+const seed = [
+  readFileSync('schema.sql', 'utf8'),
+  inserts(
+    'articulo',
+    articulos.map(a => ({ ...a, ubicacion: JSON.stringify(a.ubicacion), reformas: JSON.stringify(a.reformas) })),
+    ['ley', 'id', 'orden', 'ubicacion', 'texto', 'reformas'],
+  ),
+  inserts('enlace', enlaces, ['de_ley', 'de_id', 'inicio', 'fin', 'a_ley', 'a_id']),
+  inserts(
+    'criterio',
+    criterios.map((c, n) => ({ ...c, n, id: c.id ?? '' })),
+    ['n', 'id', 'materia', 'tema', 'texto'],
+  ),
+  inserts(
+    'criterio_cita',
+    criterios.flatMap((c, n) => c.citas.map(r => ({ n, ...r }))),
+    ['n', 'ley', 'id'],
+  ),
+  inserts('fragmento', frags, ['rowid', 'ley', 'id', 'n', 'texto']),
+  inserts(
+    'fts',
+    frags.map(f => ({ rowid: f.rowid, terminos: terminos(`${f.titulo}\n${f.texto}`).join(' ') })),
+    ['rowid', 'terminos'],
+  ),
+].join('\n')
+
+writeFileSync('data/seed.sql', seed)
+rmSync('data/fundamento.db', { force: true })
+const db = new DatabaseSync('data/fundamento.db')
+db.exec(seed)
+db.close()
 
 const porLey = leyes.map(l => `${l} ${articulos.filter(a => a.ley === l).length}`).join(', ')
 console.log(`articulos: ${porLey}`)
-console.log(`citas: ${aristas.length} (${todas.length - aristas.length} dropped: self or unknown target)`)
+console.log(`enlaces: ${enlaces.length} menciones → ${new Set(enlaces.map(e => `${e.de_ley}:${e.de_id}>${e.a_ley}:${e.a_id}`)).size} aristas`)
+console.log(`fragmentos: ${frags.length} (de ${articulos.filter(a => !derogado(a.texto)).length} artículos vigentes)`)
 console.log(`criterios: ${criterios.length}`)
-await sql.end()
+console.log(`data/seed.sql ${(seed.length / 1e6).toFixed(1)} MB, data/fundamento.db`)
