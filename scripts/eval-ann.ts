@@ -10,7 +10,7 @@ import { porArticulo, type Hit } from '../src/buscar.ts'
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
 const DIMS = 768
 const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
-const frag = new Map((db.prepare(`select rowid, ley, id from fragmento`).all() as (Hit & { rowid: number })[]).map(f => [String(f.rowid), f]))
+const frag = new Map((db.prepare(`select huella, ley, id from fragmento`).all() as (Hit & { huella: string })[]).map(f => [f.huella, f]))
 const criterios = db.prepare(`select n from criterio c where exists (select 1 from criterio_cita cc where cc.n = c.n) order by n`).all() as { n: number }[]
 const preguntas = new Map((JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { n: number; esperados: string[] }[]).map(p => [p.n, p]))
 const evalJson = JSON.parse(readFileSync('public/eval.json', 'utf8'))

@@ -45,7 +45,7 @@ const NOISE = [
   /^Última Reforma DOF/,
 ]
 const REFORMA = /^\p{Lu}[\p{L} ,.]{2,100}?DOF \d{2}-\d{2}-\d{4}/u
-const SOLO_FECHAS = /^(?:\d{2}-\d{2}-\d{4}[,. ]*)+$/
+const SOLO_FECHAS = /^\d{2}-\d{2}-\d{4}(?:\d{2}-\d{2}-\d{4}|DOF|Actualizad[ao]s?|Compilad[ao]s?|Reformad[ao]s?|Adicionad[ao]s?|Derogad[ao]s?|y|[,.\s])*$/
 const FECHA = /(\d{2})-(\d{2})-(\d{4})/g
 const MISCELANEA = /miscel[aá]nea|actualizad[ao]s?\b|compilad[ao]s?\b/i
 const DIVISION = /^(T[IÍ]TULO|CAP[IÍ]TULO|SECCI[OÓ]N)\s+\S+/

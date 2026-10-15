@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { resolve } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { encabezado, terminos } from '../src/buscar.ts'
+import { huella } from './huella.ts'
 import { ANEXOS, LEYES, derogado, fragmentos, menciones, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
 
 const RAW = 'data/raw'
@@ -37,7 +38,7 @@ const criterios = (
 const frags = articulos
   .filter(a => !derogado(a.texto))
   .flatMap(a => fragmentos(a.texto).map((t, n) => ({ ley: a.ley, id: a.id, n, texto: t, titulo: encabezado(a.ley, a.id, a.ubicacion) })))
-  .map((f, i) => ({ rowid: i + 1, ...f }))
+  .map((f, i) => ({ rowid: i + 1, huella: huella(`${f.titulo}\n${f.n}\n${f.texto}`), ...f }))
 
 const lit = (v: unknown) => (typeof v === 'number' ? String(v) : `'${String(v).replaceAll("'", "''")}'`)
 
@@ -75,7 +76,7 @@ const seed = [
     criterios.flatMap((c, n) => c.citas.map(r => ({ n, ...r }))),
     ['n', 'ley', 'id'],
   ),
-  inserts('fragmento', frags, ['rowid', 'ley', 'id', 'n', 'texto']),
+  inserts('fragmento', frags, ['rowid', 'huella', 'ley', 'id', 'n', 'texto']),
   inserts(
     'fts',
     frags.map(f => ({ rowid: f.rowid, terminos: terminos(`${f.titulo}\n${f.texto}`).join(' ') })),

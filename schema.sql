@@ -47,6 +47,7 @@ create index criterio_cita_articulo on criterio_cita (ley, id);
 
 create table fragmento (
   rowid integer primary key,
+  huella text not null unique,
   ley text not null,
   id text not null,
   n integer not null,

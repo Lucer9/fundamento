@@ -140,12 +140,12 @@ async function embeber(env: Env, query: string) {
 
 async function vectorHits(env: Env, d: Db, vector: number[]): Promise<Hit[]> {
   const { matches } = await env.VEC.query(vector, { topK: 100, filter: { tipo: 'ley' } })
-  const rows = await d.all<Hit & { rowid: number }>(
-    `select rowid, ley, id, texto from fragmento where rowid in (select value from json_each(?1))`,
-    JSON.stringify(matches.map(m => Number(m.id))),
+  const rows = await d.all<Hit & { rowid: number; huella: string }>(
+    `select rowid, huella, ley, id, texto from fragmento where huella in (select value from json_each(?1))`,
+    JSON.stringify(matches.map(m => m.id)),
   )
-  const porRow = new Map(rows.map(r => [String(r.rowid), r]))
-  return matches.flatMap(m => (porRow.has(m.id) ? [{ ...porRow.get(m.id)!, score: m.score }] : []))
+  const porHuella = new Map(rows.map(r => [r.huella, r]))
+  return matches.flatMap(m => (porHuella.has(m.id) ? [{ ...porHuella.get(m.id)!, score: m.score }] : []))
 }
 
 /** SAT criterios closest to a question; they live in the same index as `c<n>` vectors. `excluir` drops one for the leave-one-out eval. */

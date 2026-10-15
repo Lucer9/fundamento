@@ -148,6 +148,19 @@ function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], 
   }
 }
 
+/** Paired 95% intervals of a − b over the same questions, for hit@1, hit@5 and MRR. */
+function comparar(metodos: Record<string, Hit[][]>, a: string, b: string, idx: number[], esperados: (i: number) => string[]) {
+  const rangos = (m: string) =>
+    idx.map(i => {
+      const r = metodos[m][i].slice(0, 10).findIndex(h => esperados(i).includes(`${h.ley}:${h.id}`))
+      return r < 0 ? null : r + 1
+    })
+  const [ra, rb] = [rangos(a), rangos(b)]
+  const hit = (k: number) => (rs: Rangos) => rs.filter(r => r !== null && r <= k).length / rs.length
+  const mrr = (rs: Rangos) => rs.reduce<number>((s, r) => s + (r ? 1 / r : 0), 0) / rs.length
+  return { a, b, hit1: intervalo(ra, hit(1), rb), hit5: intervalo(ra, hit(5), rb), mrr: intervalo(ra, mrr, rb) }
+}
+
 const anexo = (a: number) => criterios.flatMap((c, i) => (c.anexo === a ? [i] : []))
 const ajuste = medir('Anexo 7, criterio titles', porTitulo, anexo(7), i => criterios[i].tema)
 const reserva = medir('Anexo 3, criterio titles (held out)', porTitulo, anexo(3), i => criterios[i].tema)
@@ -159,6 +172,15 @@ writeFileSync(
     nombre: 'Anexo 7 de la RMF 2026 (criterios normativos)',
     ...ajuste,
     holdout: { nombre: 'Anexo 3 de la RMF 2026 (prácticas fiscales indebidas)', ...reserva },
-    naturales: { nombre: 'Preguntas en lenguaje común, una por cada criterio de los anexos 7 y 3', ...comunes },
+    naturales: {
+      nombre: 'Preguntas en lenguaje común, una por cada criterio de los anexos 7 y 3',
+      ...comunes,
+      comparaciones: [
+        ['vector gemma', 'vector bge-m3'],
+        ['vector gemma', 'vector qwen3'],
+        ['vector bge-m3', 'hybrid bge-m3'],
+        ['vector gemma', 'hybrid gemma'],
+      ].map(([a, b]) => comparar(porPregunta, a, b, criterios.map((_, i) => i), i => criterios[i].esperados)),
+    },
   }),
 )
