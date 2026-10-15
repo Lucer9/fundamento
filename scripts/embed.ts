@@ -18,9 +18,9 @@ mkdirSync('data/emb', { recursive: true })
 const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
 const frags = db
   .prepare(
-    `select f.rowid, f.ley, f.id, f.texto, a.ubicacion from fragmento f join articulo a using (ley, id) order by f.rowid`,
+    `select f.rowid, f.ley, f.id, f.texto, a.ubicacion, a.titulo from fragmento f join articulo a using (ley, id) order by f.rowid`,
   )
-  .all() as { rowid: number; ley: Ley; id: string; texto: string; ubicacion: string }[]
+  .all() as { rowid: number; ley: Ley; id: string; texto: string; ubicacion: string; titulo: string | null }[]
 const preguntas = (db.prepare(`select tema from criterio order by n`).all() as { tema: string }[]).map(r => r.tema)
 const criterios = (db.prepare(`select id, anexo, tema, texto from criterio order by n`).all() as { id: string; anexo: number; tema: string; texto: string }[]).map(
   c => [`${c.anexo === 3 ? 'Práctica fiscal indebida' : 'Criterio normativo'} del SAT ${c.id}`.trim(), `${c.tema}\n${c.texto}`.slice(0, 2000)] as const,
@@ -75,21 +75,23 @@ for (const nombre of (process.argv.slice(2).length ? process.argv.slice(2) : Obj
   const qs = `data/emb/${nombre}.preguntas.f32`
   const t0 = Date.now()
   const cache = leerCache(nombre, m.dims)
-  const textos = frags.map(f => m.documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion)), f.texto))
-  const faltan = [...new Set(textos.filter(t => !cache.has(huella(t))))]
-  if (faltan.length) {
-    const nuevos = await embeber(m.id, faltan)
-    faltan.forEach((t, i) => cache.set(huella(t), nuevos.slice(i * m.dims, (i + 1) * m.dims)))
-    guardarCache(nombre, cache)
+  let nuevos = 0
+  const vectores = async (textos: string[]) => {
+    const faltan = [...new Set(textos.filter(t => !cache.has(huella(t))))]
+    if (faltan.length) {
+      const v = await embeber(m.id, faltan)
+      faltan.forEach((t, i) => cache.set(huella(t), v.slice(i * m.dims, (i + 1) * m.dims)))
+      guardarCache(nombre, cache)
+      nuevos += faltan.length
+    }
+    const out = new Float32Array(textos.length * m.dims)
+    textos.forEach((t, i) => out.set(cache.get(huella(t))!, i * m.dims))
+    return out
   }
-  const docs = new Float32Array(textos.length * m.dims)
-  textos.forEach((t, i) => docs.set(cache.get(huella(t))!, i * m.dims))
-  writeFileSync(`data/emb/${nombre}.docs.f32`, docs)
-  if (!existsSync(qs)) writeFileSync(qs, await embeber(m.id, preguntas.map(m.consulta)))
-  const nat = `data/emb/${nombre}.naturales.f32`
-  if (naturales.length && !existsSync(nat)) writeFileSync(nat, await embeber(m.id, naturales.map(m.consulta)))
-  const crit = `data/emb/${nombre}.criterios.f32`
-  if (!existsSync(crit)) writeFileSync(crit, await embeber(m.id, criterios.map(([t, x]) => m.documento(t, x))))
-  console.log(`${nombre}: ${frags.length} fragmentos (${faltan.length} nuevos) + ${preguntas.length} preguntas (${((Date.now() - t0) / 1000).toFixed(0)} s)`)
+  writeFileSync(`data/emb/${nombre}.docs.f32`, await vectores(frags.map(f => m.documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion), f.titulo), f.texto))))
+  writeFileSync(qs, await vectores(preguntas.map(m.consulta)))
+  writeFileSync(`data/emb/${nombre}.naturales.f32`, await vectores(naturales.map(m.consulta)))
+  writeFileSync(`data/emb/${nombre}.criterios.f32`, await vectores(criterios.map(([t, x]) => m.documento(t, x))))
+  console.log(`${nombre}: ${frags.length} fragmentos + ${preguntas.length} criterios, ${nuevos} textos nuevos (${((Date.now() - t0) / 1000).toFixed(0)} s)`)
 }
 writeFileSync('data/emb/rowids.json', JSON.stringify(frags.map(f => f.rowid)))

@@ -1,12 +1,35 @@
 export const typeDefs = /* GraphQL */ `
-  "The three federal tax laws in the index."
+  "Every document in the index: four federal tax laws, the 2026 income law, four regulations and the 2026 Miscelánea."
   enum LawCode {
     "Ley del Impuesto sobre la Renta"
     LISR
     "Ley del Impuesto al Valor Agregado"
     LIVA
+    "Ley del Impuesto Especial sobre Producción y Servicios"
+    LIEPS
     "Código Fiscal de la Federación"
     CFF
+    "Ley de Ingresos de la Federación para 2026"
+    LIF
+    "Reglamento de la Ley del ISR"
+    RLISR
+    "Reglamento de la Ley del IVA"
+    RLIVA
+    "Reglamento de la Ley del IEPS"
+    RLIEPS
+    "Reglamento del Código Fiscal de la Federación"
+    RCFF
+    "Resolución Miscelánea Fiscal para 2026 (SAT's compiled edition): numbered rules instead of articles"
+    RMF
+  }
+
+  enum LawKind {
+    "Passed by Congress."
+    LAW
+    "Issued by the President to carry out a law."
+    REGULATION
+    "SAT's yearly general rules; its units are rules (2.7.1.21), not articles."
+    RULES
   }
 
   enum SearchMode {
@@ -39,6 +62,11 @@ export const typeDefs = /* GraphQL */ `
   type Law {
     code: LawCode!
     name: String!
+    kind: LawKind!
+    "For a regulation, the law it carries out."
+    regulates: Law
+    "The official PDF the text was parsed from."
+    source: String!
     articleCount: Int!
     "Every article key in order (LISR:1, LISR:2, ...): enough to lay out a graph without paging."
     articleKeys: [ID!]!
@@ -46,10 +74,12 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Article {
-    "LISR:27"
+    "LISR:27, or RMF:2.7.1.21 for a Miscelánea rule"
     key: ID!
     law: Law!
     number: String!
+    "A Miscelánea rule's heading (epígrafe); null for articles, which have none."
+    title: String
     "Título, capítulo and sección headings the article sits under."
     location: [String!]!
     text: String!
@@ -85,7 +115,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Answer {
-    "Plain text with citation markers: [LISR 151] for articles, [SAT 12] for criteria (12 = Criterion.number)."
+    "Plain text with citation markers: [LISR 151] or [RMF 2.7.1.21] for articles and rules, [SAT 12] for criteria (12 = Criterion.number)."
     text: String!
     sources: [Article!]!
     "SAT criteria the answer cites."

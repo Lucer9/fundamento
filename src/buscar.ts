@@ -1,4 +1,4 @@
-import type { Ley } from './parse.ts'
+import { LEYES, type Ley } from './parse.ts'
 
 const VACIAS = new Set(
   `a al ante bajo con contra de del desde durante e el en entre hacia hasta la las le les lo los mediante o para pero por
@@ -8,11 +8,7 @@ const VACIAS = new Set(
   cómo cuál cuáles cuándo dónde cuánto cuánta quién`.split(/\s+/),
 )
 
-export const NOMBRES: Record<Ley, string> = {
-  LISR: 'Ley del Impuesto sobre la Renta',
-  LIVA: 'Ley del Impuesto al Valor Agregado',
-  CFF: 'Código Fiscal de la Federación',
-}
+export const NOMBRES = Object.fromEntries(Object.entries(LEYES).map(([k, v]) => [k, v.nombre])) as Record<Ley, string>
 
 /**
  * Lowercased words minus Spanish stopwords; the same function indexes chunks and parses questions.
@@ -23,9 +19,9 @@ export const terminos = (s: string) => (s.toLowerCase().match(/\p{L}+/gu) ?? [])
 /** FTS5 MATCH expression: any word may match, bm25 does the weighting. */
 export const consultaFts = (q: string) => [...new Set(terminos(q))].map(t => `"${t}"`).join(' OR ')
 
-/** Heading every chunk carries into both indexes, so a chunk deep inside article 27 still says what it belongs to. */
-export const encabezado = (ley: Ley, id: string, ubicacion: string[]) =>
-  `${NOMBRES[ley]}, artículo ${id}${ubicacion.length ? ` (${ubicacion.join(' › ')})` : ''}`
+/** Heading every chunk carries into both indexes, so a chunk deep inside article 27 still says what it belongs to. Miscelánea rules add their title. */
+export const encabezado = (ley: Ley, id: string, ubicacion: string[], titulo?: string | null) =>
+  `${NOMBRES[ley]}, ${LEYES[ley].tipo === 'reglas' ? 'regla' : 'artículo'} ${id}${titulo ? `, «${titulo}»` : ''}${ubicacion.length ? ` (${ubicacion.join(' › ')})` : ''}`
 
 export const SQL_FTS = `
   select f.rowid, f.ley, f.id, f.texto, -bm25(fts) as score

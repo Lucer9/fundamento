@@ -5,7 +5,8 @@ import { ai, texto } from './dev.ts'
 /**
  * Turns every SAT criterio into the question an ordinary taxpayer would ask, without the answer,
  * with gpt-oss-120b through the dev Worker. Output eval/preguntas.json is committed so the set can be
- * read and audited; existing entries are kept, so reruns only fill gaps.
+ * read and audited. Entries are matched to criterios by title, so a re-ingest that renumbers criterios keeps
+ * every question and refreshes its number and expected articles; reruns only write questions for new criterios.
  */
 const ARCHIVO = 'eval/preguntas.json'
 const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
@@ -17,7 +18,7 @@ const criterios = db
   .all() as { n: number; anexo: number; id: string; tema: string; texto: string; esperados: string }[]
 type Pregunta = { n: number; anexo: number; id: string | null; tema: string; pregunta: string; esperados: string[] }
 const hechas: Pregunta[] = existsSync(ARCHIVO) ? JSON.parse(readFileSync(ARCHIVO, 'utf8')) : []
-const porN = new Map(hechas.map(p => [p.n, p]))
+const porTema = new Map(hechas.map(p => [p.tema, p]))
 
 async function preguntar(c: (typeof criterios)[number]) {
   const out = await ai('@cf/openai/gpt-oss-120b', {
@@ -38,20 +39,22 @@ async function preguntar(c: (typeof criterios)[number]) {
   return texto(out).trim().replace(/^["“]|["”]$/g, '')
 }
 
-const pendientes = criterios.filter(c => !porN.has(c.n))
+const pendientes = criterios.filter(c => !porTema.has(c.tema))
 let i = 0
 await Promise.all(
   Array.from({ length: 4 }, async () => {
     while (i < pendientes.length) {
       const c = pendientes[i++]
       const pregunta = await preguntar(c)
-      if (pregunta.endsWith('?')) porN.set(c.n, { n: c.n, anexo: c.anexo, id: c.id || null, tema: c.tema, pregunta, esperados: JSON.parse(c.esperados) })
-      if (porN.size % 20 === 0) guardar()
+      if (pregunta.endsWith('?')) porTema.set(c.tema, { n: c.n, anexo: c.anexo, id: c.id || null, tema: c.tema, pregunta, esperados: [] })
+      if (porTema.size % 20 === 0) guardar()
     }
   }),
 )
 function guardar() {
-  const todas = criterios.flatMap(c => (porN.has(c.n) ? [porN.get(c.n)!] : []))
+  const todas = criterios.flatMap(c =>
+    porTema.has(c.tema) ? [{ ...porTema.get(c.tema)!, n: c.n, anexo: c.anexo, id: c.id || null, esperados: JSON.parse(c.esperados) as string[] }] : [],
+  )
   writeFileSync(ARCHIVO, JSON.stringify(todas, null, 1) + '\n')
   return todas
 }

@@ -18,7 +18,7 @@ export interface Env {
   DEV?: string
 }
 
-export type Fila = { ley: Ley; id: string; orden: number; ubicacion: string; texto: string; reformas: string; actualizaciones: string }
+export type Fila = { ley: Ley; id: string; orden: number; ubicacion: string; texto: string; reformas: string; actualizaciones: string; titulo: string | null }
 export type Criterio = { n: number; anexo: number; id: string; materia: Ley; tema: string; texto: string }
 
 /** Per-request ledger: D1 access that counts round trips, plus whether search fell back to keywords. */

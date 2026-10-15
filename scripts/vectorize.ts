@@ -24,12 +24,12 @@ const v = new Float32Array(b.buffer, b.byteOffset, b.byteLength / 4)
 const cache = new Map((JSON.parse(readFileSync(`data/emb/${modelo}.cache.json`, 'utf8')) as string[]).map((h, i) => [h, v.subarray(i * dims, (i + 1) * dims)]))
 const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
 const frags = db
-  .prepare(`select f.huella, f.ley, f.id, f.texto, a.ubicacion from fragmento f join articulo a using (ley, id) order by f.rowid`)
-  .all() as { huella: string; ley: Ley; id: string; texto: string; ubicacion: string }[]
+  .prepare(`select f.huella, f.ley, f.id, f.texto, a.ubicacion, a.titulo from fragmento f join articulo a using (ley, id) order by f.rowid`)
+  .all() as { huella: string; ley: Ley; id: string; texto: string; ubicacion: string; titulo: string | null }[]
 
 const faltan: string[] = []
 const lineas = frags.flatMap(f => {
-  const vec = cache.get(huella(documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion)), f.texto)))
+  const vec = cache.get(huella(documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion), f.titulo), f.texto)))
   if (!vec) return faltan.push(`${f.ley}:${f.id}`), []
   return [JSON.stringify({ id: f.huella, values: recortar(vec, indice), metadata: { tipo: 'ley', ley: f.ley, articulo: f.id } })]
 })

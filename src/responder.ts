@@ -3,15 +3,16 @@ import { encabezado } from './buscar.ts'
 import type { Ley } from './parse.ts'
 import { cargar, contexto, type Ctx, type Env } from './indice.ts'
 
-const SISTEMA = `Eres "fundamento", un buscador de la legislación fiscal federal mexicana (LISR, LIVA y CFF).
-Responde en español, en dos a cinco frases, usando solo los artículos que se te dan.
-Después de cada afirmación cita su fuente entre corchetes con su clave exacta, por ejemplo [LISR 151], [CFF 29-A] o [SAT 12].
+const SISTEMA = `Eres "fundamento", un buscador de la legislación fiscal federal mexicana: leyes (LISR, LIVA, LIEPS, CFF, LIF), sus reglamentos (RLISR, RLIVA, RLIEPS, RCFF) y la Resolución Miscelánea Fiscal 2026 (RMF).
+Responde en español, en dos a cinco frases, usando solo los artículos y reglas que se te dan.
+Después de cada afirmación cita su fuente entre corchetes con su clave exacta, por ejemplo [LISR 151], [CFF 29-A], [RLISR 264], [RMF 3.17.1] o [SAT 12].
+Las leyes mandan sobre los reglamentos y los reglamentos sobre las reglas de la Miscelánea; cuando una regla da una facilidad u opción, dilo así.
 Los criterios del SAT son la interpretación oficial de la autoridad: si uno responde la pregunta, apóyate en él y cítalo.
 Si los artículos solo responden una parte, responde esa parte y di qué falta; si no responden nada, dilo en una frase.
 No inventes reglas, plazos ni cifras que no aparezcan en los artículos, y no des asesoría personalizada.
 Escribe texto plano, sin markdown.`
 
-const REF = /(LISR|LIVA|CFF|SAT)\D{0,20}?(\d+(?:-[A-Za-z]+)*)/i
+const REF = /(RLISR|RLIVA|RLIEPS|RCFF|LISR|LIVA|LIEPS|CFF|LIF|RMF|SAT)\D{0,20}?(\d+(?:\.\d+)*(?:-[A-Za-z]+)*)/i
 
 async function sha256(s: string) {
   const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))
@@ -69,7 +70,7 @@ export async function responder(ctx: Ctx, pregunta: string) {
     .map(k => {
       const [ley, id] = k.split(':') as [Ley, string]
       const texto = trozos.filter(h => `${h.ley}:${h.id}` === k).map(h => h.texto).join('\n[…]\n')
-      return `[${ley} ${id}] ${encabezado(ley, id, JSON.parse(filas.get(k)?.ubicacion ?? '[]'))}\n${texto}`
+      return `[${ley} ${id}] ${encabezado(ley, id, JSON.parse(filas.get(k)?.ubicacion ?? '[]'), filas.get(k)?.titulo)}\n${texto}`
     })
     .join('\n\n')
   const sat = criterios

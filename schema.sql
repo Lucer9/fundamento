@@ -14,6 +14,7 @@ create table articulo (
   texto text not null,
   reformas text not null,
   actualizaciones text not null,
+  titulo text,
   primary key (ley, id)
 );
 

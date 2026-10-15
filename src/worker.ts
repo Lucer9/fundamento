@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql'
 import { createSchema, createYoga, type Plugin } from 'graphql-yoga'
 import { NOMBRES, type Hit } from './buscar.ts'
 import { buscar, cargar, clave, db, loaders, type Criterio, type Ctx, type Env, type Fila, type Modo } from './indice.ts'
-import { derogado, type Ley } from './parse.ts'
+import { LEYES, derogado, type Ley } from './parse.ts'
 import { responder } from './responder.ts'
 import { typeDefs } from './schema.graphql.ts'
 
@@ -59,6 +59,9 @@ const resolvers = {
   },
   Law: {
     name: (l: { code: Ley }) => NOMBRES[l.code],
+    kind: (l: { code: Ley }) => ({ ley: 'LAW', reglamento: 'REGULATION', reglas: 'RULES' })[LEYES[l.code].tipo],
+    regulates: (l: { code: Ley }) => (LEYES[l.code].reglamenta ? { code: LEYES[l.code].reglamenta } : null),
+    source: (l: { code: Ley }) => LEYES[l.code].pdf,
     articleCount: async (l: { code: Ley }, _: unknown, ctx: Ctx) =>
       (await ctx.db.all<{ n: number }>(`select count(*) as n from articulo where ley = ?1`, l.code))[0].n,
     articleKeys: async (l: { code: Ley }, _: unknown, ctx: Ctx) =>
@@ -80,6 +83,7 @@ const resolvers = {
     key: (r: Fila) => clave(r.ley, r.id),
     law: (r: Fila) => ({ code: r.ley }),
     number: (r: Fila) => r.id,
+    title: (r: Fila) => r.titulo ?? null,
     location: (r: Fila) => JSON.parse(r.ubicacion),
     text: (r: Fila) => r.texto,
     repealed: (r: Fila) => derogado(r.texto),

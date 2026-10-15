@@ -5,12 +5,16 @@ import { DatabaseSync } from 'node:sqlite'
 import { encabezado, terminos } from '../src/buscar.ts'
 import { huella } from './huella.ts'
 import { ANEXOS, LEYES, derogado, fragmentos, menciones, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
+import { fundamentos, parseRmf } from '../src/rmf.ts'
 
 const RAW = 'data/raw'
 mkdirSync(RAW, { recursive: true })
 
-/** Downloads a PDF once into data/raw and extracts its text with macOS PDFKit (macOS only; pdfjs-dist would make this portable). */
-async function texto(url: string, nombre: string) {
+/**
+ * Downloads a PDF once into data/raw and extracts its text with macOS PDFKit (macOS only; pdfjs-dist would make this
+ * portable). `lineas` keeps each visual line's position (scripts/pdf-lineas.js), which the Miscelánea needs.
+ */
+async function texto(url: string, nombre: string, lineas = false) {
   const pdf = resolve(RAW, `${nombre}.pdf`)
   if (!existsSync(pdf)) {
     const res = await fetch(url)
@@ -18,14 +22,17 @@ async function texto(url: string, nombre: string) {
     writeFileSync(pdf, Buffer.from(await res.arrayBuffer()))
   }
   const js = `ObjC.import('PDFKit'); $.PDFDocument.alloc.initWithURL($.NSURL.fileURLWithPath(${JSON.stringify(pdf)})).string.js`
-  return execFileSync('osascript', ['-l', 'JavaScript', '-e', js], { encoding: 'utf8', maxBuffer: 1 << 26 })
+  const args = lineas ? ['-l', 'JavaScript', 'scripts/pdf-lineas.js', pdf] : ['-l', 'JavaScript', '-e', js]
+  return execFileSync('osascript', args, { encoding: 'utf8', maxBuffer: 1 << 27 })
 }
 
 const leyes = Object.keys(LEYES) as Ley[]
-const articulos = (await Promise.all(leyes.map(async l => parseLey(await texto(LEYES[l].pdf, l), l)))).flat()
+const articulos = (
+  await Promise.all(leyes.map(async l => (l === 'RMF' ? parseRmf(await texto(LEYES[l].pdf, l, true)) : parseLey(await texto(LEYES[l].pdf, l), l))))
+).flat()
 const existe = new Set(articulos.map(a => `${a.ley}:${a.id}`))
 const enlaces = articulos.flatMap(a =>
-  menciones(a.texto, a.ley)
+  [...menciones(a.texto, a.ley), ...(a.ley === 'RMF' ? fundamentos(a.texto) : [])]
     .filter(m => existe.has(`${m.ley}:${m.id}`) && !(m.ley === a.ley && m.id === a.id))
     .map(m => ({ de_ley: a.ley, de_id: a.id, inicio: m.inicio, fin: m.fin, a_ley: m.ley, a_id: m.id })),
 )
@@ -37,10 +44,10 @@ const criterios = (
   .filter(c => c.citas.length)
 const frags = articulos
   .filter(a => !derogado(a.texto))
-  .flatMap(a => fragmentos(a.texto).map((t, n) => ({ ley: a.ley, id: a.id, n, texto: t, titulo: encabezado(a.ley, a.id, a.ubicacion) })))
+  .flatMap(a => fragmentos(a.texto).map((t, n) => ({ ley: a.ley, id: a.id, n, texto: t, titulo: encabezado(a.ley, a.id, a.ubicacion, a.titulo) })))
   .map((f, i) => ({ rowid: i + 1, huella: huella(`${f.titulo}\n${f.n}\n${f.texto}`), ...f }))
 
-const lit = (v: unknown) => (typeof v === 'number' ? String(v) : `'${String(v).replaceAll("'", "''")}'`)
+const lit = (v: unknown) => (v === null ? 'null' : typeof v === 'number' ? String(v) : `'${String(v).replaceAll("'", "''")}'`)
 
 /** Multi-row INSERTs kept under D1's 100 KB statement limit. */
 function inserts(tabla: string, filas: Record<string, unknown>[], cols: string[]) {
@@ -62,8 +69,14 @@ const seed = [
   readFileSync('schema.sql', 'utf8'),
   inserts(
     'articulo',
-    articulos.map(a => ({ ...a, ubicacion: JSON.stringify(a.ubicacion), reformas: JSON.stringify(a.reformas), actualizaciones: JSON.stringify(a.actualizaciones) })),
-    ['ley', 'id', 'orden', 'ubicacion', 'texto', 'reformas', 'actualizaciones'],
+    articulos.map(a => ({
+      ...a,
+      ubicacion: JSON.stringify(a.ubicacion),
+      reformas: JSON.stringify(a.reformas),
+      actualizaciones: JSON.stringify(a.actualizaciones),
+      titulo: a.titulo ?? null,
+    })),
+    ['ley', 'id', 'orden', 'ubicacion', 'texto', 'reformas', 'actualizaciones', 'titulo'],
   ),
   inserts('enlace', enlaces, ['de_ley', 'de_id', 'inicio', 'fin', 'a_ley', 'a_id']),
   inserts(
