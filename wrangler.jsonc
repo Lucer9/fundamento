@@ -20,7 +20,7 @@
   "vars": {
     "MODEL": "gemma",
     "ANSWER_MODEL": "@cf/openai/gpt-oss-120b",
-    "DAILY_ANSWERS": "300"
+    "DAILY_ANSWERS": "30"
   },
   "observability": { "enabled": true }
 }
