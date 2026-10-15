@@ -30,7 +30,7 @@ export const typeDefs = /* GraphQL */ `
     mostCited(first: Int = 10, law: LawCode): [CitationCount!]!
     "Every Diario Oficial date that amended at least one article, newest first."
     amendments(law: LawCode): [Amendment!]!
-    criteria(law: LawCode): [Criterion!]!
+    criteria(law: LawCode, kind: CriterionKind): [Criterion!]!
     stats: Stats!
   }
 
@@ -56,8 +56,8 @@ export const typeDefs = /* GraphQL */ `
     links: [Link!]!
     cites: [Article!]!
     citedBy: [Article!]!
-    "SAT criterios normativos (Anexo 7, RMF 2026) that cite this article."
-    criteria: [Criterion!]!
+    "SAT criteria that cite this article: how SAT reads it (Anexo 7) and practices it calls improper (Anexo 3)."
+    criteria(kind: CriterionKind): [Criterion!]!
   }
 
   type Link {
@@ -89,8 +89,16 @@ export const typeDefs = /* GraphQL */ `
     articles: [Article!]!
   }
 
+  enum CriterionKind {
+    "Criterio normativo, Anexo 7 de la RMF 2026: how SAT interprets the law."
+    NORMATIVE
+    "Criterio no vinculativo, Anexo 3 de la RMF 2026: a practice SAT considers improper."
+    IMPROPER_PRACTICE
+  }
+
   type Criterion {
     id: String
+    kind: CriterionKind!
     law: LawCode!
     title: String!
     text: String!

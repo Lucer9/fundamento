@@ -29,6 +29,7 @@ create index enlace_a on enlace (a_ley, a_id);
 
 create table criterio (
   n integer primary key,
+  anexo integer not null,
   id text,
   materia text not null,
   tema text not null,

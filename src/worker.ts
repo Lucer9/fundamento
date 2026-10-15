@@ -7,6 +7,9 @@ import { derogado, type Ley } from './parse.ts'
 import { responder } from './responder.ts'
 import { typeDefs } from './schema.graphql.ts'
 
+type Tipo = 'NORMATIVE' | 'IMPROPER_PRACTICE'
+const ANEXO: Record<Tipo, number> = { NORMATIVE: 7, IMPROPER_PRACTICE: 3 }
+
 const resolvers = {
   Query: {
     laws: () => (Object.keys(NOMBRES) as Ley[]).map(code => ({ code })),
@@ -32,8 +35,12 @@ const resolvers = {
           a.law ?? null,
         )
       ).map(r => ({ date: r.date, keys: r.keys.split(',') })),
-    criteria: (_: unknown, a: { law?: Ley }, ctx: Ctx) =>
-      ctx.db.all<Criterio>(`select * from criterio where ?1 is null or materia = ?1 order by n`, a.law ?? null),
+    criteria: (_: unknown, a: { law?: Ley; kind?: Tipo }, ctx: Ctx) =>
+      ctx.db.all<Criterio>(
+        `select * from criterio where (?1 is null or materia = ?1) and (?2 is null or anexo = ?2) order by n`,
+        a.law ?? null,
+        a.kind ? ANEXO[a.kind] : null,
+      ),
     stats: async (_: unknown, __: unknown, ctx: Ctx) =>
       (
         await ctx.db.all<Record<string, number>>(
@@ -73,7 +80,8 @@ const resolvers = {
       (await ctx.load.enlaces.load(clave(r.ley, r.id))).map(e => ({ start: e.inicio, end: e.fin, key: e.a })),
     cites: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.cita.load(clave(r.ley, r.id))).map(c => c.a)),
     citedBy: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.citadoPor.load(clave(r.ley, r.id))).map(c => c.a)),
-    criteria: (r: Fila, _: unknown, ctx: Ctx) => ctx.load.criterios.load(clave(r.ley, r.id)),
+    criteria: async (r: Fila, a: { kind?: Tipo }, ctx: Ctx) =>
+      (await ctx.load.criterios.load(clave(r.ley, r.id))).filter(c => !a.kind || c.anexo === ANEXO[a.kind]),
   },
   Link: { target: (l: { key: string }, _: unknown, ctx: Ctx) => ctx.load.articulo.load(l.key) },
   SearchHit: {
@@ -85,6 +93,7 @@ const resolvers = {
   Amendment: { articles: (a: { keys: string[] }, _: unknown, ctx: Ctx) => cargar(ctx, a.keys) },
   Criterion: {
     id: (c: Criterio) => c.id || null,
+    kind: (c: Criterio) => (c.anexo === 3 ? 'IMPROPER_PRACTICE' : 'NORMATIVE'),
     law: (c: Criterio) => c.materia,
     title: (c: Criterio) => c.tema,
     text: (c: Criterio) => c.texto,

@@ -66,14 +66,15 @@ export function porArticulo(hits: Hit[]): Hit[] {
   return [...vistos.values()]
 }
 
-/** Reciprocal rank fusion (k = 60, the value from the original paper); keeps the first list's chunk text. */
-export function rrf(listas: Hit[][], k = 60): Hit[] {
+/** Reciprocal rank fusion (k = 60, the value from the original paper), optionally weighting each list; keeps the first list's chunk text. */
+export function rrf(listas: Hit[][], k = 60, pesos: number[] = listas.map(() => 1)): Hit[] {
   const out = new Map<string, Hit>()
-  for (const lista of listas)
+  listas.forEach((lista, l) =>
     lista.forEach((h, i) => {
       const clave = `${h.ley}:${h.id}`
       const prev = out.get(clave)
-      out.set(clave, { ...(prev ?? h), texto: prev?.texto ?? h.texto, score: (prev?.score ?? 0) + 1 / (k + i + 1) })
-    })
+      out.set(clave, { ...(prev ?? h), texto: prev?.texto ?? h.texto, score: (prev?.score ?? 0) + pesos[l] / (k + i + 1) })
+    }),
+  )
   return [...out.values()].sort((a, b) => b.score - a.score)
 }

@@ -17,7 +17,7 @@ export interface Env {
 }
 
 export type Fila = { ley: Ley; id: string; orden: number; ubicacion: string; texto: string; reformas: string }
-export type Criterio = { n: number; id: string; materia: Ley; tema: string; texto: string }
+export type Criterio = { n: number; anexo: number; id: string; materia: Ley; tema: string; texto: string }
 
 /** D1 access that counts round trips, so every response can report how many queries it cost. */
 export type Db = { n: number; all<T>(sql: string, ...params: unknown[]): Promise<T[]> }

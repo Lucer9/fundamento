@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { resolve } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { encabezado, terminos } from '../src/buscar.ts'
-import { ANEXO_7, LEYES, derogado, fragmentos, menciones, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
+import { ANEXOS, LEYES, derogado, fragmentos, menciones, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
 
 const RAW = 'data/raw'
 mkdirSync(RAW, { recursive: true })
@@ -28,7 +28,10 @@ const enlaces = articulos.flatMap(a =>
     .filter(m => existe.has(`${m.ley}:${m.id}`) && !(m.ley === a.ley && m.id === a.id))
     .map(m => ({ de_ley: a.ley, de_id: a.id, inicio: m.inicio, fin: m.fin, a_ley: m.ley, a_id: m.id })),
 )
-const criterios = parseCriterios(await texto(ANEXO_7, 'anexo7'))
+const criterios = (
+  await Promise.all(([7, 3] as const).map(async anexo => parseCriterios(await texto(ANEXOS[anexo], `anexo${anexo}`)).map(c => ({ ...c, anexo }))))
+)
+  .flat()
   .map(c => ({ ...c, citas: c.citas.filter(r => existe.has(`${r.ley}:${r.id}`)) }))
   .filter(c => c.citas.length)
 const frags = articulos
@@ -65,7 +68,7 @@ const seed = [
   inserts(
     'criterio',
     criterios.map((c, n) => ({ ...c, n, id: c.id ?? '' })),
-    ['n', 'id', 'materia', 'tema', 'texto'],
+    ['n', 'anexo', 'id', 'materia', 'tema', 'texto'],
   ),
   inserts(
     'criterio_cita',
@@ -90,5 +93,5 @@ const porLey = leyes.map(l => `${l} ${articulos.filter(a => a.ley === l).length}
 console.log(`articulos: ${porLey}`)
 console.log(`enlaces: ${enlaces.length} menciones → ${new Set(enlaces.map(e => `${e.de_ley}:${e.de_id}>${e.a_ley}:${e.a_id}`)).size} aristas`)
 console.log(`fragmentos: ${frags.length} (de ${articulos.filter(a => !derogado(a.texto)).length} artículos vigentes)`)
-console.log(`criterios: ${criterios.length}`)
+console.log(`criterios: anexo 7 ${criterios.filter(c => c.anexo === 7).length}, anexo 3 ${criterios.filter(c => c.anexo === 3).length}`)
 console.log(`data/seed.sql ${(seed.length / 1e6).toFixed(1)} MB, data/fundamento.db`)

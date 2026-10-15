@@ -11,8 +11,10 @@ export const LEYES: Record<Ley, { titulo: string; pdf: string }> = {
   CFF: { titulo: 'CÓDIGO FISCAL DE LA FEDERACIÓN', pdf: `${BIBLIO}/CFF.pdf` },
 }
 
-export const ANEXO_7 =
-  'https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rmf/anexos/Anexo_7_RMF2026-09012026.pdf'
+const ANEXOS_RMF = 'https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rmf/anexos'
+
+/** Anexo 7: criterios normativos (how SAT reads the law). Anexo 3: criterios no vinculativos (practices SAT calls improper). */
+export const ANEXOS = { 7: `${ANEXOS_RMF}/Anexo_7_RMF2026-09012026.pdf`, 3: `${ANEXOS_RMF}/Anexo_3_RMF2026-09012026.pdf` } as const
 
 const WORDS = 'Bis|Ter|Quáter|Quinquies|Sexies|BIS|TER|QUÁTER|QUINQUIES|SEXIES'
 const SUF = String.raw`(?:\.?-[A-Z](?![a-záéíóú])|[- ](?:${WORDS}))*`
@@ -47,7 +49,7 @@ const SOLO_FECHAS = /^(?:\d{2}-\d{2}-\d{4}[,. ]*)+$/
 const FECHA = /(\d{2})-(\d{2})-(\d{4})/g
 const DIVISION = /^(T[IÍ]TULO|CAP[IÍ]TULO|SECCI[OÓ]N)\s+\S+/
 const MARCA = /^(?:[IVXLC]+\.|[a-z]\)|\d+\.)\s/
-const ID_CRITERIO = /\b\d+\/[A-Z]+(?:\/[A-Z]+)*\/N\b/g
+const ID_CRITERIO = /\b\d+\/(?:[A-Z]+\/)+[A-Z]+\b/g
 const MATERIA: Record<string, Ley> = { 'del CFF': 'CFF', 'de la Ley del ISR': 'LISR', 'de la Ley del IVA': 'LIVA' }
 
 const esMayus = (l: string) => l === l.toUpperCase() && /\p{Lu}/u.test(l)
@@ -173,7 +175,7 @@ export function parseLey(raw: string, ley: Ley): Articulo[] {
 }
 
 /**
- * Anexo 7 (criterios normativos) → one entry per criterio in force for CFF, ISR or IVA.
+ * SAT criterios (Anexo 7 normativos, Anexo 3 prácticas indebidas) → one entry per criterio in force for CFF, ISR or IVA.
  * Titles are recovered by matching body lines against the index, since the PDF's id column
  * comes out detached from its text.
  */
@@ -181,8 +183,9 @@ export function parseCriterios(raw: string): Criterio[] {
   const lines = raw.split('\n').map(s => s.trim()).filter(Boolean)
   const origen = (l: string) => l.startsWith('Origen Primer antecedente')
   const primerOrigen = lines.findIndex(origen)
-  const inicio = lines.findLastIndex((l, i) => i < primerOrigen && l === 'I. Criterios del CFF')
-  const fin = lines.indexOf('B. Criterios normativos derogados.')
+  const inicio = lines.findLastIndex((l, i) => i < primerOrigen && /^I\. Criterios /.test(l))
+  const derogados = lines.findIndex((l, i) => i > inicio && /^B\. .*[Dd]erogados/.test(l))
+  const fin = derogados < 0 ? lines.length : derogados
   const norm = (s: string) => s.replace(ID_CRITERIO, ' ').replace(/\s+/g, ' ').trim()
   const indice = norm(lines.slice(0, inicio).join(' '))
   const out: Criterio[] = []
