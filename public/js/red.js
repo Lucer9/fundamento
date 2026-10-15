@@ -145,6 +145,20 @@ export function montarRed(root, { navigate, ley = '' }) {
 
     g.globalAlpha = 1
     g.font = `600 ${w < 480 ? 11 : 12}px "Schibsted Grotesk", sans-serif`
+    if (foco) {
+      const [ley, num] = foco.key.split(':')
+      const texto = `${ley} ${numero(num)}`
+      const c = Math.cos(foco.a)
+      const [fx, fy] = punto(foco, borde + 10, G)
+      const tw = g.measureText(texto).width
+      const x0 = Math.max(2, Math.min(w - 2 - tw, c > 0.2 ? fx : c < -0.2 ? fx - tw : fx - tw / 2))
+      g.fillStyle = getComputedStyle(root).getPropertyValue('--paper').trim()
+      g.fillRect(x0 - 4, fy - 9, tw + 8, 18)
+      g.fillStyle = acento
+      g.textBaseline = 'middle'
+      g.textAlign = 'left'
+      g.fillText(texto, x0, fy)
+    }
     g.textBaseline = 'middle'
     for (const arco of d.arcos) {
       const medio = (arco.desde + arco.hasta) / 2

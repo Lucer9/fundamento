@@ -71,17 +71,17 @@ export default {
     }
     if (ctx.signal.aborted) return
     const cs = conjuntos(ev)
-    main.querySelector('[data-slot=prose]').innerHTML = html`<p>Cada criterio tiene un título y cita los artículos en los que se apoya. Hacemos la búsqueda con el título como pregunta, y cuenta como acierto si alguno de esos artículos aparece entre los primeros resultados.</p>
+    main.querySelector('[data-slot=prose]').innerHTML = html`<div class="prose-main"><p>Cada criterio tiene un título y cita los artículos en los que se apoya. Hacemos la búsqueda con el título como pregunta, y cuenta como acierto si alguno de esos artículos aparece entre los primeros resultados.</p>
       <ul class="sets">
         <li><strong>${cs.ajuste.nombre}</strong>, ${nf.format(cs.ajuste.n)} preguntas. ${cs.ajuste.rol}</li>
         ${cs.reservado ? html`<li><strong>${cs.reservado.nombre}</strong>, ${nf.format(cs.reservado.n)} preguntas. ${cs.reservado.rol}</li>` : ''}
-      </ul>
-      <dl class="defs">
+      </ul></div>
+      <aside class="prose-side"><dl class="defs">
         <div><dt>hit@k</dt><dd>Proporción de preguntas con un acierto entre los primeros k resultados.</dd></div>
         <div><dt>MRR</dt><dd>Promedio de 1 / posición del primer acierto.</dd></div>
         <div><dt>Rangos</dt><dd>Intervalos de confianza de 95% por bootstrap.</dd></div>
       </dl>
-      <p class="muted small">Resultados del ${ev.fecha}. Este sitio usa la búsqueda <strong>${nombre(EN_USO)}</strong>.</p>`
+      <p class="muted small">Resultados del ${ev.fecha}. Este sitio usa la búsqueda <strong>${nombre(EN_USO).toLowerCase()}</strong>.</p></aside>`
     vista = { ...vista, limite: 25, conjunto: ctx.params.get('conjunto') === 'reservado' && cs.reservado ? 'reservado' : 'ajuste' }
     pintar(cs)
   },
@@ -109,7 +109,7 @@ function pintar(cs) {
   const resumen = !base
     ? ''
     : sig.length
-      ? `En el ${c.corto}, ${sig.length === 1 ? 'un método supera' : `${sig.length} métodos superan`} a palabras clave en hit@5 con un intervalo que no cruza el cero. El mayor es ${nombre(mejor.nombre)}: ${puntos(mejor.hit5 - base.hit5)} puntos (de ${puntos(mejor.delta5[0])} a ${puntos(mejor.delta5[1])}).`
+      ? `En el ${c.corto}, ${sig.length === 1 ? 'un método supera' : `${sig.length} métodos superan`} a palabras clave en hit@5 con un intervalo que no cruza el cero. El mayor es ${nombre(mejor.nombre).toLowerCase()}: ${puntos(mejor.hit5 - base.hit5)} puntos (de ${puntos(mejor.delta5[0])} a ${puntos(mejor.delta5[1])}).`
       : `En el ${c.corto}, ningún método se distingue de palabras clave: todos los intervalos de la diferencia en hit@5 cruzan el cero.`
 
   slot.innerHTML = html`<div class="filterbar">
@@ -164,7 +164,7 @@ function pintar(cs) {
         <label class="field"><span>Mostrar</span><select name="mostrar">
           ${[
             ['todas', 'Todas'],
-            ['falla-uso', `Sin acierto de ${nombre(EN_USO)}`],
+            ['falla-uso', `Sin acierto de la búsqueda en uso`],
             ['falla-todos', 'Sin acierto de ningún método'],
             ['acierta-todos', 'Acierto de todos los métodos'],
           ].map(([v, t]) => html`<option value="${v}" ${vista.mostrar === v ? 'selected' : ''}>${t}</option>`)}

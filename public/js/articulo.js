@@ -1,4 +1,4 @@
-import { coincidencias, cuenta, errorHtml, esc, fecha, fechaLargaDe, gql, html, LEYES, marcar, niveles, numero, raw, ruta, terminos, ubicacionCorta, ubicacionHtml } from './lib.js'
+import { coincidencias, errorHtml, esc, fecha, fechaLargaDe, gql, html, LEYES, marcar, numero, raw, ruta, terminos, ubicacionCorta, ubicacionHtml } from './lib.js'
 
 const QUERY = `query Articulo($law: LawCode!, $n: String!) {
   article(law: $law, number: $n) {
@@ -72,7 +72,7 @@ export default {
         ${a.location.length ? html`<ol class="art-loc" aria-label="Ubicación en la ley">${ubicacionHtml(a.location)}</ol>` : ''}
         <dl class="art-facts">
           <div><dt>Reformas</dt><dd>${a.amendedOn.length ? html`<a href="#reformas">${a.amendedOn.length}</a><span class="fact-sub">última ${fecha(a.amendedOn[a.amendedOn.length - 1])}</span>` : html`0<span class="fact-sub">sin anotar</span>`}</dd></div>
-          <div><dt>Lo citan</dt><dd><a href="#lo-citan">${a.citedBy.length}</a><span class="fact-sub">${a.citedBy.length === 1 ? 'artículo' : 'artículos'}</span></dd></div>
+          <div><dt>Lo citan</dt><dd>${a.citedBy.length ? html`<a href="#lo-citan">${a.citedBy.length}</a>` : '0'}<span class="fact-sub">${a.citedBy.length === 1 ? 'artículo' : 'artículos'}</span></dd></div>
           <div><dt>Criterios</dt><dd>${a.criteria.length ? html`<a href="#criterios">${a.criteria.length}</a>` : '0'}<span class="fact-sub">del SAT</span></dd></div>
         </dl>
       </header>

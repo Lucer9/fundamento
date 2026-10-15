@@ -214,7 +214,6 @@ function respuesta(q, slot) {
     p.catch(() => respuestas.delete(q))
   }
   aside.setAttribute('aria-busy', 'true')
-  aside.classList.remove('answer--error')
   slot.innerHTML = html`<p class="answer-wait"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Leyendo los artículos para redactar una respuesta…</p>
     <div aria-hidden="true"><span class="sk"></span><span class="sk"></span><span class="sk sk-l"></span></div>`
   p.then(
@@ -242,8 +241,8 @@ function respuesta(q, slot) {
     },
     e => {
       if (slot.dataset.q !== q) return
+      delete slot.dataset.q
       aside.removeAttribute('aria-busy')
-      aside.classList.add('answer--error')
       slot.innerHTML = html`<p class="answer-error" role="status">${e.message}</p><p class="answer-note">Los resultados de búsqueda no dependen de la respuesta.</p>`
     },
   )

@@ -54,7 +54,7 @@ export default {
           <h2 class="section-h" id="net-h">Red de citas</h2>
           <p class="muted small">Las líneas grises unen artículos de la misma ley; las de color cruzan de una ley a otra.</p>
         </div>
-        <div data-slot="net"></div>
+        <div class="net-body" data-slot="net"></div>
       </section>`
     main.querySelector('[data-slot=filtro]').addEventListener('change', e => {
       const v = e.target.value
@@ -135,8 +135,9 @@ function pintarReformas(slot, fechas, ley) {
   const desde = Math.min(...anios)
   const hasta = Math.max(...anios)
   const maxAnio = Math.max(...porAnio.values())
+  const pico = [...porAnio].find(([, v]) => v === maxAnio)[0]
   const max = Math.max(...fechas.map(f => f.articles.length))
-  const ver = todas ? fechas : fechas.slice(0, 12)
+  const ver = todas ? fechas : fechas.slice(0, 18)
   const fila = f => {
     const leyes = {}
     for (const { key } of f.articles) leyes[key.split(':')[0]] = (leyes[key.split(':')[0]] ?? 0) + 1
@@ -148,15 +149,15 @@ function pintarReformas(slot, fechas, ley) {
     </li>`
   }
   slot.innerHTML = html`<figure class="years">
-      <div class="years-bars" role="img" aria-label="${`Artículos reformados por año, de ${desde} a ${hasta}`}">${Array.from({ length: hasta - desde + 1 }, (_, i) => {
+      <div class="years-bars" role="img" aria-label="${`Artículos reformados por año, de ${desde} a ${hasta}; un artículo reformado dos veces en el año cuenta dos veces`}">${Array.from({ length: hasta - desde + 1 }, (_, i) => {
         const y = desde + i
         const v = porAnio.get(String(y)) ?? 0
         return html`<span title="${`${y}: ${cuenta(v, 'artículo')}`}" style="height:${v ? Math.max(4, (v / maxAnio) * 100).toFixed(1) : 0}%"></span>`
       })}</div>
-      <figcaption class="years-axis"><span>${desde}</span><span>${hasta}</span></figcaption>
+      <figcaption class="years-axis"><span>${desde}</span><span>Máximo: ${cuenta(maxAnio, 'artículo reformado', 'artículos reformados')} en ${pico}</span><span>${hasta}</span></figcaption>
     </figure>
     <ol class="amend">${ver.map(fila)}</ol>
-    ${fechas.length > 12 ? html`<button class="button button--quiet more-btn" type="button" aria-expanded="${todas}">${todas ? 'Mostrar menos' : `Mostrar las ${fechas.length} fechas`}</button>` : ''}`
+    ${fechas.length > 18 ? html`<button class="button button--quiet more-btn" type="button" aria-expanded="${todas}">${todas ? 'Mostrar menos' : `Mostrar las ${fechas.length} fechas`}</button>` : ''}`
   slot.querySelector('.more-btn')?.addEventListener('click', () => {
     todas = !todas
     pintarReformas(slot, fechas, ley)
