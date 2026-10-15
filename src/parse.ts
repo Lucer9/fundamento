@@ -36,7 +36,7 @@ const QUAL = new RegExp(
   'gu',
 )
 const LAW =
-  /(?<!\p{L})(?:de|del)\s+(?:(?:la|el)\s+)?(?:(esta|este|presente|dich[ao]|citad[ao]|mism[ao]|referid[ao])\s+)?(Ley|Código|CFF|ordenamiento|Reglamento|Decreto|Resolución|Constitución|Convenio|Tratado|Acuerdo|Norma)(?!\p{L})([^,;:()]{0,60})/u
+  /(?<!\p{L})(?:de|del)\s+(?:(?:la|el)\s+)?(?:(esta|este|presente|dich[ao]|citad[ao]|mism[ao]|referid[ao])\s+)?(Ley|Código|CFF|LISR|LIVA|ordenamiento|Reglamento|Decreto|Resolución|Constitución|Convenio|Tratado|Acuerdo|Norma)(?!\p{L})([^,;:()]{0,60})/u
 const STOP = /[;:(]|\.\s+\p{Lu}/u
 const NOISE = [
   /^\d+ de \d+$/,
@@ -72,7 +72,7 @@ function resolver(det: string | undefined, word: string, rest: string, self: Ley
   if (det && /^(esta|este|presente)$/.test(det)) return self
   if (det) return last
   const r = rest.toLowerCase()
-  if (word === 'CFF') return 'CFF'
+  if (word === 'CFF' || word === 'LISR' || word === 'LIVA') return word
   if (word === 'Ley') return /impuesto sobre la renta|^\s*del isr\b/.test(r) ? 'LISR' : /valor agregado|^\s*del iva\b/.test(r) ? 'LIVA' : null
   if (word === 'Código') return /^\s*(civil|penal|de comercio|nacional|federal)/.test(r) ? null : 'CFF'
   return null
@@ -110,6 +110,25 @@ export function menciones(texto: string, self: Ley | null): Mencion[] {
 /** Distinct articles a passage cites. */
 export function citas(texto: string, self: Ley | null): Ref[] {
   return [...new Map(menciones(texto, self).map(({ ley, id }) => [`${ley}:${id}`, { ley, id }])).values()]
+}
+
+const ALIAS: Record<string, Ley> = { LISR: 'LISR', ISR: 'LISR', LIVA: 'LIVA', IVA: 'LIVA', CFF: 'CFF' }
+const CODIGO = '(LISR|LIVA|CFF|ISR|IVA|lisr|liva|cff|isr|iva)'
+const ART = '(?:[Aa]rt(?:[íi]culo|\\.)?\\s*)'
+const CORTA = new RegExp(
+  String.raw`(?<![\p{L}\d])(?:${CODIGO}\s*,?\s*${ART}?(\d+)o?(${SUF})(?!\s*%)|${ART}?(\d+)o?(${SUF})\s*(?:de\s+la\s+|del\s+)?${CODIGO})(?![\p{L}\d])`,
+  'gu',
+)
+
+/** Article references a search query names outright: "artículo 27 de la Ley del ISR", "CFF 29-A", "151 LISR". */
+export function referencias(q: string): Ref[] {
+  const out = new Map(citas(q, null).map(r => [`${r.ley}:${r.id}`, r]))
+  for (const m of q.matchAll(CORTA)) {
+    const ley = ALIAS[(m[1] ?? m[6]).toUpperCase()]
+    const id = normId(m[2] ?? m[4], m[3] ?? m[5])
+    out.set(`${ley}:${id}`, { ley, id })
+  }
+  return [...out.values()]
 }
 
 /** Packs paragraphs into chunks of at most `max` characters, splitting overlong paragraphs at sentence ends. */

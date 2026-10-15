@@ -28,7 +28,7 @@ export const encabezado = (ley: Ley, id: string, ubicacion: string[]) =>
   `${NOMBRES[ley]}, artículo ${id}${ubicacion.length ? ` (${ubicacion.join(' › ')})` : ''}`
 
 export const SQL_FTS = `
-  select f.ley, f.id, f.texto, -bm25(fts) as score
+  select f.rowid, f.ley, f.id, f.texto, -bm25(fts) as score
   from fts join fragmento f on f.rowid = fts.rowid
   where fts match ?1
   order by bm25(fts)
@@ -57,7 +57,7 @@ export const MODELOS = {
 } as const
 
 export type Modelo = keyof typeof MODELOS
-export type Hit = { ley: Ley; id: string; score: number; texto?: string }
+export type Hit = { ley: Ley; id: string; score: number; texto?: string; rowid?: number }
 
 /** Chunk hits sorted best-first → one hit per article, keeping its best chunk. */
 export function porArticulo(hits: Hit[]): Hit[] {
@@ -66,14 +66,19 @@ export function porArticulo(hits: Hit[]): Hit[] {
   return [...vistos.values()]
 }
 
-/** Reciprocal rank fusion (k = 60, the value from the original paper), optionally weighting each list; keeps the first list's chunk text. */
-export function rrf(listas: Hit[][], k = 60, pesos: number[] = listas.map(() => 1)): Hit[] {
+const porLey = (h: Hit) => `${h.ley}:${h.id}`
+
+/**
+ * Reciprocal rank fusion (k = 60, the value from the original paper). Items are matched by `clave`
+ * (article by default, chunk with `h => String(h.rowid)`); keeps the first list's chunk text.
+ */
+export function rrf(listas: Hit[][], { k = 60, pesos = listas.map(() => 1), clave = porLey }: { k?: number; pesos?: number[]; clave?: (h: Hit) => string } = {}): Hit[] {
   const out = new Map<string, Hit>()
   listas.forEach((lista, l) =>
     lista.forEach((h, i) => {
-      const clave = `${h.ley}:${h.id}`
-      const prev = out.get(clave)
-      out.set(clave, { ...(prev ?? h), texto: prev?.texto ?? h.texto, score: (prev?.score ?? 0) + pesos[l] / (k + i + 1) })
+      const c = clave(h)
+      const prev = out.get(c)
+      out.set(c, { ...(prev ?? h), texto: prev?.texto ?? h.texto, score: (prev?.score ?? 0) + pesos[l] / (k + i + 1) })
     }),
   )
   return [...out.values()].sort((a, b) => b.score - a.score)

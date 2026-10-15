@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node src/parse.check.ts",
+    "check": "node src/check.ts",
     "typecheck": "tsc",
     "ingest": "node scripts/ingest.ts",
     "embed": "node scripts/embed.ts",

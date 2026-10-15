@@ -1,0 +1,1950 @@
+[
+ {
+  "n": 0,
+  "anexo": 7,
+  "id": "2/CFF/N",
+  "tema": "Normas sustantivas. Reúnen esta característica las aplicables para determinar la pérdida fiscal.",
+  "pregunta": "¿Puedo usar la normativa vigente al momento de generar la pérdida para calcularla, aunque cambie después?",
+  "esperados": [
+   "CFF:6"
+  ]
+ },
+ {
+  "n": 1,
+  "anexo": 7,
+  "id": null,
+  "tema": "Principios de contabilidad generalmente aceptados y normas de información financiera. Su aplicación.",
+  "pregunta": "¿Qué normas contables debo aplicar al elaborar mi declaración de impuestos?",
+  "esperados": [
+   "CFF:58-A",
+   "CFF:60",
+   "LISR:182",
+   "LISR:40"
+  ]
+ },
+ {
+  "n": 2,
+  "anexo": 7,
+  "id": null,
+  "tema": "Momento en que se lleva a cabo la fusión, para efectos de la presentación del aviso de cancelación en el RFC por fusión de sociedades.",
+  "pregunta": "¿Cuál es la fecha que se toma como momento de la fusión para presentar el aviso de cancelación en el RFC?",
+  "esperados": [
+   "CFF:11",
+   "CFF:14-B"
+  ]
+ },
+ {
+  "n": 3,
+  "anexo": 7,
+  "id": null,
+  "tema": "Regalías por el uso o goce temporal de derechos de autor sobre obras literarias, artísticas o científicas. Los pagos que se realicen en virtud de cualquier acto jurídico que tenga por objeto la distribución de una obra tienen dicho carácter.",
+  "pregunta": "¿Los pagos que recibo por la distribución o venta de una obra protegida por derechos de autor se consideran regalías?",
+  "esperados": [
+   "CFF:15-B",
+   "CFF:5"
+  ]
+ },
+ {
+  "n": 4,
+  "anexo": 7,
+  "id": null,
+  "tema": "Pesca deportiva. Los servicios turísticos que prestan las embarcaciones se consideran actividades comerciales.",
+  "pregunta": "¿Los servicios de pesca deportiva que ofrecen las embarcaciones se consideran actividades comerciales?",
+  "esperados": [
+   "CFF:16"
+  ]
+ },
+ {
+  "n": 5,
+  "anexo": 7,
+  "id": null,
+  "tema": "Aplicación de las cantidades pagadas en devoluciones en cantidades menores a la cantidad solicitada.",
+  "pregunta": "Si me devuelven menos de lo que solicité, ¿cómo se distribuye el monto que me devuelven?",
+  "esperados": [
+   "CFF:22-A"
+  ]
+ },
+ {
+  "n": 6,
+  "anexo": 7,
+  "id": null,
+  "tema": "Medidas de apremio. Es necesario agotarlas en estricto orden, antes de proceder penalmente por los delitos de desobediencia o resistencia a un mandato de autoridad.",
+  "pregunta": "¿Qué pasos sigue la autoridad antes de acusarme de desobediencia si no cumplo una orden?",
+  "esperados": [
+   "CFF:40",
+   "CFF:40-A"
+  ]
+ },
+ {
+  "n": 7,
+  "anexo": 7,
+  "id": "9/CFF/N",
+  "tema": "Visitas domiciliarias para verificar el cumplimiento de obligaciones fiscales. No se requiere que se levanten actas parciales y acta final.",
+  "pregunta": "¿La autoridad tiene que levantar actas parciales o un acta final cuando realiza una visita domiciliaria?",
+  "esperados": [
+   "CFF:42",
+   "CFF:49"
+  ]
+ },
+ {
+  "n": 8,
+  "anexo": 7,
+  "id": null,
+  "tema": "Discrepancia fiscal. El resultado de la comprobación se dará a conocer mediante oficio y, en su caso, en la última acta parcial o complementaria.",
+  "pregunta": "¿Qué documento me enviará la autoridad si detecta que mis gastos son mayores que mis ingresos declarados?",
+  "esperados": [
+   "CFF:46",
+   "CFF:48",
+   "CFF:53",
+   "LISR:91"
+  ]
+ },
+ {
+  "n": 9,
+  "anexo": 7,
+  "id": null,
+  "tema": "Garantía del interés fiscal. Están relevadas de otorgarla las instituciones que conforman el Sistema Bancario Mexicano.",
+  "pregunta": "¿Los bancos están obligados a ofrecer garantía del interés fiscal cuando tienen una deuda fiscal?",
+  "esperados": [
+   "CFF:141",
+   "CFF:142",
+   "CFF:65"
+  ]
+ },
+ {
+  "n": 10,
+  "anexo": 7,
+  "id": "12/CFF/N",
+  "tema": "Suspensión del plazo de caducidad cuando se hacen valer medios de defensa.",
+  "pregunta": "¿Se detiene el conteo del plazo de caducidad si presento un recurso o defensa contra la autoridad fiscal?",
+  "esperados": [
+   "CFF:67"
+  ]
+ },
+ {
+  "n": 11,
+  "anexo": 7,
+  "id": null,
+  "tema": "Caducidad de las facultades de la autoridad fiscal. La suspensión del plazo con motivo de la interposición de algún recurso administrativo o juicio, debe considerarse independiente del plazo de diez años.",
+  "pregunta": "¿El plazo para que la autoridad fiscal pierda su facultad se suspende al interponer un recurso o un juicio?",
+  "esperados": [
+   "CFF:67"
+  ]
+ },
+ {
+  "n": 12,
+  "anexo": 7,
+  "id": null,
+  "tema": "Infracciones. Aplicación de las multas establecidas en el CFF.",
+  "pregunta": "¿Me pueden aplicar una multa más baja si la sanción se redujo después de que cometí la infracción?",
+  "esperados": [
+   "CFF:6",
+   "CFF:70"
+  ]
+ },
+ {
+  "n": 13,
+  "anexo": 7,
+  "id": null,
+  "tema": "Declaración de nulidad lisa y llana o la revocación de la resolución correspondiente no desvirtúa el cumplimiento espontáneo.",
+  "pregunta": "¿Me pueden multar si cumplo una obligación después de que anulen la visita domiciliaria o requerimiento?",
+  "esperados": [
+   "CFF:73"
+  ]
+ },
+ {
+  "n": 14,
+  "anexo": 7,
+  "id": null,
+  "tema": "Imposición de multas. Determinación de la multa aplicable por la omisión en el entero de diversas contribuciones y en la presentación de declaraciones.",
+  "pregunta": "¿Qué multa se me aplicará si incumplo varias obligaciones fiscales al mismo tiempo?",
+  "esperados": [
+   "CFF:75"
+  ]
+ },
+ {
+  "n": 15,
+  "anexo": 7,
+  "id": "17/CFF/N",
+  "tema": "Supuestos de infracción relacionados con la obligación de presentar la información correspondiente sobre el pago, retención, acreditamiento y traslado del IVA en las operaciones con proveedores.",
+  "pregunta": "¿Qué consecuencias tengo si no presento la información del IVA de mis proveedores en el formato y plazo establecidos?",
+  "esperados": [
+   "CFF:81",
+   "LIVA:32"
+  ]
+ },
+ {
+  "n": 16,
+  "anexo": 7,
+  "id": null,
+  "tema": "Recursos administrativos. Formulario múltiple de pago, cartas invitación o citatorio. No son resoluciones que afecten el interés jurídico de los contribuyentes.",
+  "pregunta": "¿Puedo presentar recurso de revocación contra una carta invitación, citatorio o formulario múltiple de pago?",
+  "esperados": [
+   "CFF:117"
+  ]
+ },
+ {
+  "n": 17,
+  "anexo": 7,
+  "id": null,
+  "tema": "Remoción del depositario. El recurso de revocación es improcedente.",
+  "pregunta": "¿Puedo interponer un recurso de revocación contra la remoción del depositario?",
+  "esperados": [
+   "CFF:117",
+   "CFF:153"
+  ]
+ },
+ {
+  "n": 18,
+  "anexo": 7,
+  "id": null,
+  "tema": "Notificación por correo certificado. Para su validez debe estarse a lo señalado en la Ley del Servicio Postal Mexicano.",
+  "pregunta": "¿Es válida una notificación fiscal enviada por correo certificado con acuse de recibo a mi empresa?",
+  "esperados": [
+   "CFF:134",
+   "CFF:5"
+  ]
+ },
+ {
+  "n": 19,
+  "anexo": 7,
+  "id": "21/CFF/N",
+  "tema": "Notificación en los términos del artículo 134, fracción I del CFF. Establece tres medios alternativos entre sí.",
+  "pregunta": "¿De qué formas puede la autoridad fiscal notificarme un requerimiento o acto administrativo?",
+  "esperados": [
+   "CFF:134"
+  ]
+ },
+ {
+  "n": 20,
+  "anexo": 7,
+  "id": null,
+  "tema": "Embargo en la vía administrativa. No es necesario volver a embargar el bien.",
+  "pregunta": "¿Debo volver a embargar un bien que ya está embargado en la vía administrativa para ejecutar la garantía?",
+  "esperados": [
+   "CFF:141",
+   "CFF:143"
+  ]
+ },
+ {
+  "n": 21,
+  "anexo": 7,
+  "id": null,
+  "tema": "Suspensión del plazo de caducidad derivado de la interposición de un recurso administrativo o juicio.",
+  "pregunta": "¿Se suspende el plazo de prescripción cuando presento un recurso administrativo o un juicio contra la autoridad fiscal?",
+  "esperados": [
+   "CFF:67"
+  ]
+ },
+ {
+  "n": 22,
+  "anexo": 7,
+  "id": null,
+  "tema": "Contribuciones retenidas. Cuando el retenedor, no la efectúe y asuma el adeudo o las pague, podrá obtener los beneficios legales propios de los contribuyentes.",
+  "pregunta": "¿Puedo obtener facilidades de pago o reducción de multas por una retención que no hizo mi empleador?",
+  "esperados": [
+   "CFF:26",
+   "CFF:6",
+   "CFF:66",
+   "CFF:66-A",
+   "CFF:70-A"
+  ]
+ },
+ {
+  "n": 23,
+  "anexo": 7,
+  "id": "25/CFF/N",
+  "tema": "Devoluciones indebidas, al tener su origen en una contribución, conservan la naturaleza jurídica de esta.",
+  "pregunta": "¿Tengo que devolver el dinero que me reembolsaron por error?",
+  "esperados": [
+   "CFF:1",
+   "CFF:2",
+   "CFF:22",
+   "CFF:6"
+  ]
+ },
+ {
+  "n": 24,
+  "anexo": 7,
+  "id": null,
+  "tema": "Definiciones de saldo a favor y pago de lo indebido.",
+  "pregunta": "¿Cómo puedo distinguir si la devolución que me corresponde es por saldo a favor o por pago indebido?",
+  "esperados": [
+   "CFF:22"
+  ]
+ },
+ {
+  "n": 25,
+  "anexo": 7,
+  "id": null,
+  "tema": "Acuerdo Conclusivo. Concepto de calificación de hechos u omisiones.",
+  "pregunta": "¿En qué momento puedo solicitar un acuerdo conclusivo durante la revisión de mis declaraciones?",
+  "esperados": [
+   "CFF:42",
+   "CFF:69-C"
+  ]
+ },
+ {
+  "n": 26,
+  "anexo": 7,
+  "id": "28/CFF/N",
+  "tema": "Responsabilidad penal de plataformas de servicios digitales y sus titulares.",
+  "pregunta": "¿Una plataforma digital puede ser castigada penalmente por publicar anuncios que venden comprobantes fiscales falsos?",
+  "esperados": [
+   "CFF:113-Bis"
+  ]
+ },
+ {
+  "n": 27,
+  "anexo": 7,
+  "id": "1/ISR/N",
+  "tema": "Establecimiento permanente. Los ejemplos que pueden considerarse constitutivos de establecimiento permanente deben analizarse de conformidad con las características esenciales de dicho concepto.",
+  "pregunta": "¿Mi oficina en el extranjero se considera establecimiento permanente a efectos del ISR?",
+  "esperados": [
+   "LISR:2"
+  ]
+ },
+ {
+  "n": 28,
+  "anexo": 7,
+  "id": "2/ISR/N",
+  "tema": "Beneficios de los tratados para evitar la doble tributación. Es necesario el cumplimiento de las disposiciones de procedimiento para su aplicación.",
+  "pregunta": "¿Qué requisitos debo cumplir para poder aplicar los beneficios de un tratado que evita la doble tributación?",
+  "esperados": [
+   "CFF:32-A",
+   "CFF:32-H",
+   "LISR:4"
+  ]
+ },
+ {
+  "n": 29,
+  "anexo": 7,
+  "id": "3/ISR/N",
+  "tema": "Beneficios del tratado para evitar la doble tributación entre México y Barbados. Interpretación de los textos en español e inglés.",
+  "pregunta": "¿Puedo pagar impuesto en México o en Barbados por la venta de acciones si poseía al menos 25 % del capital?",
+  "esperados": [
+   "LISR:4"
+  ]
+ },
+ {
+  "n": 30,
+  "anexo": 7,
+  "id": null,
+  "tema": "Orden en que se efectuará el acreditamiento del ISR pagado en el extranjero.",
+  "pregunta": "¿Se debe acreditar primero el ISR pagado en el extranjero antes de los pagos provisionales?",
+  "esperados": [
+   "LISR:5"
+  ]
+ },
+ {
+  "n": 31,
+  "anexo": 7,
+  "id": null,
+  "tema": "Acreditamiento del ISR pagado en el extranjero. Los contribuyentes sólo podrán acreditar el excedente cuando el procedimiento amistoso concluya con un acuerdo y lo acepten.",
+  "pregunta": "¿Puedo deducir el ISR que pagué en el extranjero si el proceso amistoso no termina con un acuerdo?",
+  "esperados": [
+   "LISR:5"
+  ]
+ },
+ {
+  "n": 32,
+  "anexo": 7,
+  "id": "6/ISR/N",
+  "tema": "Devolución de cantidades realizada por la autoridad fiscal. Si se pagan intereses los mismos deben acumularse para efectos del ISR.",
+  "pregunta": "¿Los intereses que me pague la autoridad al devolverme mi dinero se consideran ingreso y debo pagar ISR por ellos?",
+  "esperados": [
+   "CFF:21",
+   "CFF:22-A",
+   "LISR:133",
+   "LISR:135",
+   "LISR:8"
+  ]
+ },
+ {
+  "n": 33,
+  "anexo": 7,
+  "id": null,
+  "tema": "Ganancia en la enajenación de certificados bursátiles fiduciarios, colocados entre el gran público inversionista. Se debe considerar interés.",
+  "pregunta": "¿La ganancia que obtengo al vender certificados bursátiles fiduciarios se considera ingreso por intereses?",
+  "esperados": [
+   "CFF:14",
+   "LISR:8"
+  ]
+ },
+ {
+  "n": 34,
+  "anexo": 7,
+  "id": null,
+  "tema": "ISR por dividendos o utilidades. Casos en los cuales las personas morales no deberán calcular el impuesto por los montos que se consideran dividendos o utilidades distribuidos.",
+  "pregunta": "¿En qué casos una empresa no tiene que pagar ISR por los dividendos que reparte?",
+  "esperados": [
+   "LISR:10",
+   "LISR:140"
+  ]
+ },
+ {
+  "n": 35,
+  "anexo": 7,
+  "id": "9/ISR/N",
+  "tema": "ISR por dividendos o utilidades. Orden en el que se efectuará su acreditamiento.",
+  "pregunta": "¿En qué ejercicio fiscal puedo aplicar el acreditamiento del ISR que pagué por dividendos distribuidos?",
+  "esperados": [
+   "LISR:10",
+   "LISR:11"
+  ]
+ },
+ {
+  "n": 36,
+  "anexo": 7,
+  "id": "10/ISR/N",
+  "tema": "Declaración del ejercicio del ISR. La fiduciaria no está obligada a presentarla por las actividades realizadas a través de un fideicomiso.",
+  "pregunta": "¿Tengo que presentar la declaración del ISR si mi actividad está dentro de un fideicomiso?",
+  "esperados": [
+   "CFF:32-B",
+   "LISR:13",
+   "LISR:187",
+   "LISR:188",
+   "LISR:192",
+   "LISR:193"
+  ]
+ },
+ {
+  "n": 37,
+  "anexo": 7,
+  "id": "11/ISR/N",
+  "tema": "Determinación del reparto adicional de participación de utilidades a los trabajadores de las empresas. Las autoridades fiscales no están obligadas a verificar la existencia de relación laboral alguna.",
+  "pregunta": "¿Puede el SAT obligarme a pagar reparto adicional de utilidades aunque no tenga empleados?",
+  "esperados": [
+   "LISR:109",
+   "LISR:9"
+  ]
+ },
+ {
+  "n": 38,
+  "anexo": 7,
+  "id": null,
+  "tema": "Ingresos acumulables por la prestación del servicio de emisión de vales o monederos electrónicos.",
+  "pregunta": "¿Qué ingresos debo incluir al declarar impuestos si mi empresa emite vales o monederos electrónicos?",
+  "esperados": [
+   "LISR:16"
+  ]
+ },
+ {
+  "n": 39,
+  "anexo": 7,
+  "id": null,
+  "tema": "Autorización para enajenar acciones a costo fiscal. No se actualiza el supuesto para otorgarla tratándose de aquéllas que no tengan costo promedio por acción.",
+  "pregunta": "¿Puedo solicitar la autorización para enajenar mis acciones a costo fiscal si no tengo costo promedio por acción?",
+  "esperados": [
+   "LISR:22",
+   "LISR:23",
+   "LISR:24"
+  ]
+ },
+ {
+  "n": 40,
+  "anexo": 7,
+  "id": null,
+  "tema": "Envases de bebidas embotelladas. Supuestos en los que se deben considerar activo fijo o mercancía.",
+  "pregunta": "¿Los envases que utilizo para vender bebidas deben registrarse como inventario o como activo fijo?",
+  "esperados": [
+   "LISR:25",
+   "LISR:32",
+   "LISR:39"
+  ]
+ },
+ {
+  "n": 41,
+  "anexo": 7,
+  "id": null,
+  "tema": "Deducción de pérdidas por caso fortuito o fuerza mayor.",
+  "pregunta": "¿Cómo puedo deducir una pérdida de efectivo por robo o fraude en mi declaración de impuestos?",
+  "esperados": [
+   "CFF:17-A",
+   "LISR:18",
+   "LISR:25",
+   "LISR:37"
+  ]
+ },
+ {
+  "n": 42,
+  "anexo": 7,
+  "id": "16/ISR/N",
+  "tema": "Intereses devengados. Supuesto en el que se acredita el requisito de la deducibilidad.",
+  "pregunta": "¿Puedo deducir los intereses que me generó un préstamo aunque no los haya pagado todavía?",
+  "esperados": [
+   "LISR:25",
+   "LISR:27"
+  ]
+ },
+ {
+  "n": 43,
+  "anexo": 7,
+  "id": "17/ISR/N",
+  "tema": "Actos u operaciones prohibidos por la Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita. La realización de dichos actos u operaciones implica la no deducción de las erogaciones relacionadas con aquéllos.",
+  "pregunta": "¿Puedo deducir los gastos de una operación que realicé usando efectivo o divisas si esa operación está prohibida por la ley?",
+  "esperados": [
+   "LISR:103",
+   "LISR:105",
+   "LISR:25",
+   "LISR:27"
+  ]
+ },
+ {
+  "n": 44,
+  "anexo": 7,
+  "id": "18/ISR/N",
+  "tema": "Personas morales que concentren sus transacciones de tesorería. Excepción al requisito de deducibilidad previsto para la procedencia del acreditamiento del IVA.",
+  "pregunta": "¿Podemos deducir el IVA de pagos hechos a través de una empresa centralizadora del grupo sin usar transferencia electrónica?",
+  "esperados": [
+   "LISR:27",
+   "LIVA:5"
+  ]
+ },
+ {
+  "n": 45,
+  "anexo": 7,
+  "id": "19/ISR/N",
+  "tema": "Pérdidas por créditos incobrables. Notoria imposibilidad práctica de cobro.",
+  "pregunta": "¿En qué momento puedo deducir una pérdida por un crédito que ya no puedo cobrar, sin esperar a que venza el plazo de prescripción?",
+  "esperados": [
+   "LISR:27"
+  ]
+ },
+ {
+  "n": 46,
+  "anexo": 7,
+  "id": null,
+  "tema": "Intereses no se consideran cantidades pagadas por concepto de ISR a cargo de terceros.",
+  "pregunta": "¿Los intereses que me pagan para cubrir la retención del ISR se consideran como ISR a cargo de un tercero?",
+  "esperados": [
+   "LISR:166",
+   "LISR:28"
+  ]
+ },
+ {
+  "n": 47,
+  "anexo": 7,
+  "id": null,
+  "tema": "Dádivas a servidores públicos. No son deducibles para los efectos del ISR.",
+  "pregunta": "¿Puedo deducir en mi declaración de impuestos los regalos que le doy a un funcionario público?",
+  "esperados": [
+   "LISR:28"
+  ]
+ },
+ {
+  "n": 48,
+  "anexo": 7,
+  "id": null,
+  "tema": "Crédito comercial. No es deducible el sobreprecio que paga el contribuyente por la adquisición de un bien.",
+  "pregunta": "¿Puedo deducir el sobreprecio que pagué al comprar un bien?",
+  "esperados": [
+   "LISR:28"
+  ]
+ },
+ {
+  "n": 49,
+  "anexo": 7,
+  "id": null,
+  "tema": "Capitalización delgada. No es deducible la pérdida cambiaria, devengada por la fluctuación de la moneda extranjera, que derive del monto de las deudas que excedan del triple del capital de los contribuyentes y provengan de deudas contraídas con partes relacionadas en el extranjero.",
+  "pregunta": "¿Puedo deducir una pérdida cambiaria de una deuda con mi empresa hermana en el extranjero que supera tres veces mi capital?",
+  "esperados": [
+   "LISR:179",
+   "LISR:28",
+   "LISR:8"
+  ]
+ },
+ {
+  "n": 50,
+  "anexo": 7,
+  "id": "24/ISR/N",
+  "tema": "Deducciones del ISR. Los vehículos denominados pick up son camiones de carga.",
+  "pregunta": "¿Mi pick‑up se considera camión de carga para poder deducir el ISR?",
+  "esperados": [
+   "CFF:5",
+   "LISR:34",
+   "LISR:36"
+  ]
+ },
+ {
+  "n": 51,
+  "anexo": 7,
+  "id": null,
+  "tema": "Cálculo del ajuste anual por inflación. No debe considerarse el IVA acreditable.",
+  "pregunta": "¿Puedo incluir el IVA acreditable al calcular el ajuste anual por inflación?",
+  "esperados": [
+   "LISR:44",
+   "LISR:45",
+   "LIVA:4"
+  ]
+ },
+ {
+  "n": 52,
+  "anexo": 7,
+  "id": null,
+  "tema": "Operaciones financieras derivadas de capital referenciadas al tipo de cambio de una divisa. El hecho de estar previstas en una disposición que regula la no retención por el pago de intereses no altera su naturaleza.",
+  "pregunta": "¿Las ganancias que obtengo al operar con divisas están exentas de retención de ISR?",
+  "esperados": [
+   "CFF:16-A",
+   "CFF:16-C",
+   "LISR:54"
+  ]
+ },
+ {
+  "n": 53,
+  "anexo": 7,
+  "id": null,
+  "tema": "Actualización de pérdidas fiscales. Factor aplicable.",
+  "pregunta": "¿Cuál es la forma de obtener el factor para actualizar una pérdida fiscal del ejercicio en que ocurrió?",
+  "esperados": [
+   "LISR:57",
+   "LISR:6"
+  ]
+ },
+ {
+  "n": 54,
+  "anexo": 7,
+  "id": null,
+  "tema": "Aumento de la pérdida fiscal en declaraciones complementarias.",
+  "pregunta": "¿Pierdo el derecho a compensar una pérdida fiscal si, al corregir mi declaración, convierto esa pérdida en utilidad?",
+  "esperados": [
+   "LISR:57"
+  ]
+ },
+ {
+  "n": 55,
+  "anexo": 7,
+  "id": null,
+  "tema": "Sociedades cooperativas de consumo. No están obligadas a pagar el ISR cuando enajenen bienes distintos de su activo fijo.",
+  "pregunta": "¿Mi cooperativa de consumo debe pagar ISR al vender productos a sus socios?",
+  "esperados": [
+   "LISR:80"
+  ]
+ },
+ {
+  "n": 56,
+  "anexo": 7,
+  "id": null,
+  "tema": "Instituciones de enseñanza. Deben contar con reconocimiento de validez oficial de estudios para obtener la autorización para recibir donativos deducibles y considerarse personas morales con fines no lucrativos.",
+  "pregunta": "¿Qué requisitos debe cumplir una escuela privada para poder recibir donativos deducibles?",
+  "esperados": [
+   "CFF:5",
+   "LISR:79"
+  ]
+ },
+ {
+  "n": 57,
+  "anexo": 7,
+  "id": null,
+  "tema": "Instituciones educativas autorizadas para recibir donativos deducibles. Las cuotas de inscripción y colegiaturas pagadas por sus alumnos se consideran cuotas de recuperación.",
+  "pregunta": "¿Las cuotas de inscripción y colegiatura que pago a una institución educativa autorizada se consideran ingresos no relacionados?",
+  "esperados": [
+   "LISR:79",
+   "LISR:80"
+  ]
+ },
+ {
+  "n": 58,
+  "anexo": 7,
+  "id": null,
+  "tema": "Premios por asistencia y puntualidad. No son prestaciones de naturaleza análoga a la previsión social.",
+  "pregunta": "¿Los premios que recibo por puntualidad y asistencia en mi trabajo están sujetos a impuesto?",
+  "esperados": [
+   "LISR:7",
+   "LISR:93"
+  ]
+ },
+ {
+  "n": 59,
+  "anexo": 7,
+  "id": null,
+  "tema": "Previsión Social. Cumplimiento del requisito de generalidad.",
+  "pregunta": "¿Se me cobra ISR si mi empresa me otorga una beca educativa y la concede a todos los empleados?",
+  "esperados": [
+   "LISR:93"
+  ]
+ },
+ {
+  "n": 60,
+  "anexo": 7,
+  "id": null,
+  "tema": "Ingresos por enajenación de bienes inmuebles destinados a casa habitación.",
+  "pregunta": "¿Tengo que pagar ISR al vender mi casa si parte del terreno supera el límite de superficie permitido?",
+  "esperados": [
+   "LISR:93"
+  ]
+ },
+ {
+  "n": 61,
+  "anexo": 7,
+  "id": null,
+  "tema": "Propinas. Constituyen un ingreso para el trabajador.",
+  "pregunta": "¿Las propinas que recibo en mi empleo deben considerarse como ingreso para el cálculo del ISR?",
+  "esperados": [
+   "LISR:94",
+   "LISR:96"
+  ]
+ },
+ {
+  "n": 62,
+  "anexo": 7,
+  "id": null,
+  "tema": "Subsidio para el empleo. Es factible recuperar vía devolución el remanente no acreditado.",
+  "pregunta": "¿Puedo solicitar la devolución del subsidio para el empleo que no logré acreditar?",
+  "esperados": [
+   "CFF:22"
+  ]
+ },
+ {
+  "n": 63,
+  "anexo": 7,
+  "id": null,
+  "tema": "Acciones emitidas por sociedades extranjeras cotizadas en bolsas de valores concesionadas. Su enajenación está sujeta a la tasa del 10%.",
+  "pregunta": "¿Cuál es la tasa de impuesto que debo pagar al vender acciones de empresas extranjeras cotizadas en la bolsa mexicana?",
+  "esperados": [
+   "CFF:5",
+   "CFF:9",
+   "LISR:129"
+  ]
+ },
+ {
+  "n": 64,
+  "anexo": 7,
+  "id": null,
+  "tema": "Dividendos o utilidades distribuidos. Acumulación a los demás ingresos por parte de las personas físicas.",
+  "pregunta": "¿Los dividendos o utilidades que recibo deben sumarse a mis otros ingresos al declarar mi ISR?",
+  "esperados": [
+   "LISR:140"
+  ]
+ },
+ {
+  "n": 65,
+  "anexo": 7,
+  "id": null,
+  "tema": "Dividendos o utilidades distribuidos pagados por una sociedad. Acumulación de los demás ingresos de las personas físicas.",
+  "pregunta": "¿Los dividendos o utilidades que me asignan de una sociedad deben sumarse a mis otros ingresos al declarar impuestos?",
+  "esperados": [
+   "LISR:140"
+  ]
+ },
+ {
+  "n": 66,
+  "anexo": 7,
+  "id": null,
+  "tema": "Dividendos o utilidades distribuidos. Momento de acumulación de los ingresos de las personas físicas.",
+  "pregunta": "¿En qué momento tengo que incluir los dividendos o utilidades distribuidas en mi declaración de impuestos?",
+  "esperados": [
+   "CFF:6",
+   "LISR:140"
+  ]
+ },
+ {
+  "n": 67,
+  "anexo": 7,
+  "id": null,
+  "tema": "Devolución de saldos a favor a personas físicas. Acreditamiento del ISR pagado por la persona que distribuyó los dividendos.",
+  "pregunta": "¿Puedo solicitar la devolución del impuesto que ya pagó la empresa cuando me distribuye dividendos?",
+  "esperados": [
+   "LISR:140",
+   "LISR:152"
+  ]
+ },
+ {
+  "n": 68,
+  "anexo": 7,
+  "id": null,
+  "tema": "Préstamos a socios y accionistas. Se consideran dividendos.",
+  "pregunta": "¿Un préstamo que le dé mi empresa a un socio se trata como dividendos en mi declaración de impuestos?",
+  "esperados": [
+   "LISR:10",
+   "LISR:140"
+  ]
+ },
+ {
+  "n": 69,
+  "anexo": 7,
+  "id": null,
+  "tema": "Distribución de dividendos. Monto del acreditamiento del ISR que tienen derecho de aplicar las personas físicas en la declaración del ejercicio, cuando reciban dividendos de persona moral dedicada exclusivamente a actividades agrícolas, ganaderas, pesqueras o silvícolas.",
+  "pregunta": "¿Cuánto ISR puedo acreditar si recibo dividendos de una empresa dedicada solo a actividades agrícolas, ganaderas, pesqueras o silvícolas?",
+  "esperados": [
+   "LISR:140",
+   "LISR:9"
+  ]
+ },
+ {
+  "n": 70,
+  "anexo": 7,
+  "id": null,
+  "tema": "Personas físicas. Ingresos percibidos por estímulos fiscales, se consideran percibidos en el momento que se incrementa el patrimonio.",
+  "pregunta": "¿En qué momento debo considerar que ya recibí los ingresos de un estímulo fiscal para efectos de pago de impuestos?",
+  "esperados": [
+   "CFF:1",
+   "CFF:6",
+   "LISR:141"
+  ]
+ },
+ {
+  "n": 71,
+  "anexo": 7,
+  "id": null,
+  "tema": "Operaciones financieras derivadas en las que se liquiden diferencias durante su vigencia. Se considera que existe un vencimiento en cada liquidación respecto del monto de la diferencia liquidada.",
+  "pregunta": "¿Cómo se determina el momento en que debo reconocer la ganancia o pérdida de un derivado que se liquida parcialmente durante su vigencia?",
+  "esperados": [
+   "CFF:16-A",
+   "LISR:146"
+  ]
+ },
+ {
+  "n": 72,
+  "anexo": 7,
+  "id": null,
+  "tema": "Deducible del seguro de gastos médicos. No es una deducción personal.",
+  "pregunta": "¿Puedo deducir del ISR el deducible que pago de mi seguro de gastos médicos?",
+  "esperados": [
+   "LISR:151"
+  ]
+ },
+ {
+  "n": 73,
+  "anexo": 7,
+  "id": null,
+  "tema": "Ingresos por honorarios y en general por la prestación de un servicio profesional, para los efectos del Título V de la Ley del ISR.",
+  "pregunta": "¿Qué ingresos se consideran como honorarios o servicios profesionales a efectos del ISR?",
+  "esperados": [
+   "LISR:100",
+   "LISR:175"
+  ]
+ },
+ {
+  "n": 74,
+  "anexo": 7,
+  "id": null,
+  "tema": "Operación de maquila para los efectos de la Ley del ISR. Alcance del concepto transformación.",
+  "pregunta": "¿Qué actividades se consideran “transformación” en una operación de maquila?",
+  "esperados": [
+   "LISR:181"
+  ]
+ },
+ {
+  "n": 75,
+  "anexo": 7,
+  "id": null,
+  "tema": "Operación de maquila para los efectos de la Ley del ISR. Mercancías con las que deben realizarse los procesos de transformación o reparación.",
+  "pregunta": "¿Qué mercancías pueden usarse o importarse temporalmente en una operación de maquila para la transformación o reparación?",
+  "esperados": [
+   "LISR:181"
+  ]
+ },
+ {
+  "n": 76,
+  "anexo": 7,
+  "id": "50/ISR/N",
+  "tema": "Operación de maquila para los efectos del Decreto IMMEX. Porcentaje de la maquinaria y equipo que se utiliza.",
+  "pregunta": "¿Cuánta maquinaria de la maquila debe ser propiedad del cliente extranjero para cumplir con el requisito del programa IMMEX?",
+  "esperados": [
+   "LISR:181"
+  ]
+ },
+ {
+  "n": 77,
+  "anexo": 7,
+  "id": null,
+  "tema": "Actualización. No se considera ingreso acumulable para efectos del cálculo del ISR.",
+  "pregunta": "¿El ajuste por inflación que me devuelven cuenta como ingreso para calcular el ISR?",
+  "esperados": [
+   "CFF:17-A"
+  ]
+ },
+ {
+  "n": 78,
+  "anexo": 7,
+  "id": null,
+  "tema": "Momento en que se considera percibido un dividendo o utilidad distribuido mediante la entrega de acciones de la misma persona moral para fines de la acumulación a los demás ingresos de las personas físicas y la aplicación del impuesto adicional del 10%.",
+  "pregunta": "¿En qué momento se considera percibido un dividendo si me lo pagan con acciones de la misma empresa?",
+  "esperados": [
+   "LISR:10",
+   "LISR:140",
+   "LISR:164",
+   "LISR:23",
+   "LISR:78"
+  ]
+ },
+ {
+  "n": 79,
+  "anexo": 7,
+  "id": "54/ISR/N",
+  "tema": "Gas de empaque. El utilizado en el servicio de transporte de gas natural tiene la naturaleza de activo fijo.",
+  "pregunta": "¿Puedo deducir el gas de empaque que utilizo en mi negocio de transporte de gas natural?",
+  "esperados": [
+   "LISR:32",
+   "LISR:35"
+  ]
+ },
+ {
+  "n": 80,
+  "anexo": 7,
+  "id": null,
+  "tema": "Beneficios empresariales para los efectos de los tratados para evitar la doble tributación y su relación con el artículo 175, fracción VI de la Ley del ISR.",
+  "pregunta": "¿Qué se entiende por “beneficios empresariales” al aplicar un tratado para evitar la doble tributación?",
+  "esperados": [
+   "CFF:153",
+   "CFF:16",
+   "CFF:173",
+   "CFF:7",
+   "LISR:175"
+  ]
+ },
+ {
+  "n": 81,
+  "anexo": 7,
+  "id": null,
+  "tema": "Autorización. Requisitos para ser donataria autorizada.",
+  "pregunta": "¿Qué requisitos debe cumplir una organización sin fines de lucro para poder recibir donativos deducibles?",
+  "esperados": [
+   "CFF:5",
+   "LISR:79",
+   "LISR:82"
+  ]
+ },
+ {
+  "n": 82,
+  "anexo": 7,
+  "id": "57/ISR/N",
+  "tema": "Donativos otorgados por Donatarias Autorizadas a organizaciones extranjeras.",
+  "pregunta": "¿Puedo deducir en mi ISR una donación que hice a una organización benéfica de otro país?",
+  "esperados": [
+   "LISR:79",
+   "LISR:82"
+  ]
+ },
+ {
+  "n": 83,
+  "anexo": 7,
+  "id": "58/ISR/N",
+  "tema": "Beneficios del tratado para evitar la doble tributación entre México y Qatar. Interpretación de los textos en español e inglés.",
+  "pregunta": "¿Puedo aplicar el tratado México‑Qatar para que mis intereses no se graven doblemente si la empresa es parcialmente propiedad de Qatar?",
+  "esperados": [
+   "LISR:4"
+  ]
+ },
+ {
+  "n": 84,
+  "anexo": 7,
+  "id": "59/ISR/IVA/N",
+  "tema": "Plataformas digitales. Cumplimiento de obligaciones fiscales de personas físicas con actividades empresariales que presten servicios a través de Internet y de las plataformas tecnológicas, aplicaciones informáticas y similares.",
+  "pregunta": "¿Tengo que pagar impuestos si vendo o presto servicios por medio de una app o plataforma digital?",
+  "esperados": [
+   "LISR:113-A",
+   "LIVA:18-B",
+   "LIVA:18-K"
+  ]
+ },
+ {
+  "n": 85,
+  "anexo": 7,
+  "id": "1/IVA/N",
+  "tema": "La contraprestación pagada con acciones o partes sociales por aportaciones en especie a sociedades mercantiles, se considera efectivamente cobrada con la entrega de las mismas.",
+  "pregunta": "¿En qué momento se considera que he recibido efectivamente el pago cuando aporto bienes a una empresa a cambio de acciones?",
+  "esperados": [
+   "CFF:14",
+   "LIVA:1",
+   "LIVA:1-B",
+   "LIVA:11",
+   "LIVA:8"
+  ]
+ },
+ {
+  "n": 86,
+  "anexo": 7,
+  "id": null,
+  "tema": "Indemnización por cheque no pagado. El monto de la misma no es objeto del IVA.",
+  "pregunta": "¿La indemnización que recibo por un cheque no pagado debe considerarse para calcular el IVA?",
+  "esperados": [
+   "LIVA:1"
+  ]
+ },
+ {
+  "n": 87,
+  "anexo": 7,
+  "id": null,
+  "tema": "Retenciones del IVA. No proceden por servicios prestados como actividad empresarial.",
+  "pregunta": "¿Debo retener IVA cuando contrato un servicio que no constituye una actividad empresarial?",
+  "esperados": [
+   "CFF:16",
+   "LIVA:1-A"
+  ]
+ },
+ {
+  "n": 88,
+  "anexo": 7,
+  "id": null,
+  "tema": "Servicios de mensajería y paquetería. No se encuentran sujetos a la retención del IVA.",
+  "pregunta": "¿Debo retener IVA al contratar servicios de mensajería o paquetería?",
+  "esperados": [
+   "CFF:5",
+   "LIVA:1-A"
+  ]
+ },
+ {
+  "n": 89,
+  "anexo": 7,
+  "id": null,
+  "tema": "Transmisión de deudas. Momento en que se considera efectivamente cobrada la contraprestación y pagado el impuesto.",
+  "pregunta": "¿En qué momento se considera que ya pagué el IVA si un tercero asume la obligación de pago?",
+  "esperados": [
+   "LIVA:1-B"
+  ]
+ },
+ {
+  "n": 90,
+  "anexo": 7,
+  "id": "6/IVA/N",
+  "tema": "Enajenación de colmenas polinizadoras.",
+  "pregunta": "¿Qué impuesto se paga al vender una colmena de abejas y sus diferentes partes?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 91,
+  "anexo": 7,
+  "id": "7/IVA/N",
+  "tema": "Enajenación de pieles frescas.",
+  "pregunta": "¿Se me cobra IVA al vender pieles frescas o conservadas sin curtir?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 92,
+  "anexo": 7,
+  "id": "8/IVA/N",
+  "tema": "Medicinas de patente.",
+  "pregunta": "¿Las vacunas y medicamentos homeopáticos que mezclo con otros productos están exentos del IVA?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 93,
+  "anexo": 7,
+  "id": "9/IVA/N",
+  "tema": "Suministro de medicamentos como parte de los servicios de un hospital. Se debe considerar la tasa general del IVA.",
+  "pregunta": "¿Los medicamentos que recibo en el hospital están gravados con la tasa general del IVA?",
+  "esperados": [
+   "CFF:14",
+   "CFF:17",
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 94,
+  "anexo": 7,
+  "id": "10/IVA/N",
+  "tema": "Productos destinados a la alimentación humana y animal.",
+  "pregunta": "¿Los ingredientes que uso para elaborar alimentos están gravados con IVA o con tasa 0%?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 95,
+  "anexo": 7,
+  "id": null,
+  "tema": "Suplementos alimenticios. No se consideran como productos destinados a la alimentación.",
+  "pregunta": "¿Los suplementos alimenticios están sujetos al IVA del 0% o deben pagar la tasa regular?",
+  "esperados": [
+   "LIVA:2-A",
+   "LIVA:25"
+  ]
+ },
+ {
+  "n": 96,
+  "anexo": 7,
+  "id": null,
+  "tema": "Concepto de leche para efectos del IVA.",
+  "pregunta": "¿La leche saborizada o de otras especies también está exenta del IVA?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 97,
+  "anexo": 7,
+  "id": "13/IVA/N",
+  "tema": "Alimentos preparados.",
+  "pregunta": "¿Los alimentos listos para comer que compro en el supermercado llevan el IVA de la tasa general?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 98,
+  "anexo": 7,
+  "id": null,
+  "tema": "Alimentos preparados para su consumo en el lugar de su enajenación.",
+  "pregunta": "¿Los platillos que me sirven listos, pero que debo calentar con los utensilios del lugar, se consideran gravados con IVA?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 99,
+  "anexo": 7,
+  "id": null,
+  "tema": "Enajenación de refacciones para equipo agrícola.",
+  "pregunta": "¿Debo cobrar IVA al vender repuestos de mi maquinaria agrícola?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 100,
+  "anexo": 7,
+  "id": null,
+  "tema": "Equipos integrados a invernaderos hidropónicos.",
+  "pregunta": "¿Qué equipos pueden considerarse integrados a un invernadero hidropónico para aplicar la tasa del 0 % de IVA?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 101,
+  "anexo": 7,
+  "id": "17/IVA/N",
+  "tema": "Libros contenidos en medios electrónicos, táctiles o auditivos. Tratamiento en materia de IVA.",
+  "pregunta": "¿Tengo que pagar IVA al vender un libro digital o su versión en audio?",
+  "esperados": [
+   "CFF:5",
+   "LIVA:2-A",
+   "LIVA:20",
+   "LIVA:9"
+  ]
+ },
+ {
+  "n": 102,
+  "anexo": 7,
+  "id": "18/IVA/N",
+  "tema": "Cargos entre líneas aéreas.",
+  "pregunta": "¿Los cargos que paga una aerolínea por servicios de otra línea están gravados con IVA o pueden facturarse con tasa 0%?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 103,
+  "anexo": 7,
+  "id": "19/IVA/N",
+  "tema": "Prestación de servicios a sociedades dedicadas a actividades agrícolas y ganaderas.",
+  "pregunta": "¿Puedo aplicar la tasa 0 % de IVA al contratar servicios para mi empresa agrícola?",
+  "esperados": [
+   "CFF:16",
+   "LISR:113-E",
+   "LISR:74",
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 104,
+  "anexo": 7,
+  "id": null,
+  "tema": "Prestación de servicios en invernaderos hidropónicos. Aplicación de la tasa del 0%.",
+  "pregunta": "¿Se me cobra IVA por servicios de construcción de un invernadero hidropónico?",
+  "esperados": [
+   "CFF:5",
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 105,
+  "anexo": 7,
+  "id": null,
+  "tema": "IVA en importaciones que realice la Federación, los Estados, los Municipios, así como sus organismos descentralizados y las instituciones públicas de seguridad social.",
+  "pregunta": "¿Las entidades públicas como estados y municipios deben pagar IVA al importar mercancías?",
+  "esperados": [
+   "LIVA:3"
+  ]
+ },
+ {
+  "n": 106,
+  "anexo": 7,
+  "id": null,
+  "tema": "Cálculo de la proporción de acreditamiento cuando se realicen actividades exentas a título gratuito.",
+  "pregunta": "¿Cómo determino la proporción de IVA que puedo acreditar cuando realizo actividades gravadas y también actividades gratuitas?",
+  "esperados": [
+   "LIVA:15"
+  ]
+ },
+ {
+  "n": 107,
+  "anexo": 7,
+  "id": null,
+  "tema": "Saldos a favor del IVA. El remanente de un saldo a favor, si este último previamente se acreditó contra un pago posterior a la declaración en la que se determinó, debe seguirse acreditando hasta agotarlo.",
+  "pregunta": "¿Qué debo hacer con el saldo a favor del IVA que me quedó después de acreditarlo en una declaración posterior?",
+  "esperados": [
+   "LIVA:5-D",
+   "LIVA:6"
+  ]
+ },
+ {
+  "n": 108,
+  "anexo": 7,
+  "id": null,
+  "tema": "Reembolsos o reintegros en especie. Constituyen enajenación.",
+  "pregunta": "¿Tengo que pagar IVA cuando devuelvo bienes al gobierno como reembolso al liquidar mi empresa?",
+  "esperados": [
+   "CFF:14",
+   "LIVA:8"
+  ]
+ },
+ {
+  "n": 109,
+  "anexo": 7,
+  "id": null,
+  "tema": "Enajenación de piedra, arena y tierra. No son bienes inmuebles.",
+  "pregunta": "¿Al vender piedra, arena o tierra debo pagar el IVA o está exenta?",
+  "esperados": [
+   "LIVA:9"
+  ]
+ },
+ {
+  "n": 110,
+  "anexo": 7,
+  "id": null,
+  "tema": "Enajenación de casa habitación. La disposición que establece que no se pagará el IVA no abarca a servicios parciales en su construcción.",
+  "pregunta": "¿Tengo que pagar IVA por los trabajos de plomería y electricidad en la construcción de mi casa?",
+  "esperados": [
+   "LIVA:9"
+  ]
+ },
+ {
+  "n": 111,
+  "anexo": 7,
+  "id": "27/IVA/N",
+  "tema": "Exención. Comisiones por el otorgamiento de créditos hipotecarios para vivienda.",
+  "pregunta": "¿Tengo que pagar IVA por la comisión que me cobró el banco al solicitar mi crédito hipotecario?",
+  "esperados": [
+   "LIVA:15"
+  ]
+ },
+ {
+  "n": 112,
+  "anexo": 7,
+  "id": "28/IVA/N",
+  "tema": "Intereses moratorios.",
+  "pregunta": "¿Debo pagar IVA sobre los intereses moratorios que me cobran por una deuda?",
+  "esperados": [
+   "LIVA:15"
+  ]
+ },
+ {
+  "n": 113,
+  "anexo": 7,
+  "id": null,
+  "tema": "Intereses en financiamientos de actos gravados a la tasa del 0% o exentos.",
+  "pregunta": "¿Los intereses que pago por un crédito para comprar mi casa están sujetos al IVA?",
+  "esperados": [
+   "LIVA:15"
+  ]
+ },
+ {
+  "n": 114,
+  "anexo": 7,
+  "id": null,
+  "tema": "Propinas. No forman parte de la base gravable del IVA.",
+  "pregunta": "¿Las propinas que recibo por mi trabajo están sujetas al IVA?",
+  "esperados": [
+   "LIVA:18"
+  ]
+ },
+ {
+  "n": 115,
+  "anexo": 7,
+  "id": null,
+  "tema": "IVA. Base del impuesto por la prestación del servicio de emisión de vales y monederos electrónicos.",
+  "pregunta": "¿Sobre qué monto se debe calcular el IVA al contratar el servicio de emisión de vales o monederos electrónicos?",
+  "esperados": [
+   "LIVA:18"
+  ]
+ },
+ {
+  "n": 116,
+  "anexo": 7,
+  "id": null,
+  "tema": "Disposición aplicable para determinar las importaciones de oro por las cuales no se pagará IVA.",
+  "pregunta": "¿La importación de oro está exenta de IVA?",
+  "esperados": [
+   "LIVA:2-A",
+   "LIVA:25",
+   "LIVA:9"
+  ]
+ },
+ {
+  "n": 117,
+  "anexo": 7,
+  "id": null,
+  "tema": "Pago y acreditamiento del IVA por importaciones, cuando las actividades del importador estén gravadas a la tasa del 0%.",
+  "pregunta": "¿Cómo debo pagar y acreditar el IVA de una importación si mi actividad está gravada al 0%?",
+  "esperados": [
+   "LIVA:28"
+  ]
+ },
+ {
+  "n": 118,
+  "anexo": 7,
+  "id": null,
+  "tema": "Tasa del 0% del IVA. Resulta aplicable y no se pagará el IEPS, cuando las mercancías nacionales sean destinadas al régimen de depósito fiscal para su exposición y venta en las tiendas denominadas “Duty Free”.",
+  "pregunta": "¿Tengo que pagar IVA e IEPS por productos nacionales que vendo en una tienda duty free?",
+  "esperados": [
+   "LIVA:29"
+  ]
+ },
+ {
+  "n": 119,
+  "anexo": 7,
+  "id": null,
+  "tema": "Seguros. Vehículos de residentes en el extranjero que ingresan temporalmente al país.",
+  "pregunta": "¿Tengo que pagar IVA por el seguro de mi coche extranjero mientras lo uso temporalmente en México?",
+  "esperados": [
+   "LIVA:29"
+  ]
+ },
+ {
+  "n": 120,
+  "anexo": 7,
+  "id": null,
+  "tema": "Impuestos trasladados. Cuando el contribuyente los pague sin haber realizado el cargo o cobro correspondiente al sujeto económico, podrá obtener beneficios legales sin las exclusiones aplicables a dichos impuestos.",
+  "pregunta": "¿Me pueden dar facilidades de pago si pagué el impuesto sin haberlo cobrado a mis clientes?",
+  "esperados": [
+   "CFF:66",
+   "CFF:66-A",
+   "CFF:70-A",
+   "LIVA:1"
+  ]
+ },
+ {
+  "n": 121,
+  "anexo": 7,
+  "id": null,
+  "tema": "Enajenación de sal tasa aplicable en IVA.",
+  "pregunta": "¿Qué tasa de IVA corresponde al vender sal destinada al consumo alimenticio?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 122,
+  "anexo": 7,
+  "id": null,
+  "tema": "Rollos de película o acolchados plásticos. No son herbicidas ni plaguicidas.",
+  "pregunta": "¿Puedo aplicar la tasa del 0 % de IVA al comprar rollos de película o acolchados plásticos para mi cultivo?",
+  "esperados": [
+   "CFF:5",
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 123,
+  "anexo": 7,
+  "id": "40/IVA/N",
+  "tema": "Servicios Digitales. Definición de servicios de intermediación para los efectos de lo dispuesto en el artículo 18-B, fracción II de la Ley del IVA.",
+  "pregunta": "¿Mi plataforma que cobra comisiones por conectar compradores y vendedores en línea se considera un servicio digital?",
+  "esperados": [
+   "LIVA:1-A-Bis",
+   "LIVA:18",
+   "LIVA:18-B"
+  ]
+ },
+ {
+  "n": 124,
+  "anexo": 3,
+  "id": "1/CFF/PI",
+  "tema": "Entrega o puesta a disposición del CFDI. No se cumple con la obligación cuando el emisor únicamente remite a una página de Internet.",
+  "pregunta": "¿Cumplo con la entrega del CFDI si solo les envío el enlace a una página de internet?",
+  "esperados": [
+   "CFF:29",
+   "CFF:29-A"
+  ]
+ },
+ {
+  "n": 125,
+  "anexo": 3,
+  "id": "2/CFF/PI",
+  "tema": "Revelación de esquemas reportables generalizados. Hacer aparentar que tienen el carácter de esquemas reportables personalizados, es contrario a lo establecido por las disposiciones legales aplicables.",
+  "pregunta": "¿Tengo que informar a mi asesor si me propone un plan fiscal que se vende a muchos contribuyentes?",
+  "esperados": [
+   "CFF:197",
+   "CFF:199"
+  ]
+ },
+ {
+  "n": 126,
+  "anexo": 3,
+  "id": "3/CFF/PI",
+  "tema": "Elusión de los efectos de la restricción temporal o cancelación del uso del CSD.",
+  "pregunta": "¿Qué ocurre si me suspenden temporalmente el uso del CSD para emitir mis facturas electrónicas?",
+  "esperados": [
+   "CFF:113-Bis",
+   "CFF:17-H",
+   "CFF:17-H-Bis",
+   "CFF:29"
+  ]
+ },
+ {
+  "n": 127,
+  "anexo": 3,
+  "id": "4/CFF/PI",
+  "tema": "Aplicación indebida de estímulos fiscales, bajo la figura de asunción de responsabilidad solidaria.",
+  "pregunta": "¿Puedo transferir un estímulo fiscal a otro contribuyente mediante asunción de responsabilidad solidaria?",
+  "esperados": [
+   "CFF:109",
+   "CFF:39"
+  ]
+ },
+ {
+  "n": 128,
+  "anexo": 3,
+  "id": "1/ISR/PI",
+  "tema": "Establecimiento permanente.",
+  "pregunta": "¿Debo pagar impuesto sobre la renta en México por ingresos de un establecimiento permanente aunque sea residente en el extranjero?",
+  "esperados": [
+   "LISR:1",
+   "LISR:2"
+  ]
+ },
+ {
+  "n": 129,
+  "anexo": 3,
+  "id": "2/ISR/PI",
+  "tema": "Enajenación de bienes de activo fijo.",
+  "pregunta": "¿Cómo debo calcular la ganancia y la deducción al vender un activo fijo de mi negocio?",
+  "esperados": [
+   "LISR:105",
+   "LISR:147",
+   "LISR:18",
+   "LISR:27",
+   "LISR:31"
+  ]
+ },
+ {
+  "n": 130,
+  "anexo": 3,
+  "id": null,
+  "tema": "Reservas para fondos de pensiones o jubilaciones. No son deducibles los intereses derivados de la inversión o reinversión de los fondos.",
+  "pregunta": "¿Puedo deducir los intereses que obtengo al invertir los fondos de mi reserva para pensiones?",
+  "esperados": [
+   "LISR:29"
+  ]
+ },
+ {
+  "n": 131,
+  "anexo": 3,
+  "id": null,
+  "tema": "Regalías por activos intangibles originados en México, pagadas a partes relacionadas residentes en el extranjero.",
+  "pregunta": "¿Puedo deducir las regalías que pago a una empresa relacionada en el extranjero por usar un activo intangible originado en México?",
+  "esperados": [
+   "LISR:105",
+   "LISR:27"
+  ]
+ },
+ {
+  "n": 132,
+  "anexo": 3,
+  "id": "5/ISR/PI",
+  "tema": "Instituciones de fianzas. Pagos por reclamaciones.",
+  "pregunta": "¿Los pagos que recibo de una fianza por una reclamación incobrable pueden deducirse como gasto en mi ISR?",
+  "esperados": [
+   "LISR:25",
+   "LISR:27"
+  ]
+ },
+ {
+  "n": 133,
+  "anexo": 3,
+  "id": "6/ISR/PI",
+  "tema": "Gastos a favor de tercero. No son deducibles aquellos que se realicen a favor de personas con las cuales no se tenga una relación laboral ni presten servicios profesionales.",
+  "pregunta": "¿Puedo deducir gastos que pagué a una persona que no trabaja para mí ni me presta servicios?",
+  "esperados": [
+   "LISR:27",
+   "LISR:28"
+  ]
+ },
+ {
+  "n": 134,
+  "anexo": 3,
+  "id": null,
+  "tema": "Deducción de inversiones tratándose de activos fijos.",
+  "pregunta": "¿Puedo deducir como gasto la compra de cable de datos o de refrigeradores que vendo en mi negocio?",
+  "esperados": [
+   "LISR:25",
+   "LISR:31",
+   "LISR:32"
+  ]
+ },
+ {
+  "n": 135,
+  "anexo": 3,
+  "id": null,
+  "tema": "Instituciones del sistema financiero. Retención del ISR por intereses.",
+  "pregunta": "¿Mi banco está obligado a retener ISR cuando me paga intereses por mi depósito?",
+  "esperados": [
+   "LISR:54"
+  ]
+ },
+ {
+  "n": 136,
+  "anexo": 3,
+  "id": "9/ISR/PI",
+  "tema": "Desincorporación de sociedades controladas.",
+  "pregunta": "¿Qué debo hacer con las pérdidas fiscales de una subsidiaria que se desincorpora de la consolidación?",
+  "esperados": [
+   "LISR:68",
+   "LISR:71"
+  ]
+ },
+ {
+  "n": 137,
+  "anexo": 3,
+  "id": "10/ISR/PI",
+  "tema": "Rendimientos de bienes entregados en fideicomiso, que únicamente se destinen a financiar la educación.",
+  "pregunta": "¿Tengo que pagar ISR por los rendimientos de un fideicomiso que solo sirve para pagar la universidad de mi hijo?",
+  "esperados": [
+   "LISR:90",
+   "LISR:93"
+  ]
+ },
+ {
+  "n": 138,
+  "anexo": 3,
+  "id": "12/ISR/PI",
+  "tema": "Enajenación de certificados inmobiliarios.",
+  "pregunta": "¿Puedo considerar la venta de certificados inmobiliarios de tiempo compartido como enajenación de casa habitación para no pagar ISR e IVA?",
+  "esperados": [
+   "LISR:93",
+   "LIVA:9"
+  ]
+ },
+ {
+  "n": 139,
+  "anexo": 3,
+  "id": "13/ISR/PI",
+  "tema": "Aplicación de los artículos de los tratados para evitar la doble tributación que México tiene en vigor, relativos a la imposición sobre sucursales.",
+  "pregunta": "¿Se me grava al transferir utilidades de mi sucursal en México a la casa matriz en el extranjero?",
+  "esperados": [
+   "LISR:164",
+   "LISR:78"
+  ]
+ },
+ {
+  "n": 140,
+  "anexo": 3,
+  "id": null,
+  "tema": "Indebida deducción de pérdidas por la enajenación de la nuda propiedad de bienes otorgados en usufructo.",
+  "pregunta": "¿Puedo descontar como pérdida la venta de la nuda propiedad de un bien que había entregado en usufructo?",
+  "esperados": [
+   "CFF:14",
+   "LISR:121",
+   "LISR:122",
+   "LISR:16",
+   "LISR:25",
+   "LISR:90"
+  ]
+ },
+ {
+  "n": 141,
+  "anexo": 3,
+  "id": "17/ISR/PI",
+  "tema": "Subcontratación. Retención de salarios.",
+  "pregunta": "¿Es ilegal contratar a una cooperativa para que realice el mismo trabajo que mis empleados y así evitar retenerles impuestos?",
+  "esperados": [
+   "CFF:16",
+   "LISR:147",
+   "LISR:27",
+   "LISR:32",
+   "LISR:68",
+   "LISR:71",
+   "LISR:72",
+   "LISR:86",
+   "LIVA:32",
+   "LIVA:5"
+  ]
+ },
+ {
+  "n": 142,
+  "anexo": 3,
+  "id": null,
+  "tema": "Previsión social para efectos de la determinación del ISR. No puede otorgarse en efectivo o en otros medios equivalentes.",
+  "pregunta": "¿Puedo entregar a mis trabajadores los beneficios de previsión social en efectivo y aun así deducirlos del ISR?",
+  "esperados": [
+   "LISR:27",
+   "LISR:7",
+   "LISR:93"
+  ]
+ },
+ {
+  "n": 143,
+  "anexo": 3,
+  "id": "22/ISR/PI",
+  "tema": "Inversiones en automóviles. No son deducibles cuando correspondan a automóviles otorgados en comodato y que no son utilizados para la realización de las actividades propias del contribuyente.",
+  "pregunta": "¿Puedo deducir el gasto de un auto que me prestaron en comodato si no lo utilizo para mi actividad comercial?",
+  "esperados": [
+   "LISR:25",
+   "LISR:27",
+   "LIVA:5"
+  ]
+ },
+ {
+  "n": 144,
+  "anexo": 3,
+  "id": "23/ISR/PI",
+  "tema": "Medios de pago en gastos médicos, dentales, por servicios en materia de psicología, nutrición u hospitalarios.",
+  "pregunta": "¿Qué formas de pago debo usar para que mis gastos médicos, dentales o de psicología sean deducibles?",
+  "esperados": [
+   "LISR:151"
+  ]
+ },
+ {
+  "n": 145,
+  "anexo": 3,
+  "id": "24/ISR/PI",
+  "tema": "Entrega de donativos a instituciones de enseñanza cuando no son onerosos, ni remunerativos.",
+  "pregunta": "¿Puedo deducir de mi ISR los donativos que hago a una escuela privada sin recibir nada a cambio?",
+  "esperados": [
+   "LISR:151",
+   "LISR:82"
+  ]
+ },
+ {
+  "n": 146,
+  "anexo": 3,
+  "id": "25/ISR/PI",
+  "tema": "Costo de lo vendido. Tratándose de servicios derivados de contratos de obra inmueble, no son deducibles los costos correspondientes a ingresos no acumulados en el ejercicio.",
+  "pregunta": "¿Puedo deducir los costos de una obra inmobiliaria si todavía no he acumulado los ingresos de esa obra en el ejercicio?",
+  "esperados": [
+   "LISR:19",
+   "LISR:28",
+   "LISR:79",
+   "LISR:99"
+  ]
+ },
+ {
+  "n": 147,
+  "anexo": 3,
+  "id": "27/ISR/PI",
+  "tema": "Deducción de bienes de activo fijo objeto de un contrato de arrendamiento financiero.",
+  "pregunta": "¿Cómo se deduce el costo de un bien adquirido mediante un arrendamiento financiero?",
+  "esperados": [
+   "CFF:15",
+   "LISR:17",
+   "LISR:40"
+  ]
+ },
+ {
+  "n": 148,
+  "anexo": 3,
+  "id": "28/ISR/PI",
+  "tema": "Derechos federativos de los deportistas. Su adquisición constituye una inversión en la modalidad de gasto diferido.",
+  "pregunta": "¿Puedo deducir como gasto los derechos federativos que paga mi club para inscribir a un atleta?",
+  "esperados": [
+   "LISR:25",
+   "LISR:31",
+   "LISR:32",
+   "LISR:33"
+  ]
+ },
+ {
+  "n": 149,
+  "anexo": 3,
+  "id": "30/ISR/PI",
+  "tema": "Ingresos obtenidos por residentes en el extranjero, por arrendamiento o fletamento de embarcaciones o artefactos navales a casco desnudo, con fuente de riqueza en territorio nacional.",
+  "pregunta": "¿Debo retener impuestos al pagar el arrendamiento de una embarcación usada en México aunque el arrendador sea extranjero?",
+  "esperados": [
+   "CFF:15-B",
+   "LISR:167"
+  ]
+ },
+ {
+  "n": 150,
+  "anexo": 3,
+  "id": "31/ISR/PI",
+  "tema": "Asociaciones Deportivas.",
+  "pregunta": "¿Mi asociación deportiva debe pagar impuesto sobre la renta si vende bienes o presta servicios a personas que no son sus socios?",
+  "esperados": [
+   "LISR:79",
+   "LISR:80",
+   "LISR:86"
+  ]
+ },
+ {
+  "n": 151,
+  "anexo": 3,
+  "id": "32/ISR/PI",
+  "tema": "Determinación del costo de lo vendido para contribuyentes que realicen actividades comerciales que consistan en la adquisición y enajenación de mercancías.",
+  "pregunta": "¿Qué gastos puedo incluir para calcular el costo de lo vendido en mi negocio de compra‑venta de mercancías?",
+  "esperados": [
+   "LISR:39"
+  ]
+ },
+ {
+  "n": 152,
+  "anexo": 3,
+  "id": "33/ISR/PI",
+  "tema": "Reconocimiento de contribuciones únicas y valiosas. Deben reconocerse en los análisis de precios de transferencia para demostrar que, en operaciones celebradas con partes relacionadas, los ingresos acumulables y deducciones autorizadas fueron determinados considerando para esas operaciones los precios, montos de contraprestaciones o márgenes de utilidad que hubieran utilizado u obtenido con o entre partes independientes en operaciones comparables.",
+  "pregunta": "¿Cómo demuestro que los precios que uso con mis empresas relacionadas son los mismos que usaría con terceros independientes?",
+  "esperados": [
+   "LISR:179",
+   "LISR:180"
+  ]
+ },
+ {
+  "n": 153,
+  "anexo": 3,
+  "id": "34/ISR/PI",
+  "tema": "Modificaciones al valor de las operaciones con partes relacionadas dentro del rango intercuartil.",
+  "pregunta": "¿Qué debo hacer si el precio de mi operación con una parte relacionada está fuera del rango intercuartil?",
+  "esperados": [
+   "CFF:34-A",
+   "LISR:180"
+  ]
+ },
+ {
+  "n": 154,
+  "anexo": 3,
+  "id": "35/ISR/PI",
+  "tema": "Servicios de hospedaje a través de plataformas tecnológicas. Se encuentran sujetos al pago de ISR.",
+  "pregunta": "¿Tengo que pagar ISR por los ingresos que obtengo al rentar mi casa en plataformas como Airbnb?",
+  "esperados": [
+   "CFF:16",
+   "LISR:100",
+   "LISR:106",
+   "LISR:109",
+   "LISR:16",
+   "LISR:90"
+  ]
+ },
+ {
+  "n": 155,
+  "anexo": 3,
+  "id": "36/ISR/PI",
+  "tema": "Pago del impuesto sobre dividendos distribuidos en mercados reconocidos extranjeros.",
+  "pregunta": "¿Tengo que pagar impuesto extra por dividendos que recibo de una empresa extranjera?",
+  "esperados": [
+   "CFF:16-C",
+   "CFF:29",
+   "LISR:140",
+   "LISR:164",
+   "LISR:76",
+   "LISR:77",
+   "LISR:85"
+  ]
+ },
+ {
+  "n": 156,
+  "anexo": 3,
+  "id": "37/ISR/PI",
+  "tema": "Resultado fiscal distribuido a los tenedores de los certificados de un fideicomiso dedicado a la adquisición o construcción de inmuebles. La deducción a que se refiere el artículo 115, segundo párrafo de la Ley del ISR no le es aplicable.",
+  "pregunta": "¿Puedo deducir el resultado fiscal que me distribuye el fideicomiso de certificados inmobiliarios?",
+  "esperados": [
+   "LISR:114",
+   "LISR:115",
+   "LISR:188"
+  ]
+ },
+ {
+  "n": 157,
+  "anexo": 3,
+  "id": null,
+  "tema": "Entero del ISR diferido por los fideicomitentes de un fideicomiso dedicado a la adquisición o construcción de inmuebles. La donación de los certificados de participación obtenidos por la aportación de bienes inmuebles actualiza el supuesto de enajenación.",
+  "pregunta": "¿Tengo que pagar el ISR diferido si dono los certificados que recibí al aportar un inmueble al fideicomiso?",
+  "esperados": [
+   "CFF:14",
+   "LISR:187",
+   "LISR:188"
+  ]
+ },
+ {
+  "n": 158,
+  "anexo": 3,
+  "id": null,
+  "tema": "Donataria Autorizada. Modificación de los estatutos sociales o del contrato de fideicomiso.",
+  "pregunta": "¿Qué implica cambiar los estatutos de mi organización sin perder la autorización para recibir donativos deducibles?",
+  "esperados": [
+   "CFF:5",
+   "LISR:82"
+  ]
+ },
+ {
+  "n": 159,
+  "anexo": 3,
+  "id": "41/ISR/PI",
+  "tema": "Mercancía deteriorada o que perdió valor. El importe de la mercancía que se deduzca de los inventarios del contribuyente no constituye un donativo deducible.",
+  "pregunta": "¿Puedo deducir como donativo la mercancía deteriorada que elimino de mis inventarios?",
+  "esperados": [
+   "CFF:29-A",
+   "LISR:25",
+   "LISR:27"
+  ]
+ },
+ {
+  "n": 160,
+  "anexo": 3,
+  "id": "42/ISR/PI",
+  "tema": "Cantidades otorgadas a trabajadores con cargo a planes de pensiones. No tienen el tratamiento de ingreso exento para el trabajador, ni las aportaciones a dichos planes son una deducción para el empleador, cuando constituyen cantidades que forman parte del salario afecto al pago del ISR.",
+  "pregunta": "¿Los aportes de mi empresa a mi plan de pensiones se consideran ingreso gravado y no son deducibles para el empleador?",
+  "esperados": [
+   "LISR:25",
+   "LISR:27",
+   "LISR:7",
+   "LISR:90",
+   "LISR:93",
+   "LISR:94"
+  ]
+ },
+ {
+  "n": 161,
+  "anexo": 3,
+  "id": "43/ISR/PI",
+  "tema": "Cantidades entregadas a trabajadores, socios o accionistas por concepto de incentivos laborales, bonos, comisiones o compensaciones complementarias por invención, primas o cualquier otro concepto similar, pagadas a través de terceros. No tienen el tratamiento de ingresos exentos, ni las cantidades pagadas a los terceros son deducibles, ni es acreditable el IVA que se traslade por dichos pagos.",
+  "pregunta": "¿Los bonos que le pago a mis empleados mediante un tercero son deducibles del ISR y me permiten acreditar el IVA?",
+  "esperados": [
+   "LISR:1",
+   "LISR:10",
+   "LISR:140",
+   "LISR:25",
+   "LISR:27",
+   "LISR:90",
+   "LISR:93",
+   "LISR:94",
+   "LISR:96",
+   "LIVA:5"
+  ]
+ },
+ {
+  "n": 162,
+  "anexo": 3,
+  "id": "1/IVA/PI",
+  "tema": "Alimentos preparados para su consumo en el lugar de su enajenación por las denominadas tiendas de conveniencia.",
+  "pregunta": "¿Los alimentos preparados en tiendas de conveniencia deben pagar el IVA del 0 % o del 16 %?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 163,
+  "anexo": 3,
+  "id": "2/IVA/PI",
+  "tema": "Alimentos preparados.",
+  "pregunta": "¿Me cobran IVA al comprar alimentos preparados en una tienda de autoservicio para llevar o consumir en casa?",
+  "esperados": [
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 164,
+  "anexo": 3,
+  "id": null,
+  "tema": "Servicio de itinerancia internacional o global.",
+  "pregunta": "¿Cómo debo aplicar el IVA al servicio de itinerancia internacional que ofrezco a operadores extranjeros, al 0% o al 16%?",
+  "esperados": [
+   "LIVA:29"
+  ]
+ },
+ {
+  "n": 165,
+  "anexo": 3,
+  "id": "4/IVA/PI",
+  "tema": "Prestación de servicios en territorio nacional a través de la figura de comisionista mercantil.",
+  "pregunta": "¿Puedo aplicar la tasa 0 % de IVA a servicios realizados en México si los vende un comisionista al extranjero?",
+  "esperados": [
+   "LIVA:29"
+  ]
+ },
+ {
+  "n": 166,
+  "anexo": 3,
+  "id": null,
+  "tema": "Retención a residentes en el extranjero sin establecimiento permanente en el país.",
+  "pregunta": "¿Debo aplicar retención de impuesto cuando compro bienes a un residente en el extranjero que no tiene establecimiento permanente en México?",
+  "esperados": [
+   "LIVA:1-A",
+   "LIVA:3"
+  ]
+ },
+ {
+  "n": 167,
+  "anexo": 3,
+  "id": null,
+  "tema": "IVA en transportación aérea que inicia en la franja fronteriza. No puede considerarse como prestado solamente el 25% del servicio.",
+  "pregunta": "¿Debo pagar IVA del 100 % o solo 25 % por un vuelo que parte de la zona fronteriza hacia otro destino dentro de México?",
+  "esperados": [
+   "LIVA:1",
+   "LIVA:16"
+  ]
+ },
+ {
+  "n": 168,
+  "anexo": 3,
+  "id": "8/IVA/PI",
+  "tema": "Traslado indebido de IVA. Transporte de bienes no corresponde al servicio de cosecha y recolección.",
+  "pregunta": "¿El transporte de mi cosecha está exento del IVA?",
+  "esperados": [
+   "LIVA:14",
+   "LIVA:2-A"
+  ]
+ },
+ {
+  "n": 169,
+  "anexo": 3,
+  "id": "9/IVA/PI",
+  "tema": "Acreditamiento indebido de IVA.",
+  "pregunta": "¿Puedo considerar como IVA acreditable el 16 % que me cobran en una operación exenta o con tasa 0 %?",
+  "esperados": [
+   "LIVA:1",
+   "LIVA:15",
+   "LIVA:2-A",
+   "LIVA:20",
+   "LIVA:25",
+   "LIVA:4",
+   "LIVA:9"
+  ]
+ },
+ {
+  "n": 170,
+  "anexo": 3,
+  "id": "10/IVA/PI",
+  "tema": "Bienes inmuebles destinados a hospedaje, a través de plataformas tecnológicas.",
+  "pregunta": "¿Debo incluir el 16 % de IVA al rentar mi casa por plataformas de hospedaje?",
+  "esperados": [
+   "LIVA:1",
+   "LIVA:19",
+   "LIVA:20"
+  ]
+ },
+ {
+  "n": 171,
+  "anexo": 3,
+  "id": "11/IVA/PI",
+  "tema": "Es improcedente acreditar el IVA sin cumplir los requisitos que establece la ley, así como la compensación de saldos a favor de IVA contra retenciones del ISR, tratándose de la Federación, la Ciudad de México, los Estados y los Municipios.",
+  "pregunta": "¿Puede un gobierno federal o estatal acreditar el IVA y usarlo para compensar retenciones de ISR?",
+  "esperados": [
+   "CFF:23",
+   "LIVA:1",
+   "LIVA:3",
+   "LIVA:32",
+   "LIVA:4",
+   "LIVA:5",
+   "LIVA:6"
+  ]
+ },
+ {
+  "n": 172,
+  "anexo": 3,
+  "id": "12/IVA/PI",
+  "tema": "Adquisición de bienes en territorio nacional propiedad de un residente en el extranjero. Retención del impuesto al valor agregado.",
+  "pregunta": "¿Debo retener IVA al adquirir un bien en México que pertenece a un residente extranjero sin establecimiento permanente?",
+  "esperados": [
+   "LIVA:1",
+   "LIVA:1-A"
+  ]
+ }
+]

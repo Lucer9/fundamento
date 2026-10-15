@@ -22,8 +22,8 @@ export const typeDefs = /* GraphQL */ `
     laws: [Law!]!
     law(code: LawCode!): Law
     article(law: LawCode!, number: String!): Article
-    "Plain-language search. Returns one hit per article, with the passage that matched best."
-    search(query: String!, mode: SearchMode = HYBRID, law: LawCode, first: Int = 10): [SearchHit!]!
+    "Plain-language search. One hit per article with the passage that matched best; articles the query names (LISR 151, artículo 29-A del CFF) come first."
+    search(query: String!, mode: SearchMode = VECTOR, law: LawCode, first: Int = 10): [SearchHit!]!
     "A short answer grounded in retrieved articles. Every citation in the text is one of the sources."
     answer(question: String!): Answer!
     "Articles other articles point to most."
@@ -73,8 +73,11 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Answer {
+    "Plain text with citation markers: [LISR 151] for articles, [SAT 12] for criteria (12 = Criterion.number)."
     text: String!
     sources: [Article!]!
+    "SAT criteria the answer cites."
+    criteria: [Criterion!]!
     model: String!
     cached: Boolean!
   }
@@ -97,6 +100,9 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Criterion {
+    "Stable number used in answer citations ([SAT 12])."
+    number: Int!
+    "SAT's own id, e.g. 47/ISR/N; null when the PDF layout detached it."
     id: String
     kind: CriterionKind!
     law: LawCode!

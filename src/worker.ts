@@ -88,10 +88,17 @@ const resolvers = {
     article: (h: Hit, _: unknown, ctx: Ctx) => ctx.load.articulo.load(clave(h.ley, h.id)),
     passage: (h: Hit) => h.texto ?? '',
   },
-  Answer: { sources: (a: { keys: string[] }, _: unknown, ctx: Ctx) => cargar(ctx, a.keys) },
+  Answer: {
+    sources: (a: { keys: string[] }, _: unknown, ctx: Ctx) => cargar(ctx, a.keys),
+    criteria: async (a: { criterios: number[] }, _: unknown, ctx: Ctx) => {
+      const rows = await ctx.db.all<Criterio>(`select * from criterio where n in (select value from json_each(?1))`, JSON.stringify(a.criterios))
+      return a.criterios.flatMap(n => rows.filter(r => r.n === n))
+    },
+  },
   CitationCount: { article: (c: { k: string }, _: unknown, ctx: Ctx) => ctx.load.articulo.load(c.k) },
   Amendment: { articles: (a: { keys: string[] }, _: unknown, ctx: Ctx) => cargar(ctx, a.keys) },
   Criterion: {
+    number: (c: Criterio) => c.n,
     id: (c: Criterio) => c.id || null,
     kind: (c: Criterio) => (c.anexo === 3 ? 'IMPROPER_PRACTICE' : 'NORMATIVE'),
     law: (c: Criterio) => c.materia,
@@ -105,7 +112,8 @@ const consultasD1: Plugin<Ctx> = {
   onExecute: () => ({
     onExecuteDone: ({ args, result, setResult }) => {
       if (Symbol.asyncIterator in result) return
-      setResult({ ...result, extensions: { ...result.extensions, d1Queries: (args.contextValue as Ctx).db.n } })
+      const { db } = args.contextValue as Ctx
+      setResult({ ...result, extensions: { ...result.extensions, d1Queries: db.n, ...(db.degradado ? { degraded: 'keyword-only' } : {}) } })
     },
   }),
 }
@@ -135,7 +143,16 @@ const yoga = createYoga<{ env: Env }>({
   ],
   context: ({ request, env }) => {
     const d = db(env)
-    return { env, db: d, ip: request.headers.get('cf-connecting-ip') ?? 'local', load: loaders(d, request.headers.get('x-batch') !== 'off') }
+    return {
+      env,
+      db: d,
+      ip: request.headers.get('cf-connecting-ip') ?? 'local',
+      modeloRespuesta: (env.DEV === '1' && request.headers.get('x-answer-model')) || env.ANSWER_MODEL,
+      evaluando: env.DEV === '1' && request.headers.get('x-eval') === '1',
+      excluir: env.DEV === '1' && request.headers.get('x-excluir-criterio') ? Number(request.headers.get('x-excluir-criterio')) : null,
+      sinCriterios: env.DEV === '1' && request.headers.get('x-sin-criterios') === '1',
+      load: loaders(d, request.headers.get('x-batch') !== 'off'),
+    }
   },
 })
 
