@@ -61,6 +61,8 @@ const resolvers = {
     name: (l: { code: Ley }) => NOMBRES[l.code],
     articleCount: async (l: { code: Ley }, _: unknown, ctx: Ctx) =>
       (await ctx.db.all<{ n: number }>(`select count(*) as n from articulo where ley = ?1`, l.code))[0].n,
+    articleKeys: async (l: { code: Ley }, _: unknown, ctx: Ctx) =>
+      (await ctx.db.all<{ k: string }>(`select ley || ':' || id as k from articulo where ley = ?1 order by orden`, l.code)).map(r => r.k),
     articles: async (l: { code: Ley }, a: { first: number; after?: string }, ctx: Ctx) => {
       const desde = a.after ? Number(atob(a.after)) : -1
       const rows = await ctx.db.all<Fila>(

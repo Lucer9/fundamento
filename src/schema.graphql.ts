@@ -40,6 +40,8 @@ export const typeDefs = /* GraphQL */ `
     code: LawCode!
     name: String!
     articleCount: Int!
+    "Every article key in order (LISR:1, LISR:2, ...): enough to lay out a graph without paging."
+    articleKeys: [ID!]!
     articles(first: Int = 50, after: String): ArticleConnection!
   }
 
