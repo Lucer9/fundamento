@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, SQL_FTS, consultaFts, porArticulo, rrf, type Hit, type Modelo } from '../src/buscar.ts'
 
@@ -38,6 +38,13 @@ const normalizar = (v: Float32Array, dims: number) => {
   }
   return v
 }
+/** First `d` of every `dims`-long row, renormalized: what Vectorize stores for a model cut to fewer dimensions. */
+const cortar = (v: Float32Array, dims: number, d: number) => {
+  const out = new Float32Array((v.length / dims) * d)
+  for (let i = 0; i < v.length / dims; i++) out.set(v.subarray(i * dims, i * dims + d), i * d)
+  return normalizar(out, d)
+}
+
 const cargar = (f: string, dims: number) => {
   const b = readFileSync(f)
   return normalizar(new Float32Array(b.buffer, b.byteOffset, b.byteLength / 4).slice(), dims)
@@ -82,15 +89,25 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
   const kw = consultas.map(q => porArticulo(fts.all(consultaFts(q), 200) as Hit[]))
   metodos.keyword = kw
   for (const m of Object.keys(MODELOS) as Modelo[]) {
-    const { dims } = MODELOS[m]
-    const docs = cargar(`data/emb/${m}.docs.f32`, dims)
+    const { dims, indice } = MODELOS[m]
+    const f = `data/emb/${m}.docs.f32`
+    if (!existsSync(f) || statSync(f).size !== rowids.length * dims * 4) {
+      console.log(`${m}: sin vectores para este corpus (node scripts/embed.ts ${m})`)
+      continue
+    }
+    const docs = cargar(f, dims)
     const qs = cargar(`data/emb/${m}.${archivo}.f32`, dims)
-    const vec = consultas.map((_, i) => porArticulo(vecinos(docs, qs, i, dims)))
-    metodos[`vector ${m}`] = vec
-    metodos[`hybrid ${m}`] = vec.map((v, i) => rrf([kw[i], v]))
+    for (const [nombre, d] of indice < dims ? ([[`${m} ${dims}d`, dims], [m, indice]] as const) : ([[m, dims]] as const)) {
+      const [D, Q] = d < dims ? [cortar(docs, dims, d), cortar(qs, dims, d)] : [docs, qs]
+      const vec = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d)))
+      metodos[`vector ${nombre}`] = vec
+      if (d === indice) metodos[`hybrid ${nombre}`] = vec.map((v, i) => rrf([kw[i], v]))
+    }
   }
-  metodos['hybrid bge-m3 kw×0.5'] = metodos['vector bge-m3'].map((v, i) => rrf([kw[i], v], { pesos: [0.5, 1] }))
-  if (rerank) metodos['vector bge-m3 + rerank'] = await reordenar(metodos['vector bge-m3'])
+  if (metodos['vector bge-m3']) {
+    metodos['hybrid bge-m3 kw×0.5'] = metodos['vector bge-m3'].map((v, i) => rrf([kw[i], v], { pesos: [0.5, 1] }))
+    if (rerank) metodos['vector bge-m3 + rerank'] = await reordenar(metodos['vector bge-m3'])
+  }
   return metodos
 }
 
@@ -176,11 +193,14 @@ writeFileSync(
       nombre: 'Preguntas en lenguaje común, una por cada criterio de los anexos 7 y 3',
       ...comunes,
       comparaciones: [
+        ['vector gemma', 'vector gemma 768d'],
         ['vector gemma', 'vector bge-m3'],
         ['vector gemma', 'vector qwen3'],
         ['vector bge-m3', 'hybrid bge-m3'],
         ['vector gemma', 'hybrid gemma'],
-      ].map(([a, b]) => comparar(porPregunta, a, b, criterios.map((_, i) => i), i => criterios[i].esperados)),
+      ]
+        .filter(par => par.every(m => porPregunta[m]))
+        .map(([a, b]) => comparar(porPregunta, a, b, criterios.map((_, i) => i), i => criterios[i].esperados)),
     },
   }),
 )

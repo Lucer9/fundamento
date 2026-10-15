@@ -34,16 +34,23 @@ export const SQL_FTS = `
   order by bm25(fts)
   limit ?2`
 
+/**
+ * Embedding models compared in the eval. `dims` is what Workers AI returns; `indice` is what Vectorize stores.
+ * gemma is cut to its first 512 dimensions (it was trained to allow that): 768 would not fit the free plan's
+ * 5M stored dimensions, and 512 scored the same as 768 on the plain-language questions.
+ */
 export const MODELOS = {
   'bge-m3': {
     id: '@cf/baai/bge-m3',
     dims: 1024,
+    indice: 1024,
     consulta: (q: string) => q,
     documento: (titulo: string, t: string) => `${titulo}\n${t}`,
   },
   qwen3: {
     id: '@cf/qwen/qwen3-embedding-0.6b',
     dims: 1024,
+    indice: 1024,
     consulta: (q: string) =>
       `Instruct: Given a question about Mexican tax law, retrieve the law articles that answer it\nQuery:${q}`,
     documento: (titulo: string, t: string) => `${titulo}\n${t}`,
@@ -51,12 +58,23 @@ export const MODELOS = {
   gemma: {
     id: '@cf/google/embeddinggemma-300m',
     dims: 768,
+    indice: 512,
     consulta: (q: string) => `task: search result | query: ${q}`,
     documento: (titulo: string, t: string) => `title: ${titulo} | text: ${t}`,
   },
 } as const
 
 export type Modelo = keyof typeof MODELOS
+
+/** First `d` dimensions, rescaled to unit length (Matryoshka truncation). */
+export function recortar(v: ArrayLike<number>, d: number): number[] {
+  const x = Array.from({ length: d }, (_, i) => v[i])
+  const n = Math.hypot(...x)
+  return x.map(t => t / n)
+}
+
+/** Vectorize index holding a model's vectors. */
+export const indiceVec = (m: Modelo) => `fundamento-${m}${MODELOS[m].indice < MODELOS[m].dims ? `-${MODELOS[m].indice}` : ''}`
 export type Hit = { ley: Ley; id: string; score: number; texto?: string; rowid?: number }
 
 /** Chunk hits sorted best-first → one hit per article, keeping its best chunk. */

@@ -1,6 +1,6 @@
 import DataLoader from 'dataloader'
 import { GraphQLError } from 'graphql'
-import { MODELOS, SQL_FTS, consultaFts, porArticulo, rrf, type Hit, type Modelo } from './buscar.ts'
+import { MODELOS, SQL_FTS, consultaFts, porArticulo, recortar, rrf, type Hit, type Modelo } from './buscar.ts'
 import { referencias, type Ley } from './parse.ts'
 
 export interface Env {
@@ -137,7 +137,7 @@ async function textoHits(d: Db, query: string): Promise<Hit[]> {
 async function embeber(env: Env, query: string) {
   const modelo = MODELOS[env.MODEL]
   const emb = (await env.AI.run(modelo.id as keyof AiModels, { text: [modelo.consulta(query)] } as never)) as unknown as { data: number[][] }
-  return emb.data[0]
+  return recortar(emb.data[0], modelo.indice)
 }
 
 async function vectorHits(env: Env, d: Db, vector: number[]): Promise<Hit[]> {

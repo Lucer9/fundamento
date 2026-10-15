@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
-import { porArticulo, type Hit } from '../src/buscar.ts'
+import { MODELOS, porArticulo, recortar, type Hit } from '../src/buscar.ts'
 
 /**
  * Production parity: replays the cached gemma embeddings of the plain-language questions against the real
@@ -8,7 +8,7 @@ import { porArticulo, type Hit } from '../src/buscar.ts'
  * with the exact brute-force rank recorded by `npm run eval`. Needs no Workers AI calls.
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
-const DIMS = 768
+const { dims: DIMS, indice } = MODELOS.gemma
 const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
 const frag = new Map((db.prepare(`select huella, ley, id from fragmento`).all() as (Hit & { huella: string })[]).map(f => [f.huella, f]))
 const criterios = db.prepare(`select n from criterio c where exists (select 1 from criterio_cita cc where cc.n = c.n) order by n`).all() as { n: number }[]
@@ -22,7 +22,7 @@ const aprox: (number | null)[] = []
 for (const [i, c] of criterios.entries()) {
   const res = await fetch(`${DEV}/dev/vec`, {
     method: 'POST',
-    body: JSON.stringify({ vector: Array.from(v.subarray(i * DIMS, (i + 1) * DIMS)), topK: 100, filter: { tipo: 'ley' } }),
+    body: JSON.stringify({ vector: recortar(v.subarray(i * DIMS, (i + 1) * DIMS), indice), topK: 100, filter: { tipo: 'ley' } }),
   })
   const { matches } = (await res.json()) as { matches: { id: string; score: number }[] }
   const hits = porArticulo(matches.flatMap(m => (frag.has(m.id) ? [{ ...frag.get(m.id)!, score: m.score }] : [])))

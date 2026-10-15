@@ -11,7 +11,7 @@
     "run_worker_first": ["/graphql", "/dev/*"]
   },
   "d1_databases": [{ "binding": "DB", "database_name": "fundamento", "database_id": "e2288d86-4719-436f-878e-4e342ca0a50b" }],
-  "vectorize": [{ "binding": "VEC", "index_name": "fundamento-gemma", "remote": true }],
+  "vectorize": [{ "binding": "VEC", "index_name": "fundamento-gemma-512", "remote": true }],
   "ai": { "binding": "AI" },
   "ratelimits": [
     { "name": "SEARCH_LIMITER", "namespace_id": "4331", "simple": { "limit": 60, "period": 60 } },
