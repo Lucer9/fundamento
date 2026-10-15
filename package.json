@@ -1,0 +1,14 @@
+{
+  "name": "fundamento",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db": "docker compose up -d",
+    "check": "node src/parse.check.ts",
+    "ingest": "node scripts/ingest.ts",
+    "eval": "node scripts/eval.ts"
+  },
+  "dependencies": {
+    "postgres": "^3.4.9"
+  }
+}
