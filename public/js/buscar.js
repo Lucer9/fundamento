@@ -1,8 +1,8 @@
-import { anunciar, cuenta, errorHtml, esAborto, esc, extracto, gql, html, LEYES, niveles, numero, pct, raw, request, ruta, terminos } from './lib.js'
+import { anunciar, cuenta, EN_USO, errorHtml, esAborto, esc, extracto, gql, html, LEYES, niveles, numero, pct, raw, request, ruta, terminos, TIPO_CRITERIO } from './lib.js'
 
 const MODOS = [
-  { id: 'hibrida', api: 'HYBRID', nombre: 'Híbrida' },
   { id: 'semantica', api: 'VECTOR', nombre: 'Semántica' },
+  { id: 'hibrida', api: 'HYBRID', nombre: 'Híbrida' },
   { id: 'palabras', api: 'KEYWORD', nombre: 'Palabras' },
 ]
 
@@ -21,7 +21,9 @@ const SEARCH = `query Buscar($q: String!, $mode: SearchMode, $law: LawCode) {
     article { key number law { code name } location repealed }
   }
 }`
-const ANSWER = `query Responder($q: String!) { answer(question: $q) { text model cached sources { key number law { code } } } }`
+const ANSWER = `query Responder($q: String!) {
+  answer(question: $q) { text model cached sources { key number law { code } } criteria { number id kind title } }
+}`
 
 const busquedas = new Map()
 const respuestas = new Map()
@@ -35,7 +37,7 @@ const leer = params => ({
 
 const enlace = ({ q, modo, ley }) => {
   const p = new URLSearchParams({ q })
-  if (modo.id !== 'hibrida') p.set('modo', modo.id)
+  if (modo !== MODOS[0]) p.set('modo', modo.id)
   if (ley) p.set('ley', ley)
   return `/?${p}`
 }
@@ -116,16 +118,17 @@ function inicio(ctx) {
       <ul class="chips">${EJEMPLOS.map(q => html`<li><a class="chip" href="${enlace({ q, modo: MODOS[0], ley: '' })}">${q}</a></li>`)}</ul>
     </section>
     <section class="figures" aria-label="En cifras" data-slot="cifras"></section>`
-  portada ??= Promise.all([gql('{ stats { articles citations } }'), fetch('/eval.json').then(r => (r.ok ? r.json() : null))]).catch(() => null)
+  portada ??= Promise.all([gql('{ stats { articles citations } }'), fetch('/eval.json').then(r => (r.ok ? r.json() : null)).catch(() => null)]).catch(() => null)
   return portada.then(datos => {
     const slot = below.querySelector('[data-slot=cifras]')
     if (!datos || !slot) return
     const [{ stats }, ev] = datos
-    const prod = ev?.metodos?.find(m => m.nombre === 'hybrid bge-m3')
+    const set = ev?.naturales ?? ev
+    const prod = set?.metodos?.find(m => m.nombre === EN_USO)
     slot.innerHTML = html`<dl class="figures-row">
       <div><dt>artículos vigentes en tres leyes</dt><dd>${stats.articles.toLocaleString('es-MX')}</dd></div>
       <div><dt>citas entre artículos, cada una un enlace</dt><dd>${stats.citations.toLocaleString('es-MX')}</dd></div>
-      ${prod ? html`<div><dt>de ${ev.n} preguntas tomadas de criterios del SAT traen entre sus 5 primeros resultados un artículo que el criterio cita. <a href="/como-funciona">Cómo se mide</a></dt><dd>${pct(prod.hit5, 0)}</dd></div>` : ''}
+      ${prod ? html`<div><dt>de ${set.n} preguntas en lenguaje común, escritas a partir de criterios del SAT, traen entre sus 5 primeros resultados un artículo que el criterio cita. <a href="/como-funciona">Cómo se mide</a></dt><dd>${pct(prod.hit5, 0)}</dd></div>` : ''}
     </dl>`
   })
 }
@@ -145,7 +148,7 @@ function resultados(s, ctx) {
   const llave = `${s.modo.api}|${s.ley}|${s.q}`
   let p = busquedas.get(llave)
   if (!p) {
-    p = gql(SEARCH, { q: s.q, mode: s.modo.api, law: s.ley || null })
+    p = request(SEARCH, { q: s.q, mode: s.modo.api, law: s.ley || null })
     busquedas.set(llave, p)
     p.catch(() => busquedas.delete(llave))
   }
@@ -153,10 +156,10 @@ function resultados(s, ctx) {
   slot.innerHTML = html`<div class="results-head"><h2 id="results-h" class="label">Artículos</h2></div>
     <ol class="hits" aria-hidden="true">${[0, 1, 2, 3].map(() => html`<li class="hit hit--skeleton"><span class="sk sk-s"></span><span class="sk sk-m"></span><span class="sk"></span><span class="sk"></span><span class="sk sk-l"></span></li>`)}</ol>`
   return p.then(
-    ({ search }) => {
+    ({ data: { search }, extensions }) => {
       if (ctx.signal.aborted) return
       slot.removeAttribute('aria-busy')
-      slot.innerHTML = listaHtml(search, s)
+      slot.innerHTML = listaHtml(search, s, extensions?.degraded)
       anunciar(search.length ? `${cuenta(search.length, 'artículo')} encontrados.` : 'Sin resultados.')
     },
     e => {
@@ -167,10 +170,10 @@ function resultados(s, ctx) {
   )
 }
 
-function listaHtml(hits, s) {
+function listaHtml(hits, s, degradada) {
   const stems = terminos(s.q)
   const filtro = [s.modo.nombre.toLowerCase(), s.ley ? `solo ${s.ley}` : ''].filter(Boolean).join(', ')
-  const head = html`<div class="results-head"><h2 id="results-h" class="label">Artículos</h2><p class="results-count">${cuenta(hits.length, 'resultado')} <span class="muted">· búsqueda ${filtro}</span></p></div>`
+  const head = html`${degradada ? html`<p class="degraded" role="status">Búsqueda por palabras: el modelo semántico no está disponible en este momento.</p>` : ''}<div class="results-head"><h2 id="results-h" class="label">Artículos</h2><p class="results-count">${cuenta(hits.length, 'resultado')} <span class="muted">· búsqueda ${filtro}</span></p></div>`
   if (!hits.length) return html`${head}<div class="empty"><p>No encontramos artículos para esa búsqueda.</p><p class="muted">Prueba con otras palabras o con una pregunta más corta.</p></div>`
   return html`${head}<ol class="hits">${hits.map((h, i) => {
     const a = h.article
@@ -189,15 +192,23 @@ function listaHtml(hits, s) {
   })}</ol>`
 }
 
-function citasHtml(text) {
+function citasHtml(text, criterios) {
+  const porNumero = new Map(criterios.map(c => [String(c.number), c]))
+  const chip = r => {
+    const ley = r.match(/^(LISR|LIVA|CFF)\s+(.+)$/)
+    if (ley) return `<a class="cite" href="${ruta(ley[1], ley[2])}">${ley[1]}&nbsp;${esc(numero(ley[2]))}</a>`
+    const sat = r.match(/^SAT\s+(\d+)$/)
+    if (!sat) return null
+    const c = porNumero.get(sat[1])
+    return `<a class="cite cite--sat" href="#sat-${sat[1]}"${c ? ` title="${esc(c.title)}"` : ''}>${c?.id ? esc(c.id) : `SAT&nbsp;${sat[1]}`}</a>`
+  }
   return text
     .split(/\n{2,}/)
     .map(par =>
       html`<p>${raw(
         esc(par).replace(/[\[【]([^\]】]+)[\]】]/g, (todo, dentro) => {
-          const refs = dentro.split(/[,;]\s*/).map(r => r.trim().replace(/\u2011/g, '-').match(/^(LISR|LIVA|CFF)\s+(.+)$/))
-          if (refs.some(r => !r)) return todo
-          return `<span class="cites">${refs.map(([, ley, n]) => `<a class="cite" href="${ruta(ley, n)}">${ley}&nbsp;${numero(n)}</a>`).join('')}</span>`
+          const refs = dentro.split(/[,;]\s*/).map(r => chip(r.trim().replace(/\u2011/g, '-')))
+          return refs.some(r => !r) ? todo : `<span class="cites">${refs.join('')}</span>`
         }),
       )}</p>`,
     )
@@ -221,10 +232,12 @@ function respuesta(q, slot) {
       if (slot.dataset.q !== q) return
       aside.removeAttribute('aria-busy')
       const modelo = answer.model.split('/').pop()
-      slot.innerHTML = html`<div class="answer-text" id="answer-text">${answer.text ? citasHtml(answer.text) : html`<p>Sin respuesta.</p>`}</div>
+      const criterios = answer.criteria ?? []
+      slot.innerHTML = html`<div class="answer-text" id="answer-text">${answer.text ? citasHtml(answer.text, criterios) : html`<p>Sin respuesta.</p>`}</div>
         <button class="answer-more" type="button" aria-expanded="false" aria-controls="answer-text" hidden>Leer la respuesta completa</button>
         ${answer.sources.length ? html`<p class="answer-sources"><span class="label">Fuentes</span> ${answer.sources.map(a => html`<a href="${ruta(a.law.code, a.number)}">${a.law.code} ${numero(a.number)}</a>`)}</p>` : ''}
-        <p class="answer-note">Redactada por ${modelo} a partir de los artículos encontrados${answer.cached ? ' (guardada)' : ''}. Revisa siempre el texto del artículo.</p>`
+        ${criterios.length ? html`<div class="answer-crit"><p class="label">Criterios del SAT citados</p><ul>${criterios.map(c => html`<li id="sat-${c.number}" tabindex="-1"><span class="answer-crit-meta">${TIPO_CRITERIO[c.kind] ?? 'Criterio'}${c.id ? html` · <span class="crit-id">${c.id}</span>` : ''}</span><span class="answer-crit-title">${c.title}</span></li>`)}</ul></div>` : ''}
+        <p class="answer-note">Respuesta generada con IA a partir de los artículos y criterios citados. Puede equivocarse: revisa las fuentes. <span class="answer-model">Modelo: ${modelo}${answer.cached ? ', respuesta guardada' : ''}.</span></p>`
       const texto = slot.querySelector('.answer-text')
       const mas = slot.querySelector('.answer-more')
       texto.classList.add('is-clamped')
@@ -243,7 +256,7 @@ function respuesta(q, slot) {
       if (slot.dataset.q !== q) return
       delete slot.dataset.q
       aside.removeAttribute('aria-busy')
-      slot.innerHTML = html`<p class="answer-error" role="status">${e.message}</p><p class="answer-note">Los resultados de búsqueda no dependen de la respuesta.</p>`
+      slot.innerHTML = html`<p class="answer-error" role="status">${e.message}</p>`
     },
   )
 }

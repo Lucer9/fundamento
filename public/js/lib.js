@@ -1,3 +1,7 @@
+export const EN_USO = 'vector gemma'
+
+export const TIPO_CRITERIO = { NORMATIVE: 'Criterio normativo', IMPROPER_PRACTICE: 'Práctica indebida' }
+
 export const LEYES = {
   LISR: 'Ley del Impuesto sobre la Renta',
   LIVA: 'Ley del Impuesto al Valor Agregado',

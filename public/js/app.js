@@ -13,6 +13,7 @@ const rutas = [
 let actual = null
 let control = null
 let primera = true
+let ultima = ''
 
 const noEncontrada = {
   nombre: '404',
@@ -44,6 +45,7 @@ async function render({ restaurar } = {}) {
     }
   }
   if (signal.aborted) return
+  ultima = url.pathname + url.search
   marcarNav(url.pathname)
   const ctx = { url, params: url.searchParams, match: url.pathname.match(LEY), state: history.state ?? {}, signal, navigate }
   try {
@@ -95,5 +97,7 @@ document.addEventListener('click', e => {
 })
 
 history.scrollRestoration = 'manual'
-addEventListener('popstate', () => render({ restaurar: history.state?.y ?? 0 }))
+addEventListener('popstate', () => {
+  if (location.pathname + location.search !== ultima) render({ restaurar: history.state?.y ?? 0 })
+})
 render()

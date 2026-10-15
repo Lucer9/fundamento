@@ -42,8 +42,8 @@ gemma and bge-m3 couldn't be told apart at this sample size. I kept gemma for it
 ## Measure, then delete
 
 A Spanish Snowball stemmer scored 72.6% against 75.0% for plain words, so it went, along with its 800 KB
-package. A cross-encoder reranker dropped top-1 accuracy from 54.0% to 41.9%, since it was trained mostly
-on English and Chinese. A keyword weight tuned on Anexo 7 didn't survive Anexo 3.
+package. bge-reranker-base, a reranker built for English and Chinese, dropped top-1 accuracy on Spanish law from
+54.0% to 41.9%. A keyword weight tuned on Anexo 7 didn't survive Anexo 3.
 
 ## Six queries, not fifty-seven
 

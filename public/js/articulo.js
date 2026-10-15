@@ -2,7 +2,7 @@ import { coincidencias, errorHtml, esc, fecha, fechaLargaDe, gql, html, LEYES, m
 
 const QUERY = `query Articulo($law: LawCode!, $n: String!) {
   article(law: $law, number: $n) {
-    key number law { code name } location text repealed amendedOn
+    key number law { code name } location text repealed amendedOn amountsUpdatedOn
     links { start end target { key number law { code } } }
     cites { key number law { code } location }
     citedBy { key number law { code } location }
@@ -86,7 +86,7 @@ export default {
         <aside class="art-rail" aria-label="Relaciones del artículo">
           ${listaHtml('Este artículo cita', 'cita', a.cites, a.law.code, 'No cita otros artículos de estas leyes.')}
           ${listaHtml(`Lo citan`, 'lo-citan', a.citedBy, a.law.code, 'Ningún artículo lo cita.')}
-          ${reformasHtml(a.amendedOn)}
+          ${reformasHtml(a.amendedOn, a.amountsUpdatedOn ?? [])}
         </aside>
       </div>
     </article>`
@@ -175,22 +175,32 @@ function listaHtml(titulo, id, lista, ley, vacio) {
   </section>`
 }
 
-function reformasHtml(fechas) {
-  if (!fechas.length) return html`<section class="rail-sec" id="reformas" aria-labelledby="ref-h"><h2 class="label" id="ref-h">Reformas</h2><p class="muted small">El texto no anota reformas.</p></section>`
+function reformasHtml(fechas, montos) {
+  const fila = f => html`<li><time datetime="${f}" title="${fechaLargaDe(f)}">${fecha(f)}</time></li>`
+  const lista = (xs, n = 6) =>
+    html`<ol class="dates">${xs.slice(0, n).map(fila)}</ol>${xs.length > n ? html`<details class="more"><summary>Ver ${xs.length - n} más</summary><ol class="dates">${xs.slice(n).map(fila)}</ol></details>` : ''}`
+  const cantidades = montos.length
+    ? html`<div class="amounts">
+        <h3 class="amounts-h">Cantidades actualizadas por la RMF <span class="count">${montos.length}</span></h3>
+        ${lista([...montos].reverse(), 4)}
+        <p class="muted small">Actualizaciones por inflación de montos en pesos. No son reformas.</p>
+      </div>`
+    : ''
+  if (!fechas.length)
+    return html`<section class="rail-sec" id="reformas" aria-labelledby="ref-h"><h2 class="label" id="ref-h">Reformas</h2><p class="muted small">El texto no anota reformas.</p>${cantidades}</section>`
   const t = fechas.map(f => Date.parse(f))
   const min = Math.min(...t)
   const max = Math.max(...t)
   const x = f => (max === min ? 50 : ((Date.parse(f) - min) / (max - min)) * 100)
-  const lista = [...fechas].reverse()
   return html`<section class="rail-sec" id="reformas" aria-labelledby="ref-h">
     <h2 class="label" id="ref-h">Reformas <span class="count">${fechas.length}</span></h2>
     <div class="strip" aria-hidden="true">
       <div class="strip-line">${fechas.map(f => html`<i style="left:${x(f).toFixed(2)}%"></i>`)}</div>
       <div class="strip-ends"><span>${fechas[0].slice(0, 4)}</span><span>${fechas[fechas.length - 1].slice(0, 4)}</span></div>
     </div>
-    <ol class="dates">${lista.slice(0, 6).map(f => html`<li><time datetime="${f}" title="${fechaLargaDe(f)}">${fecha(f)}</time></li>`)}</ol>
-    ${lista.length > 6 ? html`<details class="more"><summary>Ver ${lista.length - 6} más</summary><ol class="dates">${lista.slice(6).map(f => html`<li><time datetime="${f}" title="${fechaLargaDe(f)}">${fecha(f)}</time></li>`)}</ol></details>` : ''}
+    ${lista([...fechas].reverse())}
     <p class="muted small">Fechas del Diario Oficial anotadas en el texto.</p>
+    ${cantidades}
   </section>`
 }
 
