@@ -33,7 +33,7 @@ type Resultado = Pregunta & {
 
 const preguntas = JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as Pregunta[]
 const criterios = new Map(
-  (new DatabaseSync('data/fundamento.db', { readOnly: true }).prepare(`select tema, texto from criterio`).all() as { tema: string; texto: string }[]).map(c => [c.tema, c.texto]),
+  (new DatabaseSync('data/fundamento.db', { readOnly: true }).prepare(`select n, texto from criterio`).all() as { n: number; texto: string }[]).map(c => [c.n, c.texto]),
 )
 const hechos = new Map<string, Resultado>(
   existsSync(ARCHIVO) ? (JSON.parse(readFileSync(ARCHIVO, 'utf8')) as Resultado[]).map(r => [r.pregunta, r]) : [],
@@ -69,7 +69,7 @@ async function juzgar(p: Pregunta, respuesta: string) {
   const crudo = await claude(
     JUEZ,
     'Eres un evaluador estricto de respuestas sobre impuestos en México. Respondes solo con JSON.',
-    `Criterio del SAT (la posición correcta según la autoridad):\n${p.tema}\n${(criterios.get(p.tema) ?? '').slice(0, 3000)}\n\n` +
+    `Criterio del SAT (la posición correcta según la autoridad):\n${p.tema}\n${(criterios.get(p.n) ?? '').slice(0, 3000)}\n\n` +
       `Pregunta: ${p.pregunta}\n\nRespuesta a evaluar:\n${respuesta}\n\n` +
       'Clasifica la respuesta. CORRECTA: su conclusión coincide con la del criterio. ' +
       'INCORRECTA: contradice el criterio o afirma algo que el criterio niega. ' +
