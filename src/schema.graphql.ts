@@ -31,6 +31,8 @@ export const typeDefs = /* GraphQL */ `
     "Every Diario Oficial date that amended at least one article, newest first."
     amendments(law: LawCode): [Amendment!]!
     criteria(law: LawCode, kind: CriterionKind): [Criterion!]!
+    "Every distinct citation between two articles, as article keys: the whole graph in one request."
+    citations(law: LawCode): [Citation!]!
     stats: Stats!
   }
 
@@ -52,12 +54,20 @@ export const typeDefs = /* GraphQL */ `
     repealed: Boolean!
     "Diario Oficial dates of the amendments noted in the text (YYYY-MM-DD)."
     amendedOn: [String!]!
+    "Dates SAT's Resolución Miscelánea Fiscal updated or compiled peso amounts (fines, thresholds) in the article. Inflation updates, not amendments."
+    amountsUpdatedOn: [String!]!
     "Character spans in text that cite another article."
     links: [Link!]!
     cites: [Article!]!
     citedBy: [Article!]!
     "SAT criteria that cite this article: how SAT reads it (Anexo 7) and practices it calls improper (Anexo 3)."
     criteria(kind: CriterionKind): [Criterion!]!
+  }
+
+  type Citation {
+    "LISR:27"
+    from: ID!
+    to: ID!
   }
 
   type Link {

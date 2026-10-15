@@ -61,8 +61,8 @@ const seed = [
   readFileSync('schema.sql', 'utf8'),
   inserts(
     'articulo',
-    articulos.map(a => ({ ...a, ubicacion: JSON.stringify(a.ubicacion), reformas: JSON.stringify(a.reformas) })),
-    ['ley', 'id', 'orden', 'ubicacion', 'texto', 'reformas'],
+    articulos.map(a => ({ ...a, ubicacion: JSON.stringify(a.ubicacion), reformas: JSON.stringify(a.reformas), actualizaciones: JSON.stringify(a.actualizaciones) })),
+    ['ley', 'id', 'orden', 'ubicacion', 'texto', 'reformas', 'actualizaciones'],
   ),
   inserts('enlace', enlaces, ['de_ley', 'de_id', 'inicio', 'fin', 'a_ley', 'a_id']),
   inserts(

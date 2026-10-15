@@ -13,6 +13,7 @@ create table articulo (
   ubicacion text not null,
   texto text not null,
   reformas text not null,
+  actualizaciones text not null,
   primary key (ley, id)
 );
 

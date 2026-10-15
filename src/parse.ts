@@ -1,6 +1,6 @@
 export type Ley = 'LISR' | 'LIVA' | 'CFF'
 export type Ref = { ley: Ley; id: string }
-export type Articulo = Ref & { orden: number; ubicacion: string[]; texto: string; reformas: string[] }
+export type Articulo = Ref & { orden: number; ubicacion: string[]; texto: string; reformas: string[]; actualizaciones: string[] }
 export type Criterio = { id: string | null; materia: Ley; tema: string; texto: string; citas: Ref[] }
 
 const BIBLIO = 'https://www.diputados.gob.mx/LeyesBiblio/pdf'
@@ -47,6 +47,7 @@ const NOISE = [
 const REFORMA = /^\p{Lu}[\p{L} ,.]{2,100}?DOF \d{2}-\d{2}-\d{4}/u
 const SOLO_FECHAS = /^(?:\d{2}-\d{2}-\d{4}[,. ]*)+$/
 const FECHA = /(\d{2})-(\d{2})-(\d{4})/g
+const MISCELANEA = /miscel[aá]nea|actualizad[ao]s?\b|compilad[ao]s?\b/i
 const DIVISION = /^(T[IÍ]TULO|CAP[IÍ]TULO|SECCI[OÓ]N)\s+\S+/
 const MARCA = /^(?:[IVXLC]+\.|[a-z]\)|\d+\.)\s/
 const ID_CRITERIO = /\b\d+\/(?:[A-Z]+\/)+[A-Z]+\b/g
@@ -151,12 +152,14 @@ export function parseLey(raw: string, ley: Ley): Articulo[] {
   const ruta: Record<string, string> = {}
   let nombrando: string | null = null
   let nombres = 0
+  let destino: 'reformas' | 'actualizaciones' = 'reformas'
   for (const l of raw.split('\n').map(s => s.trim())) {
     if (!l || l === titulo || NOISE.some(r => r.test(l))) continue
     if (out.length && esMayus(l) && l.includes('TRANSITORI')) break
     const cur = out[out.length - 1]
     if (REFORMA.test(l) || SOLO_FECHAS.test(l)) {
-      for (const [, d, mo, y] of l.matchAll(FECHA)) cur?.reformas.push(`${y}-${mo}-${d}`)
+      if (REFORMA.test(l)) destino = MISCELANEA.test(l) ? 'actualizaciones' : 'reformas'
+      for (const [, d, mo, y] of l.matchAll(FECHA)) cur?.[destino].push(`${y}-${mo}-${d}`)
       continue
     }
     const div = l.match(DIVISION)
@@ -184,13 +187,15 @@ export function parseLey(raw: string, ley: Ley): Articulo[] {
         ubicacion: ['T', 'C', 'S'].map(k => ruta[k]).filter(Boolean),
         texto: '',
         reformas: [],
+        actualizaciones: [],
         lineas: h[3] ? [h[3]] : [],
       })
       continue
     }
     cur?.lineas.push(l)
   }
-  return out.map(({ lineas, ...a }) => ({ ...a, texto: parrafos(lineas), reformas: [...new Set(a.reformas)].sort() }))
+  const unicas = (xs: string[]) => [...new Set(xs)].sort()
+  return out.map(({ lineas, ...a }) => ({ ...a, texto: parrafos(lineas), reformas: unicas(a.reformas), actualizaciones: unicas(a.actualizaciones) }))
 }
 
 /**

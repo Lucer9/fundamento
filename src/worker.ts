@@ -41,6 +41,12 @@ const resolvers = {
         a.law ?? null,
         a.kind ? ANEXO[a.kind] : null,
       ),
+    citations: (_: unknown, a: { law?: Ley }, ctx: Ctx) =>
+      ctx.db.all<{ from: string; to: string }>(
+        `select distinct de_ley || ':' || de_id as "from", a_ley || ':' || a_id as "to" from enlace
+         where ?1 is null or de_ley = ?1 or a_ley = ?1`,
+        a.law ?? null,
+      ),
     stats: async (_: unknown, __: unknown, ctx: Ctx) =>
       (
         await ctx.db.all<Record<string, number>>(
@@ -76,6 +82,7 @@ const resolvers = {
     text: (r: Fila) => r.texto,
     repealed: (r: Fila) => derogado(r.texto),
     amendedOn: (r: Fila) => JSON.parse(r.reformas),
+    amountsUpdatedOn: (r: Fila) => JSON.parse(r.actualizaciones),
     links: async (r: Fila, _: unknown, ctx: Ctx) =>
       (await ctx.load.enlaces.load(clave(r.ley, r.id))).map(e => ({ start: e.inicio, end: e.fin, key: e.a })),
     cites: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.cita.load(clave(r.ley, r.id))).map(c => c.a)),
@@ -136,6 +143,7 @@ const yoga = createYoga<{ env: Env }>({
   schema: createSchema({ typeDefs, resolvers }),
   graphqlEndpoint: '/graphql',
   landingPage: false,
+  maskedErrors: { errorMessage: 'Algo salió mal. Intenta de nuevo en un momento.' },
   graphiql: { title: 'fundamento · GraphQL', defaultQuery },
   plugins: [
     EnvelopArmorPlugin({ maxDepth: { n: 8 }, maxAliases: { n: 5 }, maxTokens: { n: 1500 }, costLimit: { maxCost: 5000 } }),

@@ -38,6 +38,8 @@ const ley = parseLey(
     'I. Enajenen bienes.',
     'Párrafo reformado DOF 30-11-2016, 08-12-2020,',
     '12-11-2021',
+    'Multa de la fracción actualizada por resolución miscelánea fiscal DOF 05-01-2022. Compilada DOF 27-12-2022.',
+    '29-12-2023',
     '1 de 3',
     'Artículo 2o.-A.- El impuesto se calculará conforme al artículo 1o. de esta Ley.',
     'Artículo 123 Constitucional; de la Ley Reglamentaria',
@@ -49,6 +51,7 @@ const ley = parseLey(
 assert.deepEqual(ley.map(a => a.id), ['1', '2-A'])
 assert.equal(ley[0].texto, 'Están obligadas al pago del impuesto las personas que\nI. Enajenen bienes.')
 assert.deepEqual(ley[0].reformas, ['2016-11-30', '2020-12-08', '2021-11-12'])
+assert.deepEqual(ley[0].actualizaciones, ['2022-01-05', '2022-12-27', '2023-12-29'])
 assert.deepEqual(ley[1].ubicacion, ['TÍTULO I DISPOSICIONES GENERALES', 'CAPITULO I Del objeto'])
 assert.match(ley[1].texto, /Constitucional/)
 
