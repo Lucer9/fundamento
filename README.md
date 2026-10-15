@@ -77,6 +77,9 @@ Tried and dropped:
 
 ## Engineering notes
 
+- **Approximate vs exact:** replaying the 173 cached question embeddings against the live Vectorize index
+  (`scripts/eval-ann.ts`) gave the same rank as exact search on 173 of 173 questions, so production matches the
+  eval.
 - **N+1:** one search fetching citations and criteria for 10 hits takes 6 D1 queries with DataLoader and
   a median of 57 without it (`x-batch: off`). Measured live with 24 different questions each way:
   p50 329 ms vs 587 ms, p90 468 ms vs 804 ms. Every response reports `extensions.d1Queries`.

@@ -170,6 +170,10 @@ export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url)
     if (url.pathname === '/graphql') return yoga.fetch(request, { env })
+    if (url.pathname === '/dev/vec' && env.DEV === '1') {
+      const { vector, topK, filter } = await request.json<{ vector: number[]; topK: number; filter?: VectorizeVectorMetadataFilter }>()
+      return Response.json(await env.VEC.query(vector, { topK, filter }))
+    }
     if (url.pathname === '/dev/ai' && env.DEV === '1') {
       const { model, input } = await request.json<{ model: string; input: unknown }>()
       return Response.json(await env.AI.run(model as keyof AiModels, input as never))
