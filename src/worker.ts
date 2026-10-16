@@ -26,6 +26,7 @@ const resolvers = {
   Query: {
     site: () => ({
       name: CORPUS.sitio.nombre,
+      title: CORPUS.sitio.titulo,
       tagline: CORPUS.sitio.lema,
       description: CORPUS.sitio.descripcion,
       examples: CORPUS.sitio.ejemplos,

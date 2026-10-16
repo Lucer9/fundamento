@@ -29,6 +29,8 @@ ${Object.entries(CORPUS.docs)
   "The site this API serves: its name, how search splits results into lists, and the UMA for fines."
   type Site {
     name: String!
+    "The home page's title."
+    title: String!
     tagline: String!
     description: String!
     "One line for the footer: what the site is not."

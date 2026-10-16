@@ -36,7 +36,7 @@ export type Doc = {
 export type Corpus = {
   clave: 'fiscal' | 'transito'
   prefijo: string
-  sitio: { nombre: string; lema: string; descripcion: string; aviso: string; ejemplos: string[] }
+  sitio: { nombre: string; titulo: string; lema: string; descripcion: string; aviso: string; ejemplos: string[] }
   docs: Record<string, Doc>
   alias: Record<string, string>
   listas: { titulo: string; nota: string; leyes: string[] }[]

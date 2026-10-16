@@ -12,6 +12,7 @@ export const FISCAL: Corpus = {
   prefijo: 'fundamento',
   sitio: {
     nombre: 'fundamento',
+    titulo: 'fundamento · la ley fiscal, en tus palabras',
     lema: 'la ley fiscal, en tus palabras',
     descripcion:
       'Buscador de las leyes fiscales federales de México, sus reglamentos y la Resolución Miscelánea Fiscal 2026. Pregunta en español y llega al artículo o la regla vigente, con lo que cita y quién lo cita.',

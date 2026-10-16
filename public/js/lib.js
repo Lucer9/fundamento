@@ -14,7 +14,7 @@ export const DOCS = {}
 export const SITIO = {}
 
 const SITIO_QUERY = `{
-  site { name tagline description disclaimer defaultMode examples lists { title note laws } uma { value since source } evalPath answersEvalPath guide { scope knowTheRules tips { slug title text cites source { name url } } } }
+  site { name title tagline description disclaimer defaultMode examples lists { title note laws } uma { value since source } evalPath answersEvalPath guide { scope knowTheRules tips { slug title text cites source { name url } } } }
   stats { articles citations chunks criteria }
   laws { code name shortName kind regulates { code name } source articleCount }
 }`
@@ -100,7 +100,7 @@ export const cargarRespuestas = () =>
   }))
 
 export const tieneCriterios = () => (SITIO.stats?.criteria ?? 0) > 0
-const tituloPagina = t => (t ? `${t} · ${SITIO.site.name}` : `${SITIO.site.name} · ${SITIO.site.tagline}`)
+const tituloPagina = t => (t ? `${t} · ${SITIO.site.name}` : SITIO.site.title)
 
 /** Sets the tab title, except on a first load the Worker already titled because it server-rendered the page. */
 export const titular = t => {

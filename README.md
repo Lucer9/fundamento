@@ -7,8 +7,14 @@ own criteria are attached to the articles they interpret, and you can ask questi
 
 Live: https://fundamento.carlosaguirre.workers.dev · GraphQL explorer: `/graphql`
 
-The same engine also runs **semáforo**, a search over Mexico City traffic law: https://semaforo.carlosaguirre.workers.dev
-(see [semáforo](#semáforo-the-same-engine-on-mexico-city-traffic-law)).
+The same engine also runs **Maneja Sin Broncas** (named semáforo until 2026-10-16), a search over Mexico City traffic
+law: https://manejasinbroncas.carlosaguirre.workers.dev (see [Maneja Sin Broncas](#maneja-sin-broncas-the-same-engine-on-mexico-city-traffic-law)).
+The old address redirects there (`redireccion/`).
+
+Whatever you search, Claude answers on one side and the law shows on the other: SATGPT on fundamento, Educación vIAl
+on the traffic site. The answer streams from `POST /chat`, cites articles the law column marks, and takes follow-up
+questions. Every article carries a plain-Spanish summary written by Claude ("En pocas palabras") and the questions it
+answers, and the traffic site has a verified guide for a traffic stop at `/si-te-para-un-agente`.
 
 ```
  Cámara de Diputados PDFs ─┐                                 ┌─ D1 (SQLite)
@@ -21,6 +27,8 @@ The same engine also runs **semáforo**, a search over Mexico City traffic law: 
  Browser ── POST /graphql ──► Worker (GraphQL Yoga + graphql-armor + DataLoader)
                                 ├─ search: embed query → Vectorize (laws, then reglamentos + rules) → D1
                                 └─ answer: law + rule chunks + SAT criterios → LLM → citations checked
+ Browser ── POST /chat ──────► same retrieval and prompt, streamed as server-sent events; follow-ups are
+                                rewritten into one standalone question (Claude Haiku) before retrieval
 ```
 
 ## How it's graded
@@ -131,9 +139,9 @@ Tried and dropped:
 | keyword weighted ×0.5 in fusion          | best on Anexo 7, not on the held-out set             |
 | gemma cut to 256 dimensions              | hit@5 76.3% → 72.3%                                  |
 
-## semáforo: the same engine on Mexico City traffic law
+## Maneja Sin Broncas: the same engine on Mexico City traffic law
 
-semáforo indexes the Reglamento de Tránsito de la Ciudad de México (70 articles, last reformed GOCDMX 30-06-2026),
+Maneja Sin Broncas indexes the Reglamento de Tránsito de la Ciudad de México (70 articles, last reformed GOCDMX 30-06-2026),
 the Ley de Movilidad (264), its reglamento (254), the Ley de Cultura Cívica (143) and the Código Fiscal CDMX articles
 on license, tow-truck and corralón fees (229–231), from the Consejería Jurídica's PDFs: 1,247 chunks and 136
 citation links. Fines written as multiples of the UMA are shown in 2026 pesos (UMA $117.31, INEGI).
@@ -180,7 +188,7 @@ Answers, judged by Claude Opus against each reference answer:
   fracción it cites, so an answer about a motorcycle without a helmet gets that paragraph next to article 37.
 - Remaining misses are mostly the depósito when the question shares no word with article 67's paragraph.
 - Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions either way (t4 vs t3, t6 vs t7); Haiku's
-  misses are omissions, never wrong facts. semáforo answers live with Sonnet ($0.006 an answer on average, $0.009
+  misses are omissions, never wrong facts. Maneja Sin Broncas answers live with Sonnet ($0.006 an answer on average, $0.009
   at most, against Haiku's $0.003), since its answers are about fines and the corralón. From t5 to t6 the one changed verdict was a
   question the new rule doesn't touch, so it is run-to-run variation; t6's rule exists for questions like "¿qué pasa
   si traigo un porta placas que tapa la placa?", where article 67 sends the car to the depósito for any fracción of
@@ -246,7 +254,7 @@ node scripts/preguntas.ts                                                   # pl
 node scripts/eval-respuestas.ts r2 "con criterios" --modelo=claude-haiku-5-5   # answer accuracy, judged by Claude Opus
 npm run deploy
 
-# semáforo: the same steps with CORPUS=transito (data/transito, eval/transito)
+# Maneja Sin Broncas: the same steps with CORPUS=transito (data/transito, eval/transito)
 npm run ingest:transito && npm run seed:transito:local && npm run dev:transito   # :8788
 CORPUS=transito node scripts/embed.ts gemma && CORPUS=transito node scripts/vectorize.ts gemma
 CORPUS=transito npm run eval

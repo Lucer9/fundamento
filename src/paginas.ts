@@ -51,7 +51,7 @@ function guiaHtml(guia: NonNullable<typeof CORPUS.guia>) {
  */
 async function contenido(env: Env, url: URL): Promise<Pagina> {
   const { nombre, lema, descripcion } = CORPUS.sitio
-  const sitio = { titulo: `${nombre} · ${lema}`, descripcion }
+  const sitio = { titulo: CORPUS.sitio.titulo, descripcion }
   if (url.pathname === '/' && !url.search)
     return {
       ...sitio,
@@ -152,7 +152,7 @@ async function contenido(env: Env, url: URL): Promise<Pagina> {
  * brand), title, description, canonical URL, schema.org data and the server-rendered text.
  */
 export async function pagina(res: Response, env: Env, url: URL) {
-  const p = await contenido(env, url).catch(() => ({ titulo: `${CORPUS.sitio.nombre} · ${CORPUS.sitio.lema}`, descripcion: CORPUS.sitio.descripcion }) as Pagina)
+  const p = await contenido(env, url).catch(() => ({ titulo: CORPUS.sitio.titulo, descripcion: CORPUS.sitio.descripcion }) as Pagina)
   const { nombre } = CORPUS.sitio
   const canonica = `${url.origin}${url.pathname === '/' ? '/' : url.pathname.replace(/\/$/, '')}`
   const atributo = (valor: string) => ({ element: (e: Element) => void e.setAttribute('content', valor) })

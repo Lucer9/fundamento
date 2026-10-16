@@ -15,6 +15,7 @@ export const TRANSITO: Corpus = {
   prefijo: 'semaforo',
   sitio: {
     nombre: 'Maneja Sin Broncas',
+    titulo: 'Reglamento de Tránsito de la CDMX, en tus palabras · Maneja Sin Broncas',
     lema: 'conoce el reglamento y maneja sin broncas',
     descripcion:
       'El Reglamento de Tránsito de la Ciudad de México, en tus palabras: llega al artículo vigente con la multa en pesos de 2026, los puntos a la licencia y lo que un agente puede y no puede hacer si te para. Solo CDMX.',

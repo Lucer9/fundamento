@@ -27,7 +27,7 @@
   "observability": { "enabled": true },
   "env": {
     "transito": {
-      "name": "semaforo",
+      "name": "manejasinbroncas",
       "define": { "__CORPUS__": "\"transito\"" },
       "d1_databases": [{ "binding": "DB", "database_name": "semaforo", "database_id": "e1494c76-df03-4d90-8041-0b2b24888aa5" }],
       "vectorize": [{ "binding": "VEC", "index_name": "semaforo-gemma-512", "remote": true }],
