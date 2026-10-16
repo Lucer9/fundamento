@@ -13,7 +13,8 @@ type Linea = { p: number; x: number; y: number; t: string; abre: boolean }
 /**
  * Splits the compiled Resolución Miscelánea Fiscal into rules. Input is scripts/pdf-lineas.js output
  * ("page\tx\ty\ttext"): the PDF prints rule numbers in a margin column that plain extraction moves away from their
- * text, and line spacing is the only paragraph signal (≤14 pt inside a paragraph, ≥16 pt between paragraphs).
+ * text, and line spacing is the only paragraph signal (≤14 pt inside a paragraph, ≥16 pt between paragraphs; across a
+ * page break, a lowercase line after one without closing punctuation continues the paragraph).
  * A rule is its title (the paragraph right above the number), the numbered text, and usually a closing fundamento
  * paragraph. Compilation notes in the far margin ("Regla 2.12.4. - Reformada en la Primera RMRMF ... DOF el 09 de
  * julio de 2026") become the rule's amendment dates. Stops at the transitorios.
@@ -35,7 +36,8 @@ export function parseRmf(raw: string): (Articulo & { titulo: string })[] {
   for (const l of todas.slice(inicio, fin)) {
     if (l.x >= 62) {
       const prev = ls[ls.length - 1]
-      ls.push({ ...l, abre: !prev || prev.p !== l.p || prev.y - l.y > 15 })
+      const sigue = prev && prev.p !== l.p && !/[.:;]$/.test(prev.t) && /^\p{Ll}/u.test(l.t)
+      ls.push({ ...l, abre: !prev || (prev.p !== l.p && !sigue) || (prev.p === l.p && prev.y - l.y > 15) })
       continue
     }
     const r = l.t.match(/^Regla (\d+(?:\.\d+)+)\.?$/)

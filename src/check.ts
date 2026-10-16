@@ -45,7 +45,8 @@ const rmf = parseRmf(
     [15, 57, 527, 'Regla 2.1.2.'],
     [15, 57, 514, '- Reformada en la Primera RMRMF para 2026, publicada en el DOF el 09 de julio de 2026.'],
     [15, 128, 497, 'Acuerdo amplio de intercambio de información'],
-    [15, 71, 480, '2.1.2. Se deroga.'],
+    [15, 71, 480, '2.1.2. Se deroga en los términos de'],
+    [16, 128, 700, 'la regla anterior.'],
     [849, 276, 400, 'Transitorios'],
   ]
     .map(l => l.join('\t'))
@@ -55,6 +56,7 @@ assert.deepEqual(rmf.map(r => [r.id, r.titulo]), [['2.1.1', 'Cobro de créditos 
 assert.equal(rmf[0].texto, 'Para los efectos del artículo 4o. del CFF, las autoridades federales remitirán los créditos.\nCFF 4o., RMF 2.9.3.')
 assert.deepEqual(rmf[0].ubicacion, ['Título 2. Código Fiscal de la Federación', 'Capítulo 2.1. Disposiciones generales'])
 assert.deepEqual(rmf[1].reformas, ['2026-07-09'])
+assert.equal(rmf[1].texto, 'Se deroga en los términos de la regla anterior.')
 
 const refs = (q: string) => referencias(q).map(r => `${r.ley}:${r.id}`)
 assert.deepEqual(refs('LISR 151'), ['LISR:151'])
