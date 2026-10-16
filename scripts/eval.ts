@@ -1,13 +1,15 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, SQL_FTS, consultaFts, porArticulo, rrf, type Hit, type Modelo } from '../src/buscar.ts'
+import { LEYES } from '../src/parse.ts'
 
 /**
  * Asks every SAT criterio's title as a question and records the rank of the first article the criterio
  * itself cites. Anexo 7 (criterios normativos) is the set methods were tuned on; Anexo 3 (prácticas
  * indebidas) is held out and only ever reported. Keyword search runs the same SQL the Worker runs on D1;
  * vectors are brute-force cosine over the cached embeddings (exact, so any gap to production is
- * Vectorize's approximation). The reranker step calls Workers AI through the dev Worker and is cached.
+ * Vectorize's approximation). The reranker (--rerank, needs bge-m3 vectors) calls Workers AI through the dev Worker
+ * and is cached.
  * Writes public/eval.json for the site.
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
@@ -50,8 +52,8 @@ const cargar = (f: string, dims: number) => {
   return normalizar(new Float32Array(b.buffer, b.byteOffset, b.byteLength / 4).slice(), dims)
 }
 
-function vecinos(docs: Float32Array, q: Float32Array, qi: number, dims: number, k = 100): Hit[] {
-  const sims = rowids.map((rowid, d) => {
+function vecinos(docs: Float32Array, q: Float32Array, qi: number, dims: number, k = 100, filtro?: (h: Hit) => boolean): Hit[] {
+  const sims = rowids.flatMap((rowid, d) => (filtro && !filtro(frag.get(rowid)!) ? [] : [{ rowid, d }])).map(({ rowid, d }) => {
     let s = 0
     for (let j = 0; j < dims; j++) s += docs[d * dims + j] * q[qi * dims + j]
     return { rowid, s }
@@ -88,6 +90,7 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
   const metodos: Record<string, Hit[][]> = {}
   const kw = consultas.map(q => porArticulo(fts.all(consultaFts(q), 200) as Hit[]))
   metodos.keyword = kw
+  metodos['keyword · leyes'] = consultas.map(q => porArticulo((fts.all(consultaFts(q), 1000) as Hit[]).filter(h => LEYES[h.ley].tipo === 'ley')))
   for (const m of Object.keys(MODELOS) as Modelo[]) {
     const { dims, indice } = MODELOS[m]
     const f = `data/emb/${m}.docs.f32`
@@ -102,6 +105,8 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
       const vec = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d)))
       metodos[`vector ${nombre}`] = vec
       if (d === indice) metodos[`hybrid ${nombre}`] = vec.map((v, i) => rrf([kw[i], v]))
+      if (d === indice && m === 'gemma')
+        metodos[`vector ${nombre} · leyes`] = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d, 100, h => LEYES[h.ley].tipo === 'ley')))
     }
   }
   if (metodos['vector bge-m3']) {
@@ -112,7 +117,7 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
 }
 
 const naturales = new Map((JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { n: number; pregunta: string }[]).map(p => [p.n, p.pregunta]))
-const porTitulo = await metodosPara(criterios.map(c => c.tema), 'preguntas', true)
+const porTitulo = await metodosPara(criterios.map(c => c.tema), 'preguntas', process.argv.includes('--rerank'))
 const porPregunta = await metodosPara(criterios.map(c => naturales.get(c.n)!), 'naturales', false)
 
 type Rangos = (number | null)[]
@@ -193,6 +198,8 @@ writeFileSync(
       nombre: 'Preguntas en lenguaje común, una por cada criterio de los anexos 7 y 3',
       ...comunes,
       comparaciones: [
+        ['vector gemma · leyes', 'keyword · leyes'],
+        ['vector gemma · leyes', 'vector gemma'],
         ['vector gemma', 'vector gemma 768d'],
         ['vector gemma', 'vector bge-m3'],
         ['vector gemma', 'vector qwen3'],

@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, encabezado, indiceVec, recortar, type Modelo } from '../src/buscar.ts'
-import type { Ley } from '../src/parse.ts'
+import { LEYES, type Ley } from '../src/parse.ts'
 import { huella } from './huella.ts'
 
 /**
@@ -14,6 +14,7 @@ import { huella } from './huella.ts'
  * (tracked in data/emb/<model>.subidos.json). Queries filter on tipo, so the metadata index must exist first:
  *   npx wrangler vectorize create fundamento-gemma-512 --dimensions 512 --metric cosine
  *   npx wrangler vectorize create-metadata-index fundamento-gemma-512 --propertyName tipo --type string
+ *   npx wrangler vectorize create-metadata-index fundamento-gemma-512 --propertyName familia --type string
  * Usage: node scripts/vectorize.ts [model]  (default gemma)
  */
 const modelo = (process.argv[2] ?? 'gemma') as Modelo
@@ -31,7 +32,7 @@ const faltan: string[] = []
 const lineas = frags.flatMap(f => {
   const vec = cache.get(huella(documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion), f.titulo), f.texto)))
   if (!vec) return faltan.push(`${f.ley}:${f.id}`), []
-  return [JSON.stringify({ id: f.huella, values: recortar(vec, indice), metadata: { tipo: 'ley', ley: f.ley, articulo: f.id } })]
+  return [JSON.stringify({ id: f.huella, values: recortar(vec, indice), metadata: { tipo: 'ley', familia: LEYES[f.ley].tipo, ley: f.ley, articulo: f.id } })]
 })
 const crit = `data/emb/${modelo}.criterios.f32`
 if (existsSync(crit)) {

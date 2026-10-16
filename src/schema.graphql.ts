@@ -45,8 +45,8 @@ export const typeDefs = /* GraphQL */ `
     laws: [Law!]!
     law(code: LawCode!): Law
     article(law: LawCode!, number: String!): Article
-    "Plain-language search. One hit per article with the passage that matched best; articles the query names (LISR 151, artículo 29-A del CFF) come first."
-    search(query: String!, mode: SearchMode = VECTOR, law: LawCode, first: Int = 10): [SearchHit!]!
+    "Plain-language search. One hit per article with the passage that matched best; articles the query names (LISR 151, artículo 29-A del CFF) come first. kinds keeps only some kinds of document: ask for [LAW] and [REGULATION, RULES] separately, because in one ranking the rules crowd out the law they apply."
+    search(query: String!, mode: SearchMode = VECTOR, law: LawCode, kinds: [LawKind!], first: Int = 10): [SearchHit!]!
     "A short answer grounded in retrieved articles. Every citation in the text is one of the sources."
     answer(question: String!): Answer!
     "Articles other articles point to most."
