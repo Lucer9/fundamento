@@ -51,9 +51,9 @@ async function claude(env: Env, model: string, system: string, content: string) 
   const res = await fetch(`${env.ANTHROPIC_BASE_URL ?? 'https://api.anthropic.com'}/v1/messages`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY ?? '', 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model, system, max_tokens: 1024, temperature: 0.2, messages: [{ role: 'user', content }] }),
+    body: JSON.stringify({ model, system, max_tokens: 1024, messages: [{ role: 'user', content }] }),
   })
-  if (!res.ok) throw new Error(`${model}: ${res.status}`)
+  if (!res.ok) throw new Error(`${model}: ${res.status} ${(await res.text()).slice(0, 300)}`)
   const j = (await res.json()) as { content: { type: string; text?: string }[] }
   return j.content.flatMap(b => (b.type === 'text' ? [b.text ?? ''] : [])).join('')
 }
@@ -122,7 +122,8 @@ export async function responder(ctx: Ctx, pregunta: string) {
           reasoning: { effort: 'low' },
         } as never,
       ).then(salida)
-  ).catch(() => {
+  ).catch(e => {
+    console.error('respuesta: el modelo falló', String(e))
     throw fuera()
   })
 
