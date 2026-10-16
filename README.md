@@ -72,6 +72,28 @@ What the numbers support:
 - **Keyword fusion still hurts.** Vector beats hybrid on hit@1 by 1.6 to 13.2 points.
 - The held-out Anexo 3 titles agree in direction, but 56 questions separate little.
 
+## Answer accuracy (`scripts/eval-respuestas.ts`, 2026-10-16)
+
+Claude Haiku answers each of the 189 plain-language questions from the retrieved passages. Claude Opus then reads
+the SAT criterio the question came from and labels the answer: correct (same conclusion), wrong (contradicts it) or
+incomplete (doesn't reach it, usually saying the passages don't settle the question).
+
+| run | what the answer reads                                    | correct | wrong | incomplete |
+|-----|----------------------------------------------------------|---------|-------|------------|
+| r1  | laws, reglamentos and Miscelánea rules                   | 22.2%   | 6.3%  | 71.4%      |
+| r2  | the same plus SAT criterios, minus the question's own    | 24.9%   | 9.0%  | 66.1%      |
+| r3  | the same plus every SAT criterio, the question's own too | 87.3%   | 2.6%  | 10.1%      |
+
+- The statutes alone rarely settle what a criterio settles: criterios are SAT's reading of points the law doesn't
+  spell out. Answers then mostly say so instead of guessing; they are wrong 6% to 9% of the time.
+- Other criterios don't help with a different point: r2 − r1 is −2.1 to +7.4 points correct (paired bootstrap).
+- With the question's own criterio searchable, as on the live site, retrieval found it for 181 of 189 questions and
+  answers matched SAT 87.3% of the time (+57.7 to +72.0 points over r1). That is an upper bound: each question was
+  written from its criterio, so finding it is easier than for a question SAT never addressed.
+- The live site answers with gpt-oss-120b on Workers AI. These runs used Claude through `scripts/claude.ts` because
+  the Workers AI allowance was exhausted; at list price an answer cost about $0.0016 and a verdict about $0.025.
+- Every answer and verdict is in `eval/respuestas.r1.json` to `r3.json`.
+
 ## How the methods were chosen (three-law corpus, 2026-10-15)
 
 Before the corpus grew, plain-language questions (n = 173) over LISR, LIVA and CFF:
