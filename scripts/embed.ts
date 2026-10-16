@@ -2,14 +2,16 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, encabezado, type Modelo } from '../src/buscar.ts'
 import type { Ley } from '../src/parse.ts'
+import { embeberLocal } from './embeddings.ts'
 import { huella } from './huella.ts'
 
 /**
  * Embeds every chunk, criterio, criterio title and plain-language eval question (eval/preguntas.json) with each
- * model, through the dev Worker's /dev/ai route (`npm run dev` must be running), into Float32 files in data/emb.
+ * model into Float32 files in data/emb. Models with open weights (MODELOS[m].onnx) run on this machine
+ * (scripts/embeddings.ts); the rest, or all with --remoto, go through the dev Worker's /dev/ai route (`npm run dev`).
  * Chunk vectors go through a cache keyed by the embedded text's hash (<model>.cache.f32 + .cache.json), so a re-ingest
  * only re-embeds chunks whose text changed; <model>.docs.f32 is then rebuilt in rowid order.
- * Usage: node scripts/embed.ts [model...]
+ * Usage: node scripts/embed.ts [model...] [--remoto]
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
 const LOTE = 50
@@ -70,7 +72,9 @@ async function embeber(id: string, textos: string[]) {
   return Float32Array.from(out.flat(2))
 }
 
-for (const nombre of (process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(MODELOS)) as Modelo[]) {
+const REMOTO = process.argv.includes('--remoto')
+const elegidos = process.argv.slice(2).filter(a => !a.startsWith('--'))
+for (const nombre of (elegidos.length ? elegidos : Object.keys(MODELOS)) as Modelo[]) {
   const m = MODELOS[nombre]
   const qs = `data/emb/${nombre}.preguntas.f32`
   const t0 = Date.now()
@@ -79,7 +83,7 @@ for (const nombre of (process.argv.slice(2).length ? process.argv.slice(2) : Obj
   const vectores = async (textos: string[]) => {
     const faltan = [...new Set(textos.filter(t => !cache.has(huella(t))))]
     if (faltan.length) {
-      const v = await embeber(m.id, faltan)
+      const v = m.onnx && !REMOTO ? Float32Array.from((await embeberLocal(nombre, faltan)).flat()) : await embeber(m.id, faltan)
       faltan.forEach((t, i) => cache.set(huella(t), v.slice(i * m.dims, (i + 1) * m.dims)))
       guardarCache(nombre, cache)
       nuevos += faltan.length

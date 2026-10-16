@@ -31,7 +31,8 @@ export const SQL_FTS = `
   limit ?2`
 
 /**
- * Embedding models compared in the eval. `dims` is what Workers AI returns; `indice` is what Vectorize stores.
+ * Embedding models compared in the eval. `dims` is what Workers AI returns; `indice` is what Vectorize stores;
+ * `onnx` is the same model's open weights for embedding on a laptop (scripts/embeddings.ts).
  * gemma is cut to its first 512 dimensions (it was trained to allow that): 768 would not fit the free plan's
  * 5M stored dimensions, and 512 scored the same as 768 on the plain-language questions.
  */
@@ -40,6 +41,7 @@ export const MODELOS = {
     id: '@cf/baai/bge-m3',
     dims: 1024,
     indice: 1024,
+    onnx: '',
     consulta: (q: string) => q,
     documento: (titulo: string, t: string) => `${titulo}\n${t}`,
   },
@@ -47,6 +49,7 @@ export const MODELOS = {
     id: '@cf/qwen/qwen3-embedding-0.6b',
     dims: 1024,
     indice: 1024,
+    onnx: '',
     consulta: (q: string) =>
       `Instruct: Given a question about Mexican tax law, retrieve the law articles that answer it\nQuery:${q}`,
     documento: (titulo: string, t: string) => `${titulo}\n${t}`,
@@ -55,6 +58,7 @@ export const MODELOS = {
     id: '@cf/google/embeddinggemma-300m',
     dims: 768,
     indice: 512,
+    onnx: 'onnx-community/embeddinggemma-300m-ONNX',
     consulta: (q: string) => `task: search result | query: ${q}`,
     documento: (titulo: string, t: string) => `title: ${titulo} | text: ${t}`,
   },

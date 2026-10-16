@@ -15,6 +15,7 @@ export interface Env {
   DAILY_ANSWERS: string
   ANTHROPIC_API_KEY?: string
   ANTHROPIC_BASE_URL?: string
+  EMBED_URL?: string
   DEV?: string
 }
 
@@ -136,7 +137,12 @@ async function textoHits(d: Db, query: string): Promise<Hit[]> {
 
 async function embeber(env: Env, query: string) {
   const modelo = MODELOS[env.MODEL]
-  const emb = (await env.AI.run(modelo.id as keyof AiModels, { text: [modelo.consulta(query)] } as never)) as unknown as { data: number[][] }
+  const pedido = { text: [modelo.consulta(query)] }
+  const emb = (
+    env.EMBED_URL
+      ? await (await fetch(env.EMBED_URL, { method: 'POST', body: JSON.stringify({ model: modelo.id, ...pedido }) })).json()
+      : await env.AI.run(modelo.id as keyof AiModels, pedido as never)
+  ) as { data: number[][] }
   return recortar(emb.data[0], modelo.indice)
 }
 
