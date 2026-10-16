@@ -51,9 +51,19 @@ export type Corpus = {
   modo: 'VECTOR' | 'HYBRID'
   contexto: 'trozos' | 'busqueda'
   materia: string
+  guia?: { alcance: string; conoce: string; consejos: { titulo: string; texto: string; citas: string[]; fuente?: { nombre: string; url: string } }[] }
 }
 
 declare const __CORPUS__: string | undefined
+
+/** "Cómo debe ser la parada" → "como-debe-ser-la-parada": accentless lowercase words joined by hyphens, for URL fragments. */
+export const slug = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 
 /** The corpus this build serves: wrangler's `define` sets __CORPUS__ per environment; Node scripts read CORPUS (default fiscal). */
 export const CORPUS: Corpus = (typeof __CORPUS__ === 'string' ? __CORPUS__ : process.env.CORPUS) === 'transito' ? TRANSITO : FISCAL

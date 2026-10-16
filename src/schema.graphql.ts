@@ -44,6 +44,42 @@ ${Object.entries(CORPUS.docs)
     "Static files with this corpus's search and answer eval results."
     evalPath: String!
     answersEvalPath: String!
+    "What to know when a traffic agent stops you, each tip with the articles it rests on; null where the site has no guide."
+    guide: Guide
+  }
+
+  type Guide {
+    "What the site covers."
+    scope: String!
+    "Why a reader should know the rules, in two or three sentences."
+    knowTheRules: String!
+    tips: [Tip!]!
+  }
+
+  type Tip {
+    "URL fragment of the tip on the guide page."
+    slug: String!
+    title: String!
+    text: String!
+    "Articles the tip rests on, as LAW:number keys."
+    cites: [String!]!
+    "Official page behind a claim no article makes."
+    source: TipSource
+  }
+
+  type TipSource {
+    name: String!
+    url: String!
+  }
+
+  "A plain-Spanish summary of an article, written by Claude from its official text. The official text governs."
+  type Summary {
+    "A few words naming what the article is about."
+    topic: String!
+    text: String!
+    "Questions a person might ask that the article answers."
+    questions: [String!]!
+    model: String!
   }
 
   type SearchList {
@@ -121,6 +157,8 @@ ${Object.entries(CORPUS.docs)
     citedBy: [Article!]!
     "Articles closest in meaning that neither cite nor are cited by this one (scripts/relacionados.ts): where an obligation's fine lives in another document."
     related: [Related!]!
+    "Plain-Spanish summary written by Claude; null until one is generated."
+    summary: Summary
     "SAT criteria that cite this article: how SAT reads it (Anexo 7) and practices it calls improper (Anexo 3)."
     criteria(kind: CriterionKind): [Criterion!]!
   }

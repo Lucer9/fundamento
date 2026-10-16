@@ -1,9 +1,10 @@
 import type { Corpus } from '../corpus.ts'
+import { ALCANCE, CONOCE_EL_REGLAMENTO, CONSEJOS } from './consejos-transito.ts'
 
 const CEJUR = 'https://data.consejeria.cdmx.gob.mx/images/leyes/2025'
 
 /**
- * semáforo: Mexico City traffic law. Texts are the Consejería Jurídica's compiled texto vigente; the reglamento
+ * Maneja Sin Broncas (named semáforo until 2026-10-16): Mexico City traffic law. Texts are the Consejería Jurídica's compiled texto vigente; the reglamento
  * leads, since it holds the infractions, fines and points. Only the Código Fiscal articles on license, tow-truck and
  * corralón fees are kept: the rest of its 1,142 pages would drown the search. One result list: on the 28 hand-checked
  * questions, one ranking over all five documents scored at least as well as the reglamento ranked alone (hit@5 89.3% vs
@@ -13,10 +14,10 @@ export const TRANSITO: Corpus = {
   clave: 'transito',
   prefijo: 'semaforo',
   sitio: {
-    nombre: 'semáforo',
-    lema: 'el Reglamento de Tránsito de la CDMX, en tus palabras',
+    nombre: 'Maneja Sin Broncas',
+    lema: 'conoce el reglamento y maneja sin broncas',
     descripcion:
-      'Buscador del Reglamento de Tránsito de la Ciudad de México y las leyes que lo rodean. Pregunta en español y llega al artículo vigente, con la multa en pesos de 2026 y los puntos a la licencia.',
+      'El Reglamento de Tránsito de la Ciudad de México, en tus palabras: llega al artículo vigente con la multa en pesos de 2026, los puntos a la licencia y lo que un agente puede y no puede hacer si te para. Solo CDMX.',
     aviso: 'No es asesoría legal.',
     ejemplos: [
       '¿Cuánto es la multa por usar el celular manejando?',
@@ -82,8 +83,9 @@ export const TRANSITO: Corpus = {
   modo: 'HYBRID',
   contexto: 'busqueda',
   materia: 'los reglamentos y leyes de tránsito de la Ciudad de México',
+  guia: { alcance: ALCANCE, conoce: CONOCE_EL_REGLAMENTO, consejos: CONSEJOS },
   listas: [{ titulo: 'Artículos', nota: '', leyes: ['RT', 'LM', 'RLM', 'LCC', 'CFCDMX'] }],
-  prompt: `Eres "semáforo", un buscador del Reglamento de Tránsito de la Ciudad de México (RT) y de las leyes que lo rodean: la Ley de Movilidad (LM), su reglamento (RLM), la Ley de Cultura Cívica (LCC) y el Código Fiscal de la Ciudad de México (CFCDMX).
+  prompt: `Eres "Educación vIAl", el asistente de Maneja Sin Broncas, un buscador del Reglamento de Tránsito de la Ciudad de México (RT) y de las leyes que lo rodean: la Ley de Movilidad (LM), su reglamento (RLM), la Ley de Cultura Cívica (LCC) y el Código Fiscal de la Ciudad de México (CFCDMX).
 Responde en español, en dos a cinco frases, usando solo los artículos que se te dan.
 Después de cada afirmación cita su fuente entre corchetes con su clave exacta, por ejemplo [RT 38], [LM 68] o [CFCDMX 231].
 Las multas van en veces la Unidad de Medida y Actualización (UMA); junto a cada multa el texto trae entre ⟨ ⟩ su equivalente en pesos de 2026. Da la multa en pesos y en UMA; si hay tres montos (mínimo, medio y máximo), dalos los tres. Menciona los puntos a la licencia, el arresto o la remisión al depósito cuando el artículo los diga.

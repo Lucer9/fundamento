@@ -1,4 +1,4 @@
-import { CORPUS } from './corpus.ts'
+import { CORPUS, slug } from './corpus.ts'
 import type { Env } from './indice.ts'
 import { LEYES } from './parse.ts'
 
@@ -13,6 +13,37 @@ const resumen = (t: string, n = 155) => {
 
 type Pagina = { titulo: string; descripcion: string; cuerpo?: string; datos?: unknown }
 
+const GUIA = '/si-te-para-un-agente'
+const AUTOR = { '@type': 'Person', name: 'Carlos Aguirre', url: 'https://www.carlosaguirre.workers.dev' }
+
+/** Who publishes the official text of this corpus's documents, for the footer: "la Cámara de Diputados y el SAT". */
+function editores() {
+  const nombres = [
+    [/diputados\.gob\.mx/, 'la Cámara de Diputados'],
+    [/sat\.gob\.mx/, 'el SAT'],
+    [/cdmx\.gob\.mx/, 'la Consejería Jurídica de la Ciudad de México'],
+  ] as const
+  const quien = [...new Set(Object.values(CORPUS.docs).flatMap(d => nombres.filter(([re]) => re.test(d.pdf)).map(([, n]) => n)))]
+  const lista = quien.length > 1 ? `${quien.slice(0, -1).join(', ')} y ${quien[quien.length - 1]}` : quien[0]
+  return `Texto vigente publicado por ${lista}${CORPUS.anexos ? '; criterios del SAT, Anexos 3 y 7 de la RMF 2026' : ''}.`
+}
+
+/** The traffic guide as server-rendered HTML: every tip with the articles it rests on and any official page behind it. */
+function guiaHtml(guia: NonNullable<typeof CORPUS.guia>) {
+  const cita = (k: string) => {
+    const [ley, id] = k.split(':')
+    return `<a href="/${ley}/${encodeURIComponent(id)}">${esc(`${ley} ${id}`)}</a>`
+  }
+  return `<article class="ssr"><h1>Si te para un agente de tránsito en la CDMX</h1><p>${esc(guia.conoce)}</p><p>${esc(guia.alcance)}</p><ol>${guia.consejos
+    .map(
+      c =>
+        `<li id="${slug(c.titulo)}"><h2>${esc(c.titulo)}</h2><p>${esc(c.texto)}</p><p>Artículos: ${c.citas.map(cita).join(', ')}</p>${
+          c.fuente ? `<p>Fuente: <a href="${esc(c.fuente.url)}">${esc(c.fuente.nombre)}</a></p>` : ''
+        }</li>`,
+    )
+    .join('')}</ol></article>`
+}
+
 /**
  * What a crawler should find at a path, without running the app: the page's own title and description, its text in
  * the HTML, and schema.org data (Legislation for an article or rule, QAPage for a published question). The app
@@ -21,17 +52,54 @@ type Pagina = { titulo: string; descripcion: string; cuerpo?: string; datos?: un
 async function contenido(env: Env, url: URL): Promise<Pagina> {
   const { nombre, lema, descripcion } = CORPUS.sitio
   const sitio = { titulo: `${nombre} · ${lema}`, descripcion }
+  if (url.pathname === '/' && !url.search)
+    return {
+      ...sitio,
+      cuerpo: `<header class="ssr"><h1>${esc(lema[0].toUpperCase() + lema.slice(1))}.</h1><p>${esc(descripcion)}</p>${
+        CORPUS.guia ? `<p><a href="${GUIA}">Si te para un agente de tránsito: ${CORPUS.guia.consejos.length} cosas que dice el reglamento</a></p>` : ''
+      }</header>`,
+    }
+  if (CORPUS.guia && new RegExp(`^${GUIA}/?$`).test(url.pathname))
+    return {
+      titulo: `Si te para un agente de tránsito en la CDMX: lo que dice el reglamento | ${nombre}`,
+      descripcion: resumen(CORPUS.guia.conoce),
+      cuerpo: guiaHtml(CORPUS.guia),
+      datos: {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: 'Si te para un agente de tránsito en la CDMX',
+        description: resumen(CORPUS.guia.conoce),
+        about: 'Reglamento de Tránsito de la Ciudad de México',
+        inLanguage: 'es-MX',
+        author: AUTOR,
+        url: `${url.origin}${GUIA}`,
+      },
+    }
   const art = url.pathname.match(/^\/([A-Z]+)\/([^/]+)\/?$/)
   if (art && LEYES[art[1]]) {
     const [ley, id] = [art[1], decodeURIComponent(art[2])]
     const doc = LEYES[ley]
-    const fila = await env.DB.prepare(`select texto, titulo from articulo where ley = ?1 and id = ?2`).bind(ley, id).first<{ texto: string; titulo: string | null }>()
+    const [fila, res] = await Promise.all([
+      env.DB.prepare(`select texto, titulo from articulo where ley = ?1 and id = ?2`).bind(ley, id).first<{ texto: string; titulo: string | null }>(),
+      env.DB.prepare(`select tema, resumen, preguntas from resumen where ley = ?1 and id = ?2`)
+        .bind(ley, id)
+        .first<{ tema: string; resumen: string; preguntas: string }>()
+        .catch(() => null),
+    ])
     if (!fila) return sitio
-    const etiqueta = `${doc.tipo === 'reglas' ? 'Regla' : 'Artículo'} ${id}${fila.titulo ? `: ${fila.titulo}` : ''}`
+    const tema = fila.titulo ?? res?.tema
+    const etiqueta = `${doc.tipo === 'reglas' ? 'Regla' : 'Artículo'} ${id}${tema ? `: ${tema}` : ''}`
+    const preguntas = res ? (JSON.parse(res.preguntas) as string[]) : []
     return {
       titulo: `${etiqueta} · ${doc.nombre} | ${nombre}`,
-      descripcion: resumen(fila.texto),
-      cuerpo: `<article class="ssr"><p>${esc(doc.nombre)}</p><h1>${esc(etiqueta)}</h1>${fila.texto
+      descripcion: resumen(res?.resumen ?? fila.texto),
+      cuerpo: `<article class="ssr"><p>${esc(doc.nombre)}</p><h1>${esc(etiqueta)}</h1>${
+        res
+          ? `<section><h2>En pocas palabras</h2><p>${esc(res.resumen)}</p>${
+              preguntas.length ? `<h3>Preguntas que responde</h3><ul>${preguntas.map(q => `<li><a href="/?q=${encodeURIComponent(q)}">${esc(q)}</a></li>`).join('')}</ul>` : ''
+            }<p>Resumen escrito con IA a partir del texto oficial; el texto oficial es el que vale.</p></section>`
+          : ''
+      }${fila.texto
         .split('\n')
         .map(p => `<p>${esc(p)}</p>`)
         .join('')}<p><a href="${esc(doc.pdf)}">Texto oficial en PDF</a></p></article>`,
@@ -45,6 +113,7 @@ async function contenido(env: Env, url: URL): Promise<Pagina> {
         inLanguage: 'es-MX',
         url: `${url.origin}/${ley}/${art[2]}`,
         text: fila.texto.slice(0, 5000),
+        ...(res ? { abstract: res.resumen } : {}),
       },
     }
   }
@@ -107,6 +176,8 @@ export async function pagina(res: Response, env: Env, url: URL) {
     .on('meta[property="og:description"]', atributo(p.descripcion))
     .on('head', { element: e => void e.append(cabeza, { html: true }) })
     .on('main#main', { element: e => void (p.cuerpo && e.prepend(p.cuerpo, { html: true })) })
+    .on('.colophon-warn', { element: e => void e.setInnerContent(CORPUS.sitio.aviso) })
+    .on('.colophon-fuente', { element: e => void e.setInnerContent(editores()) })
     .transform(res)
 }
 
@@ -116,7 +187,7 @@ export async function sitemap(env: Env, origen: string) {
     env.DB.prepare(`select ley, id from articulo where length(texto) > 40 order by rowid`).all<{ ley: string; id: string }>(),
     env.DB.prepare(`select slug from faq`).all<{ slug: string }>().catch(() => ({ results: [] as { slug: string }[] })),
   ])
-  const rutas = ['/', '/preguntas', '/explorar', '/como-funciona', ...fs.results.map(f => `/preguntas/${f.slug}`), ...arts.results.map(a => `/${a.ley}/${encodeURIComponent(a.id)}`)]
+  const rutas = ['/', '/preguntas', ...(CORPUS.guia ? [GUIA] : []), '/explorar', '/como-funciona', ...fs.results.map(f => `/preguntas/${f.slug}`), ...arts.results.map(a => `/${a.ley}/${encodeURIComponent(a.id)}`)]
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rutas
     .map(r => `<url><loc>${esc(origen + r)}</loc></url>`)
     .join('\n')}\n</urlset>\n`

@@ -64,6 +64,9 @@ export function db(env: Env): Db {
   return d
 }
 
+/** A row of `resumen`: Claude's plain-Spanish summary of one article (scripts/resumenes.ts); `preguntas` is a JSON array. */
+export type Resumen = { tema: string; resumen: string; preguntas: string; modelo: string }
+
 function agrupar<R extends { k: string }>(keys: readonly string[], rows: R[]) {
   const m = new Map<string, R[]>()
   for (const r of rows) m.set(r.k, [...(m.get(r.k) ?? []), r])
@@ -80,6 +83,16 @@ export function loaders(d: Db, batch: boolean) {
     articulo: new DataLoader<string, Fila | null>(async keys => {
       const rows = await d.all<Fila>(`select * from articulo where ley || ':' || id in (select value from json_each(?1))`, json(keys))
       const m = new Map(rows.map(r => [clave(r.ley, r.id), r]))
+      return keys.map(k => m.get(k) ?? null)
+    }, o),
+    resumen: new DataLoader<string, Resumen | null>(async keys => {
+      const rows = await d
+        .all<Resumen & { k: string }>(
+          `select ley || ':' || id as k, tema, resumen, preguntas, modelo from resumen where ley || ':' || id in (select value from json_each(?1))`,
+          json(keys),
+        )
+        .catch(() => [])
+      const m = new Map(rows.map(r => [r.k, r]))
       return keys.map(k => m.get(k) ?? null)
     }, o),
     cita: new DataLoader<string, { k: string; a: string }[]>(

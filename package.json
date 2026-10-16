@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node src/check.ts && node src/check-cdmx.ts",
+    "check": "node src/check.ts && node src/check-cdmx.ts && node src/check-chat.ts",
     "typecheck": "tsc",
     "ingest": "node scripts/ingest.ts",
     "embed": "node scripts/embed.ts",

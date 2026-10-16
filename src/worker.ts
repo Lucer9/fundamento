@@ -4,7 +4,7 @@ import { createSchema, createYoga, type Plugin } from 'graphql-yoga'
 import { NOMBRES, type Hit } from './buscar.ts'
 import { chat } from './chat.ts'
 import { multas } from './cdmx.ts'
-import { CORPUS, PUBLICO_EVAL, PUBLICO_RESPUESTAS } from './corpus.ts'
+import { CORPUS, PUBLICO_EVAL, PUBLICO_RESPUESTAS, slug } from './corpus.ts'
 import { buscar, cargar, clave, db, loaders, type Criterio, type Ctx, type Env, type Fila, type Modo } from './indice.ts'
 import { LEYES, derogado, type Ley } from './parse.ts'
 import { responder } from './responder.ts'
@@ -35,6 +35,13 @@ const resolvers = {
       uma: CORPUS.uma ? { value: CORPUS.uma.valor, since: CORPUS.uma.desde, source: CORPUS.uma.fuente } : null,
       evalPath: `/${PUBLICO_EVAL.replace('public/', '')}`,
       answersEvalPath: `/${PUBLICO_RESPUESTAS.replace('public/', '')}`,
+      guide: CORPUS.guia
+        ? {
+            scope: CORPUS.guia.alcance,
+            knowTheRules: CORPUS.guia.conoce,
+            tips: CORPUS.guia.consejos.map(c => ({ slug: slug(c.titulo), title: c.titulo, text: c.texto, cites: c.citas, source: c.fuente ? { name: c.fuente.nombre, url: c.fuente.url } : null })),
+          }
+        : null,
     }),
     laws: () => (Object.keys(NOMBRES) as Ley[]).map(code => ({ code })),
     law: (_: unknown, { code }: { code: Ley }) => ({ code }),
@@ -121,6 +128,10 @@ const resolvers = {
       (await ctx.load.enlaces.load(clave(r.ley, r.id))).map(e => ({ start: e.inicio, end: e.fin, key: e.a })),
     cites: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.cita.load(clave(r.ley, r.id))).map(c => c.a)),
     citedBy: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.citadoPor.load(clave(r.ley, r.id))).map(c => c.a)),
+    summary: async (r: Fila, _: unknown, ctx: Ctx) => {
+      const s = await ctx.load.resumen.load(clave(r.ley, r.id))
+      return s && { topic: s.tema, text: s.resumen, questions: JSON.parse(s.preguntas) as string[], model: s.modelo }
+    },
     related: async (r: Fila, _: unknown, ctx: Ctx) =>
       (await ctx.load.relacionados.load(clave(r.ley, r.id))).map(x => ({ key: x.a, score: x.score })),
     criteria: async (r: Fila, a: { kind?: Tipo }, ctx: Ctx) =>
