@@ -1,4 +1,4 @@
-import { cargarSitio, DOCS, editor, esAborto, esDoc, fechaLargaDe, html, pesos, SITIO, tema, tieneCriterios, tituloPagina } from './lib.js'
+import { cargarSitio, DOCS, editor, esAborto, esDoc, fechaLargaDe, html, pesos, SITIO, tema, tieneCriterios, titular } from './lib.js'
 
 const main = document.getElementById('main')
 const LEY = /^\/([A-Za-z][A-Za-z0-9]*)\/([^/]+)\/?$/
@@ -13,6 +13,7 @@ const rutas = [
   { test: esArticulo, page: () => import('./articulo.js') },
   { test: p => p === '/explorar', page: () => import('./explorar.js') },
   { test: p => p === '/como-funciona', page: () => import('./metodo.js') },
+  { test: p => /^\/preguntas(\/[^/]+)?\/?$/.test(p), page: () => import('./preguntas.js') },
 ]
 
 let actual = null
@@ -23,7 +24,7 @@ let ultima = ''
 const noEncontrada = {
   nombre: '404',
   mount(el) {
-    document.title = tituloPagina('Página no encontrada')
+    titular('Página no encontrada')
     const primero = SITIO.site.lists[0]?.laws[0] ?? Object.keys(DOCS)[0]
     const reglas = Object.keys(DOCS).find(c => DOCS[c].familia === 'reglas')
     el.innerHTML = html`<section class="empty-page">
@@ -54,7 +55,8 @@ async function render({ restaurar } = {}) {
   if (signal.aborted) return
   ultima = url.pathname + url.search
   marcarNav(url.pathname)
-  const ctx = { url, params: url.searchParams, match: url.pathname.match(LEY), state: history.state ?? {}, signal, navigate }
+  const ssr = primera ? main.querySelector(':scope > .ssr') : null
+  const ctx = { url, params: url.searchParams, match: url.pathname.match(LEY), state: history.state ?? {}, signal, navigate, ssr }
   try {
     if (actual?.page === page && page.update) await page.update(ctx)
     else {
@@ -70,11 +72,13 @@ async function render({ restaurar } = {}) {
   if (signal.aborted) return
   if (restaurar != null) window.scrollTo(0, restaurar)
   primera = false
+  SITIO.conservarTitulo = false
 }
 
 function marcarNav(path) {
   for (const a of document.querySelectorAll('.nav a')) {
-    const activo = a.getAttribute('href') === path || (a.getAttribute('href') === '/' && path === '/')
+    const href = a.getAttribute('href')
+    const activo = href === path || (href !== '/' && path.startsWith(`${href}/`))
     if (activo) a.setAttribute('aria-current', 'page')
     else a.removeAttribute('aria-current')
   }
@@ -131,6 +135,7 @@ history.scrollRestoration = 'manual'
 addEventListener('popstate', () => {
   if (location.pathname + location.search !== ultima) render({ restaurar: history.state?.y ?? 0 })
 })
+SITIO.conservarTitulo = !!main.querySelector(':scope > .ssr')
 cargarSitio().then(
   () => {
     vestir()

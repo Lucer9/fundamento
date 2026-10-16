@@ -1,4 +1,4 @@
-import { cuenta, deLa, DOCS, editor, errorHtml, esAborto, esDoc, etiqueta, familia, familiasPresentes, fecha, fechaLargaDe, gaceta, gql, html, nf, opcionesDocs, ruta, SITIO, tema, tituloPagina, ubicacionCorta } from './lib.js'
+import { cuenta, deLa, DOCS, editor, errorHtml, esAborto, esDoc, etiqueta, familia, familiasPresentes, fecha, fechaLargaDe, gaceta, gql, html, nf, opcionesDocs, ruta, SITIO, tema, titular, ubicacionCorta } from './lib.js'
 import { cargarGrafo, montarRed } from './red.js'
 
 const DETALLE = `query Explorar($law: LawCode) {
@@ -41,7 +41,7 @@ export default {
   async mount(main, ctx) {
     el = main
     todas = false
-    document.title = tituloPagina('Explorar')
+    titular('Explorar')
     const ley = leyDe(ctx.params)
     main.innerHTML = html`<header class="page-head">
         <p class="kicker">Explorar</p>

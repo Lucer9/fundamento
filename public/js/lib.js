@@ -72,7 +72,27 @@ export const cargarRespuestas = () =>
   }))
 
 export const tieneCriterios = () => (SITIO.stats?.criteria ?? 0) > 0
-export const tituloPagina = t => (t ? `${t} · ${SITIO.site.name}` : `${SITIO.site.name} · ${SITIO.site.tagline}`)
+const tituloPagina = t => (t ? `${t} · ${SITIO.site.name}` : `${SITIO.site.name} · ${SITIO.site.tagline}`)
+
+/** Sets the tab title, except on a first load the Worker already titled because it server-rendered the page. */
+export const titular = t => {
+  if (!SITIO.conservarTitulo) document.title = tituloPagina(t)
+}
+
+const FAQS = `{ faqs { slug question verified sources { key } criteria { number } } }`
+let faqsP = null
+/** Every published question (slug, question, whether it was checked, what it cites), cached; [] when there are none or the request fails. */
+export const cargarFaqs = () =>
+  (faqsP ??= gql(FAQS).then(
+    d => d.faqs ?? [],
+    () => {
+      faqsP = null
+      return []
+    },
+  ))
+
+/** The document a published question is filed under: the first article it cites, or none when it only cites SAT criteria. */
+export const docDeFaq = f => f.sources[0]?.key.split(':')[0] ?? ''
 /** Families that have documents, in the order their first document appears (a site that leads with a reglamento lists reglamentos first). */
 export const familiasPresentes = () => {
   const orden = Object.values(DOCS).map(d => d.familia)
@@ -367,6 +387,33 @@ export function multaHtml(times) {
   const detalle = times.map(t => `${nf.format(t)} UMA`).join(' · ')
   return `<span class="multa" role="note" aria-label="${esc(`Multa en pesos: ${leer}`)}" title="${esc(`${detalle} × ${pesos(uma.value)}`)}">${montos.map((m, i) => `<span class="multa-m" data-t="${tramos[i]}">${esc(pesos(m))}</span>`).join('')}</span>`
 }
+
+/** Answer text as paragraphs, with each [LISR 151], [RMF 2.7.1.21] or [SAT 12] marker turned into a link chip. */
+export function citasHtml(text, criterios = []) {
+  const porNumero = new Map(criterios.map(c => [String(c.number), c]))
+  const chip = r => {
+    const ley = r.match(/^([A-Z]{2,8})\s+(\d[\w.-]*)$/)
+    if (ley && esDoc(ley[1])) return `<a class="cite" href="${ruta(ley[1], ley[2])}" title="${esc(`${DOCS[ley[1]].nombre}, ${titulo(ley[1], ley[2]).toLowerCase()}`)}">${esc(etiqueta(`${ley[1]}:${ley[2]}`)).replace(' ', '&nbsp;')}</a>`
+    const sat = r.match(/^SAT\s+(\d+)$/)
+    if (!sat) return null
+    const c = porNumero.get(sat[1])
+    return `<a class="cite cite--sat" href="#sat-${sat[1]}"${c ? ` title="${esc(c.title)}"` : ''}>${c?.id ? esc(c.id) : `SAT&nbsp;${sat[1]}`}</a>`
+  }
+  return text
+    .split(/\n+/)
+    .filter(p => p.trim())
+    .map(par =>
+      html`<p>${raw(
+        esc(par.replace(/⟨([^⟩]*)⟩/g, '($1)')).replace(/[\[【]([^\]】]+)[\]】]/g, (todo, dentro) => {
+          const refs = dentro.split(/[,;]\s*/).map(r => chip(r.trim().replace(/\u2011/g, '-')))
+          return refs.some(r => !r) ? todo : `<span class="cites">${refs.join('')}</span>`
+        }),
+      )}</p>`,
+    )
+}
+
+/** Lowercase, accentless, punctuation-free text, for comparing questions. */
+export const normal = s => plano(s).replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
 
 export const anunciar = msg => {
   const el = document.getElementById('anuncio')

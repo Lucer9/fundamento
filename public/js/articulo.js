@@ -1,4 +1,4 @@
-import { badge, coincidencias, corto, DOCS, editor, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gaceta, gql, html, marcar, multaHtml, numero, pesos, raw, ruta, SITIO, terminos, tieneCriterios, titulo, tituloPagina, TRAMOS, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
+import { badge, cargarFaqs, coincidencias, corto, DOCS, editor, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gaceta, gql, html, marcar, multaHtml, numero, pesos, raw, ruta, SITIO, terminos, tieneCriterios, titulo, titular, TRAMOS, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
 
 /** The article query; criteria only where the site has any, fines only where the API turns them into pesos. */
 const consulta = () => `query Articulo($law: LawCode!, $n: String!) {
@@ -8,6 +8,7 @@ const consulta = () => `query Articulo($law: LawCode!, $n: String!) {
     links { start end target { key number law { code } } }
     cites { key number title law { code } location }
     citedBy { key number title law { code } location }
+    related { article { key number title law { code } location } }
     ${tieneCriterios() ? 'criteria { id kind title text }' : ''}
     fines { start end times }
   }
@@ -25,8 +26,9 @@ export default {
   async mount(main, ctx) {
     const ley = ctx.match[1].toUpperCase()
     const n = decodeURIComponent(ctx.match[2])
-    document.title = tituloPagina(`${etiqueta(`${ley}:${n}`)} · ${corto(ley)}`)
-    main.innerHTML = html`<article class="art" aria-busy="true">
+    titular(`${etiqueta(`${ley}:${n}`)} · ${corto(ley)}`)
+    if (!ctx.ssr)
+      main.innerHTML = html`<article class="art" aria-busy="true">
       <header class="art-head">
         <p class="kicker art-doc">${badge(ley)} <span>${DOCS[ley].nombre}</span></p>
         <h1 tabindex="-1">${titulo(ley, n)}</h1>
@@ -41,6 +43,7 @@ export default {
       cache.set(key, p)
       p.catch(() => cache.delete(key))
     }
+    const preguntas = cargarFaqs()
     let data
     try {
       data = await p
@@ -58,7 +61,7 @@ export default {
     const a = data.article
     if (!a) {
       const regla = unidad(ley) === 'Regla'
-      document.title = tituloPagina(`${regla ? 'Regla' : 'Artículo'} no encontrado`)
+      titular(`${regla ? 'Regla' : 'Artículo'} no encontrado`)
       main.innerHTML = html`<section class="empty-page">
         <p class="kicker">Error 404</p>
         <h1 tabindex="-1">${regla ? `La ${DOCS[ley].corto} no tiene una regla ${n}` : `${DOCS[ley].corto} no tiene un artículo ${numero(n)}`}</h1>
@@ -67,7 +70,7 @@ export default {
       </section>`
       return
     }
-    document.title = tituloPagina(`${a.title ? `${etiqueta(a.key)}. ${a.title}` : etiqueta(a.key)} · ${corto(a.law.code)}`)
+    titular(`${a.title ? `${etiqueta(a.key)}. ${a.title}` : etiqueta(a.key)} · ${corto(a.law.code)}`)
     const esRegla = familia(a.law.code) === 'reglas'
     const criterios = a.criteria ?? []
     const multas = a.fines ?? []
@@ -100,15 +103,49 @@ export default {
         <aside class="art-rail" aria-label="Relaciones del artículo">
           ${listaHtml(esRegla ? 'Esta regla cita' : 'Este artículo cita', 'cita', a.cites, a.law.code, 'No cita otros textos de este índice.')}
           ${listaHtml(`Lo citan`, 'lo-citan', a.citedBy, a.law.code, esRegla ? 'Ningún texto del índice cita esta regla.' : 'Ningún texto del índice lo cita.')}
+          ${relacionadosHtml(a.related ?? [], a.law.code)}
+          <div data-slot="faqs"></div>
           ${esRegla && !a.amendedOn.length && !(a.amountsUpdatedOn ?? []).length ? '' : reformasHtml(a.amendedOn, a.amountsUpdatedOn ?? [], a.law.code)}
         </aside>
       </div>
     </article>`
+    preguntas.then(fs => {
+      const slot = main.querySelector('[data-slot=faqs]')
+      const citan = fs.filter(f => f.sources.some(s => s.key === a.key))
+      if (slot && !ctx.signal.aborted && citan.length) slot.outerHTML = faqsHtml(citan, esRegla).s
+    })
     const hit = main.querySelector('.lawtext .is-hit')
     if (hit && ctx.state.pasaje) {
       requestAnimationFrame(() => hit.scrollIntoView({ block: 'center' }))
     } else if (ctx.state.pasaje) window.scrollTo(0, 0)
   },
+}
+
+/**
+ * Articles closest in meaning that neither cite nor are cited by this one (`Article.related`): often the sanction in
+ * another document for an obligation in this one. Each shows its document, number and title or location.
+ */
+function relacionadosHtml(lista, ley) {
+  if (!lista.length) return ''
+  return html`<section class="rail-sec rail-sec--rel" id="relacionados" aria-labelledby="rel-h">
+    <h2 class="label" id="rel-h">Relacionados por tema</h2>
+    <p class="rail-hint">Cercanos en significado, aunque no se citan entre sí.</p>
+    <ul class="reflist reflist--rel">${lista.map(
+      ({ article: r }) => html`<li><a href="${ruta(r.law.code, r.number)}">
+        <span class="ref-top">${r.law.code === ley ? '' : badge(r.law.code)}<span class="ref-key">${titulo(r.law.code, r.number)}</span></span>
+        <span class="ref-loc">${r.title ?? ubicacionCorta(r.location)}</span>
+      </a></li>`,
+    )}</ul>
+  </section>`
+}
+
+/** Published questions whose answer cites this article. */
+function faqsHtml(lista, esRegla) {
+  return html`<section class="rail-sec" id="preguntas" aria-labelledby="faq-h">
+    <h2 class="label" id="faq-h">Preguntas que ${esRegla ? 'la' : 'lo'} citan <span class="count">${lista.length}</span></h2>
+    <ul class="reflist reflist--faq">${lista.slice(0, 6).map(f => html`<li><a href="/preguntas/${f.slug}"><span class="ref-q">${f.question}</span></a></li>`)}</ul>
+    ${lista.length > 6 ? html`<p class="small"><a href="/preguntas">Ver todas las preguntas</a></p>` : ''}
+  </section>`
 }
 
 const NOMBRES_TRAMO = { min: 'mínima', med: 'media', max: 'máxima' }

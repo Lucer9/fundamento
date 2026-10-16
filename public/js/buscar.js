@@ -1,4 +1,4 @@
-import { anunciar, badge, cargarEval, corto, cuenta, DOCS, errorHtml, familiasPresentes, esAborto, esc, esDoc, etiqueta, extracto, html, modeloBonito, multaHtml, niveles, nf, opcionesDocs, pct, raw, request, ruta, SITIO, terminos, tieneCriterios, TIPO_CRITERIO, titulo, tituloPagina } from './lib.js'
+import { anunciar, badge, cargarEval, cargarFaqs, citasHtml, coincidencias, corto, cuenta, DOCS, docDeFaq, errorHtml, familiasPresentes, esAborto, esDoc, etiqueta, extracto, html, modeloBonito, multaHtml, niveles, nf, normal, opcionesDocs, pct, request, ruta, SITIO, terminos, tieneCriterios, TIPO_CRITERIO, titulo, titular } from './lib.js'
 
 const MODOS = [
   { id: 'semantica', api: 'VECTOR', nombre: 'Semántica', frase: 'semántica' },
@@ -101,7 +101,7 @@ export default {
     form.ley.value = s.ley
     estado = s
     el.querySelector('.buscar').classList.toggle('buscar--resultados', !!s.q)
-    document.title = tituloPagina(s.q)
+    titular(s.q)
     if (!s.q) return inicio(ctx)
     return resultados(s, ctx)
   },
@@ -119,7 +119,16 @@ function inicio() {
       <h2 class="label" id="ej-h">Prueba con</h2>
       <ul class="chips">${site.examples.map(q => html`<li><a class="chip" href="${enlace({ q, modo: porDefecto(), ley: '' })}">${q}</a></li>`)}</ul>
     </section>
+    <section class="faq-teaser" aria-labelledby="faq-t-h" data-slot="faqs" hidden></section>
     <section class="figures" aria-label="En cifras" data-slot="cifras"></section>`
+  cargarFaqs().then(fs => {
+    const slot = below.querySelector('[data-slot=faqs]')
+    if (!slot || !fs.length) return
+    slot.innerHTML = html`<h2 class="label" id="faq-t-h">Preguntas frecuentes</h2>
+      <ul class="chips chips--faq">${destacadas(fs).map(f => html`<li><a class="chip" href="/preguntas/${f.slug}">${f.question}</a></li>`)}</ul>
+      <p class="faq-teaser-all"><a href="/preguntas">Ver las ${nf.format(fs.length)} preguntas respondidas</a></p>`
+    slot.hidden = false
+  })
   portada ??= cargarEval().catch(() => null)
   return portada.then(ev => {
     const slot = below.querySelector('[data-slot=cifras]')
@@ -136,6 +145,38 @@ function inicio() {
   })
 }
 
+/** Up to four checked questions for the home page, one per document, shortest first, none repeating an example. */
+function destacadas(fs) {
+  const ejemplos = new Set(SITIO.site.examples.map(normal))
+  const vistos = new Set()
+  return [...fs]
+    .filter(f => f.verified && !ejemplos.has(normal(f.question)) && f.question.length <= 90)
+    .sort((a, b) => a.question.length - b.question.length)
+    .filter(f => {
+      const d = docDeFaq(f)
+      if (vistos.has(d)) return false
+      vistos.add(d)
+      return true
+    })
+    .slice(0, 4)
+}
+
+/**
+ * Published questions that share most of the query's words (accent- and case-insensitive stems): at least two
+ * of them and half of all, or the one word of a one-word query. Best overlap first, then the shorter question.
+ */
+function parecidas(fs, q) {
+  const stems = terminos(q)
+  if (!stems.length) return []
+  const exacta = normal(q)
+  return fs
+    .map(f => ({ f, n: stems.filter(st => coincidencias(f.question, [st]).length).length, exacta: normal(f.question) === exacta }))
+    .filter(x => x.exacta || (stems.length === 1 ? x.n === 1 : x.n >= 2 && x.n / stems.length >= 0.5))
+    .sort((a, b) => b.exacta - a.exacta || b.n / stems.length - a.n / stems.length || a.f.question.length - b.f.question.length)
+    .slice(0, 3)
+    .map(x => x.f)
+}
+
 const esqueleto = n => html`<ol class="hits" aria-hidden="true">${Array.from({ length: n }, () => html`<li class="hit hit--skeleton"><span class="sk sk-s"></span><span class="sk sk-m"></span><span class="sk"></span><span class="sk sk-l"></span></li>`)}</ol>`
 
 /** The lists this search shows: the site's own (`site.lists`), or one list named after the filtered document. */
@@ -147,11 +188,23 @@ function resultados(s, ctx) {
   if (!below.querySelector('.results-layout')) {
     below.innerHTML = html`<div class="results-layout">
       <aside class="answer" aria-labelledby="answer-h"><h2 class="label" id="answer-h">Respuesta breve</h2><div class="answer-body" data-slot="answer"></div></aside>
+      <section class="faq-matches" aria-labelledby="faq-m-h" data-slot="faqs" hidden></section>
       <section class="results" aria-labelledby="lista-0-h" data-slot="results"></section>
       <div class="results-side" data-slot="side"></div>
     </div>`
   }
   respuesta(s.q, below.querySelector('[data-slot=answer]'))
+  const caja = below.querySelector('[data-slot=faqs]')
+  caja.hidden = true
+  cargarFaqs().then(fs => {
+    if (ctx.signal.aborted || estado?.q !== s.q) return
+    const ps = parecidas(fs, s.q)
+    caja.hidden = !ps.length
+    caja.innerHTML = ps.length
+      ? html`<h2 class="label" id="faq-m-h">Preguntas frecuentes parecidas</h2>
+        <ul class="faq-mini">${ps.map(f => html`<li><a href="/preguntas/${f.slug}">${f.question}</a></li>`)}</ul>`
+      : ''
+  })
 
   const listas = listasDe(s)
   const slot = below.querySelector('[data-slot=results]')
@@ -229,27 +282,6 @@ function secundariaHtml(hits, s, lista, i) {
   return html`${cabeza(lista, i)}<ol class="hits">${hits.map((h, k) => hitHtml(h, k, s, stems, true))}</ol>`
 }
 
-function citasHtml(text, criterios) {
-  const porNumero = new Map(criterios.map(c => [String(c.number), c]))
-  const chip = r => {
-    const ley = r.match(/^([A-Z]{2,8})\s+(\d[\w.-]*)$/)
-    if (ley && esDoc(ley[1])) return `<a class="cite" href="${ruta(ley[1], ley[2])}" title="${esc(`${DOCS[ley[1]].nombre}, ${titulo(ley[1], ley[2]).toLowerCase()}`)}">${esc(etiqueta(`${ley[1]}:${ley[2]}`)).replace(' ', '&nbsp;')}</a>`
-    const sat = r.match(/^SAT\s+(\d+)$/)
-    if (!sat) return null
-    const c = porNumero.get(sat[1])
-    return `<a class="cite cite--sat" href="#sat-${sat[1]}"${c ? ` title="${esc(c.title)}"` : ''}>${c?.id ? esc(c.id) : `SAT&nbsp;${sat[1]}`}</a>`
-  }
-  return text
-    .split(/\n{2,}/)
-    .map(par =>
-      html`<p>${raw(
-        esc(par).replace(/[\[【]([^\]】]+)[\]】]/g, (todo, dentro) => {
-          const refs = dentro.split(/[,;]\s*/).map(r => chip(r.trim().replace(/\u2011/g, '-')))
-          return refs.some(r => !r) ? todo : `<span class="cites">${refs.join('')}</span>`
-        }),
-      )}</p>`,
-    )
-}
 
 function respuesta(q, slot) {
   if (slot.dataset.q === q) return

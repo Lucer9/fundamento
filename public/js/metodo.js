@@ -1,4 +1,4 @@
-import { badge, cargarEval, cargarRespuestas, corto, DOCS, elLa, esAborto, errorHtml, etiqueta, familiasPresentes, html, modeloBonito, nf, pct, request, rutaClave, SITIO, tieneCriterios, tituloPagina } from './lib.js'
+import { badge, cargarEval, cargarRespuestas, corto, DOCS, elLa, esAborto, errorHtml, etiqueta, familiasPresentes, html, modeloBonito, nf, pct, request, rutaClave, SITIO, tieneCriterios, titular } from './lib.js'
 
 const BASE = 'keyword'
 const LETRAS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -202,7 +202,7 @@ export default {
   nombre: 'metodo',
   async mount(main, ctx) {
     el = main
-    document.title = tituloPagina('Cómo funciona')
+    titular('Cómo funciona')
     const sat = tieneCriterios()
     main.innerHTML = html`<header class="page-head">
         <p class="kicker">Cómo funciona</p>
