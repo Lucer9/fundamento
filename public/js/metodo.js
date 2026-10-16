@@ -20,6 +20,7 @@ const nombre = m =>
     .replace(/^keyword\b/, 'Palabras clave')
     .replace(/^vector\b/, 'Vector')
     .replace(/^hybrid\b/, 'Híbrida')
+    .replace(/ \+ Claude rerank\b/, ', reordenada por Claude')
     .replace(/ \+ Claude\b/, ' con reescritura de Claude')
     .replace(/\+ rerank$/, '+ reordenamiento')
 

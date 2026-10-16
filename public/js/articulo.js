@@ -1,4 +1,4 @@
-import { badge, cargarFaqs, coincidencias, corto, DOCS, editor, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gaceta, gql, html, marcar, multaHtml, numero, pesos, raw, ruta, SITIO, terminos, tieneCriterios, titulo, titular, TRAMOS, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
+import { asistente, badge, cargarFaqs, coincidencias, corto, DOCS, editor, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gaceta, gql, html, marcar, modeloBonito, multaHtml, numero, pesos, raw, ruta, SITIO, terminos, tieneCriterios, titulo, titular, TRAMOS, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
 
 /** The article query; criteria only where the site has any, fines only where the API turns them into pesos. */
 const consulta = () => `query Articulo($law: LawCode!, $n: String!) {
@@ -9,6 +9,7 @@ const consulta = () => `query Articulo($law: LawCode!, $n: String!) {
     cites { key number title law { code } location }
     citedBy { key number title law { code } location }
     related { article { key number title law { code } location } }
+    summary { topic text questions model }
     ${tieneCriterios() ? 'criteria { id kind title text }' : ''}
     fines { start end times }
   }
@@ -84,7 +85,7 @@ export default {
       <header class="art-head">
         <p class="kicker art-doc">${badge(a.law.code)} <span>${a.law.name}</span></p>
         ${docLinea(a.law)}
-        ${esRegla ? html`<p class="art-num">Regla ${a.number}</p><h1 class="art-h1--regla" tabindex="-1">${a.title ?? `Regla ${a.number}`}</h1>` : html`<h1 tabindex="-1">${titulo(a.law.code, a.number)}</h1>`}
+        ${esRegla ? html`<p class="art-num">Regla ${a.number}</p><h1 class="art-h1--regla" tabindex="-1">${a.title ?? `Regla ${a.number}`}</h1>` : html`<h1 tabindex="-1">${titulo(a.law.code, a.number)}</h1>${a.summary ? html`<p class="art-tema">${a.summary.topic}</p>` : ''}`}
         ${a.location.length ? html`<ol class="art-loc" aria-label="Ubicación en el documento">${ubicacionHtml(a.location)}</ol>` : ''}
         <dl class="art-facts">
           ${esRegla && !a.amendedOn.length ? '' : html`<div><dt>Reformas</dt><dd>${a.amendedOn.length ? html`<a href="#reformas">${a.amendedOn.length}</a><span class="fact-sub">última ${fecha(a.amendedOn[a.amendedOn.length - 1])}</span>` : html`0<span class="fact-sub">sin anotar</span>`}</dd></div>`}
@@ -97,6 +98,7 @@ export default {
       ${q && primero >= 0 ? html`<p class="highlight-note"><span>Resaltado: <strong>«${q}»</strong></span><a href="${location.pathname}">Quitar</a></p>` : ''}
       <div class="art-grid">
         <div class="art-main">
+          ${a.summary && !a.repealed ? pocasHtml(a.summary) : ''}
           <div class="lawtext">${cuerpo}</div>
           ${tieneCriterios() ? criteriosHtml(criterios, esRegla) : ''}
         </div>
@@ -119,6 +121,19 @@ export default {
       requestAnimationFrame(() => hit.scrollIntoView({ block: 'center' }))
     } else if (ctx.state.pasaje) window.scrollTo(0, 0)
   },
+}
+
+/**
+ * Claude's plain-Spanish summary above the official text, with the questions it answers: each opens a search with the
+ * assistant's answer beside the law.
+ */
+function pocasHtml(r) {
+  return html`<section class="pocas" aria-labelledby="pocas-h">
+    <h2 class="pocas-h" id="pocas-h">En pocas palabras</h2>
+    <p class="pocas-texto">${r.text}</p>
+    ${r.questions.length ? html`<p class="pocas-sub">Pregúntale a ${raw(asistente().html)}</p><ul class="pocas-preguntas">${r.questions.map(q => html`<li><a href="/?q=${encodeURIComponent(q)}">${q}</a></li>`)}</ul>` : ''}
+    <p class="pocas-nota">Resumen escrito con IA (${modeloBonito(r.model)}) a partir del texto oficial. El texto de abajo es el que vale.</p>
+  </section>`
 }
 
 /**

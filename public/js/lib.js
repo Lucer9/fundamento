@@ -14,7 +14,7 @@ export const DOCS = {}
 export const SITIO = {}
 
 const SITIO_QUERY = `{
-  site { name tagline description disclaimer defaultMode examples lists { title note laws } uma { value since source } evalPath answersEvalPath }
+  site { name tagline description disclaimer defaultMode examples lists { title note laws } uma { value since source } evalPath answersEvalPath guide { scope knowTheRules tips { slug title text cites source { name url } } } }
   stats { articles citations chunks criteria }
   laws { code name shortName kind regulates { code name } source articleCount }
 }`
@@ -41,14 +41,42 @@ const ICONO_S =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='8' y='1' width='16' height='30' rx='8' fill='%231d1b17'/%3E%3Ccircle cx='16' cy='8.5' r='4.5' fill='%23d64545'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='%23e3a33b'/%3E%3Ccircle cx='16' cy='23.5' r='4.5' fill='%2347a86a'/%3E%3C/svg%3E"
 
 /**
- * What only the front end decides per site: the name of its accent colour (for chart captions) and the tab icon.
+ * What only the front end decides per site: the name of its accent colour (for chart captions), the tab icon, and
+ * the AI assistant that answers next to the results (its name, its name as set in the logo, and what it is not).
  * Keyed by the site's slug; unknown sites get the neutral defaults.
  */
 const TEMAS = {
-  fundamento: { acento: 'guinda', icono: ICONO_F },
-  semaforo: { acento: 'verde', icono: ICONO_S },
+  fundamento: {
+    acento: 'guinda',
+    icono: ICONO_F,
+    asistente: { nombre: 'SATGPT', html: 'SAT<span class="ia">GPT</span>', aviso: 'No es el SAT ni asesoría fiscal. Lee los artículos antes de decidir.' },
+  },
+  semaforo: {
+    acento: 'verde',
+    icono: ICONO_S,
+    asistente: { nombre: 'Educación vIAl', html: 'Educación v<span class="ia">IA</span>l', aviso: 'No es una autoridad ni asesoría legal. Lee los artículos antes de decidir.' },
+  },
 }
-export const tema = () => TEMAS[SITIO.slug] ?? { acento: 'color', icono: ICONO_F }
+const NEUTRO = { acento: 'color', icono: ICONO_F, asistente: { nombre: 'el asistente', html: 'Asistente', aviso: 'Puede equivocarse. Lee los artículos.' } }
+export const tema = () => TEMAS[SITIO.slug] ?? NEUTRO
+export const asistente = () => tema().asistente
+
+/** The site's "if an agent stops you" guide (`site.guide`), or null where the site has none. */
+export const consejos = () => SITIO.site?.guide ?? null
+
+/** Whether the visitor wants the AI answer next to the results: on unless they turned it off on this device. */
+export const iaActiva = () => {
+  try {
+    return localStorage.getItem('ia') !== '0'
+  } catch {
+    return true
+  }
+}
+export const guardarIa = activa => {
+  try {
+    localStorage.setItem('ia', activa ? '1' : '0')
+  } catch {}
+}
 
 /** A static JSON file, rejecting when it is missing: the SPA fallback answers unknown paths with index.html and a 200. */
 const json = async ruta => {

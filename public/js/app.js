@@ -14,6 +14,7 @@ const rutas = [
   { test: p => p === '/explorar', page: () => import('./explorar.js') },
   { test: p => p === '/como-funciona', page: () => import('./metodo.js') },
   { test: p => /^\/preguntas(\/[^/]+)?\/?$/.test(p), page: () => import('./preguntas.js') },
+  { test: p => /^\/si-te-para-un-agente\/?$/.test(p), page: () => import('./consejos.js') },
 ]
 
 let actual = null
@@ -123,7 +124,9 @@ function vestir() {
   const lista = editores.length > 1 ? `${editores.slice(0, -1).join(', ')} y ${editores[editores.length - 1]}` : editores[0]
   const pie = document.querySelector('.colophon-row')
   pie.querySelector('.colophon-warn').textContent = site.disclaimer
-  pie.querySelector('.colophon-warn + p').textContent = `Texto vigente publicado por ${lista}${tieneCriterios() ? '; criterios del SAT, Anexos 3 y 7 de la RMF 2026' : ''}.`
+  pie.querySelector('.colophon-fuente').textContent = `Texto vigente publicado por ${lista}${tieneCriterios() ? '; criterios del SAT, Anexos 3 y 7 de la RMF 2026' : ''}.`
+  if (site.guide && !pie.querySelector('[href="/si-te-para-un-agente"]'))
+    pie.querySelector('.colophon-links').insertAdjacentHTML('afterbegin', '<a href="/si-te-para-un-agente">Si te para un agente</a>')
   if (site.uma && !pie.querySelector('.colophon-uma'))
     pie.querySelector('.colophon-links').insertAdjacentHTML(
       'beforebegin',
