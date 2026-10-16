@@ -2,6 +2,7 @@ import { EnvelopArmorPlugin } from '@escape.tech/graphql-armor'
 import { GraphQLError } from 'graphql'
 import { createSchema, createYoga, type Plugin } from 'graphql-yoga'
 import { NOMBRES, type Hit } from './buscar.ts'
+import { chat } from './chat.ts'
 import { multas } from './cdmx.ts'
 import { CORPUS, PUBLICO_EVAL, PUBLICO_RESPUESTAS } from './corpus.ts'
 import { buscar, cargar, clave, db, loaders, type Criterio, type Ctx, type Env, type Fila, type Modo } from './indice.ts'
@@ -219,6 +220,7 @@ export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url)
     if (url.pathname === '/graphql') return yoga.fetch(request, { env })
+    if (url.pathname === '/chat') return chat(request, env)
     if (url.pathname === '/dev/vec' && env.DEV === '1') {
       const { vector, topK, filter } = await request.json<{ vector: number[]; topK: number; filter?: VectorizeVectorMetadataFilter }>()
       return Response.json(await env.VEC.query(vector, { topK, filter }))
