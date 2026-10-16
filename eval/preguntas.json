@@ -19,7 +19,9 @@
    "CFF:58-A",
    "CFF:60",
    "LISR:182",
-   "LISR:40"
+   "LISR:40",
+   "RLISR:28",
+   "RLISR:56"
   ]
  },
  {
@@ -368,7 +370,8 @@
   "pregunta": "¿La ganancia que obtengo al vender certificados bursátiles fiduciarios se considera ingreso por intereses?",
   "esperados": [
    "CFF:14",
-   "LISR:8"
+   "LISR:8",
+   "RMF:3.2.12"
   ]
  },
  {
@@ -498,7 +501,8 @@
   "pregunta": "¿Podemos deducir el IVA de pagos hechos a través de una empresa centralizadora del grupo sin usar transferencia electrónica?",
   "esperados": [
    "LISR:27",
-   "LIVA:5"
+   "LIVA:5",
+   "RMF:3.3.1.3"
   ]
  },
  {
@@ -671,7 +675,8 @@
   "tema": "Ingresos por enajenación de bienes inmuebles destinados a casa habitación.",
   "pregunta": "¿Tengo que pagar ISR al vender mi casa si parte del terreno supera el límite de superficie permitido?",
   "esperados": [
-   "LISR:93"
+   "LISR:93",
+   "RLISR:129"
   ]
  },
  {
@@ -891,7 +896,8 @@
    "CFF:16",
    "CFF:173",
    "CFF:7",
-   "LISR:175"
+   "LISR:175",
+   "RMF:2.1.32"
   ]
  },
  {
@@ -1128,7 +1134,8 @@
   "tema": "Cargos entre líneas aéreas.",
   "pregunta": "¿Los cargos que paga una aerolínea por servicios de otra línea están gravados con IVA o pueden facturarse con tasa 0%?",
   "esperados": [
-   "LIVA:2-A"
+   "LIVA:2-A",
+   "RLIVA:32"
   ]
  },
  {
@@ -1244,7 +1251,8 @@
   "tema": "Intereses en financiamientos de actos gravados a la tasa del 0% o exentos.",
   "pregunta": "¿Los intereses que pago por un crédito para comprar mi casa están sujetos al IVA?",
   "esperados": [
-   "LIVA:15"
+   "LIVA:15",
+   "RLIVA:37"
   ]
  },
  {
@@ -1296,6 +1304,7 @@
   "tema": "Tasa del 0% del IVA. Resulta aplicable y no se pagará el IEPS, cuando las mercancías nacionales sean destinadas al régimen de depósito fiscal para su exposición y venta en las tiendas denominadas “Duty Free”.",
   "pregunta": "¿Tengo que pagar IVA e IEPS por productos nacionales que vendo en una tienda duty free?",
   "esperados": [
+   "LIEPS:8",
    "LIVA:29"
   ]
  },
@@ -1319,6 +1328,7 @@
    "CFF:66",
    "CFF:66-A",
    "CFF:70-A",
+   "LIEPS:19",
    "LIVA:1"
   ]
  },
@@ -1350,6 +1360,8 @@
   "tema": "Servicios Digitales. Definición de servicios de intermediación para los efectos de lo dispuesto en el artículo 18-B, fracción II de la Ley del IVA.",
   "pregunta": "¿Mi plataforma que cobra comisiones por conectar compradores y vendedores en línea se considera un servicio digital?",
   "esperados": [
+   "LIEPS:2",
+   "LIF:25",
    "LIVA:1-A-Bis",
    "LIVA:18",
    "LIVA:18-B"
@@ -1357,6 +1369,112 @@
  },
  {
   "n": 124,
+  "anexo": 7,
+  "id": "1/IEPS/N",
+  "tema": "Enajenaciones subsecuentes de alcohol o alcohol desnaturalizado. Las personas que las efectúan, son contribuyentes del IEPS.",
+  "pregunta": "Si compro alcohol a un distribuidor y luego lo revendo, ¿también tengo que pagar el impuesto especial, o solo lo paga quien lo vendió primero?",
+  "esperados": [
+   "LIEPS:1"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 125,
+  "anexo": 7,
+  "id": "2/IEPS/N",
+  "tema": "Plaguicidas. Acreditamiento de la categoría de peligro de toxicidad aguda de los plaguicidas.",
+  "pregunta": "Si vendo o importo plaguicidas, ¿con qué documento demuestro su nivel de toxicidad para saber qué impuesto aplicarles o si están exentos?",
+  "esperados": [
+   "LIEPS:1",
+   "LIEPS:2"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 126,
+  "anexo": 7,
+  "id": "3/IEPS/N",
+  "tema": "Base gravable del IEPS. No debe ser considerado el derecho de trámite aduanero exento.",
+  "pregunta": "Si importo mercancía y por un acuerdo comercial no pago el derecho de trámite aduanero, ¿tengo que incluirlo al calcular el IEPS?",
+  "esperados": [
+   "CFF:5",
+   "LIEPS:14"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 127,
+  "anexo": 7,
+  "id": "4/IEPS/N",
+  "tema": "Concepto de leche para efectos del IEPS.",
+  "pregunta": "Si vendo leche de chocolate con azúcar, ¿tengo que pagar el impuesto de bebidas azucaradas o cuenta como leche normal?",
+  "esperados": [
+   "LIEPS:2",
+   "LIEPS:8"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 128,
+  "anexo": 7,
+  "id": "5/IEPS/N",
+  "tema": "Productos lácteos y productos lácteos combinados. Están afectos al IEPS aplicable a bebidas saborizadas cuando en su proceso de elaboración se disuelvan azúcares o edulcorantes en agua.",
+  "pregunta": "¿Las bebidas lácteas endulzadas, como leches de sabor o yogures bebibles, pagan el mismo impuesto especial que los refrescos y bebidas azucaradas?",
+  "esperados": [
+   "LIEPS:2"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 129,
+  "anexo": 7,
+  "id": null,
+  "tema": "Preparaciones alimenticias que requieren un proceso adicional para su consumo.",
+  "pregunta": "Si vendo mezclas que aún hay que cocinar o freír, como pellets para botana, ¿pagan el impuesto a la comida chatarra?",
+  "esperados": [
+   "LIEPS:2"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 130,
+  "anexo": 7,
+  "id": null,
+  "tema": "Productos de confitería y helados cuyo insumo sea chicle o goma de mascar.",
+  "pregunta": "Si vendo dulces o paletas heladas que llevan chicle, ¿qué impuestos les cobro: los de comida chatarra o los del chicle solo?",
+  "esperados": [
+   "LIEPS:2",
+   "LIVA:2-A"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 131,
+  "anexo": 7,
+  "id": null,
+  "tema": "Gelatina o grenetina de grado comestible. Su enajenación o importación está sujeta al pago del IEPS cuando contenga azúcares u otros edulcorantes con una densidad calórica de 275 kilocalorías o mayor por cada 100 gramos.",
+  "pregunta": "¿Si vendo o importo gelatina o grenetina para comer, tengo que pagar el impuesto especial que se cobra a los dulces y la comida chatarra?",
+  "esperados": [
+   "LIEPS:2",
+   "LIEPS:3"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 132,
+  "anexo": 7,
+  "id": null,
+  "tema": "Saldo a favor derivado del cálculo del IEPS conforme al artículo 2o., fracción I, incisos D) y H) de la Ley del IEPS. Sólo se puede compensar contra el impuesto establecido en el mismo artículo, fracción e incisos.",
+  "pregunta": "Si me quedó saldo a favor del impuesto especial por vender combustibles, ¿puedo usarlo para pagar ese impuesto en otros productos, como bebidas?",
+  "esperados": [
+   "LIEPS:2",
+   "LIEPS:2-A",
+   "LIEPS:5"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 133,
   "anexo": 3,
   "id": "1/CFF/PI",
   "tema": "Entrega o puesta a disposición del CFDI. No se cumple con la obligación cuando el emisor únicamente remite a una página de Internet.",
@@ -1367,7 +1485,7 @@
   ]
  },
  {
-  "n": 125,
+  "n": 134,
   "anexo": 3,
   "id": "2/CFF/PI",
   "tema": "Revelación de esquemas reportables generalizados. Hacer aparentar que tienen el carácter de esquemas reportables personalizados, es contrario a lo establecido por las disposiciones legales aplicables.",
@@ -1378,7 +1496,7 @@
   ]
  },
  {
-  "n": 126,
+  "n": 135,
   "anexo": 3,
   "id": "3/CFF/PI",
   "tema": "Elusión de los efectos de la restricción temporal o cancelación del uso del CSD.",
@@ -1391,7 +1509,7 @@
   ]
  },
  {
-  "n": 127,
+  "n": 136,
   "anexo": 3,
   "id": "4/CFF/PI",
   "tema": "Aplicación indebida de estímulos fiscales, bajo la figura de asunción de responsabilidad solidaria.",
@@ -1402,7 +1520,7 @@
   ]
  },
  {
-  "n": 128,
+  "n": 137,
   "anexo": 3,
   "id": "1/ISR/PI",
   "tema": "Establecimiento permanente.",
@@ -1413,7 +1531,7 @@
   ]
  },
  {
-  "n": 129,
+  "n": 138,
   "anexo": 3,
   "id": "2/ISR/PI",
   "tema": "Enajenación de bienes de activo fijo.",
@@ -1427,7 +1545,7 @@
   ]
  },
  {
-  "n": 130,
+  "n": 139,
   "anexo": 3,
   "id": null,
   "tema": "Reservas para fondos de pensiones o jubilaciones. No son deducibles los intereses derivados de la inversión o reinversión de los fondos.",
@@ -1437,7 +1555,7 @@
   ]
  },
  {
-  "n": 131,
+  "n": 140,
   "anexo": 3,
   "id": null,
   "tema": "Regalías por activos intangibles originados en México, pagadas a partes relacionadas residentes en el extranjero.",
@@ -1448,7 +1566,7 @@
   ]
  },
  {
-  "n": 132,
+  "n": 141,
   "anexo": 3,
   "id": "5/ISR/PI",
   "tema": "Instituciones de fianzas. Pagos por reclamaciones.",
@@ -1459,7 +1577,7 @@
   ]
  },
  {
-  "n": 133,
+  "n": 142,
   "anexo": 3,
   "id": "6/ISR/PI",
   "tema": "Gastos a favor de tercero. No son deducibles aquellos que se realicen a favor de personas con las cuales no se tenga una relación laboral ni presten servicios profesionales.",
@@ -1470,7 +1588,7 @@
   ]
  },
  {
-  "n": 134,
+  "n": 143,
   "anexo": 3,
   "id": null,
   "tema": "Deducción de inversiones tratándose de activos fijos.",
@@ -1482,7 +1600,7 @@
   ]
  },
  {
-  "n": 135,
+  "n": 144,
   "anexo": 3,
   "id": null,
   "tema": "Instituciones del sistema financiero. Retención del ISR por intereses.",
@@ -1492,7 +1610,7 @@
   ]
  },
  {
-  "n": 136,
+  "n": 145,
   "anexo": 3,
   "id": "9/ISR/PI",
   "tema": "Desincorporación de sociedades controladas.",
@@ -1503,7 +1621,7 @@
   ]
  },
  {
-  "n": 137,
+  "n": 146,
   "anexo": 3,
   "id": "10/ISR/PI",
   "tema": "Rendimientos de bienes entregados en fideicomiso, que únicamente se destinen a financiar la educación.",
@@ -1514,7 +1632,7 @@
   ]
  },
  {
-  "n": 138,
+  "n": 147,
   "anexo": 3,
   "id": "12/ISR/PI",
   "tema": "Enajenación de certificados inmobiliarios.",
@@ -1525,7 +1643,7 @@
   ]
  },
  {
-  "n": 139,
+  "n": 148,
   "anexo": 3,
   "id": "13/ISR/PI",
   "tema": "Aplicación de los artículos de los tratados para evitar la doble tributación que México tiene en vigor, relativos a la imposición sobre sucursales.",
@@ -1536,7 +1654,7 @@
   ]
  },
  {
-  "n": 140,
+  "n": 149,
   "anexo": 3,
   "id": null,
   "tema": "Indebida deducción de pérdidas por la enajenación de la nuda propiedad de bienes otorgados en usufructo.",
@@ -1551,7 +1669,7 @@
   ]
  },
  {
-  "n": 141,
+  "n": 150,
   "anexo": 3,
   "id": "17/ISR/PI",
   "tema": "Subcontratación. Retención de salarios.",
@@ -1570,7 +1688,7 @@
   ]
  },
  {
-  "n": 142,
+  "n": 151,
   "anexo": 3,
   "id": null,
   "tema": "Previsión social para efectos de la determinación del ISR. No puede otorgarse en efectivo o en otros medios equivalentes.",
@@ -1582,7 +1700,7 @@
   ]
  },
  {
-  "n": 143,
+  "n": 152,
   "anexo": 3,
   "id": "22/ISR/PI",
   "tema": "Inversiones en automóviles. No son deducibles cuando correspondan a automóviles otorgados en comodato y que no son utilizados para la realización de las actividades propias del contribuyente.",
@@ -1590,11 +1708,12 @@
   "esperados": [
    "LISR:25",
    "LISR:27",
-   "LIVA:5"
+   "LIVA:5",
+   "RLISR:3"
   ]
  },
  {
-  "n": 144,
+  "n": 153,
   "anexo": 3,
   "id": "23/ISR/PI",
   "tema": "Medios de pago en gastos médicos, dentales, por servicios en materia de psicología, nutrición u hospitalarios.",
@@ -1604,7 +1723,7 @@
   ]
  },
  {
-  "n": 145,
+  "n": 154,
   "anexo": 3,
   "id": "24/ISR/PI",
   "tema": "Entrega de donativos a instituciones de enseñanza cuando no son onerosos, ni remunerativos.",
@@ -1615,7 +1734,7 @@
   ]
  },
  {
-  "n": 146,
+  "n": 155,
   "anexo": 3,
   "id": "25/ISR/PI",
   "tema": "Costo de lo vendido. Tratándose de servicios derivados de contratos de obra inmueble, no son deducibles los costos correspondientes a ingresos no acumulados en el ejercicio.",
@@ -1628,7 +1747,7 @@
   ]
  },
  {
-  "n": 147,
+  "n": 156,
   "anexo": 3,
   "id": "27/ISR/PI",
   "tema": "Deducción de bienes de activo fijo objeto de un contrato de arrendamiento financiero.",
@@ -1640,7 +1759,7 @@
   ]
  },
  {
-  "n": 148,
+  "n": 157,
   "anexo": 3,
   "id": "28/ISR/PI",
   "tema": "Derechos federativos de los deportistas. Su adquisición constituye una inversión en la modalidad de gasto diferido.",
@@ -1653,7 +1772,7 @@
   ]
  },
  {
-  "n": 149,
+  "n": 158,
   "anexo": 3,
   "id": "30/ISR/PI",
   "tema": "Ingresos obtenidos por residentes en el extranjero, por arrendamiento o fletamento de embarcaciones o artefactos navales a casco desnudo, con fuente de riqueza en territorio nacional.",
@@ -1664,7 +1783,7 @@
   ]
  },
  {
-  "n": 150,
+  "n": 159,
   "anexo": 3,
   "id": "31/ISR/PI",
   "tema": "Asociaciones Deportivas.",
@@ -1676,17 +1795,18 @@
   ]
  },
  {
-  "n": 151,
+  "n": 160,
   "anexo": 3,
   "id": "32/ISR/PI",
   "tema": "Determinación del costo de lo vendido para contribuyentes que realicen actividades comerciales que consistan en la adquisición y enajenación de mercancías.",
   "pregunta": "¿Qué gastos puedo incluir para calcular el costo de lo vendido en mi negocio de compra‑venta de mercancías?",
   "esperados": [
-   "LISR:39"
+   "LISR:39",
+   "RLISR:80"
   ]
  },
  {
-  "n": 152,
+  "n": 161,
   "anexo": 3,
   "id": "33/ISR/PI",
   "tema": "Reconocimiento de contribuciones únicas y valiosas. Deben reconocerse en los análisis de precios de transferencia para demostrar que, en operaciones celebradas con partes relacionadas, los ingresos acumulables y deducciones autorizadas fueron determinados considerando para esas operaciones los precios, montos de contraprestaciones o márgenes de utilidad que hubieran utilizado u obtenido con o entre partes independientes en operaciones comparables.",
@@ -1697,18 +1817,20 @@
   ]
  },
  {
-  "n": 153,
+  "n": 162,
   "anexo": 3,
   "id": "34/ISR/PI",
   "tema": "Modificaciones al valor de las operaciones con partes relacionadas dentro del rango intercuartil.",
   "pregunta": "¿Qué debo hacer si el precio de mi operación con una parte relacionada está fuera del rango intercuartil?",
   "esperados": [
    "CFF:34-A",
-   "LISR:180"
+   "LISR:180",
+   "RLISR:302",
+   "RMF:3.9.1.1"
   ]
  },
  {
-  "n": 154,
+  "n": 163,
   "anexo": 3,
   "id": "35/ISR/PI",
   "tema": "Servicios de hospedaje a través de plataformas tecnológicas. Se encuentran sujetos al pago de ISR.",
@@ -1723,7 +1845,7 @@
   ]
  },
  {
-  "n": 155,
+  "n": 164,
   "anexo": 3,
   "id": "36/ISR/PI",
   "tema": "Pago del impuesto sobre dividendos distribuidos en mercados reconocidos extranjeros.",
@@ -1739,7 +1861,7 @@
   ]
  },
  {
-  "n": 156,
+  "n": 165,
   "anexo": 3,
   "id": "37/ISR/PI",
   "tema": "Resultado fiscal distribuido a los tenedores de los certificados de un fideicomiso dedicado a la adquisición o construcción de inmuebles. La deducción a que se refiere el artículo 115, segundo párrafo de la Ley del ISR no le es aplicable.",
@@ -1751,7 +1873,7 @@
   ]
  },
  {
-  "n": 157,
+  "n": 166,
   "anexo": 3,
   "id": null,
   "tema": "Entero del ISR diferido por los fideicomitentes de un fideicomiso dedicado a la adquisición o construcción de inmuebles. La donación de los certificados de participación obtenidos por la aportación de bienes inmuebles actualiza el supuesto de enajenación.",
@@ -1763,7 +1885,7 @@
   ]
  },
  {
-  "n": 158,
+  "n": 167,
   "anexo": 3,
   "id": null,
   "tema": "Donataria Autorizada. Modificación de los estatutos sociales o del contrato de fideicomiso.",
@@ -1774,7 +1896,7 @@
   ]
  },
  {
-  "n": 159,
+  "n": 168,
   "anexo": 3,
   "id": "41/ISR/PI",
   "tema": "Mercancía deteriorada o que perdió valor. El importe de la mercancía que se deduzca de los inventarios del contribuyente no constituye un donativo deducible.",
@@ -1786,7 +1908,7 @@
   ]
  },
  {
-  "n": 160,
+  "n": 169,
   "anexo": 3,
   "id": "42/ISR/PI",
   "tema": "Cantidades otorgadas a trabajadores con cargo a planes de pensiones. No tienen el tratamiento de ingreso exento para el trabajador, ni las aportaciones a dichos planes son una deducción para el empleador, cuando constituyen cantidades que forman parte del salario afecto al pago del ISR.",
@@ -1801,7 +1923,7 @@
   ]
  },
  {
-  "n": 161,
+  "n": 170,
   "anexo": 3,
   "id": "43/ISR/PI",
   "tema": "Cantidades entregadas a trabajadores, socios o accionistas por concepto de incentivos laborales, bonos, comisiones o compensaciones complementarias por invención, primas o cualquier otro concepto similar, pagadas a través de terceros. No tienen el tratamiento de ingresos exentos, ni las cantidades pagadas a los terceros son deducibles, ni es acreditable el IVA que se traslade por dichos pagos.",
@@ -1820,7 +1942,7 @@
   ]
  },
  {
-  "n": 162,
+  "n": 171,
   "anexo": 3,
   "id": "1/IVA/PI",
   "tema": "Alimentos preparados para su consumo en el lugar de su enajenación por las denominadas tiendas de conveniencia.",
@@ -1830,7 +1952,7 @@
   ]
  },
  {
-  "n": 163,
+  "n": 172,
   "anexo": 3,
   "id": "2/IVA/PI",
   "tema": "Alimentos preparados.",
@@ -1840,7 +1962,7 @@
   ]
  },
  {
-  "n": 164,
+  "n": 173,
   "anexo": 3,
   "id": null,
   "tema": "Servicio de itinerancia internacional o global.",
@@ -1850,7 +1972,7 @@
   ]
  },
  {
-  "n": 165,
+  "n": 174,
   "anexo": 3,
   "id": "4/IVA/PI",
   "tema": "Prestación de servicios en territorio nacional a través de la figura de comisionista mercantil.",
@@ -1860,7 +1982,18 @@
   ]
  },
  {
-  "n": 166,
+  "n": 175,
+  "anexo": 3,
+  "id": "5/IVA/PI",
+  "tema": "Enajenación de efectos salvados.",
+  "pregunta": "Si la aseguradora me pagó por mi coche chocado y se quedó con él, ¿tengo que facturarle ese pago como venta con IVA?",
+  "esperados": [
+   "RLIVA:27"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 176,
   "anexo": 3,
   "id": null,
   "tema": "Retención a residentes en el extranjero sin establecimiento permanente en el país.",
@@ -1871,7 +2004,7 @@
   ]
  },
  {
-  "n": 167,
+  "n": 177,
   "anexo": 3,
   "id": null,
   "tema": "IVA en transportación aérea que inicia en la franja fronteriza. No puede considerarse como prestado solamente el 25% del servicio.",
@@ -1882,7 +2015,7 @@
   ]
  },
  {
-  "n": 168,
+  "n": 178,
   "anexo": 3,
   "id": "8/IVA/PI",
   "tema": "Traslado indebido de IVA. Transporte de bienes no corresponde al servicio de cosecha y recolección.",
@@ -1893,7 +2026,7 @@
   ]
  },
  {
-  "n": 169,
+  "n": 179,
   "anexo": 3,
   "id": "9/IVA/PI",
   "tema": "Acreditamiento indebido de IVA.",
@@ -1909,7 +2042,7 @@
   ]
  },
  {
-  "n": 170,
+  "n": 180,
   "anexo": 3,
   "id": "10/IVA/PI",
   "tema": "Bienes inmuebles destinados a hospedaje, a través de plataformas tecnológicas.",
@@ -1921,7 +2054,7 @@
   ]
  },
  {
-  "n": 171,
+  "n": 181,
   "anexo": 3,
   "id": "11/IVA/PI",
   "tema": "Es improcedente acreditar el IVA sin cumplir los requisitos que establece la ley, así como la compensación de saldos a favor de IVA contra retenciones del ISR, tratándose de la Federación, la Ciudad de México, los Estados y los Municipios.",
@@ -1937,7 +2070,7 @@
   ]
  },
  {
-  "n": 172,
+  "n": 182,
   "anexo": 3,
   "id": "12/IVA/PI",
   "tema": "Adquisición de bienes en territorio nacional propiedad de un residente en el extranjero. Retención del impuesto al valor agregado.",
@@ -1946,5 +2079,75 @@
    "LIVA:1",
    "LIVA:1-A"
   ]
+ },
+ {
+  "n": 183,
+  "anexo": 3,
+  "id": "1/IEPS/PI",
+  "tema": "Base sobre la cual se aplicará la tasa del IEPS cuando el prestador de servicio proporcione equipos terminales de telecomunicaciones u otorgue su uso o goce temporal al prestatario, con independencia del instrumento legal que se utilice para proporcionar el servicio.",
+  "pregunta": "Si doy servicio de internet y vendo o presto el módem, ¿el impuesto se calcula sobre todo lo cobrado o solo el servicio?",
+  "esperados": [
+   "CFF:17",
+   "LIEPS:2"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 184,
+  "anexo": 3,
+  "id": "2/IEPS/PI",
+  "tema": "Servicios que se ofrecen de manera conjunta con Internet.",
+  "pregunta": "Si contrato internet en paquete con telefonía, televisión o aplicaciones, ¿todo el paquete queda libre del impuesto especial a telecomunicaciones?",
+  "esperados": [
+   "LIEPS:8"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 185,
+  "anexo": 3,
+  "id": "3/IEPS/PI",
+  "tema": "Productos que por sus ingredientes se ubican en la definición de chocolate o productos derivados del cacao, independientemente de su denominación comercial o la forma en la que se sugiere sean consumidos, se encuentran gravados para efectos del IEPS.",
+  "pregunta": "Si vendo un polvo para preparar bebida sabor chocolate, ¿tengo que cobrar el impuesto especial aunque en la etiqueta no diga chocolate?",
+  "esperados": [
+   "LIEPS:2"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 186,
+  "anexo": 3,
+  "id": "4/IEPS/PI",
+  "tema": "Base gravable del IEPS en la prestación de servicios de juegos con apuestas y sorteos.",
+  "pregunta": "Tengo un casino: para el impuesto de apuestas, ¿cuento solo el efectivo apostado o también los créditos promocionales que regalo a los clientes?",
+  "esperados": [
+   "CFF:5",
+   "LIEPS:18",
+   "LIEPS:20"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 187,
+  "anexo": 3,
+  "id": "5/IEPS/PI",
+  "tema": "Cantidades a disminuir como premios para determinar la base gravable del IEPS en la prestación de servicios de juegos con apuestas y sorteos.",
+  "pregunta": "Tengo un casino con permiso: ¿puedo restar del impuesto por las apuestas las promociones, membresías o entradas gratis que doy, como si fueran premios?",
+  "esperados": [
+   "LIEPS:2"
+  ],
+  "modelo": "claude-opus-5-5"
+ },
+ {
+  "n": 188,
+  "anexo": 3,
+  "id": "1/LIF/PI",
+  "tema": "Estímulo fiscal a los contribuyentes que importen o adquieran diésel o biodiésel y sus mezclas para uso automotriz en vehículos que se destinen exclusivamente al transporte. Su monto debe determinarse considerando el IEPS que efectivamente se haya causado.",
+  "pregunta": "Si compro diésel para mis camiones de transporte, ¿cómo calculo cuánto impuesto del combustible puedo descontar cuando el gobierno ya redujo ese impuesto?",
+  "esperados": [
+   "LIEPS:2",
+   "LIF:20"
+  ],
+  "modelo": "claude-opus-5-5"
  }
 ]
