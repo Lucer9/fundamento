@@ -186,8 +186,10 @@ Answers, judged by Claude Opus against each reference answer:
   each way: p50 329 ms vs 587 ms, p90 468 ms vs 804 ms. Every response reports `extensions.d1Queries`.
 - **Answers:** every bracketed citation the model writes is checked against the passages it was given, and
   anything else is removed. Answers read 6 law chunks, 4 from the reglamentos and the Miscelánea, and the closest
-  SAT criterios; they are cached per question, rate limited per IP and capped per day. `ANSWER_MODEL` can be a
-  Workers AI model or a Claude model (Anthropic Messages API).
+  SAT criterios; they are cached per question, rate limited per IP (5 a minute) and capped per day
+  (`DAILY_ANSWERS`, 30 per site). With an `ANTHROPIC_API_KEY` secret the Worker answers with Claude
+  (`CLAUDE_MODEL`, Haiku: about $0.002 an answer, at most $0.004 in the eval runs); without one, with gpt-oss-120b
+  on Workers AI. In dev, `.dev.vars` points both at the local Claude bridge.
 - **Degradation:** if Workers AI is unavailable, search falls back to keyword results and says so in
   `extensions.degraded`.
 - **Abuse limits:** graphql-armor caps depth, aliases, tokens and cost.

@@ -13,6 +13,7 @@ export interface Env {
   ANSWER_LIMITER: RateLimit
   MODEL: Modelo
   ANSWER_MODEL: string
+  CLAUDE_MODEL: string
   DAILY_ANSWERS: string
   ANTHROPIC_API_KEY?: string
   ANTHROPIC_BASE_URL?: string

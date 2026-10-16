@@ -185,7 +185,7 @@ const yoga = createYoga<{ env: Env }>({
       env,
       db: d,
       ip: request.headers.get('cf-connecting-ip') ?? 'local',
-      modeloRespuesta: (env.DEV === '1' && request.headers.get('x-answer-model')) || env.ANSWER_MODEL,
+      modeloRespuesta: (env.DEV === '1' && request.headers.get('x-answer-model')) || (env.ANTHROPIC_API_KEY ? env.CLAUDE_MODEL : env.ANSWER_MODEL),
       evaluando: env.DEV === '1' && request.headers.get('x-eval') === '1',
       excluir: env.DEV === '1' && request.headers.get('x-excluir-criterio') ? Number(request.headers.get('x-excluir-criterio')) : null,
       sinCriterios: env.DEV === '1' && request.headers.get('x-sin-criterios') === '1',
