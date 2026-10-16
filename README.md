@@ -83,6 +83,7 @@ incomplete (doesn't reach it, usually saying the passages don't settle the quest
 | r1  | laws, reglamentos and Miscelánea rules                   | 22.2%   | 6.3%  | 71.4%      |
 | r2  | the same plus SAT criterios, minus the question's own    | 24.9%   | 9.0%  | 66.1%      |
 | r3  | the same plus every SAT criterio, the question's own too | 87.3%   | 2.6%  | 10.1%      |
+| r4  | r3 with Claude Sonnet instead of Haiku (live)            | 91.0%   | 1.1%  | 7.9%       |
 
 - The statutes alone rarely settle what a criterio settles: criterios are SAT's reading of points the law doesn't
   spell out. Answers then mostly say so instead of guessing; they are wrong 6% to 9% of the time.
@@ -90,8 +91,9 @@ incomplete (doesn't reach it, usually saying the passages don't settle the quest
 - With the question's own criterio searchable, as on the live site, retrieval found it for 181 of 189 questions and
   answers matched SAT 87.3% of the time (+57.7 to +72.0 points over r1). That is an upper bound: each question was
   written from its criterio, so finding it is easier than for a question SAT never addressed.
-- The live site answers with gpt-oss-120b on Workers AI. These runs used Claude through `scripts/claude.ts` because
-  the Workers AI allowance was exhausted; at list price an answer cost about $0.0016 and a verdict about $0.025.
+- Sonnet over Haiku (r4 − r3): 0.0 to +7.4 points correct, and 2 wrong answers instead of 5, so the live site
+  answers with Sonnet. At list price a Haiku answer cost about $0.002, a Sonnet answer about $0.006 and a verdict
+  about $0.025; the runs went through `scripts/claude.ts`.
 - Every answer and verdict is in `eval/respuestas.r1.json` to `r3.json`.
 
 ## How the methods were chosen (three-law corpus, 2026-10-15)
@@ -169,7 +171,7 @@ Answers, judged by Claude Opus against each reference answer:
 - Remaining misses are mostly the depósito when the question shares no word with article 67's paragraph.
 - Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions either way (t4 vs t3, t6 vs t7); Haiku's
   misses are omissions, never wrong facts. semáforo answers live with Sonnet ($0.006 an answer on average, $0.009
-  at most, against Haiku's $0.003), since its answers are about fines and the corralón; fundamento with Haiku. From t5 to t6 the one changed verdict was a
+  at most, against Haiku's $0.003), since its answers are about fines and the corralón. From t5 to t6 the one changed verdict was a
   question the new rule doesn't touch, so it is run-to-run variation; t6's rule exists for questions like "¿qué pasa
   si traigo un porta placas que tapa la placa?", where article 67 sends the car to the depósito for any fracción of
   article 45 but shares no word with the question.
@@ -213,8 +215,7 @@ Answers, judged by Claude Opus against each reference answer:
   anything else is removed. Answers read 6 law chunks, 4 from the reglamentos and the Miscelánea, and the closest
   SAT criterios; they are cached per question, rate limited per IP (5 a minute) and capped per day
   (`DAILY_ANSWERS`, 200 per site; Claude Max's monthly API credit covers the worst case). With an `ANTHROPIC_API_KEY` secret the Worker answers with Claude
-  (`CLAUDE_MODEL`: Haiku on fundamento, about $0.002 an answer; Sonnet on semáforo, about $0.006); without one, with
-  gpt-oss-120b on Workers AI. In dev, `.dev.vars` points both at the local Claude bridge.
+  (`CLAUDE_MODEL`: Sonnet on both sites, about $0.006 an answer); without one, with gpt-oss-120b on Workers AI. In dev, `.dev.vars` points both at the local Claude bridge.
 - **Degradation:** if Workers AI is unavailable, search falls back to keyword results and says so in
   `extensions.degraded`.
 - **Abuse limits:** graphql-armor caps depth, aliases, tokens and cost.

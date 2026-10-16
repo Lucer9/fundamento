@@ -8,7 +8,8 @@ import { CORPUS, DATA, PUBLICO_RESPUESTAS } from '../src/corpus.ts'
  * for the same question. Entries live in faq/<corpus>.json (committed, so every published answer can be read in git).
  *   importar <eval run file>   adds the answers a judge marked CORRECTA in an answer eval run (verified)
  *   preguntar "<q>" ...        answers new questions through the dev Worker and the local Claude bridge (unverified)
- *   subir [--local]            writes <data>/faq.sql and loads it into the site's D1 database (remote unless --local)
+ *   subir [--local] [--limpiar] writes <data>/faq.sql and loads it into the site's D1 database (remote unless --local);
+ *                              rows are replaced in place, and --limpiar first deletes entries no longer in the file
  * Usage: [CORPUS=transito] node scripts/faq.ts <command> [args] [--modelo=claude-sonnet-5-5]
  */
 type Entrada = {
@@ -91,9 +92,9 @@ if (comando === 'importar') {
   )
   const sql = [
     `create table if not exists faq (slug text primary key, pregunta text not null, respuesta text not null, fuentes text not null, modelo text not null, verificada integer not null, fecha text not null);`,
-    `delete from faq;`,
+    ...(process.argv.includes('--limpiar') ? [`delete from faq where slug not in (${[...porSlug.keys()].map(lit).join(', ')});`] : []),
     ...Array.from({ length: Math.ceil(filas.length / 50) }, (_, i) =>
-      `insert into faq (slug, pregunta, respuesta, fuentes, modelo, verificada, fecha) values\n${filas.slice(i * 50, (i + 1) * 50).join(',\n')};`,
+      `insert or replace into faq (slug, pregunta, respuesta, fuentes, modelo, verificada, fecha) values\n${filas.slice(i * 50, (i + 1) * 50).join(',\n')};`,
     ),
   ].join('\n')
   writeFileSync(`${DATA}/faq.sql`, sql)

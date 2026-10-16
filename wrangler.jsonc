@@ -21,7 +21,7 @@
   "vars": {
     "MODEL": "gemma",
     "ANSWER_MODEL": "@cf/openai/gpt-oss-120b",
-    "CLAUDE_MODEL": "claude-haiku-5-5",
+    "CLAUDE_MODEL": "claude-sonnet-5-5",
     "DAILY_ANSWERS": "200"
   },
   "observability": { "enabled": true },
