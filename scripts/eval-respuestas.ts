@@ -14,7 +14,7 @@ import { DATA, EVAL, PUBLICO_RESPUESTAS } from '../src/corpus.ts'
  * criterios measures whether the other criterios help, not whether the answer can copy its own source.
  * Every answer and verdict is written to eval/respuestas.<run>.json so the numbers can be audited line by line,
  * and each run's summary is upserted into public/eval-respuestas.json.
- * Usage: node scripts/eval-respuestas.ts <run> "<description>" [--sin-criterios] [--modelo=claude-haiku-5-5]
+ * Usage: node scripts/eval-respuestas.ts <run> "<description>" [--sin-criterios] [--con-propio] [--modelo=claude-haiku-5-5] [--paralelo=4]
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
 const [CORRIDA = 'base', DESCRIPCION = CORRIDA] = process.argv.slice(2).filter((a: string) => !a.startsWith('--'))
@@ -111,7 +111,7 @@ const guardar = () =>
 const pendientes = preguntas.filter(p => !hechos.has(p.pregunta))
 let i = 0
 await Promise.all(
-  Array.from({ length: 4 }, async () => {
+  Array.from({ length: Number(process.argv.find((a: string) => a.startsWith('--paralelo='))?.slice(11) ?? 4) }, async () => {
     while (i < pendientes.length) {
       const p = pendientes[i++]
       const r = await responder(p.pregunta, p.n)
