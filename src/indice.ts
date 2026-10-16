@@ -18,6 +18,7 @@ export interface Env {
   ANTHROPIC_API_KEY?: string
   ANTHROPIC_BASE_URL?: string
   EMBED_URL?: string
+  GOOGLE_SITE_VERIFICATION?: string
   DEV?: string
 }
 
@@ -79,6 +80,18 @@ export function loaders(d: Db, batch: boolean) {
           await d.all<{ k: string; a: string }>(
             `select distinct de_ley || ':' || de_id as k, a_ley || ':' || a_id as a from enlace
              where de_ley || ':' || de_id in (select value from json_each(?1)) order by inicio`,
+            json(keys),
+          ),
+        ),
+      o,
+    ),
+    relacionados: new DataLoader<string, { k: string; a: string; score: number }[]>(
+      async keys =>
+        agrupar(
+          keys,
+          await d.all<{ k: string; a: string; score: number }>(
+            `select ley || ':' || id as k, a_ley || ':' || a_id as a, score from relacion
+             where ley || ':' || id in (select value from json_each(?1)) order by score desc`,
             json(keys),
           ),
         ),

@@ -1,0 +1,2732 @@
+[
+ {
+  "slug": "al-vender-piedra-arena-o-tierra-debo-pagar-el-iva-o-esta-exenta",
+  "pregunta": "¿Al vender piedra, arena o tierra debo pagar el IVA o está exenta?",
+  "respuesta": "No estás exenta por la fracción I del artículo 9 de la Ley del IVA, que exime la enajenación de suelo [LIVA 9]. El SAT considera que la piedra, arena o tierra no son bienes inmuebles en el sentido del artículo 750, fracción I, del Código Civil Federal, así que ese desgravamiento no les aplica [SAT 109]. Los artículos proporcionados no establecen la tasa que corresponde a estas enajenaciones, por lo que no puedo confirmar el monto del impuesto que debes trasladar.",
+  "fuentes": {
+   "keys": [
+    "LIVA:9"
+   ],
+   "criterios": [
+    109
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "como-debo-aplicar-el-iva-al-servicio-de-itinerancia-internacional-que-ofrezco-a",
+  "pregunta": "¿Cómo debo aplicar el IVA al servicio de itinerancia internacional que ofrezco a operadores extranjeros, al 0% o al 16%?",
+  "respuesta": "Debes aplicar la tasa del 16%, no la del 0%. El SAT considera que el servicio de itinerancia internacional o global se aprovecha en territorio nacional cuando el cliente del operador extranjero está dentro de la cobertura de tu red, por lo que no es una exportación de servicios [SAT 173]. Aunque el artículo 29 de la Ley del IVA trata como exportación el aprovechamiento en el extranjero de servicios prestados por residentes en el país [LIVA 29], el criterio precisa que cobrar 0% en este caso constituye una práctica fiscal indebida [SAT 173]. Esta es la interpretación oficial de la autoridad, aplicable a la situación que describes; para una decisión concreta sobre tu operación conviene consultarlo con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LIVA:29"
+   ],
+   "criterios": [
+    173
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "como-debo-pagar-y-acreditar-el-iva-de-una-importacion-si-mi-actividad-esta-al-0",
+  "pregunta": "¿Cómo debo pagar y acreditar el IVA de una importación si mi actividad está gravada al 0%?",
+  "respuesta": "Al importar bienes tangibles, el IVA se paga ante la aduana mediante declaración, y no se pueden retirar las mercancías sin hacer ese pago [LIVA 28]. Según el criterio del SAT, ese pago es provisional y se realiza junto con el impuesto general de importación, utilizando la misma forma de pago de éste [SAT 117]. Si los bienes se usan exclusivamente en actividades gravadas a la tasa del 0%, el IVA pagado es acreditable en su totalidad [LIVA 5], y para maquinaria y equipo no producidos en el país que se destinen a las funciones propias de tu actividad, el SAT señala que se debe pagar y que se puede acreditar aun cuando tus actividades estén gravadas al 0% [SAT 117]. Si los mismos bienes también se usan en actividades no gravadas, solo procede acreditar la proporción que representan las actividades gravadas o al 0% en el valor total de las actividades del mes [LIVA 5][SAT 106]. Los artículos que se me proporcionaron no detallan el mes ni la forma de presentar el acreditamiento; la certificación que permite acreditar el 100% del IVA de importación para ciertos regímenes de maquila o exportación existe [LIVA 28-A], pero sus requisitos dependen de reglas del SAT que no tengo a la vista.",
+  "fuentes": {
+   "keys": [
+    "LIVA:28",
+    "LIVA:5",
+    "LIVA:28-A"
+   ],
+   "criterios": [
+    117,
+    106
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "como-puedo-deducir-una-perdida-de-efectivo-por-robo-o-fraude-en-mi-declaracion",
+  "pregunta": "¿Cómo puedo deducir una pérdida de efectivo por robo o fraude en mi declaración de impuestos?",
+  "respuesta": "Según el criterio del SAT, una pérdida de efectivo por robo o fraude puede deducirse como caso de fuerza mayor en los términos del artículo 25, fracción V de la LISR, siempre que las cantidades perdidas se hayan acumulado para efectos del ISR y se acredite el delito. Para ello debe presentar denuncia o querella y contar con copia auténtica del auto de vinculación a proceso, que deberá exhibir si la autoridad fiscal lo requiere [SAT 41]. Si después recupera cantidades por seguros, fianzas o responsabilidades de terceros, debe acumularlas conforme al artículo 18, fracción VI de la LISR [SAT 41]. Si la pérdida no se acredita, o si el juez decreta el sobreseimiento firme del proceso penal, las cantidades deducidas deben volver a acumularse, actualizadas conforme al artículo 17-A del CFF en el primer caso [SAT 41]. El texto del criterio que tengo está truncado en su parte final y no incluye los artículos 25 y 18 de la LISR, así que no puedo confirmar sus detalles; revisa la versión completa y, para tu caso concreto, consulta a un asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    41
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "como-puedo-distinguir-si-la-devolucion-que-me-corresponde-es-por-saldo-a-favor-o",
+  "pregunta": "¿Cómo puedo distinguir si la devolución que me corresponde es por saldo a favor o por pago indebido?",
+  "respuesta": "Según el criterio del SAT, la diferencia está en el origen del monto: el saldo a favor resulta de aplicar la mecánica de la ley a la declaración, mientras que el pago de lo indebido es una cantidad que el contribuyente enteró en exceso y no debía al Fisco [SAT 24]. Además, las devoluciones de saldos a favor improcedentes conservan la naturaleza de la contribución de origen [SAT 23]. Para determinar la naturaleza de la devolución que te corresponde, tendrías que revisar cómo se originó tu cantidad a favor; los artículos proporcionados no contienen una regla que te permita clasificar tu caso concreto, y no puedo darte asesoría personalizada sobre él.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    24,
+    23
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "como-se-deduce-el-costo-de-un-bien-adquirido-mediante-un-arrendamiento",
+  "pregunta": "¿Cómo se deduce el costo de un bien adquirido mediante un arrendamiento financiero?",
+  "respuesta": "Como arrendatario, considera como monto original de la inversión el valor del bien pactado en el contrato [LISR 38], que debe constar por escrito y consignar ese valor [CFF 15]. Si ejerce una opción de transferir la propiedad mediante un pago determinado o de prorrogar el contrato, ese importe se suma al monto original y se deduce en el porcentaje que resulte de dividir el importe entre los años que falten para terminar de deducir la inversión [LISR 38]. Quien enajena y opta por acumular la parte del precio exigible en el ejercicio deduce el costo de lo vendido en la proporción que representa el ingreso de ese ejercicio respecto del total pactado en el plazo forzoso [LISR 40][LISR 17], y el SAT indica que esa deducción es obligatoria al ejercer la opción [SAT 156]. Los artículos no dan la tasa anual ni el número de años para deducir el monto original, y el texto del criterio SAT 156 está incompleto en cuanto al alcance de la práctica indebida que menciona, así que no puedo precisarlo con lo disponible [SAT 156].",
+  "fuentes": {
+   "keys": [
+    "LISR:38",
+    "CFF:15",
+    "LISR:40",
+    "LISR:17"
+   ],
+   "criterios": [
+    156
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "como-se-determina-el-momento-en-que-debo-reconocer-la-ganancia-o-perdida-de-un",
+  "pregunta": "¿Cómo se determina el momento en que debo reconocer la ganancia o pérdida de un derivado que se liquida parcialmente durante su vigencia?",
+  "respuesta": "Según el criterio normativo del SAT, en una operación derivada que liquida diferencias durante su vigencia, cada liquidación se considera un vencimiento respecto del monto de la diferencia liquidada [SAT 71]. Si el derivado tiene como subyacente una divisa y su liquidación o vencimiento corresponde a un ejercicio posterior al de su celebración, la ganancia o pérdida del ejercicio se determina sumando o restando al resultado total de la operación el saldo acumulado de las diferencias liquidadas o pagadas durante su vigencia [RMF 3.2.6]. En operaciones liquidadas en efectivo, la ganancia o pérdida es la diferencia entre la cantidad final que se perciba o entregue y las cantidades previas pagadas o percibidas por la operación [LISR 20]. Los artículos proporcionados no describen el cálculo para derivados con subyacentes distintos de una divisa, por lo que esa parte queda sin respuesta.",
+  "fuentes": {
+   "keys": [
+    "RMF:3.2.6",
+    "LISR:20"
+   ],
+   "criterios": [
+    71
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "cual-es-la-fecha-que-se-toma-como-momento-de-la-fusion-para-presentar-el-aviso",
+  "pregunta": "¿Cuál es la fecha que se toma como momento de la fusión para presentar el aviso de cancelación en el RFC?",
+  "respuesta": "Para efectos de presentar el aviso de cancelación en el RFC por fusión, el SAT considera que la fusión se lleva a cabo en la fecha en que se toma el acuerdo respectivo o, en su caso, en la fecha que se haya señalado en el acuerdo de la asamblea general ordinaria o extraordinaria de accionistas [SAT 2]. Esto se fundamenta en el artículo 11, segundo párrafo, del CFF [SAT 2]. El aviso de cancelación por fusión debe presentarse una vez que se lleve a cabo la fusión [RCFF 29]. La regla 2.5.24 de la RMF 2026 establece además una revisión previa de requisitos, que suspende el plazo para presentar dicho aviso hasta que la autoridad emita su documento [RMF 2.5.24].",
+  "fuentes": {
+   "keys": [
+    "RCFF:29",
+    "RMF:2.5.24"
+   ],
+   "criterios": [
+    2
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "cual-es-la-forma-de-obtener-el-factor-para-actualizar-una-perdida-fiscal-del-en",
+  "pregunta": "¿Cuál es la forma de obtener el factor para actualizar una pérdida fiscal del ejercicio en que ocurrió?",
+  "respuesta": "El monto de la pérdida fiscal de un ejercicio se actualiza multiplicándolo por el factor correspondiente al periodo que va desde el primer mes de la segunda mitad del ejercicio hasta el último mes del mismo [LISR 57] [LISR 109]. Según el criterio normativo del SAT, ese factor se obtiene dividiendo el INPC de diciembre del ejercicio en que ocurrió la pérdida entre el INPC de julio del mismo ejercicio, con base en el artículo 6, fracción II de la Ley del ISR [SAT 53]. Los artículos citados no establecen los valores del INPC de esos meses, aunque la RMF indica que los índices se publican en el DOF [RMF 2.1.12].",
+  "fuentes": {
+   "keys": [
+    "LISR:57",
+    "LISR:109",
+    "RMF:2.1.12"
+   ],
+   "criterios": [
+    53
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "cual-es-la-tasa-de-impuesto-que-debo-pagar-al-vender-acciones-de-empresas-en-la",
+  "pregunta": "¿Cuál es la tasa de impuesto que debo pagar al vender acciones de empresas extranjeras cotizadas en la bolsa mexicana?",
+  "respuesta": "Si eres persona física y vendes acciones de sociedades extranjeras cotizadas en bolsas de valores concesionadas o mercados de derivados reconocidos, como la Bolsa Mexicana de Valores, aplica la tasa del 10% sobre la ganancia, y ese pago se considera definitivo [LISR 129]. El SAT indica que esta tasa aplica a las acciones listadas en el apartado de valores autorizados para cotizar en el Sistema Internacional de Cotizaciones de la BMV o de la BIVA [SAT 63]. Los artículos que tengo no dicen si tu caso concreto está en ese listado ni cómo se hace la retención, así que conviene confirmarlo con tu intermediario.",
+  "fuentes": {
+   "keys": [
+    "LISR:129"
+   ],
+   "criterios": [
+    63
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "cuanta-maquinaria-de-la-maquila-debe-ser-propiedad-del-cliente-extranjero-para",
+  "pregunta": "¿Cuánta maquinaria de la maquila debe ser propiedad del cliente extranjero para cumplir con el requisito del programa IMMEX?",
+  "respuesta": "Al menos el 30% de la maquinaria y equipo utilizados en la operación de maquila debe ser propiedad del residente en el extranjero con el que se tiene el contrato de maquila, y ese porcentaje se calcula según las reglas de carácter general del SAT [LISR 181]. La regla 3.20.3 describe cómo valuar cada tipo de maquinaria para el cálculo, pero el texto proporcionado no incluye la fórmula final del porcentaje [RMF 3.20.3]. SAT 76 aclara que el 30% se refiere a maquinaria que no haya sido propiedad de la empresa maquiladora residente en México ni de una parte relacionada, y que el 70% restante no tiene que ser propiedad del cliente extranjero [SAT 76]. Los artículos proporcionados regulan el tratamiento en el ISR de la maquila, no todas las obligaciones del programa IMMEX, así que no puedo confirmar otros requisitos de ese programa.",
+  "fuentes": {
+   "keys": [
+    "LISR:181",
+    "RMF:3.20.3"
+   ],
+   "criterios": [
+    76
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "cuanto-isr-puedo-acreditar-si-recibo-dividendos-de-una-empresa-dedicada-solo-a-o",
+  "pregunta": "¿Cuánto ISR puedo acreditar si recibo dividendos de una empresa dedicada solo a actividades agrícolas, ganaderas, pesqueras o silvícolas?",
+  "respuesta": "Si usted es persona física y recibe dividendos de una persona moral dedicada exclusivamente a actividades agrícolas, ganaderas, pesqueras o silvícolas, puede acreditar contra el impuesto de su declaración anual el ISR que pagó la sociedad [SAT 67]. Para calcular ese ISR pagado debe aplicar la tasa del artículo 9 y el factor del artículo 140 de la LISR, sin considerar el factor reducido que la empresa usó conforme al segundo párrafo del artículo 10 [SAT 69]. Por lo tanto, el monto acreditable puede ser mayor que el ISR que la empresa efectivamente enteró. Si el acreditamiento excede el impuesto a su cargo, solo puede pedir la devolución o compensar lo efectivamente pagado o retenido [SAT 67]. Los artículos proporcionados no incluyen el texto de los artículos 9, 10 y 140 ni el factor del 140, así que no puedo darle una cifra exacta.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    67,
+    69
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "cumplo-con-la-entrega-del-cfdi-si-solo-les-envio-el-enlace-a-una-pagina-de",
+  "pregunta": "¿Cumplo con la entrega del CFDI si solo les envío el enlace a una página de internet?",
+  "respuesta": "No, según el criterio del SAT, no cumples con la obligación de entrega o puesta a disposición del CFDI si solo remites a una página de Internet [SAT 133]. El artículo 29, fracción V, del CFF exige entregar o poner a disposición el archivo electrónico del CFDI a través de los medios electrónicos que el SAT establezca, y su representación impresa cuando el cliente la solicite [CFF 29]. La regla 2.7.1.33 admite, previo acuerdo con el cliente, el correo electrónico, un dispositivo portátil, una página o portal solo para descarga, o una cuenta de almacenamiento en la nube designada por el cliente [RMF 2.7.1.33]. Por lo tanto, un enlace a una página es válido solo si es de descarga y el cliente lo acordó; el criterio señala que un simple envío a una página no cumple [SAT 133].",
+  "fuentes": {
+   "keys": [
+    "CFF:29",
+    "RMF:2.7.1.33"
+   ],
+   "criterios": [
+    133
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "de-que-formas-puede-la-autoridad-fiscal-notificarme-un-requerimiento-o-acto",
+  "pregunta": "¿De qué formas puede la autoridad fiscal notificarme un requerimiento o acto administrativo?",
+  "respuesta": "Según [CFF 134], fracción I, los requerimientos y actos administrativos que puedan ser recurridos se notifican por buzón tributario, personalmente o por correo certificado, y el [SAT 19] confirma que son tres medios alternativos entre sí, por lo que la autoridad puede usar cualquiera de ellos sin importar el tipo de notificación que prevea otro artículo del CFF. Los actos que no son de los señalados en esa fracción se notifican por correo ordinario o telegrama [CFF 134]. Cuando la notificación es personal, debe entregarse copia del acto y se considera válida aunque no se haga en el domicilio, siempre que se entienda con la persona debida [CFF 135] [CFF 136]. Los documentos electrónicos deben transmitirse codificados y llevar firma electrónica avanzada [CFF 38]. Los artículos proporcionados no indican si el plazo para el correo certificado tiene particularidades adicionales, aunque el [SAT 18] señala que su validez se rige por la Ley del Servicio Postal Mexicano.",
+  "fuentes": {
+   "keys": [
+    "CFF:134",
+    "CFF:135",
+    "CFF:136",
+    "CFF:38"
+   ],
+   "criterios": [
+    19,
+    18
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-aplicar-retencion-de-impuesto-cuando-compro-bienes-a-un-residente-en-el-que",
+  "pregunta": "¿Debo aplicar retención de impuesto cuando compro bienes a un residente en el extranjero que no tiene establecimiento permanente en México?",
+  "respuesta": "Sí, en cuanto al IVA. El SAT considera práctica fiscal indebida no retener el IVA cuando se adquieren bienes tangibles de un residente en el extranjero sin establecimiento permanente en el país, conforme al artículo 1o.-A, fracción III de la Ley del IVA [SAT 176]. Para el ISR, el artículo 161 de la LISR obliga a retener al adquirente residente en el país, pero los artículos que tengo no establecen expresamente una retención de ISR por la compra de bienes a un no residente, así que no puedo confirmarla con esta información [LISR 161]. Si el residente en el extranjero no tiene establecimiento permanente, el impuesto se entera por declaración dentro de los quince días siguientes a la obtención del ingreso [LISR 161]. Para saber si existe ese establecimiento, el SAT remite a la LISR y a los tratados para evitar la doble tributación vigentes [SAT 176], y al caso de vinculación con agentes que actúen por cuenta del extranjero [SAT 137]. Falta el texto de la Ley del IVA y de la regla aplicable a la retención de ISR en compras de bienes, por lo que la parte del ISR queda sin confirmar.",
+  "fuentes": {
+   "keys": [
+    "LISR:161"
+   ],
+   "criterios": [
+    176,
+    137
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-cobrar-iva-al-vender-repuestos-de-mi-maquinaria-agricola",
+  "pregunta": "¿Debo cobrar IVA al vender repuestos de mi maquinaria agrícola?",
+  "respuesta": "Sí. Según el criterio normativo del SAT, la enajenación de refacciones para maquinaria y equipo agrícola causa IVA a la tasa del 16% [SAT 99]. La tasa del 0% del artículo 2-A, fracción I, inciso e), aplica a la maquinaria y equipo agrícola solo cuando se enajenan completos [LIVA 2-A] [SAT 99]. El reglamento extiende el 0% a equipos con otra denominación únicamente si su función cumple exclusivamente con esos supuestos, conservan su carácter esencial y no pueden destinarse a otros fines [RLIVA 9]. Los artículos proporcionados no cubren otros casos, así que para tu situación concreta conviene consultar a un especialista en materia fiscal.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A",
+    "RLIVA:9"
+   ],
+   "criterios": [
+    99
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-incluir-el-16-de-iva-al-rentar-mi-casa-por-plataformas-de-hospedaje",
+  "pregunta": "¿Debo incluir el 16 % de IVA al rentar mi casa por plataformas de hospedaje?",
+  "respuesta": "Según el criterio del SAT, quien ofrece hospedaje a través de una plataforma tecnológica debe pagar el 16% de IVA, porque el hospedaje queda excluido de la exención de casa habitación [SAT 180]. Esa exclusión alcanza también a inmuebles amueblados y a casas de hospedaje [SAT 180]. Si operas únicamente a través de plataformas, debes presentar el pago mensual de IVA a más tardar el día 17 del mes siguiente [RMF 12.3.14]. Tienes además la opción de considerar como pagos definitivos las retenciones que te efectúe la plataforma, para lo cual debes presentar un aviso [RMF 12.3.3]. Los artículos que tengo no indican si tu caso concreto es hospedaje o arrendamiento de largo plazo, así que conviene confirmarlo con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "RMF:12.3.14",
+    "RMF:12.3.3"
+   ],
+   "criterios": [
+    180
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-pagar-impuesto-sobre-la-renta-en-mexico-por-ingresos-de-un-establecimiento",
+  "pregunta": "¿Debo pagar impuesto sobre la renta en México por ingresos de un establecimiento permanente aunque sea residente en el extranjero?",
+  "respuesta": "Sí. Los residentes en el extranjero con establecimiento permanente en México están obligados a pagar el impuesto por los ingresos atribuibles a él [LISR 16], y deben presentar declaración dentro de los tres meses siguientes a la fecha en que lo constituyan, calcular el impuesto conforme al Título II o IV según el caso, y efectuar pagos provisionales desde el ejercicio siguiente [LISR 174]. El SAT considera que existe establecimiento permanente cuando el residente en el extranjero está vinculado, en términos del derecho común, con actos que habitualmente realizan personas distintas de un agente independiente por cuenta de él, y considera indebido no pagar el ISR por esa razón [SAT 137]. Los artículos proporcionados no explican cómo se aplica esto a una persona física ni a tu caso concreto, por lo que conviene revisarlo con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LISR:16",
+    "LISR:174"
+   ],
+   "criterios": [
+    137
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-pagar-iva-del-100-o-solo-25-por-un-vuelo-que-parte-de-la-zona-fronteriza-de",
+  "pregunta": "¿Debo pagar IVA del 100 % o solo 25 % por un vuelo que parte de la zona fronteriza hacia otro destino dentro de México?",
+  "respuesta": "Según los artículos proporcionados, el 25% solo aplica a la transportación aérea internacional, y el vuelo que describes es nacional [LIVA 16]. El SAT considera indebida la práctica de aplicar el 25% a un servicio que se presta desde una población de la franja fronteriza hacia otro destino nacional fuera de esa franja, y establece que ese servicio está gravado en su totalidad a la tasa general del IVA [SAT 177]. Por lo tanto, con estos textos, el IVA se calcularía sobre el 100% del servicio a la tasa general. Los artículos no señalan cuál sería el tratamiento de un vuelo internacional con origen en la franja, por lo que esa parte queda fuera de esta respuesta.",
+  "fuentes": {
+   "keys": [
+    "LIVA:16"
+   ],
+   "criterios": [
+    177
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-pagar-iva-sobre-los-intereses-moratorios-que-me-cobran-por-una-deuda",
+  "pregunta": "¿Debo pagar IVA sobre los intereses moratorios que me cobran por una deuda?",
+  "respuesta": "Según el criterio del SAT, la exención del artículo 15, fracción X de la Ley del IVA alcanza tanto a los intereses normales como a los moratorios, porque la norma no los distingue [SAT 112]. Esa exención solo opera en los casos que la propia ley señala; por ejemplo, si quien otorga el financiamiento no es quien enajena el bien o presta el servicio, el financiamiento no queda exento por ese artículo [SAT 113]. Los materiales que tengo no incluyen el texto completo de esa fracción ni las reglas de cálculo de intereses moratorios para IVA, por lo que no puedo confirmar si tu caso concreto está exento. Para determinarlo, revisa quién otorgó el crédito y en qué operación se generaron los intereses con un asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    112,
+    113
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-retener-impuestos-al-pagar-el-arrendamiento-de-una-embarcacion-usada-en-el",
+  "pregunta": "¿Debo retener impuestos al pagar el arrendamiento de una embarcación usada en México aunque el arrendador sea extranjero?",
+  "respuesta": "Probablemente sí. Si el contrato otorga el uso o goce temporal de la embarcación, el pago se considera regalía, y la fuente de riqueza está en México cuando la embarcación se aprovecha en el país o cuando quien paga es residente en México [SAT 158]. Quien paga debe retener a la tasa del 5% si la embarcación tiene concesión o permiso del Gobierno Federal para explotación comercial y el arrendatario la usa directamente para transportar pasajeros o bienes, y a la tasa del 25% en los demás casos [LISR 167]. La tasa del 10% sobre fletamento de cabotaje no aplica a arrendamientos de equipo comercial, industrial o científico [LISR 158]. El criterio SAT 158 se refiere a embarcaciones a casco desnudo para exploración o extracción de hidrocarburos, por lo que su alcance en otros casos debe verificarse con los hechos concretos. Esta respuesta es informativa y no sustituye una asesoría fiscal personalizada.",
+  "fuentes": {
+   "keys": [
+    "LISR:167",
+    "LISR:158"
+   ],
+   "criterios": [
+    158
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-retener-iva-al-adquirir-un-bien-en-mexico-que-pertenece-a-un-residente-sin",
+  "pregunta": "¿Debo retener IVA al adquirir un bien en México que pertenece a un residente extranjero sin establecimiento permanente?",
+  "respuesta": "Sí, en general debes retener el IVA. El SAT considera que, al adquirir en territorio nacional bienes propiedad de un residente en el extranjero sin establecimiento permanente, existe obligación de retención conforme al artículo 1o.-A de la Ley del IVA, siempre que realices actos o actividades gravados por los que estés obligado al pago del impuesto [SAT 182]. Quien esté obligado al pago exclusivamente por importación de bienes no efectúa esa retención, porque no presenta declaraciones de IVA [SAT 182]. Para el SAT, no retener en esos casos es una práctica indebida, salvo que el residente en el extranjero sí tenga establecimiento permanente, lo cual debe determinarse con el concepto de la LISR y los tratados vigentes [SAT 176]. Los artículos proporcionados no incluyen el texto completo del artículo 1o.-A ni el porcentaje ni los plazos de entero, así que no puedo confirmarlos.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    182,
+    176
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-retener-iva-al-contratar-servicios-de-mensajeria-o-paqueteria",
+  "pregunta": "¿Debo retener IVA al contratar servicios de mensajería o paquetería?",
+  "respuesta": "No, en principio no tienes que retener IVA por servicios de mensajería o paquetería. El SAT considera que las personas morales que reciben estos servicios de personas físicas o morales no se ubican en el supuesto del artículo 1o.-A, fracción II, inciso c), de la Ley del IVA, porque la mensajería y la paquetería son servicios auxiliares del autotransporte federal y no autotransporte federal de carga [SAT 88] [LIVA 1-A]. Las reglas RMF 2.7.1.11 y 2.7.7.2.2 tratan la constancia de retención en autotransporte de carga y la emisión de CFDI en paquetería, pero no establecen una retención para mensajería [RMF 2.7.1.11] [RMF 2.7.7.2.2]. Como esta respuesta se basa solo en los textos citados, conviene confirmar tu caso concreto con un especialista.",
+  "fuentes": {
+   "keys": [
+    "LIVA:1-A",
+    "RMF:2.7.1.11",
+    "RMF:2.7.7.2.2"
+   ],
+   "criterios": [
+    88
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-retener-iva-cuando-contrato-un-servicio-que-no-constituye-una-actividad",
+  "pregunta": "¿Debo retener IVA cuando contrato un servicio que no constituye una actividad empresarial?",
+  "respuesta": "Depende de quién preste el servicio y quién lo reciba. Las personas morales están obligadas a retener IVA cuando reciben servicios personales independientes prestados por personas físicas [LIVA 1-A], y el SAT indica que esa retención solo procede cuando el servicio es personal, es decir, cuando no tiene naturaleza de actividad empresarial [SAT 87, LIVA 14]. En ese caso, la retención se hace por las dos terceras partes del IVA trasladado y efectivamente pagado [RLIVA 3]. Los artículos proporcionados no establecen esta obligación para personas físicas que contratan, así que no puedo confirmar si le aplica en su caso.",
+  "fuentes": {
+   "keys": [
+    "LIVA:1-A",
+    "LIVA:14",
+    "RLIVA:3"
+   ],
+   "criterios": [
+    87
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "debo-volver-a-embargar-un-bien-que-ya-esta-embargado-en-la-via-administrativa-la",
+  "pregunta": "¿Debo volver a embargar un bien que ya está embargado en la vía administrativa para ejecutar la garantía?",
+  "respuesta": "No, según el criterio normativo [SAT 20], cuando el bien ya fue embargado en la vía administrativa, al hacer efectiva la garantía del interés fiscal mediante el procedimiento administrativo de ejecución no es necesario volver a embargarlo, porque ya está formalmente embargado y en depósito del contribuyente o de su representante legal, por lo que puede continuarse con el procedimiento [SAT 20]. El artículo que regula la garantía por embargo en la vía administrativa, en el texto que se te proporcionó, es el 141 fracción VI del CFF, cuyo contenido completo no aparece en los artículos dados, así que no puedo confirmar más detalles de esa fracción [SAT 20].",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    20
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "el-ajuste-por-inflacion-que-me-devuelven-cuenta-como-ingreso-para-calcular-el",
+  "pregunta": "¿El ajuste por inflación que me devuelven cuenta como ingreso para calcular el ISR?",
+  "respuesta": "Según el criterio del SAT, la actualización que se paga sobre devoluciones, aprovechamientos y compensaciones de saldos a favor no es ingreso acumulable para el ISR, porque refleja el efecto del tiempo y de los precios sobre el valor del monto [SAT 77]. Si la devolución incluye intereses por pago extemporáneo, esos intereses sí son acumulables, y tratándose de personas físicas la autoridad debe retener y enterar el ISR que corresponda [SAT 32]. Los artículos que tengo no dicen cómo distinguir ambos conceptos en tu resolución, así que conviene revisar el desglose de la devolución. El ajuste anual por inflación de los artículos 44 y 134 de la LISR es otro concepto y no responde esta pregunta [LISR 44] [LISR 134].",
+  "fuentes": {
+   "keys": [
+    "LISR:44",
+    "LISR:134"
+   ],
+   "criterios": [
+    77,
+    32
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "el-transporte-de-mi-cosecha-esta-exento-del-iva",
+  "pregunta": "¿El transporte de mi cosecha está exento del IVA?",
+  "respuesta": "No, según el criterio del SAT, el transporte de bienes no se considera cosecha ni recolección, por lo que no le aplica la tasa del 0% que el artículo 2o.-A, fracción II, inciso a) de la Ley del IVA da a esos servicios cuando se prestan directamente a agricultores y ganaderos [SAT 178]. Ese mismo criterio señala que el transporte de bienes es una prestación de servicios independientes gravada a la tasa del 16% conforme al artículo 14, fracción II de la Ley del IVA [SAT 178]. Los artículos proporcionados no contienen una exención general para el transporte de cosechas, así que no puedo confirmar que esté exento. Para su caso concreto, conviene consultar con un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    178
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-casos-una-empresa-no-tiene-que-pagar-isr-por-los-dividendos-que-reparte",
+  "pregunta": "¿En qué casos una empresa no tiene que pagar ISR por los dividendos que reparte?",
+  "respuesta": "Una persona moral no está obligada a pagar el impuesto por dividendos cuando éstos provienen de la cuenta de utilidad fiscal neta [LISR 10]. Tampoco lo está cuando los dividendos provienen de la cuenta de utilidad por inversión en energías renovables, aunque debe llevar un registro acumulativo de esas distribuciones en cada ejercicio, y esta exención no aplica al impuesto de los artículos 140, párrafo segundo, y 164, fracciones I y IV [LISR 77-A]. Según el criterio normativo del SAT, las personas morales que actualicen los supuestos del artículo 140, fracciones III a VI, no deben calcular el impuesto sobre esos montos, porque el último párrafo del artículo 10 solo les impone esa obligación en las fracciones I y II [SAT 34]. Los artículos proporcionados no describen qué conceptos abarcan las fracciones III a VI del artículo 140, así que esa parte queda sin precisar.",
+  "fuentes": {
+   "keys": [
+    "LISR:10",
+    "LISR:77-A"
+   ],
+   "criterios": [
+    34
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-momento-debo-considerar-que-ya-recibi-los-ingresos-de-un-estimulo-fiscal",
+  "pregunta": "¿En qué momento debo considerar que ya recibí los ingresos de un estímulo fiscal para efectos de pago de impuestos?",
+  "respuesta": "Según el criterio normativo del SAT, los ingresos por estímulos fiscales se consideran percibidos en el momento en que incrementan el patrimonio del contribuyente, conforme al artículo 141 de la LISR [SAT 70]. Por ello, el gravamen se causa cuando esos ingresos efectivamente incrementan tu patrimonio, y no necesariamente cuando se emite el acto de autorización. Los artículos proporcionados no establecen una fecha exacta para cada tipo de estímulo, por lo que no puedo precisar el día concreto en tu caso; para eso habría que revisar los requisitos de cada estímulo, por ejemplo el derecho que nace al obtener la autorización cuando se exigen requisitos formales adicionales [CFF 25].",
+  "fuentes": {
+   "keys": [
+    "CFF:25"
+   ],
+   "criterios": [
+    70
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-momento-puedo-deducir-una-perdida-por-un-credito-que-ya-no-puedo-cobrar-a",
+  "pregunta": "¿En qué momento puedo deducir una pérdida por un crédito que ya no puedo cobrar, sin esperar a que venza el plazo de prescripción?",
+  "respuesta": "Sí, antes de que venza la prescripción puedes deducir la pérdida si existe notoria imposibilidad práctica de cobro, supuesto en el que la pérdida se considera realizada antes de ese plazo [RLISR 299] [LISR 27]. Para créditos cuya suerte principal al vencimiento no exceda de 30,000 UDIS, la ley considera que existe esa imposibilidad si en un año contado desde la mora no se logró el cobro, y el crédito se considera incobrable en el mes en que se cumple ese año; si tienes varios créditos con la misma persona, se suman para verificar el límite [LISR 27]. Para créditos mayores a 30,000 UDIS, el SAT exige una resolución definitiva de autoridad competente que acredite el agotamiento de las gestiones de cobro, o que fue imposible ejecutar la resolución favorable, además de cumplir lo previsto en el último párrafo del inciso a) [SAT 45]. Si el deudor es contribuyente con actividades empresariales, debes informarle por escrito que efectuarás la deducción y, a más tardar el 15 de febrero del año siguiente, informar los créditos así deducidos [LISR 27]. Los artículos no permiten evaluar tu caso concreto.",
+  "fuentes": {
+   "keys": [
+    "RLISR:299",
+    "LISR:27"
+   ],
+   "criterios": [
+    45
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-momento-puedo-solicitar-un-acuerdo-conclusivo-durante-la-revision-de-mis",
+  "pregunta": "¿En qué momento puedo solicitar un acuerdo conclusivo durante la revisión de mis declaraciones?",
+  "respuesta": "Puedes solicitar el acuerdo conclusivo desde que inician las facultades de comprobación y hasta dentro de los veinte días siguientes al acta final, al oficio de observaciones o a la resolución provisional, siempre que la autoridad ya haya hecho una calificación de hechos u omisiones [CFF 69-C]. Esa calificación es la comparación que hace la autoridad entre la ley y tu situación de hecho [SAT 25]. Si la autoridad hizo constar esa calificación en actas parciales, oficios o notificaciones antes de la última acta parcial, oficio de observaciones o resolución provisional, también puedes solicitarlo antes de su emisión [RCFF 71]. Pasados los veinte días ya no procede la solicitud [CFF 69-C]. Los artículos no precisan si la opción de discrepar de hechos asentados aplica a cualquier revisión de tus declaraciones, pues esa vía se describe expresamente para las facultades del artículo 42, fracciones II, III o IX [CFF 69-C].",
+  "fuentes": {
+   "keys": [
+    "CFF:69-C",
+    "RCFF:71"
+   ],
+   "criterios": [
+    25
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-momento-se-considera-percibido-un-dividendo-si-me-lo-pagan-con-acciones",
+  "pregunta": "¿En qué momento se considera percibido un dividendo si me lo pagan con acciones de la misma empresa?",
+  "respuesta": "Si la empresa te paga con acciones de la misma persona moral, el dividendo se considera percibido en el año de calendario en que se pague el reembolso por reducción de capital o por liquidación de esa empresa, en los términos del artículo 78 de la LISR [LISR 10]. Lo mismo aplica si reinviertes el dividendo en la suscripción y pago de un aumento de capital de esa misma empresa dentro de los 30 días naturales siguientes a su distribución [LISR 10]. El criterio normativo del SAT confirma que, para la acumulación a los demás ingresos de la persona física y la aplicación del impuesto adicional del 10%, se aplica este supuesto del artículo 10 [SAT 78]. Los artículos proporcionados no incluyen el texto del artículo 78 de la LISR, por lo que no puedo explicar el cálculo del momento de pago del reembolso ni la mecánica del 10% en este caso [LISR 140].",
+  "fuentes": {
+   "keys": [
+    "LISR:10",
+    "LISR:140"
+   ],
+   "criterios": [
+    78
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-momento-se-considera-que-he-recibido-efectivamente-el-pago-cuando-aporto",
+  "pregunta": "¿En qué momento se considera que he recibido efectivamente el pago cuando aporto bienes a una empresa a cambio de acciones?",
+  "respuesta": "Según el criterio normativo del SAT, la contraprestación pagada con acciones por una aportación en especie a una sociedad mercantil se considera efectivamente cobrada con la entrega de esas acciones [SAT 85]. Ese criterio parte de que la aportación a una sociedad se entiende como enajenación [SAT 85], y de que el artículo 11 de la Ley del IVA ubica la enajenación en el momento en que se cobran las contraprestaciones [LIVA 11]. Por tanto, para efectos de IVA, el momento relevante es la entrega de las acciones. Los artículos que me proporcionaste no contienen una regla de ISR específica para esta operación, así que no puedo confirmar cómo se trata para ese impuesto. El texto del criterio SAT 85 que tengo está incompleto, por lo que no puedo revisar si contiene más precisiones.",
+  "fuentes": {
+   "keys": [
+    "LIVA:11"
+   ],
+   "criterios": [
+    85
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "en-que-momento-tengo-que-incluir-los-dividendos-o-utilidades-distribuidas-en-mi",
+  "pregunta": "¿En qué momento tengo que incluir los dividendos o utilidades distribuidas en mi declaración de impuestos?",
+  "respuesta": "Los dividendos se acumulan a sus demás ingresos cuando ocurre el supuesto jurídico que los genera, no en una fecha fija [SAT 66] [LISR 140]. Si la persona moral residente en México retiene el 10% adicional, ese pago es definitivo y se entera junto con su pago provisional [LISR 140]. Si son de una sociedad extranjera, el 10% debe enterarse a más tardar el día 17 del mes siguiente a su percepción [LISR 142], y si se pagan en acciones de otra persona moral sin autorizar la venta de acciones para cubrir el impuesto, el entero vence el día 17 del mes siguiente a su causación [RMF 3.9.1]. Si la distribución es en acciones de la misma persona moral, se consideran percibidos en el año en que se pague el reembolso por reducción de capital o liquidación [LISR 10] [SAT 78]. Los artículos proporcionados no indican la fecha de presentación de la declaración anual, así que no puedo confirmar ese plazo con ellos.",
+  "fuentes": {
+   "keys": [
+    "LISR:140",
+    "LISR:142",
+    "RMF:3.9.1",
+    "LISR:10"
+   ],
+   "criterios": [
+    66,
+    78
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "es-ilegal-contratar-a-una-cooperativa-para-que-realice-el-mismo-trabajo-que-mis",
+  "pregunta": "¿Es ilegal contratar a una cooperativa para que realice el mismo trabajo que mis empleados y así evitar retenerles impuestos?",
+  "respuesta": "Los artículos que tengo no establecen que sea un delito, pero sí indican que no es una vía válida para evitar impuestos. Los pagos por subcontratación de personal para actividades relacionadas con el objeto social o la actividad preponderante del contratante no tienen efectos fiscales de deducción ni de acreditamiento [CFF 15-D]. El SAT considera práctica fiscal indebida contratar cooperativas para que presten servicios idénticos, similares o análogos a los que realizan tus trabajadores, y omitir con ello la retención de ISR sobre los salarios de quienes mantienen una relación de subordinación [SAT 150]. Los artículos no cubren sanciones ni tu caso concreto, así que para una evaluación particular conviene consultar a un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "CFF:15-D"
+   ],
+   "criterios": [
+    150
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "es-valida-una-notificacion-fiscal-enviada-por-correo-certificado-con-acuse-de-a",
+  "pregunta": "¿Es válida una notificación fiscal enviada por correo certificado con acuse de recibo a mi empresa?",
+  "respuesta": "Según el artículo 134, fracción I del CFF, los citatorios, requerimientos y actos administrativos que puedan ser recurridos pueden notificarse por correo certificado [CFF 134]. El SAT indica que estas notificaciones son correctas si se entregan en la oficialía de partes u oficina de correspondencia de la persona moral y se acredita con el sello de recibido, conforme al artículo 42 de la Ley del Servicio Postal Mexicano [SAT 18]. Además, el SAT considera que el correo certificado es una de tres vías alternativas, junto con la notificación personal y el buzón tributario [SAT 19].\n\nPara determinar si su notificación concreta es válida faltaría conocer el acto notificado, si la entrega se hizo en la oficialía de partes de la empresa y si el acuse tiene el sello correspondiente; los artículos proporcionados no establecen más requisitos. Esto no constituye asesoría personalizada.",
+  "fuentes": {
+   "keys": [
+    "CFF:134"
+   ],
+   "criterios": [
+    18,
+    19
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "la-ganancia-que-obtengo-al-vender-certificados-bursatiles-fiduciarios-se-ingreso",
+  "pregunta": "¿La ganancia que obtengo al vender certificados bursátiles fiduciarios se considera ingreso por intereses?",
+  "respuesta": "Según el criterio normativo del SAT, sí: la ganancia en la enajenación de certificados bursátiles fiduciarios colocados entre el gran público inversionista se considera interés para efectos de la Ley del ISR [SAT 33]. El CFF trata la enajenación de estos certificados como la de títulos de crédito que no representan la propiedad de bienes [CFF 14]. Para que aplique, el título debe estar inscrito en el Registro Nacional de Valores o listado en el sistema internacional de cotizaciones de la BMV o de la BIVA, según la regla 3.2.12 que cita ese criterio [SAT 33]. Los artículos que se me proporcionaron no incluyen el texto completo de la regla 3.2.12 ni del artículo 8 de la LISR, así que no puedo precisar otros requisitos ni la retención aplicable a intereses.",
+  "fuentes": {
+   "keys": [
+    "CFF:14"
+   ],
+   "criterios": [
+    33
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "la-importacion-de-oro-esta-exenta-de-iva",
+  "pregunta": "¿La importación de oro está exenta de IVA?",
+  "respuesta": "Sí. La importación de oro con un contenido mínimo de 80% está exenta del IVA, sin condicionantes, conforme al artículo 25, fracción VII de la Ley del IVA [LIVA 25]. Para este efecto, el 80% incluye los materiales con los que se conforma el metal, siempre que tengan una calidad mínima de 10 quilates [RLIVA 10]. El SAT precisa que esta exención no se extiende a otros productos de oro, como joyería o lingotes, cuyas condiciones de tasa 0% o exención en enajenación son incompatibles con la importación [SAT 116].",
+  "fuentes": {
+   "keys": [
+    "LIVA:25",
+    "RLIVA:10"
+   ],
+   "criterios": [
+    116
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "la-indemnizacion-que-recibo-por-un-cheque-no-pagado-debe-considerarse-para-el",
+  "pregunta": "¿La indemnización que recibo por un cheque no pagado debe considerarse para calcular el IVA?",
+  "respuesta": "Según el criterio normativo del SAT, la indemnización que se recibe por un cheque no pagado por causas imputables al librador, establecida en el artículo 193 de la Ley General de Títulos y Operaciones de Crédito, no forma parte de la base para calcular el IVA, porque no deriva del acto o actividad gravada sino de esa ley [SAT 86]. Este criterio aplica a cheques librados para cubrir operaciones gravadas por la Ley del IVA, y la indemnización no puede ser menor al veinte por ciento del valor del cheque [SAT 86]. Los artículos proporcionados no contienen una disposición de la Ley del IVA que regule directamente esta indemnización, así que la respuesta se basa únicamente en el criterio del SAT.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    86
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "la-leche-saborizada-o-de-otras-especies-tambien-esta-exenta-del-iva",
+  "pregunta": "¿La leche saborizada o de otras especies también está exenta del IVA?",
+  "respuesta": "Sí, pero con matices. La LIVA aplica la tasa del 0% a los alimentos, y la excluye solo para las \"bebidas distintas de la leche\" [LIVA 2-A], por lo que la leche queda fuera de esa exclusión. El criterio del SAT entiende por leche la secreción natural de las glándulas mamarias de vacas o de cualquier otra especie animal, excluido el calostro, y aplica la tasa del 0% a su enajenación [SAT 96]. Según ese criterio, la leche saborizada también queda comprendida, siempre que cumpla con las NOM-155-SCFI-2012 y NOM-243-SSA1-2010 [SAT 96]. Técnicamente es una tasa del 0%, no una exención. Los textos que tengo no tratan los productos lácteos combinados en el criterio de IVA, y el texto del criterio [SAT 96] está cortado, así que no puedo confirmar el listado completo de requisitos.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A"
+   ],
+   "criterios": [
+    96
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-bebidas-lacteas-endulzadas-como-leches-de-sabor-o-yogures-bebibles-pagan-el",
+  "pregunta": "¿Las bebidas lácteas endulzadas, como leches de sabor o yogures bebibles, pagan el mismo impuesto especial que los refrescos y bebidas azucaradas?",
+  "respuesta": "No necesariamente. Las leches saborizadas que cumplen las NOM-155-SCFI-2012 y NOM-243-SSA1-2010 se consideran leche, incluida la saborizada, y la leche en cualquier presentación está exenta del IEPS [SAT 127] [LIEPS 8]. Las bebidas lácteas y los lácteos combinados que disuelven azúcares o edulcorantes en agua en su elaboración sí quedan afectos al IEPS de bebidas saborizadas, que es de $3.0818 por litro si tienen azúcares añadidos y de $1.5000 por litro si tienen edulcorantes [SAT 128] [LIEPS 2] [LIEPS 3]. Los artículos no dicen cómo clasificar un producto concreto, como un yogur bebible, así que hace falta revisar su composición y si cumple las normas citadas. La regla RMF 11.3.2 trata de un estímulo del decreto de beneficios fiscales para productos lácteos, no de la tasa del IEPS, por lo que no la uso para esta respuesta [RMF 11.3.2].",
+  "fuentes": {
+   "keys": [
+    "LIEPS:8",
+    "LIEPS:2",
+    "LIEPS:3",
+    "RMF:11.3.2"
+   ],
+   "criterios": [
+    127,
+    128
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-cuotas-de-inscripcion-y-colegiatura-que-pago-a-una-institucion-educativa-se",
+  "pregunta": "¿Las cuotas de inscripción y colegiatura que pago a una institución educativa autorizada se consideran ingresos no relacionados?",
+  "respuesta": "Sí, según el criterio normativo del SAT, las cuotas de inscripción y colegiaturas que pagan los alumnos a una institución educativa autorizada para recibir donativos deducibles se consideran cuotas de recuperación, y para determinar los ingresos por actividades distintas a los fines autorizados no se consideran ingresos no relacionados [SAT 57]. Además, el mismo criterio indica que el límite del 10% de ingresos no relacionados previsto en el artículo 80, séptimo párrafo, de la Ley del ISR no aplica a la prestación de servicios de enseñanza de estas instituciones [SAT 57]. Los artículos proporcionados no establecen más detalles sobre este tratamiento.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    57
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-entidades-publicas-como-estados-y-municipios-deben-pagar-iva-al-importar",
+  "pregunta": "¿Las entidades públicas como estados y municipios deben pagar IVA al importar mercancías?",
+  "respuesta": "Sí. Según los artículos y criterios proporcionados, la importación de bienes sí causa IVA para estados y municipios: el pago se hace mediante declaración ante la aduana y no pueden retirarse las mercancías sin haberlo cubierto [LIVA 28]. La exención del artículo 3 para estas entidades cubre solo los actos que no dan lugar al pago de derechos, y el SAT señala que no aplica al IVA de importación aunque se pague el derecho de trámite aduanero, porque ese derecho retribuye el servicio de trámite y no el acto de importar [LIVA 3] [SAT 105]. Por regla general, estas entidades solo pueden acreditar el IVA pagado en importaciones que se identifique con actividades gravadas o a tasa 0%, y en los demás casos se consideran consumidores finales [LIVA 3] [SAT 181]. El criterio SAT 181 se corta justo al mencionar las excepciones, así que no puedo confirmar si existen excepciones aplicables a casos concretos; la exención de la RMF 4.4.1 se refiere a embajadas y consulados, no a estas entidades [RMF 4.4.1].",
+  "fuentes": {
+   "keys": [
+    "LIVA:28",
+    "LIVA:3",
+    "RMF:4.4.1"
+   ],
+   "criterios": [
+    105,
+    181
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-ganancias-que-obtengo-al-operar-con-divisas-estan-exentas-de-retencion-de",
+  "pregunta": "¿Las ganancias que obtengo al operar con divisas están exentas de retención de ISR?",
+  "respuesta": "No hay una exención general: depende del tipo de operación. Para ganancias de operaciones financieras derivadas de capital referidas al tipo de cambio de una divisa, realizadas en mercados reconocidos, el artículo 54, fracción VII de la LISR prevé que no se efectúe retención, pero el SAT precisa que esas ganancias no son intereses ni derivados de deuda [SAT 52]. Las cuentas en moneda extranjera no generan retención sobre intereses mientras su saldo promedio diario no exceda 8,668 dólares [RMF 3.16.6]. Quienes compran y venden divisas, sin ser casas de cambio, acumulan solo la ganancia efectivamente percibida, soportada en su contabilidad [RLISR 12]. Los artículos que tengo no contienen el texto completo de la fracción VII del artículo 54 ni un régimen de retención para la compraventa de divisas al contado, por lo que no puedo confirmar si tu operación específica está exenta.",
+  "fuentes": {
+   "keys": [
+    "RMF:3.16.6",
+    "RLISR:12"
+   ],
+   "criterios": [
+    52
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-propinas-que-recibo-en-mi-empleo-deben-considerarse-como-ingreso-para-el-del",
+  "pregunta": "¿Las propinas que recibo en mi empleo deben considerarse como ingreso para el cálculo del ISR?",
+  "respuesta": "Sí, según el criterio normativo del SAT, las propinas que se otorgan a los trabajadores deben considerarse para el cálculo y retención del ISR, porque son parte del salario conforme al artículo 346 de la Ley Federal del Trabajo [SAT 61]. El artículo 94 de la LISR considera ingresos por servicio personal subordinado a los salarios y demás prestaciones que deriven de una relación laboral [LISR 94]. El patrón debe incluirlas al aplicar la tarifa del artículo 96 sobre los ingresos del mes [SAT 61] [SAT 170]. Los artículos que se me dieron no detallan cómo se registran las propinas de cada establecimiento, por lo que esa parte no se responde aquí.",
+  "fuentes": {
+   "keys": [
+    "LISR:94"
+   ],
+   "criterios": [
+    61,
+    170
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-propinas-que-recibo-por-mi-trabajo-estan-sujetas-al-iva",
+  "pregunta": "¿Las propinas que recibo por mi trabajo están sujetas al IVA?",
+  "respuesta": "No, las propinas no forman parte de la base gravable del IVA por la prestación de servicios, porque se consideran parte del salario del trabajador y el patrón no puede reservarse participación en ellas [SAT 114]. Para el ISR, en cambio, las propinas que recibe el trabajador son ingreso, y el empleador debe considerarlas para calcular y retener el impuesto que le corresponda [SAT 61].",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    114,
+    61
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "las-vacunas-y-medicamentos-homeopaticos-que-mezclo-con-otros-productos-estan-del",
+  "pregunta": "¿Las vacunas y medicamentos homeopáticos que mezclo con otros productos están exentos del IVA?",
+  "respuesta": "Las vacunas y los medicamentos homeopáticos son medicinas de patente, por lo que su enajenación se grava a la tasa del 0% [LIVA 2-A] [RLIVA 7]. Según el criterio del SAT, un producto que necesita mezclarse con otras sustancias o someterse a un proceso industrial para clasificarse como medicina de patente se grava a la tasa general del 16%, aun si después se usa para producir medicinas de patente [SAT 92]. Por eso, la tasa del 0% aplica al producto terminado que cumpla esa definición, mientras que las mezclas o insumos previos pueden causar el 16%. Los artículos proporcionados no explican el tratamiento de tu caso concreto de mezcla, así que conviene revisarlo con un especialista fiscal.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A",
+    "RLIVA:7"
+   ],
+   "criterios": [
+    92
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-alimentos-listos-para-comer-que-compro-en-el-supermercado-llevan-el-iva-de",
+  "pregunta": "¿Los alimentos listos para comer que compro en el supermercado llevan el IVA de la tasa general?",
+  "respuesta": "Depende del producto. Los alimentos preparados para consumo en el lugar o para llevar, como sándwiches, tortas o lonches, pagan la tasa del 16% [LIVA 2-A], [RMF 4.3.1]. Quedan fuera de esa categoría, y pagan tasa 0%, los alimentos envasados al alto vacío o en atmósfera modificada, los congelados, las tortillas y los productos de panificación [RLIVA 10-A], [RMF 4.3.7]. Según el criterio del SAT, en tiendas de autoservicio los alimentos preparados ofertados a granel se consideran parte del servicio genérico de comidas y están afectos a la tasa general [SAT 97], [SAT 172]. Los artículos no tratan otros productos específicos del supermercado, así que cada caso debe revisarse con estas reglas.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A",
+    "RMF:4.3.1",
+    "RLIVA:10-A",
+    "RMF:4.3.7"
+   ],
+   "criterios": [
+    97,
+    172
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-alimentos-preparados-en-tiendas-de-conveniencia-deben-pagar-el-iva-del-0-o",
+  "pregunta": "¿Los alimentos preparados en tiendas de conveniencia deben pagar el IVA del 0 % o del 16 %?",
+  "respuesta": "Los alimentos preparados para su consumo en el lugar donde se enajenan pagan la tasa del 16%, incluso cuando son para llevar o entrega a domicilio [LIVA 2-A]. El SAT considera que, en establecimientos distintos de restaurantes, como las tiendas de autoservicio, solo son alimentos preparados los listos para consumir y ofertados a granel, y que aplicar la tasa del 0% a esas enajenaciones es una práctica fiscal indebida [SAT 171][SAT 172][SAT 97]. La RMF considera preparados los sándwiches, tortas y lonches cuando quedan a disposición del adquirente los utensilios para calentarlos o cocinarlos, o cuando no requieren calentamiento [RMF 4.3.1]. Los alimentos envasados al vacío o congelados no son preparados para este efecto, y los envasados al alto vacío o en atmósfera modificada quedan en esa misma excepción, por lo que siguen la tasa del 0% [RLIVA 10-A][RMF 4.3.7][LIVA 2-A].",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A",
+    "RMF:4.3.1",
+    "RLIVA:10-A",
+    "RMF:4.3.7"
+   ],
+   "criterios": [
+    171,
+    172,
+    97
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-aportes-de-mi-empresa-a-mi-plan-de-pensiones-se-consideran-ingreso-gravado-y",
+  "pregunta": "¿Los aportes de mi empresa a mi plan de pensiones se consideran ingreso gravado y no son deducibles para el empleador?",
+  "respuesta": "Depende de cómo esté constituido el plan, y la premisa no siempre se cumple. Las aportaciones patronales a un fondo de pensiones complementario al IMSS pueden deducirse, sin exceder el factor de 0.47 de la aportación (0.53 si se cumple la condición de no disminuir las prestaciones exentas) [LISR 25], y el plan debe cumplir requisitos como ofrecer al trabajador la opción de incorporarse y no rebasar el 12.5% del salario anual [RLISR 35]. Para el SAT, las cantidades que se entregan al trabajador como parte del salario con cargo al plan son una práctica indebida: no son ingreso exento y tampoco son deducibles [SAT 169]. Los intereses que genera la inversión del fondo no son deducibles para la empresa [SAT 139], y las aportaciones del propio trabajador no son deducibles para el contribuyente [RLISR 65]. Los artículos proporcionados no establecen en general que el aporte patronal a un plan privado no sea ingreso para el trabajador; la exclusión que sí aparece [LISR 93] se refiere a aportaciones a la subcuenta de retiro del IMSS y a cuentas del ISSSTE, así que con estas fuentes no puedo confirmar su tratamiento en tu caso.",
+  "fuentes": {
+   "keys": [
+    "LISR:25",
+    "RLISR:35",
+    "RLISR:65",
+    "LISR:93"
+   ],
+   "criterios": [
+    169,
+    139
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-bancos-estan-obligados-a-ofrecer-garantia-del-interes-fiscal-cuando-tienen",
+  "pregunta": "¿Los bancos están obligados a ofrecer garantía del interés fiscal cuando tienen una deuda fiscal?",
+  "respuesta": "Según el artículo 141 del CFF, los contribuyentes pueden garantizar el interés fiscal en las formas que enumera, y en ningún caso las autoridades pueden dispensar el otorgamiento de la garantía [CFF 141]. El criterio normativo del SAT establece que las instituciones que conforman el Sistema Bancario Mexicano están relevadas de otorgarla, siempre que no se encuentren en liquidación o en procedimiento de quiebra, porque se consideran de acreditada solvencia [SAT 9]. Los artículos proporcionados no contienen el texto completo de ese criterio, así que no puedo confirmar el alcance exacto del relevo más allá de lo transcrito.",
+  "fuentes": {
+   "keys": [
+    "CFF:141"
+   ],
+   "criterios": [
+    9
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-bonos-que-le-pago-a-mis-empleados-mediante-un-tercero-son-deducibles-del-isr",
+  "pregunta": "¿Los bonos que le pago a mis empleados mediante un tercero son deducibles del ISR y me permiten acreditar el IVA?",
+  "respuesta": "No. El SAT considera indebida la práctica de pagar bonos, comisiones o compensaciones a trabajadores a través de terceros: esas cantidades no tienen tratamiento de ingresos exentos, los pagos a los terceros no son deducibles y el IVA trasladado por ellos no es acreditable [SAT 170]. Como el criterio describe la práctica como indebida, no hay una excepción aplicable en los artículos que se me dieron. Para que un pago a trabajadores sea deducible también debe cumplir los demás requisitos de la ley, como que la erogación sea estrictamente indispensable y se soporte con comprobante fiscal [SAT 142] [RLISR 43]. Esta respuesta es informativa y no sustituye la revisión de tu caso concreto por un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "RLISR:43"
+   ],
+   "criterios": [
+    170,
+    142
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-cargos-que-paga-una-aerolinea-por-servicios-de-otra-linea-estan-gravados-con",
+  "pregunta": "¿Los cargos que paga una aerolínea por servicios de otra línea están gravados con IVA o pueden facturarse con tasa 0%?",
+  "respuesta": "Los cargos que una línea aérea cobra a otra por transportar a pasajeros amparados con un boleto expedido por una línea distinta no causan IVA, porque el RLIVA 32 los considera la misma prestación ya gravada al expedirse el boleto [RLIVA 32]. El SAT lo confirma en su criterio normativo, que también indica que no pueden facturarse con tasa 0%, pues el artículo 2o.-A, fracción II, de la Ley no los incluye entre los supuestos de tasa 0% y se trata de servicios exentos conforme al RLIVA 32 [SAT 102]. Por lo tanto, la devolución del IVA que pidan las aerolíneas que apliquen tasa 0% a estos cargos es improcedente [SAT 102]. Los artículos proporcionados no establecen cómo debe tratarse este cargo para efectos de acreditamiento más allá de lo señalado en el RLIVA 17, que los excluye del valor de las actividades gravadas para el cálculo de la proporción [RLIVA 17].",
+  "fuentes": {
+   "keys": [
+    "RLIVA:32",
+    "RLIVA:17"
+   ],
+   "criterios": [
+    102
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-dividendos-o-utilidades-que-me-asignan-de-una-sociedad-deben-sumarse-a-mis",
+  "pregunta": "¿Los dividendos o utilidades que me asignan de una sociedad deben sumarse a mis otros ingresos al declarar impuestos?",
+  "respuesta": "Sí. Las personas físicas deben acumular a sus demás ingresos los dividendos o utilidades que perciban de una persona moral [LISR 140], y para ello se considera que el ingreso lo percibe el propietario del título o, en partes sociales, quien aparezca como titular [LISR 140] [SAT 65]. Además, pueden acreditar contra su impuesto anual el ISR pagado por la sociedad, siempre que sumen al ingreso el monto del impuesto correspondiente (calculado con el factor 1.4286 y la tasa del artículo 9) y cuenten con la constancia y el comprobante fiscal [LISR 140]. Adicionalmente, sobre esos dividendos se aplica una tasa adicional de 10% retenida por la sociedad, que tiene carácter definitivo [LISR 140]. Los artículos proporcionados no indican si, en tu caso concreto, la sociedad ya retuvo ese impuesto, por lo que no puedo precisar el monto a pagar.",
+  "fuentes": {
+   "keys": [
+    "LISR:140"
+   ],
+   "criterios": [
+    65
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-dividendos-o-utilidades-que-recibo-deben-sumarse-a-mis-otros-ingresos-al-mi",
+  "pregunta": "¿Los dividendos o utilidades que recibo deben sumarse a mis otros ingresos al declarar mi ISR?",
+  "respuesta": "Sí. Las personas físicas deben acumular a sus demás ingresos los percibidos por dividendos o utilidades [LISR 140] y [SAT 64]. Si además el dividendo proviene de una sociedad mexicana, pueden acreditar contra su impuesto anual el ISR que pagó la sociedad, siempre que sumen ese impuesto a su ingreso acumulable y cuenten con la constancia y el comprobante fiscal correspondientes [LISR 140]. Si es un dividendo de una entidad extranjera con régimen fiscal preferente, deben además pagar el impuesto adicional del 10% a más tardar el día 17 del mes siguiente a aquel en que lo percibieron [LISR 142] y [LISR 177]. Los artículos proporcionados no indican cómo se calcula el impuesto anual ni cuánto pagaría en su caso, por lo que esa parte no puede responderse con estas fuentes.",
+  "fuentes": {
+   "keys": [
+    "LISR:140",
+    "LISR:142",
+    "LISR:177"
+   ],
+   "criterios": [
+    64
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-envases-que-utilizo-para-vender-bebidas-deben-registrarse-como-inventario-o",
+  "pregunta": "¿Los envases que utilizo para vender bebidas deben registrarse como inventario o como activo fijo?",
+  "respuesta": "Depende de si el envase forma parte del producto que vendes. Según el criterio SAT 40, los envases que son parte del producto terminado que se enajena se consideran parte del costo de lo vendido [SAT 40]. Los envases que no forman parte del producto final, porque al enajenarse se canjean por otros de la misma especie y calidad y se usan varias veces, se consideran activo fijo, ya que son bienes tangibles que se demeritan por el uso y el paso del tiempo [SAT 40]. El texto que tengo del criterio está incompleto y no cubre otros supuestos, así que no puedo confirmar cómo tratar tu caso específico. Si llegas a enajenar bienes de activo fijo, el SAT considera indebido deducir de una vez el saldo pendiente de depreciar [SAT 138]. Para tu situación conviene consultarlo con un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    40,
+    138
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-ingredientes-que-uso-para-elaborar-alimentos-estan-gravados-con-iva-o-con-0",
+  "pregunta": "¿Los ingredientes que uso para elaborar alimentos están gravados con IVA o con tasa 0%?",
+  "respuesta": "Los ingredientes que son productos destinados a la alimentación humana o animal están gravados a la tasa del 0%, salvo las excepciones que enumera la fracción I, inciso b), del artículo 2o.-A, como las bebidas distintas de la leche o los saborizantes, microencapsulados y aditivos alimenticios [LIVA 2-A]. La sal es una excepción a esa excepción: el SAT la considera producto alimenticio y la grava al 0%, aunque sea aditivo, salvo la sal para uso industrial no alimenticio [SAT 121]. El 16% aplica a la venta de alimentos preparados para consumirse en el lugar, para llevar o a domicilio, no a los insumos que compras para cocinar [LIVA 2-A] [SAT 172]. El texto que tengo de la lista de excepciones está incompleto, así que para un caso concreto habría que revisar el inciso b) completo.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A"
+   ],
+   "criterios": [
+    121,
+    172
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-intereses-que-me-pagan-para-cubrir-la-retencion-del-isr-se-consideran-como-a",
+  "pregunta": "¿Los intereses que me pagan para cubrir la retención del ISR se consideran como ISR a cargo de un tercero?",
+  "respuesta": "Según el criterio normativo del SAT, no, siempre que quien paga los intereses se haya obligado contractualmente a cubrir las cantidades adicionales necesarias para que el perceptor reciba neta la misma cantidad que recibiría sin retención. En ese caso, esas cantidades conservan la naturaleza de intereses pactados y no son pago de ISR a cargo de tercero para efectos del artículo 28, fracción I, de la Ley del ISR [SAT 46]. El criterio se refiere a pagos a residentes en el extranjero conforme al Título V, y el texto que tengo se corta antes de su conclusión, así que no puedo confirmar su alcance en otros supuestos. Los artículos 133 y 135 de la LISR, que sí regulan a personas físicas, establecen que los intereses son ingreso y que quien los paga debe retener el ISR [LISR 133] [LISR 135].",
+  "fuentes": {
+   "keys": [
+    "LISR:133",
+    "LISR:135"
+   ],
+   "criterios": [
+    46
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-intereses-que-me-pague-la-autoridad-al-devolverme-mi-dinero-se-consideran-y",
+  "pregunta": "¿Los intereses que me pague la autoridad al devolverme mi dinero se consideran ingreso y debo pagar ISR por ellos?",
+  "respuesta": "Sí, el SAT considera que los intereses que la autoridad paga al devolver cantidades deben acumularse para efectos del ISR, y en el caso de personas físicas la autoridad debe retener y enterar el impuesto que corresponda [SAT 32]. Esos intereses se calculan conforme al artículo 22-A del CFF, sin exceder los que se causen en los últimos cinco años [CFF 22-A]. Quienes pagan intereses deben retener el impuesto a la tasa que fija la Ley de Ingresos de la Federación para el ejercicio correspondiente [LISR 133] [LISR 135], y la resolución que autoriza la devolución puede considerarse constancia de retención [RMF 3.16.8]. Las personas físicas que solo obtengan ingresos de este capítulo y no excedan de $100,000.00 pueden optar por tratar la retención como pago definitivo [LISR 135]. Los artículos proporcionados no indican la tasa aplicable, así que no puedo dar la cifra de retención.",
+  "fuentes": {
+   "keys": [
+    "CFF:22-A",
+    "LISR:133",
+    "LISR:135",
+    "RMF:3.16.8"
+   ],
+   "criterios": [
+    32
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-intereses-que-pago-por-un-credito-para-comprar-mi-casa-estan-sujetos-al-iva",
+  "pregunta": "¿Los intereses que pago por un crédito para comprar mi casa están sujetos al IVA?",
+  "respuesta": "No, en principio los intereses de un crédito hipotecario para la adquisición de casa habitación están exentos del IVA. La Ley del IVA exime los servicios que provienen de créditos hipotecarios o con garantía fiduciaria para adquirir, ampliar, construir o reparar inmuebles destinados a casa habitación [LIVA 15], y el Reglamento precisa que incluye los intereses de esos créditos para pagar pasivos contraídos por esa adquisición [RLIVA 39-A]. Los artículos proporcionados no indican si la exención depende de la institución acreedora, así que no puedo confirmar cómo aplica a tu caso concreto; para eso conviene revisar tu contrato o consultar a un asesor.",
+  "fuentes": {
+   "keys": [
+    "LIVA:15",
+    "RLIVA:39-A"
+   ],
+   "criterios": []
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-medicamentos-que-recibo-en-el-hospital-estan-gravados-con-la-tasa-general",
+  "pregunta": "¿Los medicamentos que recibo en el hospital están gravados con la tasa general del IVA?",
+  "respuesta": "Sí, según el criterio normativo del SAT, cuando se proporcionan medicinas de patente como parte de los servicios durante la hospitalización del paciente, ya sea directamente o mediante la contratación de un paquete de atención especial, se encuentran gravadas a la tasa general del 16% de IVA, porque se trata de la prestación genérica de un servicio y no de la enajenación de medicamentos que concede la tasa del 0% [SAT 93]. Esto se apoya en el artículo 14, fracción I de la LIVA y en el artículo 17, segundo párrafo del CFF, que consideran como valor del servicio el importe total de la contraprestación cuando se proporcionan bienes que normalmente se entregan con dicho servicio [SAT 93]. Los artículos que me diste no incluyen el texto del artículo 14 de la LIVA, así que no puedo confirmar su contenido más allá de lo que cita el criterio [SAT 93].",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    93
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-pagos-que-recibo-por-la-distribucion-o-venta-de-una-obra-protegida-por-de-se",
+  "pregunta": "¿Los pagos que recibo por la distribución o venta de una obra protegida por derechos de autor se consideran regalías?",
+  "respuesta": "Sí. Según el criterio normativo del SAT, los pagos que se realicen en virtud de cualquier acto jurídico que tenga por objeto la distribución de una obra tienen el carácter de regalías [SAT 3]. Ese criterio se apoya en que el CFF considera regalías los pagos de cualquier clase por el uso o goce temporal de derechos de autor sobre obras literarias, artísticas o científicas [CFF 15-B], y en que la distribución, incluida la venta, es una forma de conceder ese uso o goce [SAT 3]. Los artículos que tengo no permiten determinar el tratamiento fiscal de tu caso concreto, y para eso conviene consultar a un especialista.",
+  "fuentes": {
+   "keys": [
+    "CFF:15-B"
+   ],
+   "criterios": [
+    3
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-platillos-que-me-sirven-listos-pero-que-debo-calentar-con-los-utensilios-del",
+  "pregunta": "¿Los platillos que me sirven listos, pero que debo calentar con los utensilios del lugar, se consideran gravados con IVA?",
+  "respuesta": "Sí, en general se gravan a la tasa del 16% si el platillo está entre los productos que enumera la regla y el lugar pone a tu disposición los utensilios para calentarlo o cocinarlo [RMF 4.3.1] [LIVA 2-A]. Esto aplica aunque el alimento sea para llevar o para entrega a domicilio [LIVA 2-A]. Quedan fuera de este tratamiento los alimentos envasados al vacío o congelados, los que requieren cocción posterior por parte del comprador y las tortillas y productos de panadería, salvo cuando se venden en restaurantes, fondas, cafeterías y establecimientos similares, donde siempre se aplica el 16% [RLIVA 10-A]. El SAT considera indebida la práctica de las tiendas de conveniencia que calculan el 0% sobre estos alimentos preparados [SAT 171].",
+  "fuentes": {
+   "keys": [
+    "RMF:4.3.1",
+    "LIVA:2-A",
+    "RLIVA:10-A"
+   ],
+   "criterios": [
+    171
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-premios-que-recibo-por-puntualidad-y-asistencia-en-mi-trabajo-estan-sujetos",
+  "pregunta": "¿Los premios que recibo por puntualidad y asistencia en mi trabajo están sujetos a impuesto?",
+  "respuesta": "Según el criterio del SAT, los premios por puntualidad y asistencia no están exentos, porque no son prestaciones de naturaleza análoga a la previsión social y no se otorgan de manera general [SAT 58]. La Ley considera ingresos por la prestación de un servicio personal subordinado los salarios y demás prestaciones que deriven de una relación laboral, y sobre ellos el patrón debe efectuar retenciones mensuales conforme al artículo 96 [SAT 170]. Los textos que tengo no indican la tarifa ni el procedimiento de cálculo de esa retención, así que para tu caso conviene confirmarlo con tu empleador o con un contador.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    58,
+    170
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-servicios-de-pesca-deportiva-que-ofrecen-las-embarcaciones-se-consideran",
+  "pregunta": "¿Los servicios de pesca deportiva que ofrecen las embarcaciones se consideran actividades comerciales?",
+  "respuesta": "Sí. El SAT considera que los servicios turísticos que prestan las embarcaciones para facilitar actividades de recreación en el medio acuático relacionadas con la pesca deportiva son actividades comerciales, porque los contratos de comercio marítimo y las empresas de turismo son actos de comercio [SAT 4]. Esto encuadra en la fracción I del artículo 16 del CFF, que define como comerciales las actividades que las leyes federales así califican y no están comprendidas en las fracciones siguientes [CFF 16] [SAT 4]. Los artículos proporcionados no establecen tratamiento de IVA específico para estos servicios, por lo que no puedo precisar sus efectos fiscales.",
+  "fuentes": {
+   "keys": [
+    "CFF:16"
+   ],
+   "criterios": [
+    4
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "los-suplementos-alimenticios-estan-sujetos-al-iva-del-0-o-deben-pagar-la-tasa",
+  "pregunta": "¿Los suplementos alimenticios están sujetos al IVA del 0% o deben pagar la tasa regular?",
+  "respuesta": "Los suplementos alimenticios no están sujetos a la tasa del 0%: según el criterio normativo del SAT, no se consideran productos destinados a la alimentación para efectos del artículo 2o.-A, fracción I, inciso b), por lo que su enajenación no es gravada a esa tasa [SAT 95]. Los artículos proporcionados no contienen una regla que indique expresamente la tasa general aplicable a esa enajenación, por lo que esa parte queda sin respaldo en los textos dados; la tasa del 0% tampoco aplica a su importación [SAT 95].",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    95
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "me-cobran-iva-al-comprar-alimentos-preparados-en-una-tienda-de-autoservicio-para",
+  "pregunta": "¿Me cobran IVA al comprar alimentos preparados en una tienda de autoservicio para llevar o consumir en casa?",
+  "respuesta": "Depende del producto y de cómo se venda. Los alimentos preparados para consumo en el lugar, para llevar o a domicilio pagan 16% de IVA [LIVA 2-A]. En tiendas de autoservicio, el SAT considera que la venta de alimentos preparados o compuestos, listos para consumo y ofertados a granel está afecta a la tasa general [SAT 97] [SAT 172], y calcular 0% en esos casos es una práctica indebida [SAT 171]. Sándwiches y tortas se consideran alimentos preparados aunque no se entreguen utensilios para calentarlos [RMF 4.3.1], pero los envasados al vacío o congelados, los que requieren cocción posterior, las tortillas y los productos de panadería quedan excluidos de ese concepto [RLIVA 10-A] [RMF 4.3.7]. Los artículos que tengo no indican si un sándwich empacado individualmente se trata igual que uno ofertado a granel, así que eso no puedo confirmarlo.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A",
+    "RMF:4.3.1",
+    "RLIVA:10-A",
+    "RMF:4.3.7"
+   ],
+   "criterios": [
+    97,
+    172,
+    171
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "me-pueden-aplicar-una-multa-mas-baja-si-la-sancion-se-redujo-despues-de-que-la",
+  "pregunta": "¿Me pueden aplicar una multa más baja si la sanción se redujo después de que cometí la infracción?",
+  "respuesta": "Sí, en principio. Si la multa por la misma conducta se modifica después mediante reforma, la autoridad aplica la menor entre la vigente al cometerse la infracción y la vigente al imponerla [CFF 70]. Sin embargo, el SAT interpreta que este beneficio solo opera conforme a la ley vigente y que la autoridad no puede modificar una sanción ya notificada al infractor aunque después se reduzca por reforma [SAT 12]. Los artículos que tengo no indican cómo se aplica esto en tu caso concreto, por lo que habría que revisar la fecha de la infracción, la de notificación de la multa y la reforma correspondiente.",
+  "fuentes": {
+   "keys": [
+    "CFF:70"
+   ],
+   "criterios": [
+    12
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "me-pueden-dar-facilidades-de-pago-si-pague-el-impuesto-sin-haberlo-cobrado-a-mis",
+  "pregunta": "¿Me pueden dar facilidades de pago si pagué el impuesto sin haberlo cobrado a mis clientes?",
+  "respuesta": "Sí, según el criterio normativo del SAT, si no trasladó el impuesto y lo pagó directamente con su patrimonio, no queda impedido para solicitar la autorización de pago a plazos del artículo 66 del CFF ni la reducción de multas y recargos [SAT 120]. Debe presentar la solicitud conforme a las fichas 55/CFF o 58/CFF, y en la reducción de multas pagar el total de contribuciones, actualización y accesorios dentro de los quince días posteriores a la notificación de la resolución [RMF 2.14.2]. Además, el artículo 70-A del CFF exige haber presentado los avisos y declaraciones de sus tres últimos ejercicios y no tener diferencias a su cargo mayores al 10%, lo que debe declarar bajo protesta de decir verdad [CFF 70-A]. Los artículos que tengo no incluyen el texto completo del artículo 66 ni de la fracción VI del 66-A, por lo que no puedo confirmar los plazos de las parcialidades ni si la autoridad aceptaría su caso en particular; para eso conviene consultar a un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "RMF:2.14.2",
+    "CFF:70-A"
+   ],
+   "criterios": [
+    120
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "me-pueden-multar-si-cumplo-una-obligacion-despues-de-que-anulen-la-visita-o",
+  "pregunta": "¿Me pueden multar si cumplo una obligación después de que anulen la visita domiciliaria o requerimiento?",
+  "respuesta": "En general, no. Según el criterio del SAT, si la orden de visita o el requerimiento quedan sin efectos por una resolución de recurso administrativo o una sentencia, y después cumples la obligación omitida, el cumplimiento se considera espontáneo respecto del acto anulado y no procede imponer multas, siempre que la autoridad no haya notificado una nueva orden de visita, requerimiento o gestión para verificar tu cumplimiento [SAT 13]. Esto se apoya en el artículo 73, fracción II, del CFF, que no considera espontáneo el cumplimiento posterior a una orden de visita o requerimiento notificados [CFF 73]. Si en el recurso o juicio se reconoce la legalidad de la orden o del requerimiento, la multa posterior sí puede imponerse, pero el texto del criterio que tengo está cortado en ese punto, así que no puedo precisar sus términos [SAT 13]. Las reglas RMF 2.5.15 y 3.1.19 tratan la suspensión o cancelación de obligaciones en el RFC y establecen que no liberan de multas por declaraciones no presentadas, por lo que no conviene confundir ese supuesto con la anulación de una visita [RMF 2.5.15] [RMF 3.1.19]. Para tu caso concreto necesitarías asesoría personalizada.",
+  "fuentes": {
+   "keys": [
+    "CFF:73",
+    "RMF:2.5.15",
+    "RMF:3.1.19"
+   ],
+   "criterios": [
+    13
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "mi-asociacion-deportiva-debe-pagar-impuesto-sobre-la-renta-si-vende-bienes-o-a",
+  "pregunta": "¿Mi asociación deportiva debe pagar impuesto sobre la renta si vende bienes o presta servicios a personas que no son sus socios?",
+  "respuesta": "Sí, si esos ingresos superan el 5% de los ingresos totales de la asociación en el ejercicio. En ese caso debe determinar el impuesto sobre la utilidad de esos ingresos conforme al Título II de la Ley, a la tasa del artículo 9 [LISR 80]. El criterio del SAT para asociaciones deportivas confirma esta obligación [SAT 159]. Si no superan ese 5%, el artículo no les impone esta obligación [LISR 80]. No tengo tus cifras de ingresos, así que no puedo determinar en cuál supuesto estás; el SAT también señala que la no contribución del artículo 79, fracción XXVI aplica a asociaciones reconocidas por la CONADE y miembros del Sistema Nacional del Deporte [SAT 159].",
+  "fuentes": {
+   "keys": [
+    "LISR:80"
+   ],
+   "criterios": [
+    159
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "mi-banco-esta-obligado-a-retener-isr-cuando-me-paga-intereses-por-mi-deposito",
+  "pregunta": "¿Mi banco está obligado a retener ISR cuando me paga intereses por mi depósito?",
+  "respuesta": "Sí, en general los bancos, como instituciones del sistema financiero, deben retener y enterar el ISR sobre los intereses que pagan, aplicando la tasa que fije la Ley de Ingresos de la Federación al monto del capital que genera el interés [LISR 54]. Para cuentas de cheques de depósito de sueldos, pensiones o ahorro, no hay retención si el saldo promedio diario no excede el valor anual de 5 UMA, pero sobre la parte que lo exceda sí debe retenerse [RMF 3.16.6]. Cuando la retención se calcula por días, la RMF permite optar por multiplicar 0.00247% por el promedio diario de la inversión y por el número de días [RMF 3.5.4]. Los artículos no indican el valor de la UMA para 2026 ni tu tipo de cuenta o saldo, así que no puedo determinar si estás dentro de la excepción.",
+  "fuentes": {
+   "keys": [
+    "LISR:54",
+    "RMF:3.16.6",
+    "RMF:3.5.4"
+   ],
+   "criterios": []
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "mi-cooperativa-de-consumo-debe-pagar-isr-al-vender-productos-a-sus-socios",
+  "pregunta": "¿Mi cooperativa de consumo debe pagar ISR al vender productos a sus socios?",
+  "respuesta": "Según el criterio normativo del SAT, las sociedades cooperativas de consumo de bienes no deben pagar ISR por la venta de bienes distintos de su activo fijo a sus socios, porque ese ingreso no debe causar el impuesto [SAT 55]. El criterio se basa en que estas cooperativas se crean sin objeto de lucro para adquirir o producir bienes y servicios para consumo de sus socios, y la contraprestación se usa para seguir cumpliendo su objeto [SAT 55]. Los textos que tengo no dicen cómo se trata la venta a personas que no son socias, así que esa parte no puedo responderla con estas fuentes. Para tu caso concreto, conviene confirmarlo con un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    55
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "mi-pick-up-se-considera-camion-de-carga-para-poder-deducir-el-isr",
+  "pregunta": "¿Mi pick‑up se considera camión de carga para poder deducir el ISR?",
+  "respuesta": "Sí, según el criterio normativo del SAT, los vehículos pick-up son camiones de carga, porque el Reglamento de Tránsito los define como camión unitario ligero o pesado [SAT 50]. Esa clasificación cambia el tratamiento de la inversión: para camiones de carga aplica el porcentaje máximo de deducción del 25% y no el límite de $175,000.00 que la ley fija para automóviles [SAT 50]. Sin embargo, la clasificación no garantiza la deducción, pues la inversión también debe ser estrictamente indispensable para la actividad del contribuyente [SAT 152]. Los artículos que me diste no mencionan otros requisitos para deducir la inversión, así que no puedo confirmar el monto deducible de tu caso concreto.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    50,
+    152
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "pierdo-el-derecho-a-compensar-una-perdida-fiscal-si-al-corregir-mi-declaracion",
+  "pregunta": "¿Pierdo el derecho a compensar una pérdida fiscal si, al corregir mi declaración, convierto esa pérdida en utilidad?",
+  "respuesta": "No necesariamente. El derecho a disminuir pérdidas se pierde si no se aplica pudiendo hacerlo [LISR 109] [LISR 57], pero el criterio SAT 54 señala que, al corregir la declaración y convertir la pérdida declarada en utilidad, no se pierde el derecho a disminuir una cantidad igual a la pérdida convertida [SAT 54]. Ese criterio se refiere al artículo 57 de la Ley del ISR, que aplica a personas morales, y condiciona el efecto a que la corrección ocurra cuando la autoridad haya ejercido sus facultades de comprobación [SAT 54]. Los artículos proporcionados no dicen cómo se trata una corrección voluntaria sin revisión de la autoridad, así que no puedo confirmar ese caso. Tampoco incluyen una regla para personas físicas equivalente a SAT 54, aunque LISR 109 establece el mismo plazo de diez ejercicios para disminuir la pérdida [LISR 109].",
+  "fuentes": {
+   "keys": [
+    "LISR:109",
+    "LISR:57"
+   ],
+   "criterios": [
+    54
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puede-el-sat-obligarme-a-pagar-reparto-adicional-de-utilidades-aunque-no-tenga",
+  "pregunta": "¿Puede el SAT obligarme a pagar reparto adicional de utilidades aunque no tenga empleados?",
+  "respuesta": "Sí, según el criterio normativo SAT 37, la autoridad fiscal puede determinar un reparto adicional de utilidades aunque no se compruebe que el contribuyente tenga trabajadores, porque no está obligada a verificar la existencia de relación laboral [SAT 37]. Ese criterio se apoya en los artículos 121, 122, 523 y 526 de la Ley Federal del Trabajo, que le dan al SAT competencia para determinar repartos adicionales cuando la base gravable aumenta [SAT 37]. El mismo criterio señala que no corresponde a la autoridad fiscal comprobar la relación laboral ni el pago del reparto [SAT 37]. Los textos que me diste no incluyen la Ley Federal del Trabajo ni el procedimiento para impugnar esa determinación, así que no puedo precisar plazos, montos ni medios de defensa, y el criterio aparece cortado en la parte sobre contratos colectivos.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    37
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puede-un-gobierno-federal-o-estatal-acreditar-el-iva-y-usarlo-para-compensar-de",
+  "pregunta": "¿Puede un gobierno federal o estatal acreditar el IVA y usarlo para compensar retenciones de ISR?",
+  "respuesta": "Según [SAT 181], no es procedente que la Federación, la Ciudad de México, los Estados y los Municipios acrediten el IVA que no se identifique exclusivamente con actividades gravadas o con tasa 0%, y el criterio expresamente considera improcedente compensar saldos a favor de IVA contra retenciones de ISR. Los artículos citados ([LIVA 3]) establecen esa misma limitación de acreditamiento, aunque no mencionan la compensación contra ISR. El texto disponible de [SAT 181] se corta antes de sus excepciones, así que no puedo confirmar en qué casos los entes públicos sí podrían acreditar, y no tengo información sobre si existe alguna regla que permita la compensación en supuestos específicos.",
+  "fuentes": {
+   "keys": [
+    "LIVA:3"
+   ],
+   "criterios": [
+    181
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-aplicar-la-tasa-0-de-iva-a-servicios-realizados-en-mexico-si-los-vende-un",
+  "pregunta": "¿Puedo aplicar la tasa 0 % de IVA a servicios realizados en México si los vende un comisionista al extranjero?",
+  "respuesta": "No. La Ley solo considera exportación de servicios el aprovechamiento en el extranjero de servicios prestados por residentes en el país [LIVA 29]. El SAT considera práctica fiscal indebida aplicar la tasa del 0% a servicios realizados en territorio nacional, como carga, descarga, transportación o mantenimiento, solo porque se contratan a través de un comisionista mercantil, y también considera indebido asesorar o participar en esa práctica [SAT 174]. El artículo 49 del reglamento establece que los servicios prestados en el extranjero por comisionistas no residentes para exportar bienes o servicios no se consideran importación de servicios, pero eso no hace aplicable la tasa del 0% a servicios ejecutados en México [RLIVA 49]. Los artículos proporcionados no detallan otros supuestos, así que no puedo confirmar si algún caso concreto podría encuadrar en otra excepción.",
+  "fuentes": {
+   "keys": [
+    "LIVA:29",
+    "RLIVA:49"
+   ],
+   "criterios": [
+    174
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-aplicar-la-tasa-del-0-de-iva-al-comprar-rollos-de-pelicula-o-acolchados-mi",
+  "pregunta": "¿Puedo aplicar la tasa del 0 % de IVA al comprar rollos de película o acolchados plásticos para mi cultivo?",
+  "respuesta": "No, según el criterio normativo del SAT, los rollos de película o acolchados plásticos no son herbicidas ni plaguicidas, por lo que no quedan comprendidos en la tasa del 0% para fertilizantes, plaguicidas, herbicidas y fungicidas destinados a la agricultura [SAT 122][LIVA 2-A]. El artículo 5 del CFF exige aplicar de forma estricta las normas que establecen cargas, y el criterio señala que ese beneficio no puede extenderse a productos no previstos en la ley [SAT 122]. Los artículos proporcionados no indican qué tasa corresponde a estos productos, así que esa parte no puede responderse con esta información.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A"
+   ],
+   "criterios": [
+    122
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-considerar-como-iva-acreditable-el-16-que-me-cobran-en-una-operacion-o-con",
+  "pregunta": "¿Puedo considerar como IVA acreditable el 16 % que me cobran en una operación exenta o con tasa 0 %?",
+  "respuesta": "No, en principio no. El acreditamiento consiste en restar el IVA trasladado o pagado en importación en el mes [LIVA 4], y solo es acreditable el impuesto que corresponda a bienes, servicios o usos estrictamente indispensables para actividades gravadas al 16% o a la tasa del 0% [LIVA 5]. El SAT considera práctica indebida que, en actos exentos o a tasa 0%, se cobre un 16% adicional que el adquirente toma como IVA acreditable [SAT 179]. Los artículos citados no indican cómo se corrige ese cobro en tu situación.",
+  "fuentes": {
+   "keys": [
+    "LIVA:4",
+    "LIVA:5"
+   ],
+   "criterios": [
+    179
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-considerar-la-venta-de-certificados-inmobiliarios-de-tiempo-compartido-de",
+  "pregunta": "¿Puedo considerar la venta de certificados inmobiliarios de tiempo compartido como enajenación de casa habitación para no pagar ISR e IVA?",
+  "respuesta": "No, no puedes tratar esa venta como enajenación de casa habitación para no pagar ISR ni IVA. El SAT considera una práctica fiscal indebida considerar como enajenación de casa habitación, para efectos de ISR e IVA, la de certificados inmobiliarios que representen membresías de tiempo compartido con créditos vacacionales canjeables [SAT 147]. La exención del IVA solo alcanza a certificados de participación inmobiliaria no amortizables u otros títulos que den derechos sobre inmuebles distintos a casa habitación o suelo, por lo que estos títulos no quedan exentos por esa vía [LIVA 9] [SAT 147]. Los ingresos de este tipo se someten al régimen general aplicable, y en las personas físicas el tratamiento de los certificados de participación inmobiliaria no amortizables se regula en [LISR 126] y [LISR 188]. Los artículos proporcionados no establecen las tasas ni los cálculos aplicables a tu caso concreto, por lo que conviene revisarlo con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LIVA:9",
+    "LISR:126",
+    "LISR:188"
+   ],
+   "criterios": [
+    147
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-como-donativo-la-mercancia-deteriorada-que-elimino-de-mis",
+  "pregunta": "¿Puedo deducir como donativo la mercancía deteriorada que elimino de mis inventarios?",
+  "respuesta": "No. El importe de la mercancía deteriorada que se deduce de los inventarios no constituye un donativo deducible [SAT 168]. Es una deducción de inventarios que procede en el ejercicio en que la mercancía pierde su valor por causas no imputables al contribuyente [LISR 27]. Solo si se trata de bienes básicos para la subsistencia (alimentación, vestido, vivienda o salud) debes ofrecerlos en donación a instituciones autorizadas antes de destruirlos [LISR 27] [RLISR 108]. En cualquier caso, la destrucción requiere un aviso presentado cuando menos treinta días antes [RLISR 107], y para bienes básicos, un aviso ante el SAT con al menos quince días de anticipación [RLISR 108], conforme a la ficha 3/ISR del Anexo 2 [RMF 3.3.1.14].",
+  "fuentes": {
+   "keys": [
+    "LISR:27",
+    "RLISR:108",
+    "RLISR:107",
+    "RMF:3.3.1.14"
+   ],
+   "criterios": [
+    168
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-como-gasto-la-compra-de-cable-de-datos-o-de-refrigeradores-que-en",
+  "pregunta": "¿Puedo deducir como gasto la compra de cable de datos o de refrigeradores que vendo en mi negocio?",
+  "respuesta": "No, en general no. El criterio SAT 143 considera indebido deducir como gasto la compra de cable para transmitir datos, salvo que sea para mantenimiento o reparación, y lo mismo aplica a refrigeradores puestos a disposición de detallistas [SAT 143]. Esos refrigeradores y enfriadores, si no transmites su propiedad, pueden deducirse como inversión en cinco años, a razón de una quinta parte por año, siempre que tengas documentación que acredite que su vida útil no excede de cinco años [RMF 3.3.2.1]. Si vendes los refrigeradores y transmites su propiedad, su costo se trata como adquisición de mercancías para enajenar, conforme a [LISR 103] fracción II para personas físicas o [LISR 39] para personas morales. Los artículos proporcionados no dicen si el cable de datos es mercancía para venta, así que no puedo confirmar ese caso con estas fuentes.",
+  "fuentes": {
+   "keys": [
+    "RMF:3.3.2.1",
+    "LISR:103",
+    "LISR:39"
+   ],
+   "criterios": [
+    143
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-como-gasto-los-derechos-federativos-que-paga-mi-club-para-a-un",
+  "pregunta": "¿Puedo deducir como gasto los derechos federativos que paga mi club para inscribir a un atleta?",
+  "respuesta": "No, según el criterio del SAT, los derechos federativos que paga un club para inscribir a un atleta no deben tratarse como gasto. El SAT considera indebida esa práctica y la clasifica como inversión en la modalidad de gasto diferido [SAT 157]. Como inversión, se deduce aplicando cada ejercicio un porcentaje máximo sobre el monto original, que para gastos diferidos es de 15% anual, conforme a los artículos 31, 32 y 33 de la Ley del ISR [SAT 157]. El criterio no detalla un caso particular, así que no puedo precisar cómo aplicaría a tu club.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    157
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-de-mi-isr-los-donativos-que-hago-a-una-escuela-privada-sin-recibir",
+  "pregunta": "¿Puedo deducir de mi ISR los donativos que hago a una escuela privada sin recibir nada a cambio?",
+  "respuesta": "Sí, en principio. Las personas físicas pueden deducir donativos no onerosos ni remunerativos a instituciones de enseñanza si la escuela tiene autorización o reconocimiento de validez oficial de estudios, los recursos se destinan a bienes de inversión, investigación o desarrollo de tecnología, o a gastos de administración hasta el monto que fije el Reglamento, y la escuela no ha distribuido remanentes a sus socios en los últimos cinco años [LISR 151] [SAT 154]. La escuela también debe estar autorizada por el SAT para recibir donativos deducibles [RMF 3.10.1.1]. El total de donativos deducibles no puede exceder el 7% de los ingresos acumulables del ejercicio anterior, o el 4% si el donativo es a la Federación, a una entidad federativa o a un municipio [LISR 151]. Si el pago da derecho a acceder a eventos o a recibir bienes, servicios o beneficios, se considera oneroso y no es deducible [RLISR 130], y las colegiaturas se consideran cuotas de recuperación, no donativos [SAT 57]. Los artículos proporcionados no indican el monto de gastos de administración que fija el Reglamento, así que esa cifra falta.",
+  "fuentes": {
+   "keys": [
+    "LISR:151",
+    "RMF:3.10.1.1",
+    "RLISR:130"
+   ],
+   "criterios": [
+    154,
+    57
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-del-isr-el-deducible-que-pago-de-mi-seguro-de-gastos-medicos",
+  "pregunta": "¿Puedo deducir del ISR el deducible que pago de mi seguro de gastos médicos?",
+  "respuesta": "No, el deducible que pagas de tu seguro de gastos médicos no es una deducción personal para efectos del ISR, porque no es un gasto médico ni una prima de ese seguro: es una contraprestación del servicio de la aseguradora [SAT 72]. Solo las primas por seguros de gastos médicos figuran entre las deducciones personales del artículo 151, fracción VI de la Ley del ISR [SAT 72]. Los artículos que me diste no dicen más sobre tu caso particular, así que no puedo confirmar requisitos adicionales para tu declaración.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    72
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-el-gas-de-empaque-que-utilizo-en-mi-negocio-de-transporte-de-gas",
+  "pregunta": "¿Puedo deducir el gas de empaque que utilizo en mi negocio de transporte de gas natural?",
+  "respuesta": "Sí, pero no como gasto de combustible. El SAT considera que el gas de empaque forma parte de la infraestructura fija del transporte de gas natural, no se usa como combustible ni se enajena, y por ello tiene naturaleza de activo fijo [SAT 79]. Se deduce a la tasa máxima del 10% anual sobre el monto original de la inversión, según el artículo 35, fracción VI de la Ley del ISR, citado en ese criterio [SAT 79]. Tratarlo como gasto deducible en su totalidad es una práctica que el SAT considera indebida [SAT 143]. Los artículos que me proporcionaste no incluyen el texto completo de ese artículo 35, así que no puedo verificar otras condiciones ni plazos.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    79,
+    143
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-el-gasto-de-un-auto-que-me-prestaron-en-comodato-si-no-lo-utilizo",
+  "pregunta": "¿Puedo deducir el gasto de un auto que me prestaron en comodato si no lo utilizo para mi actividad comercial?",
+  "respuesta": "No, en principio no. El SAT considera indebido deducir inversiones en automóviles otorgados en comodato que no se utilizan para las actividades propias del contribuyente [SAT 152]. Además, la deducción de automóviles exige que sean estrictamente indispensables para la actividad [LISR 28] [LISR 36], y para personas físicas la ley señala que en ningún caso son deducibles las inversiones o los pagos por el uso o goce temporal de automóviles [LISR 148]. La única excepción que mencionan los artículos es la de los coordinados que pagan individualmente y deducen gastos del vehículo que administran, siempre que la documentación identifique ese vehículo [LISR 73]. Los artículos no regulan el caso de un comodato usado en parte para la actividad, así que para tu situación particular conviene consultar a un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LISR:28",
+    "LISR:36",
+    "LISR:148",
+    "LISR:73"
+   ],
+   "criterios": [
+    152
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-el-isr-que-pague-en-el-extranjero-si-el-proceso-amistoso-no-con-un",
+  "pregunta": "¿Puedo deducir el ISR que pagué en el extranjero si el proceso amistoso no termina con un acuerdo?",
+  "respuesta": "No. El excedente del ISR pagado en el extranjero por encima de lo previsto en el tratado solo puede acreditarse una vez agotado el procedimiento de resolución de controversias del tratado [LISR 5]. Si el procedimiento amistoso concluye sin acuerdo, o con un acuerdo que el contribuyente no acepta, el excedente no es acreditable [SAT 31], y la parte no acreditable tampoco es deducible [LISR 5]. Los artículos proporcionados no indican cómo se trata la parte pagada dentro del límite del tratado, así que no puedo responder sobre ese monto.",
+  "fuentes": {
+   "keys": [
+    "LISR:5"
+   ],
+   "criterios": [
+    31
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-el-resultado-fiscal-que-me-distribuye-el-fideicomiso-de",
+  "pregunta": "¿Puedo deducir el resultado fiscal que me distribuye el fideicomiso de certificados inmobiliarios?",
+  "respuesta": "No, los artículos no prevén una deducción por ese concepto. Los tenedores residentes en México acumulan el resultado fiscal distribuido sin deducir el impuesto retenido, y pueden acreditar ese impuesto contra el ISR del ejercicio en que se distribuya [LISR 188]. Si eres persona física, ese resultado se considera ingreso por otorgar el uso o goce temporal de bienes inmuebles, conforme al artículo 114, fracción II [LISR 188]. El SAT considera indebido aplicar a estas distribuciones la deducción del artículo 115, segundo párrafo, de la Ley [SAT 165]. Los artículos que se me proporcionaron no reproducen el texto completo del artículo 115, así que no puedo precisar sus requisitos. Para tu caso concreto, consulta con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LISR:188"
+   ],
+   "criterios": [
+    165
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-el-sobreprecio-que-pague-al-comprar-un-bien",
+  "pregunta": "¿Puedo deducir el sobreprecio que pagué al comprar un bien?",
+  "respuesta": "No, el sobreprecio que pagas por encima del valor real, nominal o de mercado de un bien no es deducible para efectos del ISR [SAT 48]. La LISR no permite deducir el crédito comercial, aun cuando se haya adquirido de terceros [LISR 28]. Además, en las personas morales, el costo de adquisición solo es deducible hasta el precio de mercado, y el excedente no lo es [LISR 27]. Los artículos proporcionados no tratan los casos de personas físicas que adquieren bienes, así que no puedo confirmar si aplica otro tratamiento para ellas.",
+  "fuentes": {
+   "keys": [
+    "LISR:28",
+    "LISR:27"
+   ],
+   "criterios": [
+    48
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-en-mi-declaracion-de-impuestos-los-regalos-que-le-doy-a-un-publico",
+  "pregunta": "¿Puedo deducir en mi declaración de impuestos los regalos que le doy a un funcionario público?",
+  "respuesta": "No puedes deducir regalos a un funcionario público: el SAT considera que las dádivas a servidores públicos no son deducibles para efectos del ISR, y que cualquier erogación que encuadre en los delitos de cohecho contraviene las leyes de orden público, por lo que no puede considerarse deducción autorizada [SAT 47]. Lo anterior se apoya en que el artículo 28, fracción III de la LISR excluye los obsequios y atenciones como deducción [SAT 47]. Los artículos proporcionados no desarrollan más supuestos, así que no puedo confirmar si existe alguna excepción fuera de los citados.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    47
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-gastos-que-pague-a-una-persona-que-no-trabaja-para-mi-ni-me-presta",
+  "pregunta": "¿Puedo deducir gastos que pagué a una persona que no trabaja para mí ni me presta servicios?",
+  "respuesta": "El criterio [SAT 142] indica que no son deducibles las erogaciones a favor de personas con las que no se tenga relación laboral ni prestación de servicios profesionales, porque no se consideran estrictamente indispensables para la actividad del contribuyente [SAT 142]. Esto se apoya en que el artículo 28, fracción V de la Ley solo admite viáticos y gastos de viaje cuando beneficien a personas con relación de trabajo o que presten servicios profesionales [SAT 142]. Los artículos proporcionados no contienen una regla general que cubra cualquier pago a terceros, así que no puedo confirmar el tratamiento de otros supuestos distintos; para ello haría falta revisar el caso concreto con un asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    142
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-las-regalias-que-pago-a-una-empresa-relacionada-en-el-extranjero",
+  "pregunta": "¿Puedo deducir las regalías que pago a una empresa relacionada en el extranjero por usar un activo intangible originado en México?",
+  "respuesta": "Según el criterio [SAT 140], el SAT considera práctica indebida deducir regalías pagadas a partes relacionadas residentes en el extranjero por el uso de activos intangibles originados en México, cuando esos activos hayan sido propiedad del contribuyente o de una parte relacionada residente en México y su transmisión se haya hecho sin contraprestación o a un precio inferior al de mercado. Los artículos que se me proporcionaron no permiten determinar si la deducción procede en otros supuestos, así que no puedo dar una respuesta general. El criterio cita los artículos 27 y 105 de la Ley del ISR, cuyo texto no se incluye aquí, y el texto de [SAT 140] aparece incompleto, por lo que conviene revisar la fuente completa.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    140
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-los-costos-de-una-obra-inmobiliaria-si-todavia-no-he-acumulado-los",
+  "pregunta": "¿Puedo deducir los costos de una obra inmobiliaria si todavía no he acumulado los ingresos de esa obra en el ejercicio?",
+  "respuesta": "En general, no: la deducción de las erogaciones de una obra inmobiliaria se vincula con el ingreso de esa obra. Quienes realizan desarrollos inmobiliarios o fraccionamientos pueden deducir sus costos directos e indirectos estimados en los ejercicios en que obtengan los ingresos de la obra [LISR 30]. Si prestas servicios derivados de contratos de obra inmueble, solo puedes deducir en el ejercicio el costo de los avances aprobados por el cliente cuando se pagaron dentro de los tres meses siguientes a su aprobación; si no se cumple ese supuesto, la deducción procede en el ejercicio en que se acumule el ingreso [RMF 3.3.3.3]. El SAT considera indebido deducir costos de ingresos no acumulados en el ejercicio, aunque su criterio cita el régimen de la Ley anterior a 2014 [SAT 155]. Los artículos proporcionados no cubren otros supuestos, así que no puedo determinar tu caso concreto con esta información.",
+  "fuentes": {
+   "keys": [
+    "LISR:30",
+    "RMF:3.3.3.3"
+   ],
+   "criterios": [
+    155
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-los-gastos-de-una-operacion-que-realice-usando-efectivo-o-divisas",
+  "pregunta": "¿Puedo deducir los gastos de una operación que realicé usando efectivo o divisas si esa operación está prohibida por la ley?",
+  "respuesta": "No, según el criterio normativo [SAT 43], si realizas actos u operaciones previstos en el artículo 32 de la Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita, que prohíbe liquidar o pagar mediante monedas, billetes, divisas o metales preciosos en los supuestos que ese artículo señala, las erogaciones relacionadas con esas operaciones no son deducibles, porque se realizaron en contravención a una ley de orden público. Los artículos que se me proporcionaron no detallan los supuestos concretos del artículo 32 de esa ley, por lo que no puedo confirmar si tu operación encaja en ellos; falta esa información para responder de forma completa. Para tu caso, conviene revisar el texto de ese artículo y consultar a un asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    43
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-los-intereses-que-me-genero-un-prestamo-aunque-no-los-haya-pagado",
+  "pregunta": "¿Puedo deducir los intereses que me generó un préstamo aunque no los haya pagado todavía?",
+  "respuesta": "Para personas morales, el SAT indica que los intereses devengados a cargo en el ejercicio son deducibles sin ajuste, y que esa deducción no requiere que se hayan pagado [SAT 42]. Quedan fuera los intereses moratorios y los del artículo 27, fracción VIII, que solo son deducibles al pagarse en efectivo, en bienes o en servicios [SAT 42] [LISR 27]. También deben cumplirse los demás requisitos, como que el gasto sea estrictamente indispensable, esté registrado en contabilidad y el préstamo se haya invertido en los fines del negocio [SAT 42]. Si las inversiones o gastos financiados no son deducibles, o solo lo son en parte, los intereses seguirán esa misma proporción [LISR 27]. Los artículos que tengo no tratan el caso de personas físicas, así que no puedo confirmar si la regla aplica a tu situación.",
+  "fuentes": {
+   "keys": [
+    "LISR:27"
+   ],
+   "criterios": [
+    42
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-los-intereses-que-obtengo-al-invertir-los-fondos-de-mi-reserva",
+  "pregunta": "¿Puedo deducir los intereses que obtengo al invertir los fondos de mi reserva para pensiones?",
+  "respuesta": "No, según el criterio del SAT, los intereses derivados de la inversión o reinversión de los fondos destinados a la creación o incremento de reservas para pensiones o jubilaciones complementarias a las previstas en la LSS no son deducibles para el fideicomitente, y deducirlos constituye una práctica fiscal indebida [SAT 139]. El SAT sostiene que, al constituirse el fideicomiso, esos intereses ya no afectan el patrimonio del fideicomitente ni derivan de una erogación que él haya hecho [SAT 139]. Los artículos proporcionados no establecen el tratamiento fiscal de los rendimientos de la reserva en otros supuestos, así que no puedo confirmar más allá de este criterio; para tu caso particular, consulta con un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    139
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-deducir-una-perdida-cambiaria-de-una-deuda-con-mi-empresa-hermana-en-el-mi",
+  "pregunta": "¿Puedo deducir una pérdida cambiaria de una deuda con mi empresa hermana en el extranjero que supera tres veces mi capital?",
+  "respuesta": "Según el criterio normativo del SAT, las pérdidas cambiarias por fluctuación de la moneda extranjera que deriven de deudas que excedan el triple del capital, contraídas con partes relacionadas residentes en el extranjero en los términos del artículo 179, no son deducibles [SAT 49]. Esto se apoya en el artículo 28, fracción XXVII, que niega la deducción de los intereses de ese exceso [LISR 28], y en el artículo 8, sexto párrafo, que da a las pérdidas cambiarias el mismo tratamiento que a los intereses [SAT 49]. El exceso se calcula restando del saldo promedio anual de las deudas que devengan intereses la cantidad que resulta de multiplicar por tres el cociente de dividir entre dos la suma del capital contable al inicio y al final del ejercicio [LISR 28]. Los artículos proporcionados no definen qué es parte relacionada según el artículo 179, así que la calificación de tu empresa hermana debe verificarse con ese precepto, que no se incluye aquí.",
+  "fuentes": {
+   "keys": [
+    "LISR:28"
+   ],
+   "criterios": [
+    49
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-descontar-como-perdida-la-venta-de-la-nuda-propiedad-de-un-bien-que-habia",
+  "pregunta": "¿Puedo descontar como pérdida la venta de la nuda propiedad de un bien que había entregado en usufructo?",
+  "respuesta": "No, según el criterio del SAT, deducir pérdidas por la venta de la nuda propiedad de un bien otorgado en usufructo es una práctica fiscal indebida [SAT 149]. Para la enajenación de solo uno de los atributos, la ley determina la ganancia restando del precio la parte proporcional del monto original de la inversión, según un avalúo practicado por persona autorizada por las autoridades fiscales [LISR 19]. El texto del criterio que se te proporcionó está incompleto, así que no puedo detallar todos sus fundamentos. Tampoco encuentro en los artículos entregados una regla que permita esa deducción en este caso.",
+  "fuentes": {
+   "keys": [
+    "LISR:19"
+   ],
+   "criterios": [
+    149
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-entregar-a-mis-trabajadores-los-beneficios-de-prevision-social-en-efectivo",
+  "pregunta": "¿Puedo entregar a mis trabajadores los beneficios de previsión social en efectivo y aun así deducirlos del ISR?",
+  "respuesta": "No. El SAT considera indebida la práctica de otorgar previsión social en efectivo o en otros medios equivalentes [SAT 151]. La LISR solo permite deducir estas prestaciones cuando se otorgan en forma general a todos los trabajadores [LISR 27], y los vales de despensa solo son deducibles si se entregan a través de monederos electrónicos autorizados por el SAT [LISR 27]. Los artículos proporcionados no dicen expresamente que el pago en efectivo impida la deducción, así que esa conclusión se apoya en el criterio [SAT 151].",
+  "fuentes": {
+   "keys": [
+    "LISR:27"
+   ],
+   "criterios": [
+    151
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-incluir-el-iva-acreditable-al-calcular-el-ajuste-anual-por-inflacion",
+  "pregunta": "¿Puedo incluir el IVA acreditable al calcular el ajuste anual por inflación?",
+  "respuesta": "No, el IVA acreditable no debe considerarse al calcular el ajuste anual por inflación. El SAT establece que el IVA acreditable no es un crédito a favor del contribuyente ni una cuenta por cobrar frente a la autoridad, porque solo sirve para restar o acreditar contra el IVA trasladado en el mismo contribuyente [SAT 51]. Por ello, no entra en el saldo promedio de créditos que se usa para el ajuste conforme al artículo 44 de la LISR, que se calcula con los saldos de créditos y deudas al último día de cada mes [LISR 44] [SAT 51]. Los artículos que se te dieron no contienen más detalle sobre el tratamiento de otros conceptos de IVA en este cálculo.",
+  "fuentes": {
+   "keys": [
+    "LISR:44"
+   ],
+   "criterios": [
+    51
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-interponer-un-recurso-de-revocacion-contra-la-remocion-del-depositario",
+  "pregunta": "¿Puedo interponer un recurso de revocación contra la remoción del depositario?",
+  "respuesta": "No, según el criterio normativo del SAT [SAT 17], la impugnación de la remoción del depositario es improcedente porque la remoción es una facultad discrecional de la autoridad que no afecta el interés jurídico del depositario, por lo que no constituye una resolución que cause agravio y no procede el recurso de revocación. Esto se apoya en que los jefes de las oficinas ejecutoras nombran y remueven libremente a los depositarios [CFF 153]. Sin embargo, los artículos proporcionados no contienen una regla que regule la remoción del depositario frente a terceros, por lo que no puedo precisar si otra persona afectada tendría algún medio de impugnación distinto.",
+  "fuentes": {
+   "keys": [
+    "CFF:153"
+   ],
+   "criterios": [
+    17
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-presentar-recurso-de-revocacion-contra-una-carta-invitacion-citatorio-o-de",
+  "pregunta": "¿Puedo presentar recurso de revocación contra una carta invitación, citatorio o formulario múltiple de pago?",
+  "respuesta": "No, según el criterio normativo del SAT, las cartas invitación, los citatorios y los formularios múltiples de pago no son resoluciones que afecten el interés jurídico del contribuyente ni constituyen resoluciones definitivas, por lo que el recurso de revocación se desecharía por improcedente [SAT 16]. Esto se apoya en el artículo 117, fracción I, inciso d) del CFF, que hace procedente el recurso contra resoluciones definitivas que causen agravio en materia fiscal [CFF 117]. Los artículos que se me proporcionaron no dicen si procede algún otro medio de defensa contra estos documentos.",
+  "fuentes": {
+   "keys": [
+    "CFF:117"
+   ],
+   "criterios": [
+    16
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-solicitar-la-autorizacion-para-enajenar-mis-acciones-a-costo-fiscal-si-no",
+  "pregunta": "¿Puedo solicitar la autorización para enajenar mis acciones a costo fiscal si no tengo costo promedio por acción?",
+  "respuesta": "No, no puedes solicitar la autorización si tus acciones no tienen costo promedio por acción. El SAT señala que no se actualiza el supuesto para otorgarla en ese caso, porque el artículo 22, fracción III, tercer párrafo, segunda oración de la Ley del ISR establece que esas acciones no tienen costo promedio por acción [SAT 39][LISR 24][LISR 22]. Además, el artículo 24 exige que el costo promedio de las acciones se determine a la fecha de la enajenación conforme a los artículos 22 y 23 [LISR 24]. Los artículos proporcionados no indican qué otros supuestos aplican fuera de este caso.",
+  "fuentes": {
+   "keys": [
+    "LISR:24",
+    "LISR:22"
+   ],
+   "criterios": [
+    39
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-solicitar-la-devolucion-del-impuesto-que-ya-pago-la-empresa-cuando-me",
+  "pregunta": "¿Puedo solicitar la devolución del impuesto que ya pagó la empresa cuando me distribuye dividendos?",
+  "respuesta": "Sí. Según el criterio del SAT, las personas físicas que reciben dividendos pueden acreditar contra el impuesto de su declaración anual el ISR que pagó la sociedad que los distribuyó, y si de ello resulta saldo a favor, pueden solicitar su devolución o compensarlo [SAT 67]. La devolución se limita al impuesto efectivamente pagado o retenido: si el impuesto a su cargo es menor que el monto acreditable, solo puede recuperar lo que realmente se pagó o retuvo [SAT 67]. El 10% adicional que retiene la empresa es un pago definitivo [LISR 140]. Los artículos que tengo no describen el procedimiento, los plazos ni el cálculo de esta devolución, por lo que esos detalles no puedo confirmarlos.",
+  "fuentes": {
+   "keys": [
+    "LISR:140"
+   ],
+   "criterios": [
+    67
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-solicitar-la-devolucion-del-subsidio-para-el-empleo-que-no-logre-acreditar",
+  "pregunta": "¿Puedo solicitar la devolución del subsidio para el empleo que no logré acreditar?",
+  "respuesta": "Sí, según el criterio normativo del SAT, es factible recuperar por devolución el remanente del subsidio para el empleo que no se acreditó [SAT 62], con fundamento en que las autoridades fiscales devuelven las cantidades pagadas indebidamente o que procedan conforme a las leyes fiscales [CFF 22]. Sin embargo, no será acreditable si no se anotó el monto del subsidio de manera expresa y por separado en los comprobantes fiscales de nómina entregados a los trabajadores [RMF 3.17.13]. Los artículos proporcionados no establecen el procedimiento, los plazos ni los requisitos específicos para solicitar esta devolución, así que esa parte no puedo responderla con esta información.",
+  "fuentes": {
+   "keys": [
+    "CFF:22",
+    "RMF:3.17.13"
+   ],
+   "criterios": [
+    62
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-transferir-un-estimulo-fiscal-a-otro-contribuyente-mediante-asuncion-de",
+  "pregunta": "¿Puedo transferir un estímulo fiscal a otro contribuyente mediante asunción de responsabilidad solidaria?",
+  "respuesta": "No, los artículos proporcionados no permiten transferir un estímulo fiscal a otro contribuyente mediante asunción de responsabilidad solidaria. El SAT considera esa práctica indebida: transferir el importe del estímulo a un tercero para que pague las contribuciones propias, acreditando estímulos a los que no se tiene derecho, equivale a una conducta similar al delito de defraudación fiscal [SAT 136]. Los estímulos solo pueden acreditarse contra las contribuciones que efectivamente se deben pagar, y el contribuyente debe cumplir los requisitos del estímulo que le corresponde [CFF 25-A] [CFF 25] [SAT 136]. Los artículos no describen otros supuestos en los que sea posible esta transferencia, así que no puedo confirmar más allá de esto.",
+  "fuentes": {
+   "keys": [
+    "CFF:25-A",
+    "CFF:25"
+   ],
+   "criterios": [
+    136
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "puedo-usar-la-normativa-vigente-al-momento-de-generar-la-perdida-para-calcularla",
+  "pregunta": "¿Puedo usar la normativa vigente al momento de generar la pérdida para calcularla, aunque cambie después?",
+  "respuesta": "Según el criterio del SAT, la pérdida fiscal disminuible se calcula conforme a las disposiciones vigentes al momento de causarse el ISR, porque las normas sobre su cálculo y actualización forman parte del mecanismo para determinar el impuesto [SAT 0]. Ese criterio se apoya en el artículo 6o. del CFF, que el texto que me diste no incluye, así que solo puedo confirmarlo por lo que dice el criterio [SAT 0]. Los artículos LISR 57 y LISR 109 regulan la actualización de la pérdida, pero no indican qué versión aplicar si la norma cambia, por lo que esa respuesta depende del criterio citado [LISR 57] [LISR 109].",
+  "fuentes": {
+   "keys": [
+    "LISR:57",
+    "LISR:109"
+   ],
+   "criterios": [
+    0
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-actividades-se-consideran-transformacion-en-una-operacion-de-maquila",
+  "pregunta": "¿Qué actividades se consideran “transformación” en una operación de maquila?",
+  "respuesta": "Según el artículo 181 de la LISR, se consideran transformación la dilución en agua o en otras sustancias; el lavado o limpieza, incluida la remoción de óxido, grasa, pintura u otros recubrimientos; la aplicación de conservadores, como lubricantes, encapsulación protectora o pintura para conservación; el ajuste, limado o corte; el acondicionamiento en dosis; el empacado, reempacado, embalado o reembalado; el sometimiento a pruebas; y el marcado, etiquetado o clasificación [LISR 181]. También se considera transformación el desarrollo de un producto, excepto tratándose de marcas, avisos comerciales y nombres comerciales [LISR 181]. El SAT aclara que estos procesos son adicionales al proceso de transformación industrial a que se refiere el primer párrafo de la fracción, y no lo sustituyen [SAT 74].",
+  "fuentes": {
+   "keys": [
+    "LISR:181"
+   ],
+   "criterios": [
+    74
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-consecuencias-tengo-si-no-presento-la-informacion-del-iva-de-mis-proveedores",
+  "pregunta": "¿Qué consecuencias tengo si no presento la información del IVA de mis proveedores en el formato y plazo establecidos?",
+  "respuesta": "Si no presenta la información mensual de pago, retención, acreditamiento y traslado del IVA con sus proveedores por los medios electrónicos, en el formato o con los datos completos, o fuera del día 17 del mes siguiente, comete la infracción del artículo 81, fracción XXVI del CFF, y basta con una de estas conductas para que se configure [SAT 15, LIVA 32]. Además, si la autoridad le requiere esa información y no la entrega, se configura otra infracción, la del artículo 81, fracción I del CFF [SAT 15]. Los artículos proporcionados no indican las multas ni sanciones aplicables, por lo que no puedo precisar montos.",
+  "fuentes": {
+   "keys": [
+    "LIVA:32"
+   ],
+   "criterios": [
+    15
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-debo-hacer-con-el-saldo-a-favor-del-iva-que-me-quedo-despues-de-acreditarlo",
+  "pregunta": "¿Qué debo hacer con el saldo a favor del IVA que me quedó después de acreditarlo en una declaración posterior?",
+  "respuesta": "Si ya acreditaste parte de un saldo a favor en una declaración posterior y te queda remanente, debes seguir acreditándolo contra el IVA a tu cargo en los meses siguientes hasta agotarlo [LIVA 6]. El SAT considera que en este caso no procede la devolución del remanente [SAT 107]. La devolución solo puede pedirse sobre el total del saldo, y los saldos cuya devolución se solicite no pueden acreditarse en declaraciones posteriores [LIVA 6]. Los artículos que tengo no indican qué pasa si el remanente no se agota en un plazo determinado, así que esa parte no puedo responderla.",
+  "fuentes": {
+   "keys": [
+    "LIVA:6"
+   ],
+   "criterios": [
+    107
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-debo-hacer-con-las-perdidas-fiscales-de-una-subsidiaria-que-se-desincorpora",
+  "pregunta": "¿Qué debo hacer con las pérdidas fiscales de una subsidiaria que se desincorpora de la consolidación?",
+  "respuesta": "Según el criterio SAT 145, si la controladora determinó su resultado fiscal consolidado conforme al régimen anterior al 2014, al desincorporar una controlada debe sumar a su utilidad fiscal consolidada, o restar a su pérdida fiscal consolidada del ejercicio inmediato anterior, las pérdidas fiscales de ejercicios anteriores que la controlada tenía derecho a disminuir en lo individual en el momento de la desincorporación, considerando solo los ejercicios en que esas pérdidas se restaron para determinar el resultado consolidado [SAT 145]. No hacer ese ajuste se considera práctica fiscal indebida [SAT 145], y la pérdida disminuible se calcula conforme a las disposiciones vigentes al causarse el ISR [SAT 0]. Los artículos que se me proporcionaron no regulan el régimen consolidado vigente ni el régimen opcional para grupos de sociedades, y el texto de SAT 145 está truncado en la enumeración de supuestos indebidos, así que no puedo precisar otros casos. Para tu situación concreta, conviene consultar a un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    145,
+    0
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-debo-hacer-si-el-precio-de-mi-operacion-con-una-parte-relacionada-esta-fuera",
+  "pregunta": "¿Qué debo hacer si el precio de mi operación con una parte relacionada está fuera del rango intercuartil?",
+  "respuesta": "Si el precio de tu operación con una parte relacionada queda fuera del rango ajustado, la ley considera que el precio que hubieran utilizado partes independientes es la mediana de ese rango [LISR 180]. El rango se obtiene ordenando los valores de forma ascendente y aplicando el método intercuartil del Reglamento [RLISR 302]. Si el precio está dentro del rango, no debe modificarse, y el SAT considera indebida esa práctica [SAT 162]. Para deducir un ajuste de precios de transferencia, debes obtener y conservar la documentación que identifique que la operación original no consideró precios de mercado [RMF 3.9.1.3]. Los artículos proporcionados no describen el procedimiento formal para presentar el ajuste ni las cifras de los percentiles, así que esa parte no puedo responderla con estas fuentes.",
+  "fuentes": {
+   "keys": [
+    "LISR:180",
+    "RLISR:302",
+    "RMF:3.9.1.3"
+   ],
+   "criterios": [
+    162
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-documento-me-enviara-la-autoridad-si-detecta-que-mis-gastos-son-mayores-que",
+  "pregunta": "¿Qué documento me enviará la autoridad si detecta que mis gastos son mayores que mis ingresos declarados?",
+  "respuesta": "Si la autoridad detecta una discrepancia fiscal, le notificará un oficio que indique el monto de las erogaciones detectadas, la información utilizada para conocerlas, el medio por el cual se obtuvo y la discrepancia resultante [LISR 91]. Según el criterio del SAT, el resultado de la comprobación se da a conocer mediante oficio y, en su caso, en la última acta parcial o complementaria [SAT 8]. Después de notificado ese oficio, usted tendrá veinte días, contados desde el día siguiente a la notificación, para informar por escrito el origen de los recursos y ofrecer las pruebas que considere idóneas [LISR 91]. Los artículos proporcionados no detallan otros requisitos formales del oficio.",
+  "fuentes": {
+   "keys": [
+    "LISR:91"
+   ],
+   "criterios": [
+    8
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-equipos-pueden-considerarse-integrados-a-un-invernadero-hidroponico-para-la",
+  "pregunta": "¿Qué equipos pueden considerarse integrados a un invernadero hidropónico para aplicar la tasa del 0 % de IVA?",
+  "respuesta": "Según el criterio normativo del SAT, tienen el carácter de equipos integrados a invernaderos hidropónicos los bienes tangibles, tengan o no la calidad de activo fijo, que se enajenen conjuntamente con el invernadero y así se haga constar en el CFDI, siempre que el invernadero sea un producto terminado y los equipos cumplan su función en conjunto con él, es decir, que produzcan temperatura y humedad controladas o protejan los cultivos de elementos naturales [SAT 100]. Los bienes que se vendan de manera individual como insumos para la producción, mejora, reparación o mantenimiento de los invernaderos no califican y no se gravan a tasa del 0% [SAT 100]. Lo anterior se basa en el artículo 2-A, fracción I, inciso g), que menciona invernaderos hidropónicos y equipos integrados a ellos, así como equipos de irrigación [LIVA 2-A]. Los artículos proporcionados no especifican qué bienes concretos entran en esa categoría, por lo que esa lista no se puede precisar con esta información.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A"
+   ],
+   "criterios": [
+    100
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-formas-de-pago-debo-usar-para-que-mis-gastos-medicos-dentales-o-de-sean",
+  "pregunta": "¿Qué formas de pago debo usar para que mis gastos médicos, dentales o de psicología sean deducibles?",
+  "respuesta": "Según el artículo 151, fracción I de la LISR, el pago debe hacerse con cheque nominativo del contribuyente, con transferencia electrónica desde una cuenta a su nombre en una institución del sistema financiero o entidad autorizada por el Banco de México, o con tarjeta de crédito, de débito o de servicios [LISR 151]. La regla 3.17.10 incluye los honorarios dentales dentro de esa misma fracción, por lo que aplican las mismas formas de pago [RMF 3.17.10]. El criterio SAT 153 menciona que los prestadores de servicios médicos, dentales, de psicología, nutrición y hospitalarios deben contar con medios tecnológicos para recibir esos pagos, pero el texto disponible está incompleto y no detalla esa obligación [SAT 153]. Además, las personas beneficiarias no deben percibir durante el año ingresos iguales o superiores al salario mínimo general elevado al año [LISR 151].",
+  "fuentes": {
+   "keys": [
+    "LISR:151",
+    "RMF:3.17.10"
+   ],
+   "criterios": [
+    153
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-gastos-puedo-incluir-para-calcular-el-costo-de-lo-vendido-en-mi-negocio-de",
+  "pregunta": "¿Qué gastos puedo incluir para calcular el costo de lo vendido en mi negocio de compra‑venta de mercancías?",
+  "respuesta": "Si tu actividad consiste en comprar y vender mercancías, solo puedes considerar dentro del costo de lo vendido el importe de las adquisiciones de mercancías del ejercicio, disminuido con las devoluciones, descuentos y bonificaciones sobre esas mismas compras, y los gastos incurridos para adquirir y dejar las mercancías en condiciones de ser enajenadas [LISR 39]. El SAT confirma que solo corresponden a esta actividad las partidas de esas dos categorías [SAT 160]. Los artículos que se me proporcionaron no detallan qué gastos específicos encajan en la segunda categoría, así que ese punto queda sin precisar. Además, el costo se deduce en el ejercicio en que se acumulan los ingresos de la venta, y se excluye el costo de la mercancía no enajenada al cierre del ejercicio [LISR 39].",
+  "fuentes": {
+   "keys": [
+    "LISR:39"
+   ],
+   "criterios": [
+    160
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-implica-cambiar-los-estatutos-de-mi-organizacion-sin-perder-la-autorizacion",
+  "pregunta": "¿Qué implica cambiar los estatutos de mi organización sin perder la autorización para recibir donativos deducibles?",
+  "respuesta": "Cambiar los estatutos no revoca por sí mismo la autorización, pero debe informarse al SAT mediante el aviso de la ficha de trámite 20/ISR, porque la modificación a los estatutos o a cualquier requisito considerado para otorgar la autorización es un cambio que obliga a avisar [RMF 3.10.1.4]. Si el cambio solo ajusta la redacción sin alterar la actividad autorizada, no implica una nueva autorización [RMF 3.10.1.4]. Si en cambio se agregan actividades, la organización solo puede aplicar donativos a ellas si están en sus estatutos y obtiene la autorización mediante la ficha 19/ISR durante el mismo ejercicio fiscal [RMF 3.10.1.8]. El SAT considera indebida la modificación de estatutos para realizar actividades distintas a las autorizadas [SAT 167], y la revocación puede darse si la entidad incumple sus requisitos u obligaciones [LISR 82]. Los artículos que tengo no fijan el plazo para presentar el aviso, así que habría que consultarlo en la ficha 20/ISR del Anexo 2.",
+  "fuentes": {
+   "keys": [
+    "RMF:3.10.1.4",
+    "RMF:3.10.1.8",
+    "LISR:82"
+   ],
+   "criterios": [
+    167
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-impuesto-se-paga-al-vender-una-colmena-de-abejas-y-sus-diferentes-partes",
+  "pregunta": "¿Qué impuesto se paga al vender una colmena de abejas y sus diferentes partes?",
+  "respuesta": "Según el criterio normativo del SAT [SAT 90], la colmena polinizadora se considera enajenación de animales no industrializados, gravada a la tasa del 0% del IVA, pero solo la cámara de cría con abejas (el compartimento con abejas) queda a esa tasa; los compartimentos adicionales (alzas) y los marcos o bastidores pagan la tasa general [SAT 90]. Los artículos de la LIEPS que se me proporcionaron no tratan la venta de colmenas ni de sus partes, así que no puedo confirmar con ellos si aplica algún IEPS a estos bienes; la pregunta sobre el IEPS queda sin respuesta en las fuentes dadas, y el criterio citado trata solo del IVA.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    90
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-ingresos-debo-incluir-al-declarar-impuestos-si-mi-empresa-emite-vales-o",
+  "pregunta": "¿Qué ingresos debo incluir al declarar impuestos si mi empresa emite vales o monederos electrónicos?",
+  "respuesta": "Para el ISR, el criterio del SAT indica que la emisora debe acumular la comisión por el servicio, el importe o valor nominal recibido de sus clientes que no se reembolse de forma definitiva a comercios afiliados, clientes o usuarios, y los rendimientos que generen a su favor sobre ese valor nominal [SAT 38]. Para el IVA, la base por el servicio es solo la comisión, sin incluir el valor nominal de los vales o monederos [SAT 115]. Los artículos proporcionados no incluyen el texto del artículo 16 de la LISR al que remite el criterio SAT 38, así que los supuestos de reembolso definitivo deben verificarse directamente en esa ley.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    38,
+    115
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-ingresos-se-consideran-como-honorarios-o-servicios-profesionales-a-efectos",
+  "pregunta": "¿Qué ingresos se consideran como honorarios o servicios profesionales a efectos del ISR?",
+  "respuesta": "Son ingresos por la prestación de un servicio profesional las remuneraciones que deriven de un servicio personal independiente y que no estén consideradas en el Capítulo I del Título IV, es decir, las que no son salarios [LISR 100]. Para residentes en el extranjero, la remisión del artículo 175, fracción II, a los honorarios y servicios profesionales debe entenderse hecha a estos mismos ingresos del artículo 100, fracción II [LISR 175] [SAT 73]. Los honorarios a miembros de consejos directivos, de vigilancia o consultivos, a administradores, comisarios y gerentes generales, y los pagados a quien presta servicios preponderantemente a un prestatario en sus instalaciones se tratan como ingresos por salarios, y no como servicios profesionales [LISR 94] [LISR 175]. Los ingresos de actividades comerciales, industriales, agrícolas, ganaderas, de pesca o silvícolas son actividades empresariales, no servicios profesionales [LISR 100]. Los artículos proporcionados no detallan qué actividades concretas califican como servicio personal independiente, así que esa precisión no puedo darla con estas fuentes.",
+  "fuentes": {
+   "keys": [
+    "LISR:100",
+    "LISR:175",
+    "LISR:94"
+   ],
+   "criterios": [
+    73
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-mercancias-pueden-usarse-o-importarse-temporalmente-en-una-operacion-de-para",
+  "pregunta": "¿Qué mercancías pueden usarse o importarse temporalmente en una operación de maquila para la transformación o reparación?",
+  "respuesta": "Los artículos proporcionados responden solo en parte. Según el criterio del SAT, la lista del Decreto para la Industria Manufacturera Maquiladora y de Servicios de Exportación incluye, además de maquinaria y equipo, herramientas, instrumentos, moldes y refacciones destinados al proceso productivo [SAT 75]. Ese mismo criterio aclara que la maquinaria y equipo del artículo 181, fracción IV, de la LISR no comprende esas herramientas, instrumentos, moldes ni refacciones [SAT 75]. La empresa también puede incorporar mercancías nacionales o extranjeras que no sean importadas temporalmente, pero deben exportarse o retornarse junto con las que sí se importaron temporalmente [LISR 181]. Entre los procesos que el SAT considera de transformación están la dilución, el lavado, la aplicación de conservadores, el ajuste, el corte, el empacado y el marcado [SAT 74]. Falta el texto completo de la lista del Decreto, así que no puedo enumerar todas las mercancías permitidas.",
+  "fuentes": {
+   "keys": [
+    "LISR:181"
+   ],
+   "criterios": [
+    75,
+    74
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-ocurre-si-me-suspenden-temporalmente-el-uso-del-csd-para-emitir-mis-facturas",
+  "pregunta": "¿Qué ocurre si me suspenden temporalmente el uso del CSD para emitir mis facturas electrónicas?",
+  "respuesta": "Si te restringen temporalmente el uso del CSD, no podrás emitir CFDI con ese certificado mientras dure la medida, que procede, entre otros casos, si omites la declaración anual un mes después de su fecha o presentas dos o más declaraciones provisionales o definitivas fuera de plazo [CFF 17-H-Bis]. Tienes hasta cuarenta días hábiles para presentar una solicitud de aclaración con pruebas que subsanen la irregularidad o desvirtúen su causa, y si la autoridad lo acepta, el uso del certificado se restablece [CFF 17-H-Bis] [RMF 2.2.15]. Si la solicitud llega fuera de plazo, no trae argumentos ni pruebas, o la autoridad no considera subsanada la irregularidad, el CSD se deja sin efectos y no podrás solicitar uno nuevo hasta resolverla [RMF 2.2.15]. Si varias autoridades aplicaron la medida, debes presentar la aclaración ante cada una, y el SAT considera indebido buscar eludir la restricción por otros medios para emitir CFDI [RMF 2.2.17] [RMF 2.2.15] [SAT 135]. Los artículos no describen el procedimiento de aclaración, que se fija mediante reglas de carácter general, por lo que faltaría consultar esa parte en la RMF vigente [CFF 17-H-Bis].",
+  "fuentes": {
+   "keys": [
+    "CFF:17-H-Bis",
+    "RMF:2.2.15",
+    "RMF:2.2.17"
+   ],
+   "criterios": [
+    135
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-pasos-sigue-la-autoridad-antes-de-acusarme-de-desobediencia-si-no-cumplo-una",
+  "pregunta": "¿Qué pasos sigue la autoridad antes de acusarme de desobediencia si no cumplo una orden?",
+  "respuesta": "Según el criterio del SAT, las medidas de apremio deben agotarse en estricto orden antes de proceder penalmente por desobediencia: primero el auxilio de la fuerza pública, después la multa que corresponda, luego el aseguramiento precautorio de bienes o de la negociación, y solo al final la solicitud para que se proceda por desobediencia o resistencia a un mandato legítimo de autoridad [SAT 6]. Si el incumplimiento es la presentación de declaraciones o información, la autoridad debe requerir hasta tres veces, con quince días para cada requerimiento, e imponer una multa por cada obligación omitida; si se desatienden tres o más requerimientos sobre la misma obligación, los hechos se ponen en conocimiento de la autoridad competente para proceder por desobediencia [CFF 41]. No se aplican medidas de apremio cuando existe fuerza mayor o caso fortuito, siempre que se manifieste por escrito y se acredite con pruebas [SAT 6]. Los artículos que se me proporcionaron no incluyen el texto completo del artículo 40 del CFF, así que no puedo confirmar otros pasos ni plazos, y no puedo valorar tu situación particular.",
+  "fuentes": {
+   "keys": [
+    "CFF:41"
+   ],
+   "criterios": [
+    6
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-requisitos-debe-cumplir-una-organizacion-sin-fines-de-lucro-para-poder",
+  "pregunta": "¿Qué requisitos debe cumplir una organización sin fines de lucro para poder recibir donativos deducibles?",
+  "respuesta": "Según [RMF 3.10.1.1], el SAT autoriza para recibir donativos deducibles a las instituciones de asistencia o beneficencia privada, organizaciones civiles y fideicomisos que se ubiquen en los artículos 79 y 82 de la LISR, siempre que estén al corriente en sus obligaciones fiscales, tengan un objeto social de las actividades susceptibles de autorización, acrediten realizar esas actividades y tengan actualizado su RFC. Además, sus estatutos deben contemplar de forma expresa e irrevocable los requisitos de patrimonio y liquidación [LISR 82], y destinar sus activos exclusivamente a su objeto social, sin otorgar beneficios sobre el remanente a personas físicas [SAT 167]. Los artículos proporcionados no detallan la lista completa de requisitos de [LISR 82] (las fracciones II a VIII no se transcriben), así que esa parte queda sin confirmar; tampoco aparece la ficha de trámite del Anexo 2 con los documentos exactos que se deben presentar.",
+  "fuentes": {
+   "keys": [
+    "RMF:3.10.1.1",
+    "LISR:82"
+   ],
+   "criterios": [
+    167
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-requisitos-debo-cumplir-para-poder-aplicar-los-beneficios-de-un-tratado-que",
+  "pregunta": "¿Qué requisitos debo cumplir para poder aplicar los beneficios de un tratado que evita la doble tributación?",
+  "respuesta": "Para aplicar los beneficios de un tratado para evitar la doble tributación debes acreditar que eres residente en el país de que se trate, cumplir con las disposiciones del tratado y con las de procedimiento de la LISR, incluida la presentación de la información sobre tu situación fiscal conforme al artículo 32-H del CFF o del dictamen de estados financieros cuando estés obligado o hayas ejercido la opción del artículo 32-A, y designar representante legal [LISR 4]. El SAT precisa que, como los tratados por regla general no contienen disposiciones de procedimiento, cada Estado puede fijar en su legislación interna los requisitos para aplicar sus beneficios [SAT 28]. Las constancias de residencia expedidas por autoridades extranjeras no requieren legalización y solo necesitan traducción autorizada si la autoridad fiscal la pide [LISR 4]. En operaciones entre partes relacionadas, la autoridad puede pedir una manifestación bajo protesta de decir verdad sobre la doble tributación jurídica, salvo en los casos de la regla 3.1.5 [LISR 4] [RMF 3.1.5]. Los artículos proporcionados no detallan los documentos específicos de cada trámite, por lo que faltaría verificar esa parte en las reglas vigentes.",
+  "fuentes": {
+   "keys": [
+    "LISR:4",
+    "RMF:3.1.5"
+   ],
+   "criterios": [
+    28
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-se-entiende-por-beneficios-empresariales-al-aplicar-un-tratado-para-evitar",
+  "pregunta": "¿Qué se entiende por “beneficios empresariales” al aplicar un tratado para evitar la doble tributación?",
+  "respuesta": "Según la regla 2.1.33 de la RMF 2026, para el artículo 7 de los tratados para evitar la doble tributación, \"beneficios empresariales\" son los ingresos que se obtienen por realizar las actividades a que se refiere el artículo 16 del CFF [RMF 2.1.33]. El criterio normativo del SAT confirma esta interpretación: el artículo 175, fracción VI de la LISR define los ingresos empresariales, pero solo para efectos del Título V de esa ley, así que para los tratados rige la regla [SAT 80]. El SAT cita esa regla como 2.1.32, mientras que el texto que tienes es la 2.1.33, por lo que conviene verificar el número en la Miscelánea vigente [SAT 80, RMF 2.1.33]. Los artículos proporcionados no detallan qué actividades comprende el artículo 16 del CFF.",
+  "fuentes": {
+   "keys": [
+    "RMF:2.1.33"
+   ],
+   "criterios": [
+    80
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "que-tasa-de-iva-corresponde-al-vender-sal-destinada-al-consumo-alimenticio",
+  "pregunta": "¿Qué tasa de IVA corresponde al vender sal destinada al consumo alimenticio?",
+  "respuesta": "La sal destinada a la alimentación se grava a la tasa del 0% de IVA. El artículo 2-A, fracción I, inciso b), aplica esa tasa a los productos destinados a la alimentación humana y animal [LIVA 2-A], y el criterio del SAT precisa que la sal, aunque sea un aditivo alimenticio, está gravada al 0% aunque el adquirente la use en una industria distinta a la alimenticia [SAT 121]. Ese criterio no aplica a la sal para uso industrial no alimenticio prevista en el artículo 3.28 de la NOM-040-SSA1-1993 [SAT 121], y los artículos proporcionados no indican qué tasa le corresponde a esa sal.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A"
+   ],
+   "criterios": [
+    121
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "se-debe-acreditar-primero-el-isr-pagado-en-el-extranjero-antes-de-los-pagos",
+  "pregunta": "¿Se debe acreditar primero el ISR pagado en el extranjero antes de los pagos provisionales?",
+  "respuesta": "No. La ley no establece un orden para acreditar el ISR pagado en el extranjero, por lo que el criterio del SAT considera que las personas morales pueden acreditarlo contra el ISR que deban pagar en México antes de acreditar los pagos provisionales del ejercicio [SAT 30]. El acreditamiento procede solo si el ingreso acumulado, percibido o devengado incluye ese impuesto [LISR 5]. Este orden es una interpretación oficial del SAT, no una disposición expresa de la ley.",
+  "fuentes": {
+   "keys": [
+    "LISR:5"
+   ],
+   "criterios": [
+    30
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "se-detiene-el-conteo-del-plazo-de-caducidad-si-presento-un-recurso-o-defensa-la",
+  "pregunta": "¿Se detiene el conteo del plazo de caducidad si presento un recurso o defensa contra la autoridad fiscal?",
+  "respuesta": "Sí, el plazo de caducidad se suspende cuando se interpone un recurso administrativo o juicio, y la suspensión inicia con la presentación del medio de defensa y concluye con la resolución definitiva o sentencia ejecutoriada [CFF 67, SAT 21]. Esta suspensión aplica solo si el medio de defensa se interpone contra actos emitidos por autoridades fiscales, y no contra actos de otras autoridades en materias distintas a las fiscales [SAT 21]. Además, según el criterio del SAT, la suspensión se da sin importar el sentido de la resolución [SAT 10], y los diez años máximos del plazo de caducidad se calculan sin contar la suspensión [SAT 11].",
+  "fuentes": {
+   "keys": [
+    "CFF:67"
+   ],
+   "criterios": [
+    21,
+    10,
+    11
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "se-me-cobra-isr-si-mi-empresa-me-otorga-una-beca-educativa-y-la-concede-a-todos",
+  "pregunta": "¿Se me cobra ISR si mi empresa me otorga una beca educativa y la concede a todos los empleados?",
+  "respuesta": "En principio, no. Según el criterio del SAT, los ingresos por becas educacionales para los trabajadores o sus hijos no pagan ISR cuando se conceden de manera general, es decir, a todos los trabajadores que tengan derecho al beneficio conforme a la ley o a su contrato de trabajo [SAT 59]. Esa exención proviene del artículo 93, fracción VIII de la Ley del ISR, que el criterio transcribe [SAT 59]. Sin embargo, el importe de una beca otorgada a personas que asumieron la obligación de prestar servicios a quien la otorga se considera ingreso por servicio personal subordinado [RLISR 166], así que conviene revisar las condiciones de la beca. Los artículos que tengo no indican si tu beca cumple esas condiciones, por lo que no puedo confirmar tu caso concreto.",
+  "fuentes": {
+   "keys": [
+    "RLISR:166"
+   ],
+   "criterios": [
+    59
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "se-me-cobra-iva-al-vender-pieles-frescas-o-conservadas-sin-curtir",
+  "pregunta": "¿Se me cobra IVA al vender pieles frescas o conservadas sin curtir?",
+  "respuesta": "No, si vendes pieles frescas o conservadas de cualquier forma, el IVA se calcula a la tasa del 0%, porque los animales no industrializados se gravan así [LIVA 2-A] y se consideran no industrializados los que se presentan frescos, salados, secos, refrigerados, congelados o empacados [RLIVA 6]. El SAT confirma que esto aplica mientras las pieles no estén precurtidas, curtidas, apergaminadas ni preparadas de otra manera [SAT 91]. Si las pieles ya están curtidas o preparadas, los artículos que tengo no indican qué tasa corresponde, así que tendrías que consultar esa parte con un especialista.",
+  "fuentes": {
+   "keys": [
+    "LIVA:2-A",
+    "RLIVA:6"
+   ],
+   "criterios": [
+    91
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "se-me-cobra-iva-por-servicios-de-construccion-de-un-invernadero-hidroponico",
+  "pregunta": "¿Se me cobra IVA por servicios de construcción de un invernadero hidropónico?",
+  "respuesta": "Según [SAT 104], la tasa del 0% en IVA solo aplica a servicios independientes prestados en invernaderos hidropónicos ya constituidos, y no se extiende a los servicios para construir, habilitar o montar esos invernaderos. Por lo tanto, la construcción no queda cubierta por esa tasa. El impuesto se paga cuando se cobren efectivamente las contraprestaciones [LIVA 17]. Los artículos que me proporcionaste no indican la tasa general aplicable a este servicio, así que no puedo confirmar el monto. Tampoco aplica la exención para casa habitación de [RLIVA 29], porque un invernadero no es casa habitación.",
+  "fuentes": {
+   "keys": [
+    "LIVA:17",
+    "RLIVA:29"
+   ],
+   "criterios": [
+    104
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "se-me-grava-al-transferir-utilidades-de-mi-sucursal-en-mexico-a-la-casa-matriz",
+  "pregunta": "¿Se me grava al transferir utilidades de mi sucursal en México a la casa matriz en el extranjero?",
+  "respuesta": "Sí, en principio. Las utilidades en efectivo o en bienes que el establecimiento permanente envíe a su oficina central, y que no provengan del saldo de la cuenta de utilidad fiscal neta ni de la cuenta de remesas de capital, causan impuesto: se multiplican por 1.4286 y al resultado se aplica la tasa del primer párrafo del artículo 9 de la Ley, que el establecimiento permanente debe enterar [LISR 164]. Si el envío sí proviene de esas cuentas, no se aplica este gravamen [LISR 164]. El SAT considera una práctica indebida aplicar artículos de tratados para evitar el gravamen sobre sucursales [SAT 148]. Los artículos proporcionados no indican la cifra exacta de la tasa del artículo 9 ni cómo aplica a tu situación particular, y no puedo darte asesoría personalizada.",
+  "fuentes": {
+   "keys": [
+    "LISR:164"
+   ],
+   "criterios": [
+    148
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-compro-alcohol-a-un-distribuidor-y-luego-lo-revendo-tambien-tengo-que-pagar-o",
+  "pregunta": "Si compro alcohol a un distribuidor y luego lo revendo, ¿también tengo que pagar el impuesto especial, o solo lo paga quien lo vendió primero?",
+  "respuesta": "Según el criterio normativo del SAT, quienes enajenan alcohol o alcohol desnaturalizado con el fin de comercializarlo son contribuyentes del IEPS, porque la ley no grava solo la primera enajenación, por lo que las enajenaciones subsecuentes también causan el impuesto [SAT 124]. Esto se apoya en el artículo 1o. y en la tasa del 50% del artículo 2o., fracción I, inciso B), de la Ley del IEPS [SAT 124]. Ese mismo criterio aclara que tales enajenaciones pueden quedar exentas si se cumplen las obligaciones del artículo 8o., fracción I, inciso e), de la ley [SAT 124]; los artículos que me proporcionaste no desarrollan esa exención, así que no puedo detallar sus requisitos.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    124
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-compro-diesel-para-mis-camiones-de-transporte-como-calculo-cuanto-impuesto-el",
+  "pregunta": "Si compro diésel para mis camiones de transporte, ¿cómo calculo cuánto impuesto del combustible puedo descontar cuando el gobierno ya redujo ese impuesto?",
+  "respuesta": "Según el artículo 20 de la LIF, el monto a acreditar es la cuota del IEPS vigente al momento de la compra o importación, multiplicada por los litros adquiridos [LIF 20]. La cuota ordinaria del diésel es de 49.0817 centavos por litro [LIEPS 2-A], pero los artículos que me diste no indican la cuota reducida que aplica a tu fecha de compra. La regla 11.7.3 solo describe descuentos semanales al precio base del diésel para el estímulo del decreto, sin una cifra final de acreditamiento [RMF 11.7.3], así que no puedo calcular el monto exacto con esta información. Para vehículos destinados al transporte, el SAT indica que el monto debe considerar el IEPS que efectivamente se haya causado [SAT 188]. Si compras con monedero electrónico autorizado, la deducción y el acreditamiento solo proceden con el CFDI y el complemento, y hasta el monto que ampare ese complemento [RMF 3.3.1.7].",
+  "fuentes": {
+   "keys": [
+    "LIF:20",
+    "LIEPS:2-A",
+    "RMF:11.7.3",
+    "RMF:3.3.1.7"
+   ],
+   "criterios": [
+    188
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-contrato-internet-en-paquete-con-telefonia-television-o-aplicaciones-todo-el",
+  "pregunta": "Si contrato internet en paquete con telefonía, televisión o aplicaciones, ¿todo el paquete queda libre del impuesto especial a telecomunicaciones?",
+  "respuesta": "No, no todo el paquete queda libre. Solo está exento el servicio de acceso a Internet, a través de red fija o móvil, y esa exención procede únicamente si en el comprobante la contraprestación de Internet se determina por separado de los demás servicios de telecomunicaciones y se calcula con los precios que se hubieran cobrado sin el paquete [LIEPS 8]. Además, los servicios de Internet exentos no pueden exceder el 30% del total de las contraprestaciones facturadas en forma conjunta [LIEPS 8][SAT 184]. La telefonía, la televisión y otros servicios de telecomunicaciones que se presten por red pública siguen gravados con la tasa del 3% [LIEPS 2][SAT 184]. Los artículos no dicen cómo se aplica la exención a las aplicaciones y contenidos del paquete, por lo que esa parte no puede confirmarse con lo proporcionado.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:8",
+    "LIEPS:2"
+   ],
+   "criterios": [
+    184
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-doy-servicio-de-internet-y-vendo-o-presto-el-modem-el-impuesto-se-calcula-lo",
+  "pregunta": "Si doy servicio de internet y vendo o presto el módem, ¿el impuesto se calcula sobre todo lo cobrado o solo el servicio?",
+  "respuesta": "Según el criterio del SAT, cuando con el servicio de telecomunicaciones se proporcionan equipos terminales o se otorga su uso o goce temporal al prestatario, la base es el importe total cobrado por todos esos conceptos, de modo que el módem entra en la base junto con el servicio [SAT 183]. No considerar ese valor, o disminuirlo de la base, es una práctica que el SAT considera indebida [SAT 183]. La tasa del 3% aplica a los servicios de telecomunicaciones que se prestan por redes públicas [LIEPS 2], y la exención de acceso a Internet cubre solo ese servicio, no el equipo [SAT 184]. Los artículos que se me dieron no indican cómo tratar la venta (enajenación) del módem, así que sobre ese caso falta información.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:2"
+   ],
+   "criterios": [
+    183,
+    184
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-importo-mercancia-y-por-un-acuerdo-comercial-no-pago-el-derecho-de-tramite-al",
+  "pregunta": "Si importo mercancía y por un acuerdo comercial no pago el derecho de trámite aduanero, ¿tengo que incluirlo al calcular el IEPS?",
+  "respuesta": "No, no tienes que incluirlo. El artículo 14 de la LIEPS establece que la base del IEPS en importación es el valor para fines del impuesto general de importación, más las contribuciones y aprovechamientos que deban pagarse con motivo de la importación, excepto el IVA [LIEPS 14]. Según el criterio normativo del SAT, si un tratado internacional exime del pago del derecho de trámite aduanero, ese monto exento no debe adicionarse al valor de las mercancías, porque las disposiciones que definen la base del impuesto son de aplicación estricta [SAT 126]. Los artículos proporcionados no indican cómo verificar la exención en su caso concreto, así que conviene confirmarla con tu agente aduanal o con la autoridad.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:14"
+   ],
+   "criterios": [
+    126
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-la-aseguradora-me-pago-por-mi-coche-chocado-y-se-quedo-con-el-tengo-que-ese",
+  "pregunta": "Si la aseguradora me pagó por mi coche chocado y se quedó con él, ¿tengo que facturarle ese pago como venta con IVA?",
+  "respuesta": "Los artículos que tengo no bastan para decir que debas facturar esa operación como venta con IVA. El criterio del SAT indica que la cantidad que paga la aseguradora al verificarse el siniestro tiene su causa en el contrato de seguro, por lo que no puede considerarse el precio o costo de adquisición de los efectos salvados [SAT 175]. Según ese mismo criterio, expedir un CFDI que señale esa cantidad como precio de la enajenación, y calcular el IVA sobre ella, es una práctica fiscal indebida [SAT 175]. No tengo el artículo de la LIVA que define cuándo la enajenación de un vehículo causa IVA ni su base gravable, así que no puedo precisar qué sí tendría que facturarse; para eso conviene consultar a un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    175
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-me-devuelven-menos-de-lo-que-solicite-como-se-distribuye-el-monto-que-me",
+  "pregunta": "Si me devuelven menos de lo que solicité, ¿cómo se distribuye el monto que me devuelven?",
+  "respuesta": "Si te devuelven una cantidad menor a la solicitada, lo devuelto se aplica primero a los intereses vencidos hasta la fecha del pago y después al principal [SAT 5] [CFF 22-A]. Los intereses que se generen después del pago por la parte no devuelta no se cubren con esa cantidad [SAT 5]. La parte no devuelta se considera negada, salvo que se trate de errores aritméticos o de forma, y la autoridad debe fundar y motivar esa negativa [CFF 22]. Los intereses a cargo del fisco no pueden exceder los de los últimos cinco años [CFF 22-A]. Los artículos que tengo no indican plazos para impugnar la negativa, así que no puedo precisarlos.",
+  "fuentes": {
+   "keys": [
+    "CFF:22-A",
+    "CFF:22"
+   ],
+   "criterios": [
+    5
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-me-quedo-saldo-a-favor-del-impuesto-especial-por-vender-combustibles-puedo-en",
+  "pregunta": "Si me quedó saldo a favor del impuesto especial por vender combustibles, ¿puedo usarlo para pagar ese impuesto en otros productos, como bebidas?",
+  "respuesta": "No, el saldo a favor de la declaración mensual solo puede compensarse contra el mismo impuesto a tu cargo en los pagos mensuales siguientes, hasta agotarlo [LIEPS 5]. La ley considera impuestos distintos cada gravamen de las categorías de las fracciones I y II del artículo 2o., así que el IEPS de gasolinas y diésel no es el mismo que el de bebidas [LIEPS 5]. El criterio del SAT confirma que el saldo derivado de los incisos D) y H) de la fracción I del artículo 2o. solo se compensa contra el impuesto de esa misma fracción e incisos [SAT 132]. La ley solo prevé otra opción para contribuyentes cuyas exportaciones representen al menos 90% del valor de sus actividades del mes: pueden pedir la devolución en lugar de compensar [LIEPS 5]. Esta es una lectura general de los artículos, no una asesoría sobre tu caso; para tu situación concreta conviene consultar a un contador.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:5"
+   ],
+   "criterios": [
+    132
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-vendo-dulces-o-paletas-heladas-que-llevan-chicle-que-impuestos-les-cobro-los",
+  "pregunta": "Si vendo dulces o paletas heladas que llevan chicle, ¿qué impuestos les cobro: los de comida chatarra o los del chicle solo?",
+  "respuesta": "Si el producto es un dulce o una paleta helada que contiene chicle pero no es solo chicle, el criterio del SAT indica que se grava con IEPS a la tasa de 8% cuando su densidad calórica es de 275 kcal o más por cada 100 gramos [SAT 130][LIEPS 2]. Si el producto no tiene etiqueta nutrimental, se presume que tiene esa densidad salvo prueba en contrario, y si la etiqueta cumple con las disposiciones de etiquetado, puedes tomar en cuenta las kilocalorías declaradas [LIEPS 2]. Solo cuando el producto es exclusivamente chicle o goma de mascar aplica la tasa de 16% de IVA, y no se paga IEPS si se toma el beneficio del artículo 3.3 del Decreto citado en [SAT 130][LIVA 2-A]. Los artículos que tengo no indican la tasa de IVA para dulces o paletas con chicle que no sean chicle puro, así que no puedo confirmar ese punto.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:2",
+    "LIVA:2-A"
+   ],
+   "criterios": [
+    130
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-vendo-leche-de-chocolate-con-azucar-tengo-que-pagar-el-impuesto-de-bebidas-o",
+  "pregunta": "Si vendo leche de chocolate con azúcar, ¿tengo que pagar el impuesto de bebidas azucaradas o cuenta como leche normal?",
+  "respuesta": "Según el criterio del SAT, la leche en cualquier presentación, incluida la saborizada, no paga IEPS si cumple con la NOM-155-SCFI-2012 [SAT 127]. Si el producto no cumple esas especificaciones y en su elaboración se disuelven azúcares o edulcorantes en agua, el SAT lo considera afecto al IEPS de bebidas saborizadas [SAT 128]. Esa cuota es de $3.0818 por litro si tiene azúcares añadidos y de $1.5000 por litro si tiene edulcorantes [LIEPS 2]. Los textos que tengo no definen \"leche de chocolate\" ni dicen si el suyo cumple la NOM-155, así que no puedo confirmar en qué categoría cae. El extracto de [SAT 128] además está incompleto, y la regla [RMF 11.3.2] trata de un estímulo del Decreto para productos lácteos, no del IEPS.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:2",
+    "RMF:11.3.2"
+   ],
+   "criterios": [
+    127,
+    128
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-vendo-mezclas-que-aun-hay-que-cocinar-o-freir-como-pellets-para-botana-pagan",
+  "pregunta": "Si vendo mezclas que aún hay que cocinar o freír, como pellets para botana, ¿pagan el impuesto a la comida chatarra?",
+  "respuesta": "Sí, pueden estar gravadas, pero depende de la densidad calórica y no de que el producto se venda crudo. Las botanas son productos elaborados a base de harinas, semillas, tubérculos, cereales, granos o frutas que pueden freírse, hornearse, explotarse o tostarse [LIEPS 3], y el SAT indica que las preparaciones para elaborar botanas que requieren freído o explosión a base de aire caliente están gravadas cuando su densidad calórica es de 275 kcal o más por cada 100 gramos [SAT 129]. Si el producto tiene etiqueta con kilocalorías, se pueden tomar las que indica; si no la tiene, se presume, salvo prueba en contrario, que tiene 275 kcal o más por cada 100 gramos [LIEPS 2]. No se encontraron en los artículos proporcionados la tasa exacta aplicable a estas preparaciones ni los plazos de pago, así que esa parte queda sin respuesta.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:3",
+    "LIEPS:2"
+   ],
+   "criterios": [
+    129
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-vendo-o-importo-gelatina-o-grenetina-para-comer-tengo-que-pagar-el-impuesto-a",
+  "pregunta": "¿Si vendo o importo gelatina o grenetina para comer, tengo que pagar el impuesto especial que se cobra a los dulces y la comida chatarra?",
+  "respuesta": "Depende de si la gelatina o grenetina de grado comestible contiene azúcares u otros edulcorantes. Según el criterio del SAT, su enajenación o importación está sujeta a IEPS cuando los contiene y su densidad calórica es de 275 kilocalorías o más por cada 100 gramos [SAT 131]. Ese criterio la ubica dentro de los productos de confitería, que la Ley define e incluye expresamente [LIEPS 3], y los alimentos no básicos con esa densidad se gravan a la tasa de 8% [SAT 131]. Si el producto no tiene etiqueta, se presume, salvo prueba en contrario, que tiene 275 kilocalorías o más por cada 100 gramos; si la tiene, puede tomarse en cuenta la cifra de la etiqueta [LIEPS 2]. El texto del criterio que tengo se corta antes de su conclusión, así que no puedo confirmar si hay condiciones adicionales.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:3",
+    "LIEPS:2"
+   ],
+   "criterios": [
+    131
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-vendo-o-importo-plaguicidas-con-que-documento-demuestro-su-nivel-de-toxicidad",
+  "pregunta": "Si vendo o importo plaguicidas, ¿con qué documento demuestro su nivel de toxicidad para saber qué impuesto aplicarles o si están exentos?",
+  "respuesta": "El documento que acredita la categoría de peligro de toxicidad aguda es el registro sanitario emitido por la COFEPRIS, o el permiso de importación, donde se expresa esa categoría conforme a la NOM-232-SSA1-2009 [SAT 125]. Con esa categoría se aplica la tabla del inciso I) del artículo 2 de la LIEPS: 9% para las categorías 1 y 2, 7% para la 3 y 6% para la 4 [LIEPS 2]. El artículo 13, fracción VIII, de la LIEPS se refiere a los plaguicidas de categoría 5 en el capítulo de importación [LIEPS 13], pero los fragmentos que recibí no muestran el tratamiento completo de esa categoría, así que esa parte queda sin respuesta.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:2",
+    "LIEPS:13"
+   ],
+   "criterios": [
+    125
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "si-vendo-un-polvo-para-preparar-bebida-sabor-chocolate-tengo-que-cobrar-el-en-la",
+  "pregunta": "Si vendo un polvo para preparar bebida sabor chocolate, ¿tengo que cobrar el impuesto especial aunque en la etiqueta no diga chocolate?",
+  "respuesta": "Sí, en principio. El SAT considera que, sin importar su denominación comercial, los productos cuyos ingredientes corresponden a chocolate o derivados del cacao están gravados si tienen 275 kilocalorías o más por cada 100 gramos al enajenarse o importarse, por lo que un polvo para preparar bebida sabor chocolate puede quedar comprendido [SAT 185]. Si la etiqueta manifiesta kilocalorías, se consideran esas cifras, referidas al total del producto en el estado en que se enajena [RMF 5.1.2]; si no tiene esa etiqueta, se presume que tiene 275 kilocalorías o más por cada 100 gramos, salvo prueba en contrario [LIEPS 2]. Los artículos que tengo no muestran la conclusión completa del criterio SAT 185 (el texto se corta) ni explican cómo se calcula el impuesto para polvos, así que no puedo confirmar la situación de tu producto específico.",
+  "fuentes": {
+   "keys": [
+    "RMF:5.1.2",
+    "LIEPS:2"
+   ],
+   "criterios": [
+    185
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "sobre-que-monto-se-debe-calcular-el-iva-al-contratar-el-servicio-de-emision-de-o",
+  "pregunta": "¿Sobre qué monto se debe calcular el IVA al contratar el servicio de emisión de vales o monederos electrónicos?",
+  "respuesta": "El IVA al contratar el servicio de emisión de vales o monederos electrónicos debe calcularse sobre el monto de la contraprestación pactada por ese servicio, conocida como comisión, sin incluir el importe o valor nominal de los vales o monederos [SAT 115]. Esto se apoya en el artículo 18 de la Ley del IVA, que toma como valor el total de la contraprestación pactada y los cargos adicionales cobrados al receptor del servicio [LIVA 18]. Los artículos proporcionados no establecen el procedimiento de cálculo para el caso de los vales ni los plazos de pago, por lo que esa parte no puede responderse con esta base.",
+  "fuentes": {
+   "keys": [
+    "LIVA:18"
+   ],
+   "criterios": [
+    115
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-informar-a-mi-asesor-si-me-propone-un-plan-fiscal-que-se-vende-a",
+  "pregunta": "¿Tengo que informar a mi asesor si me propone un plan fiscal que se vende a muchos contribuyentes?",
+  "respuesta": "Los artículos que tengo no obligan al contribuyente a informar a su asesor. La obligación de revelar recae en el asesor fiscal, quien debe dar el número de identificación del esquema a cada contribuyente que pretenda implementarlo [CFF 202]. Si el asesor no le proporciona ese número ni una constancia de que el esquema no es reportable, usted queda obligado a revelarlo [CFF 198]. Un esquema que se comercializa de manera masiva a cualquier contribuyente o a un grupo de ellos, con mínima o nula adaptación, es un esquema reportable generalizado, y los asesores deben revelarlo [SAT 134] [CFF 197]. Los artículos no permiten determinar si el plan que le propusieron es reportable, así que lo prudente es pedir a su asesor el número de identificación o la constancia correspondiente.",
+  "fuentes": {
+   "keys": [
+    "CFF:202",
+    "CFF:198",
+    "CFF:197"
+   ],
+   "criterios": [
+    134
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-el-isr-diferido-si-dono-los-certificados-que-recibi-al-aportar",
+  "pregunta": "¿Tengo que pagar el ISR diferido si dono los certificados que recibí al aportar un inmueble al fideicomiso?",
+  "respuesta": "Sí, según el criterio del SAT, donar los certificados de participación que recibió por la aportación del inmueble equivale a enajenarlos, porque la donación es una transmisión de propiedad en los términos del artículo 14, fracción I del CFF, así que debe pagar el ISR que hasta ese momento estaba diferido [SAT 166]. El diferimiento del artículo 188 de la LISR aplica hasta el momento en que enajene cada certificado, actualizando el impuesto por el periodo transcurrido [LISR 188]. Si opta por pagar antes, la regla 3.21.2.11 le da esa facilidad, pero el pago se considera definitivo y no da lugar a devolución ni compensación [RMF 3.21.2.11]. El texto del criterio SAT 166 que se me proporcionó está incompleto, así que no puedo confirmar los detalles de la práctica que describe.",
+  "fuentes": {
+   "keys": [
+    "LISR:188",
+    "RMF:3.21.2.11"
+   ],
+   "criterios": [
+    166
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-impuestos-si-vendo-o-presto-servicios-por-medio-de-una-app-o",
+  "pregunta": "¿Tengo que pagar impuestos si vendo o presto servicios por medio de una app o plataforma digital?",
+  "respuesta": "Sí, si eres persona física con actividades empresariales y vendes bienes o prestas servicios por internet, plataformas o aplicaciones, debes pagar ISR por los ingresos que generes por esos medios, y la plataforma lo paga mediante retención [LISR 113-A]. Si recibes parte del pago directamente de tus clientes y tus ingresos totales no superan los 300 mil pesos anuales, puedes optar por pagar el ISR sobre esos ingresos directos aplicando las tasas de retención al total y acreditando lo que te retuvo la plataforma [LISR 113-A]; si ejerces esa opción, pagas con la \"Declaración de pago del ISR personas físicas plataformas tecnológicas\" a más tardar el día 17 del mes siguiente [RMF 12.3.7]. Si no la ejerces, debes acumular todos tus ingresos, aplicar las mismas tasas y presentar pagos provisionales de ISR con esa declaración a más tardar el día 17 del mes siguiente [RMF 12.3.6]. Si actúas únicamente a través de plataformas, también debes pagar IVA mensualmente a más tardar el día 17 del mes siguiente [RMF 12.3.14], y antes debes presentar el aviso de actualización de actividades económicas indicando las actividades que realizas por plataformas [RMF 12.3.2]. Los artículos que tengo no detallan los porcentajes de retención de IVA ni cómo se calcula tu caso específico, así que para eso conviene consultar a un contador o al SAT.",
+  "fuentes": {
+   "keys": [
+    "LISR:113-A",
+    "RMF:12.3.7",
+    "RMF:12.3.6",
+    "RMF:12.3.14",
+    "RMF:12.3.2"
+   ],
+   "criterios": []
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-isr-al-vender-mi-casa-si-parte-del-terreno-supera-el-limite-de",
+  "pregunta": "¿Tengo que pagar ISR al vender mi casa si parte del terreno supera el límite de superficie permitido?",
+  "respuesta": "Sí, es probable que la parte del terreno que exceda el límite no quede exenta. El terreno se considera casa habitación solo hasta tres veces el área cubierta por las construcciones [RLISR 154]. Según el criterio del SAT, cuando solo parte de la superficie es casa habitación, el ISR se paga únicamente por la parte que no corresponde a ella [SAT 60]. La exención también exige que la contraprestación no exceda de setecientas mil UDIS y que la operación se formalice ante fedatario público [LISR 93]. Los artículos disponibles no explican cómo calcular el ISR sobre la superficie excedente; el 5% sobre la ganancia de [LISR 127] se refiere a enajenaciones de terrenos y construcciones en general, y no especifica si aplica a esa parte.",
+  "fuentes": {
+   "keys": [
+    "RLISR:154",
+    "LISR:93",
+    "LISR:127"
+   ],
+   "criterios": [
+    60
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-isr-por-los-ingresos-que-obtengo-al-rentar-mi-casa-en-como",
+  "pregunta": "¿Tengo que pagar ISR por los ingresos que obtengo al rentar mi casa en plataformas como Airbnb?",
+  "respuesta": "Según el criterio SAT 163, los servicios de hospedaje que un anfitrión ofrece por plataformas tecnológicas se consideran empresariales y están sujetos al pago de ISR [SAT 163]. Si esos ingresos llegan por plataforma, la retención de ISR corresponde a la plataforma [LISR 113-A], y quien ejerza la opción de pago definitivo debe presentar la declaración a más tardar el día 17 del mes siguiente [RMF 12.3.7]. Los artículos que tengo no dicen cuándo rentar una casa habitación deja de ser arrendamiento y pasa a ser hospedaje, ni cómo se calcula el ISR de una persona física por esos ingresos, así que esa parte falta [SAT 163]. Además, el texto del criterio SAT 163 está incompleto en mi fuente, por lo que no puedo confirmar todo su razonamiento.",
+  "fuentes": {
+   "keys": [
+    "LISR:113-A",
+    "RMF:12.3.7"
+   ],
+   "criterios": [
+    163
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-isr-por-los-rendimientos-de-un-fideicomiso-que-solo-sirve-para",
+  "pregunta": "¿Tengo que pagar ISR por los rendimientos de un fideicomiso que solo sirve para pagar la universidad de mi hijo?",
+  "respuesta": "En principio, no, siempre que se cumplan las condiciones del artículo 90: que los rendimientos se destinen únicamente a financiar la educación hasta nivel licenciatura de sus descendientes en línea recta, y que los estudios cuenten con reconocimiento de validez oficial [LISR 90]. El criterio del SAT exige además que usted sea el fideicomitente, es decir, quien transmitió los bienes o el dinero a la fiduciaria para ese fin, y que su hijo sea su descendiente en línea recta [SAT 146]. Si el fideicomiso tuviera también otros destinos, los rendimientos que se usen para ellos no quedan cubiertos por esta exención [LISR 90]. Aun cuando no sean ingreso, la regla general obliga a informar las cantidades recibidas al presentar la declaración anual [LISR 90]. Los artículos que tengo no permiten confirmar si su caso cumple todos los requisitos, así que conviene revisarlo con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LISR:90"
+   ],
+   "criterios": [
+    146
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-iva-cuando-devuelvo-bienes-al-gobierno-como-reembolso-al-mi",
+  "pregunta": "¿Tengo que pagar IVA cuando devuelvo bienes al gobierno como reembolso al liquidar mi empresa?",
+  "respuesta": "Según el criterio normativo del SAT, sí: las empresas concesionarias de bienes o servicios que, al disolverse y liquidarse, reintegran bienes al Gobierno Federal como reembolso del haber social aportado deben trasladar y pagar IVA a la tasa del 16%, porque esas operaciones constituyen enajenación [SAT 108]. El criterio se refiere expresamente a empresas concesionarias, así que no sé si aplica a tu caso concreto, y los artículos que tengo no dicen nada sobre otros tipos de sociedades. Para confirmarlo con tu situación, conviene consultarlo con un contador o revisar el criterio completo en el portal del SAT.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    108
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-iva-e-ieps-por-productos-nacionales-que-vendo-en-una-tienda-duty",
+  "pregunta": "¿Tengo que pagar IVA e IEPS por productos nacionales que vendo en una tienda duty free?",
+  "respuesta": "Según el criterio del SAT, la mercancía nacional destinada al régimen de depósito fiscal para su exposición y venta en tiendas Duty Free se sujeta a la tasa de 0% de IVA y, en su caso, no paga IEPS [SAT 118]. Esto parte de que, desde que la mercancía queda en depósito fiscal para exportación, se considera exportada definitivamente, lo que encaja con la tasa de 0% del artículo 29, fracción I de la Ley del IVA [SAT 118] [LIVA 29]. Si vendes bebidas alcohólicas, los envases deben llevar una etiqueta con los datos de identificación de la tienda libre de impuestos [RLIEPS 15]. Los artículos que tengo no indican si tu caso cumple las condiciones del depósito fiscal, así que conviene confirmarlo con tu asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LIVA:29",
+    "RLIEPS:15"
+   ],
+   "criterios": [
+    118
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-iva-por-el-seguro-de-mi-coche-extranjero-mientras-lo-uso-en",
+  "pregunta": "¿Tengo que pagar IVA por el seguro de mi coche extranjero mientras lo uso temporalmente en México?",
+  "respuesta": "Según el criterio normativo SAT 119, sí: el seguro de vehículos de residentes en el extranjero que ingresan temporalmente a México solo ampara el vehículo mientras circula en el país, así que el beneficio se aprovecha en territorio nacional y no se considera exportación [SAT 119]. Por eso la prestación queda sujeta al traslado del IVA a la tasa del 16%, aunque el pago de la suma asegurada por un siniestro se realice en el extranjero [SAT 119]. La tasa del 0% del artículo 29, fracción IV, inciso e) de la LIVA no aplica a este caso [SAT 119]. Los artículos que tengo no indican quién debe enterar el impuesto ni el procedimiento de pago, así que eso no puedo confirmarlo con estas fuentes.",
+  "fuentes": {
+   "keys": [],
+   "criterios": [
+    119
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-pagar-iva-por-los-trabajos-de-plomeria-y-electricidad-en-la-de-mi-casa",
+  "pregunta": "¿Tengo que pagar IVA por los trabajos de plomería y electricidad en la construcción de mi casa?",
+  "respuesta": "Según el criterio SAT 110, los trabajos de instalaciones hidráulicas (plomería) y eléctricas que se contratan con terceros para incorporarlos a una casa habitación nueva no quedan dentro de la exención, porque no constituyen la construcción misma del inmueble [SAT 110]. La exención del artículo 29 del reglamento aplica cuando el prestador proporciona la mano de obra y los materiales [RLIVA 29], y en los servicios que no cumplen esa condición el impuesto es del 16% y lo traslada el prestador a quien recibe el servicio [LIVA 1]. Los artículos que me diste no incluyen el texto del artículo 9o., fracción II de la Ley del IVA, ni dicen si este criterio cambia cuando la persona construye su propia casa, así que esa parte no puedo responderla con estas fuentes. Esta es información general y no una asesoría sobre tu caso particular.",
+  "fuentes": {
+   "keys": [
+    "RLIVA:29",
+    "LIVA:1"
+   ],
+   "criterios": [
+    110
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-que-presentar-la-declaracion-del-isr-si-mi-actividad-esta-dentro-de-un",
+  "pregunta": "¿Tengo que presentar la declaración del ISR si mi actividad está dentro de un fideicomiso?",
+  "respuesta": "La fiduciaria no está obligada a presentar la declaración anual del ISR por las actividades realizadas a través del fideicomiso [SAT 36]. Según el artículo 13 de la LISR, la fiduciaria determina el resultado fiscal y cumple por cuenta de los fideicomisarios las obligaciones de la ley, incluidos los pagos provisionales [LISR 13]. Si usted es fideicomisario persona física residente en México, la parte del resultado que le corresponde según el contrato se considera ingreso por actividades empresariales [LISR 13], y a partir de un pago provisional debe tributar conforme a los títulos de la LISR que le correspondan [RMF 3.1.14]. Los artículos que se me proporcionaron no establecen si, en su caso concreto, está obligado a presentar una declaración anual propia, por lo que esa parte queda sin respuesta; tampoco sé si usted es fideicomisario o fideicomitente.",
+  "fuentes": {
+   "keys": [
+    "LISR:13",
+    "RMF:3.1.14"
+   ],
+   "criterios": [
+    36
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-un-casino-con-permiso-puedo-restar-del-impuesto-por-las-apuestas-las-o-que",
+  "pregunta": "Tengo un casino con permiso: ¿puedo restar del impuesto por las apuestas las promociones, membresías o entradas gratis que doy, como si fueran premios?",
+  "respuesta": "No, según el artículo 18 de la LIEPS, los valores para calcular el IEPS solo se pueden disminuir con los premios efectivamente pagados o entregados conforme a las disposiciones aplicables, y las devoluciones previas al evento [LIEPS 18]. El SAT considera una práctica fiscal indebida disminuir de la base del IEPS las promociones, membresías, accesos a las instalaciones y otros conceptos similares, porque no corresponden a la retribución que obtiene el ganador de un juego con apuestas y sorteos, y también es indebido asesorar o participar en esa práctica [SAT 187]. Además, para el cálculo, el valor en juegos con apuesta es el monto total apostado, incluyendo esas otras cantidades que se otorguen a los participantes, con independencia de su denominación [SAT 186].",
+  "fuentes": {
+   "keys": [
+    "LIEPS:18"
+   ],
+   "criterios": [
+    187,
+    186
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "tengo-un-casino-para-el-impuesto-de-apuestas-cuento-solo-el-efectivo-apostado-o",
+  "pregunta": "Tengo un casino: para el impuesto de apuestas, ¿cuento solo el efectivo apostado o también los créditos promocionales que regalo a los clientes?",
+  "respuesta": "Según el SAT, la base no se limita al efectivo: en juegos con apuestas se considera el monto total apostado, incluyendo cualquier cantidad que se otorgue a los participantes con independencia de su denominación, como promociones o membresías [LIEPS 18, SAT 186]. Los créditos promocionales regalados a clientes que pueden apostarse, por tanto, entrarían en la base según ese criterio. Además, las promociones, membresías y accesos no se pueden restar como premios, porque el concepto de premio solo cubre la retribución al ganador que paguen quienes tengan permiso de la autoridad [LIEPS 18, SAT 187]. Como el SAT lo califica de criterio interpretativo y no de disposición de la ley, conviene confirmar su aplicación a tu caso con un asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LIEPS:18"
+   ],
+   "criterios": [
+    186,
+    187
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "un-prestamo-que-le-de-mi-empresa-a-un-socio-se-trata-como-dividendos-en-mi-de",
+  "pregunta": "¿Un préstamo que le dé mi empresa a un socio se trata como dividendos en mi declaración de impuestos?",
+  "respuesta": "Generalmente sí. El artículo 140 de la LISR considera dividendos los préstamos a socios o accionistas, salvo que cumplan a la vez que sean consecuencia normal de las operaciones de la empresa, que se pacten a plazo menor de un año, que el interés sea igual o superior a la tasa que fija la Ley de Ingresos de la Federación para la prórroga de créditos fiscales, y que se cumplan efectivamente esas condiciones [LISR 140]. El criterio del SAT confirma este tratamiento y señala que estas utilidades no provienen de la Cuenta de Utilidad Fiscal Neta, por lo que la empresa debe calcular el impuesto conforme al artículo 10 de la Ley [SAT 68]. Si usted es persona física, el dividendo debe acumularse a sus demás ingresos, y el artículo 140 establece además un impuesto adicional del 10% que retiene la persona moral [LISR 140] [SAT 78]. Los artículos proporcionados no incluyen la tasa de la Ley de Ingresos ni el cálculo aplicable a su caso, así que para su situación concreta conviene consultar a un contador o asesor fiscal.",
+  "fuentes": {
+   "keys": [
+    "LISR:140"
+   ],
+   "criterios": [
+    68,
+    78
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ },
+ {
+  "slug": "una-plataforma-digital-puede-ser-castigada-penalmente-por-publicar-anuncios-que",
+  "pregunta": "¿Una plataforma digital puede ser castigada penalmente por publicar anuncios que venden comprobantes fiscales falsos?",
+  "respuesta": "Sí. El artículo 113 Bis del CFF sanciona con las mismas penas a las plataformas de servicios digitales y a sus titulares cuando permiten la publicación de anuncios para adquirir o enajenar comprobantes fiscales que amparen operaciones inexistentes, falsas o simuladas, y también a quien a sabiendas permita o publique esos anuncios [CFF 113-Bis]. El SAT precisa que la pena es de dos a nueve años de prisión y que este delito solo puede perseguirse a título de dolo, no de culpa [SAT 26]. Para proceder penalmente se requiere querella de la Secretaría de Hacienda y Crédito Público [CFF 113-Bis]. Los artículos proporcionados no detallan cómo se acredita el dolo en cada caso concreto.",
+  "fuentes": {
+   "keys": [
+    "CFF:113-Bis"
+   ],
+   "criterios": [
+    26
+   ]
+  },
+  "modelo": "claude-haiku-5-5",
+  "verificada": 1,
+  "fecha": "2026-10-16"
+ }
+]

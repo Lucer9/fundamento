@@ -1,4 +1,5 @@
 drop table if exists respuesta;
+drop table if exists relacion;
 drop table if exists fts;
 drop table if exists fragmento;
 drop table if exists criterio_cita;
@@ -70,4 +71,23 @@ create table respuesta (
 create table if not exists uso (
   dia text primary key,
   n integer not null
+);
+
+create table relacion (
+  ley text not null,
+  id text not null,
+  a_ley text not null,
+  a_id text not null,
+  score real not null,
+  primary key (ley, id, a_ley, a_id)
+);
+
+create table if not exists faq (
+  slug text primary key,
+  pregunta text not null,
+  respuesta text not null,
+  fuentes text not null,
+  modelo text not null,
+  verificada integer not null,
+  fecha text not null
 );

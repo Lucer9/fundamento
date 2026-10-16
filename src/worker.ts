@@ -7,9 +7,11 @@ import { CORPUS, PUBLICO_EVAL, PUBLICO_RESPUESTAS } from './corpus.ts'
 import { buscar, cargar, clave, db, loaders, type Criterio, type Ctx, type Env, type Fila, type Modo } from './indice.ts'
 import { LEYES, derogado, type Ley } from './parse.ts'
 import { responder } from './responder.ts'
+import { pagina, robots, sitemap } from './paginas.ts'
 import { typeDefs } from './schema.graphql.ts'
 
 type Tipo = 'NORMATIVE' | 'IMPROPER_PRACTICE'
+type FaqFila = { slug: string; pregunta: string; respuesta: string; fuentes: string; modelo: string; verificada: number; fecha: string }
 const ANEXO: Record<Tipo, number> = { NORMATIVE: 7, IMPROPER_PRACTICE: 3 }
 const FAMILIA: Record<string, string> = { LAW: 'ley', REGULATION: 'reglamento', RULES: 'reglas' }
 
@@ -68,6 +70,8 @@ const resolvers = {
          where ?1 is null or de_ley = ?1 or a_ley = ?1`,
         a.law ?? null,
       ),
+    faqs: (_: unknown, __: unknown, ctx: Ctx) => ctx.db.all<FaqFila>(`select * from faq order by fecha desc, slug`).catch(() => []),
+    faq: async (_: unknown, a: { slug: string }, ctx: Ctx) => (await ctx.db.all<FaqFila>(`select * from faq where slug = ?1`, a.slug).catch(() => []))[0] ?? null,
     stats: async (_: unknown, __: unknown, ctx: Ctx) =>
       (
         await ctx.db.all<Record<string, number>>(
@@ -116,10 +120,27 @@ const resolvers = {
       (await ctx.load.enlaces.load(clave(r.ley, r.id))).map(e => ({ start: e.inicio, end: e.fin, key: e.a })),
     cites: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.cita.load(clave(r.ley, r.id))).map(c => c.a)),
     citedBy: async (r: Fila, _: unknown, ctx: Ctx) => cargar(ctx, (await ctx.load.citadoPor.load(clave(r.ley, r.id))).map(c => c.a)),
+    related: async (r: Fila, _: unknown, ctx: Ctx) =>
+      (await ctx.load.relacionados.load(clave(r.ley, r.id))).map(x => ({ key: x.a, score: x.score })),
     criteria: async (r: Fila, a: { kind?: Tipo }, ctx: Ctx) =>
       (await ctx.load.criterios.load(clave(r.ley, r.id))).filter(c => !a.kind || c.anexo === ANEXO[a.kind]),
   },
   Link: { target: (l: { key: string }, _: unknown, ctx: Ctx) => ctx.load.articulo.load(l.key) },
+  Related: { article: (r: { key: string }, _: unknown, ctx: Ctx) => ctx.load.articulo.load(r.key) },
+  Faq: {
+    slug: (f: FaqFila) => f.slug,
+    question: (f: FaqFila) => f.pregunta,
+    answer: (f: FaqFila) => f.respuesta,
+    sources: (f: FaqFila, _: unknown, ctx: Ctx) => cargar(ctx, (JSON.parse(f.fuentes) as { keys: string[] }).keys),
+    criteria: async (f: FaqFila, _: unknown, ctx: Ctx) => {
+      const ns = (JSON.parse(f.fuentes) as { criterios?: number[] }).criterios ?? []
+      const rows = await ctx.db.all<Criterio>(`select * from criterio where n in (select value from json_each(?1))`, JSON.stringify(ns))
+      return ns.flatMap(n => rows.filter(r => r.n === n))
+    },
+    model: (f: FaqFila) => f.modelo,
+    verified: (f: FaqFila) => f.verificada === 1,
+    date: (f: FaqFila) => f.fecha,
+  },
   SearchHit: {
     article: (h: Hit, _: unknown, ctx: Ctx) => ctx.load.articulo.load(clave(h.ley, h.id)),
     passage: (h: Hit) => h.texto ?? '',
@@ -206,26 +227,9 @@ export default {
       const { model, input } = await request.json<{ model: string; input: unknown }>()
       return Response.json(await env.AI.run(model as keyof AiModels, input as never))
     }
+    if (url.pathname === '/robots.txt') return robots(url.origin)
+    if (url.pathname === '/sitemap.xml') return sitemap(env, url.origin)
     const res = await env.ASSETS.fetch(request)
-    return res.headers.get('content-type')?.includes('text/html') ? marca(res) : res
+    return res.headers.get('content-type')?.includes('text/html') ? pagina(res, env, url) : res
   },
 } satisfies ExportedHandler<Env>
-
-/** The shared index.html carries the active site's name, description and theme, for browser tabs, link previews and a first paint without the other site's colours. */
-function marca(res: Response) {
-  const { nombre, lema, descripcion } = CORPUS.sitio
-  const contenido = (valor: string) => ({ element: (e: Element) => void e.setAttribute('content', valor) })
-  return new HTMLRewriter()
-    .on('html', { element: e => void e.setAttribute('data-site', CORPUS.prefijo) })
-    .on('a.wordmark', {
-      element: e => {
-        e.setInnerContent(nombre)
-        e.setAttribute('aria-label', `${nombre}, inicio`)
-      },
-    })
-    .on('title', { element: e => void e.setInnerContent(`${nombre} · ${lema}`) })
-    .on('meta[name="description"]', contenido(descripcion))
-    .on('meta[property="og:title"]', contenido(nombre))
-    .on('meta[property="og:description"]', contenido(descripcion))
-    .transform(res)
-}

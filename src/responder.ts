@@ -70,6 +70,11 @@ export async function responder(ctx: Ctx, pregunta: string) {
   const modelo = ctx.modeloRespuesta
   const clave = await sha256(`${modelo}\n${q.toLowerCase()}`)
   if (!ctx.evaluando) {
+    const [publicada] = await ctx.db.all<{ respuesta: string; fuentes: string; modelo: string }>(
+      `select respuesta, fuentes, modelo from faq where lower(pregunta) = ?1`,
+      q.toLowerCase(),
+    ).catch(() => [])
+    if (publicada) return { text: publicada.respuesta, ...(JSON.parse(publicada.fuentes) as { keys: string[]; criterios: number[] }), model: publicada.modelo, cached: true }
     const [hecha] = await ctx.db.all<{ texto: string; fuentes: string }>(`select texto, fuentes from respuesta where clave = ?1`, clave)
     if (hecha) return { text: hecha.texto, ...(JSON.parse(hecha.fuentes) as { keys: string[]; criterios: number[] }), model: modelo, cached: true }
     if (!(await ctx.env.ANSWER_LIMITER.limit({ key: ctx.ip })).success) throw new GraphQLError('Demasiadas preguntas, espera un minuto.')

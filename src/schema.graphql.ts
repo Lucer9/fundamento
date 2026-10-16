@@ -77,6 +77,9 @@ ${Object.entries(CORPUS.docs)
     "Every distinct citation between two articles, as article keys: the whole graph in one request."
     citations(law: LawCode): [Citation!]!
     stats: Stats!
+    "Published questions and answers, newest first."
+    faqs: [Faq!]!
+    faq(slug: ID!): Faq
   }
 
   type Law {
@@ -116,8 +119,30 @@ ${Object.entries(CORPUS.docs)
     links: [Link!]!
     cites: [Article!]!
     citedBy: [Article!]!
+    "Articles closest in meaning that neither cite nor are cited by this one (scripts/relacionados.ts): where an obligation's fine lives in another document."
+    related: [Related!]!
     "SAT criteria that cite this article: how SAT reads it (Anexo 7) and practices it calls improper (Anexo 3)."
     criteria(kind: CriterionKind): [Criterion!]!
+  }
+
+  type Related {
+    article: Article!
+    "Cosine similarity of the two articles' mean embeddings."
+    score: Float!
+  }
+
+  "A question answered ahead of time with Claude and published as a page; the answer box serves it for that question."
+  type Faq {
+    slug: ID!
+    question: String!
+    "Plain text with the same citation markers as Answer.text."
+    answer: String!
+    sources: [Article!]!
+    criteria: [Criterion!]!
+    model: String!
+    "Checked by a judge model against SAT's criterio or a hand-written reference answer."
+    verified: Boolean!
+    date: String!
   }
 
   type Citation {
