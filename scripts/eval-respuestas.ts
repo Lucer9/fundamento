@@ -7,7 +7,8 @@ import { claude } from './dev.ts'
  * real `answer` resolver (dev Worker, `x-eval: 1` skips cache and limits, `x-answer-model` picks the model).
  * A judge (Claude Opus through scripts/claude.ts, which must be running) reads the SAT criterio and labels the
  * answer CORRECTA, INCORRECTA or INCOMPLETA. Also records whether the answer cites an article the criterio cites.
- * The criterio a question came from is always excluded from retrieval (`x-excluir-criterio`), so a run with
+ * The criterio a question came from is excluded from retrieval (`x-excluir-criterio`; --con-propio keeps it, an upper
+ * bound closer to production, where every criterio is searchable), so a run with
  * criterios measures whether the other criterios help, not whether the answer can copy its own source.
  * Every answer and verdict is written to eval/respuestas.<run>.json so the numbers can be audited line by line,
  * and each run's summary is upserted into public/eval-respuestas.json.
@@ -16,6 +17,7 @@ import { claude } from './dev.ts'
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
 const [CORRIDA = 'base', DESCRIPCION = CORRIDA] = process.argv.slice(2).filter((a: string) => !a.startsWith('--'))
 const SIN_CRITERIOS = process.argv.includes('--sin-criterios')
+const CON_PROPIO = process.argv.includes('--con-propio')
 const MODELO = process.argv.find((a: string) => a.startsWith('--modelo='))?.slice(9) ?? 'claude-haiku-5-5'
 const JUEZ = 'claude-opus-5-5'
 const ARCHIVO = `eval/respuestas.${CORRIDA}.json`
@@ -48,7 +50,7 @@ async function responder(pregunta: string, n: number) {
         'content-type': 'application/json',
         'x-eval': '1',
         'x-answer-model': MODELO,
-        'x-excluir-criterio': String(n),
+        ...(CON_PROPIO ? {} : { 'x-excluir-criterio': String(n) }),
         ...(SIN_CRITERIOS ? { 'x-sin-criterios': '1' } : {}),
       },
       body: JSON.stringify({
