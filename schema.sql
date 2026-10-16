@@ -98,3 +98,15 @@ create table if not exists reescritura (
   modelo text not null,
   creado text not null default (datetime('now'))
 );
+
+create table if not exists resumen (
+  ley text not null,
+  id text not null,
+  tema text not null,
+  resumen text not null,
+  preguntas text not null,
+  modelo text not null,
+  huella text not null,
+  fecha text not null,
+  primary key (ley, id)
+);

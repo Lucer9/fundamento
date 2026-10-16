@@ -1,0 +1,251 @@
+{
+ "fecha": "2026-10-16",
+ "juez": "claude-opus-5-5",
+ "modelos": [
+  "claude-sonnet-5-5"
+ ],
+ "n": 40,
+ "fieles": 38,
+ "juicios": [
+  {
+   "ley": "RMF",
+   "id": "10.1",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge los artículos citados, las dos condiciones (pago conforme al Contrato y a la LISH, y requisitos de deducibilidad), la deducibilidad para el ISR y la obligación del FMP de expedir los CFDI, incluido el monto del artículo 20; las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "RMF",
+   "id": "2.2.18",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con la regla: sujetos con suspensión provisional o definitiva o amparo contra el 17-K del CFF, la opción de pagar ISR conforme al Título IV, Capítulo II, Sección IV de la LISR y los artículos de referencia."
+  },
+  {
+   "ley": "RMF",
+   "id": "2.8.1.4",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce correctamente a los tres grupos obligados, los montos de $2'000,000.00 y $4'000,000.00, la exclusión de lo amparado por CFDI y la consulta de lo capturado; las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "LIF",
+   "id": "3",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien el objeto de la deuda, el informe trimestral, el papel de Banxico, los 15 días hábiles ampliables hasta tres meses y el cargo a la cuenta de la Tesorería, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.3.1.41",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien el aviso de la ficha 8/ISR con fecha y hora, los noventa días de transición contados desde esa fecha y hora y las cuatro obligaciones; las tres preguntas se responden con el artículo (la tercera, con el plazo de tres días naturales que el resumen no menciona)."
+  },
+  {
+   "ley": "RLIVA",
+   "id": "6",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce las presentaciones y procesos que no implican industrialización y el caso de la madera; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.18.5",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien la condición del listado y la base neta, la verificación en cada pago, el aviso anual de enero y febrero y el reingreso con la ficha 26/ISR, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RMF",
+   "id": "10.18",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas reflejan bien la regla: si en el mismo mes hay exploración y extracción, el IAEEH de toda el área contractual o de asignación se calcula con la cuota de la fracción II del artículo 55 de la LISH."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.5.23",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien los sujetos (fideicomisos de la regla 3.1.14 y personas morales del art. 79-XXI), los requisitos (informe, consentimiento escrito, aviso 97/ISR, tenencia con todos los derechos) y las consecuencias del incumplimiento; las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "RMF",
+   "id": "11.11.1",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con la regla: aplica desde el ejercicio en que se obtiene la constancia, desde el pago provisional del mes de esa constancia y para ingresos de actividades productivas dentro de los PODEBI."
+  },
+  {
+   "ley": "LISR",
+   "id": "132",
+   "veredicto": "FIEL",
+   "motivo": "La tasa del 20% sin deducciones, el plazo de 15 días, el caso de la fracción IV del art. 130 y el cálculo y entero a cargo del fedatario cuando hay escritura con avalúo coinciden con el texto, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "CFF",
+   "id": "117",
+   "veredicto": "ERROR",
+   "motivo": "El resumen dice que el recurso procede contra 'cobros de créditos fiscales' sin la condición del artículo: solo cuando se alegue que el crédito se extinguió o que el monto exigido es mayor al real, y el exceso sea imputable a la autoridad ejecutora o se refiera a recargos, gastos de ejecución o la indemnización del artículo 21."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.1.17",
+   "veredicto": "FIEL",
+   "motivo": "Coinciden con el texto la lista de reglas, el objeto en servicios fiscales independientes, el vínculo de parte relacionada (remitido a los términos de la regla), el abogado o contador habilitado con tres años de ejercicio y la opinión fundada y motivada; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RCFF",
+   "id": "107",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien el pago total, la solicitud de fecha y hora a la Autoridad Fiscal, las formalidades de los arts. 185 y 186 y la nueva fecha, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RMF",
+   "id": "2.7.1.39",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien las tres condiciones para usar PUE (pago pactado o estimado al último día del mes, PUE con forma de pago y cobro total en plazo), la cancelación y reexpedición en ambos supuestos y el plazo al día 17 del mes siguiente para el sector financiero; las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "LIEPS",
+   "id": "22",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien que a la base presuntiva se aplica la tasa que corresponda y luego se restan las cantidades acreditables comprobadas, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "CFF",
+   "id": "47",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien la obligación de concluir la visita, las cinco excepciones y el acta, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.9.5",
+   "veredicto": "FIEL",
+   "motivo": "El resumen coincide con la regla en los artículos 146 y 163 LISR, el 26-VIII CFF, la ficha 63/ISR, la constancia al contribuyente y el entero a más tardar el día 17 del mes siguiente, y las tres preguntas se responden con el texto."
+  },
+  {
+   "ley": "CFF",
+   "id": "69-E",
+   "veredicto": "FIEL",
+   "motivo": "El plazo de veinte días desde el acuse de recibo, la notificación, los firmantes y las mesas de trabajo coinciden con el artículo, y las tres preguntas se responden con su texto."
+  },
+  {
+   "ley": "CFF",
+   "id": "32-B-Quinquies",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce correctamente a los sujetos obligados, el plazo de quince días naturales tras la modificación de identidad o participación y la facultad del SAT para emitir reglas, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "CFF",
+   "id": "84-B",
+   "veredicto": "FIEL",
+   "motivo": "Los montos citados (fracciones I, II y IV, y $140 a $260 por estado de cuenta no emitido según el 32-B) coinciden con el texto, y el artículo responde las tres preguntas, incluida la multa de $516,600 a $1,033,190 por no proporcionar la información."
+  },
+  {
+   "ley": "CFF",
+   "id": "15-D",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien la prohibición general, los dos supuestos de personal transferido o que abarca actividades preponderantes y la excepción de servicios u obras especializadas con registro del art. 15 LFT y requisitos de ISR e IVA; el artículo responde las tres preguntas, incluida la de servicios entre empresas del mismo grupo."
+  },
+  {
+   "ley": "RMF",
+   "id": "2.8.5.1",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con la regla: obtención del FPCPA, medios de pago por Internet, ventanilla solo para personas físicas en efectivo o con cheque de la misma institución, recibo con sello digital como comprobante y repetición del procedimiento si vence la línea de captura."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.15.7",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con el texto: el umbral de $227,400.00, el límite del art. 93-XIX-b, el escrito del enajenante, el aviso de la ficha 67/ISR en enero siguiente y la mención a la regla 3.15.2."
+  },
+  {
+   "ley": "RLIVA",
+   "id": "35",
+   "veredicto": "FIEL",
+   "motivo": "El resumen coincide con el texto en sujetos, base del impuesto, conceptos que no se descuentan y supuesto de retención, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LISR",
+   "id": "71",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas reflejan bien el cálculo: artículo 14, participación integrable y factor del ejercicio anterior, más la parte no integrable. También son correctas la regla del primer ejercicio (factor hipotético y pago de los meses uno a tres) y el acreditamiento contra el impuesto del ejercicio."
+  },
+  {
+   "ley": "RMF",
+   "id": "11.8.2",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce sin cambios el momento de entrega, el destinatario, los firmantes y el contenido del escrito, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RLISR",
+   "id": "274",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien a los sujetos, la exención del art. 164 (fracc. I y IV, II y III), la exención en términos del art. 153, los cinco requisitos y la exclusión de ingresos distintos al párrafo noveno; el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RMF",
+   "id": "2.7.7.1.5",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce sujetos, la documentación del art. 146 LA, la condición de no tener establecimiento permanente y la salvedad de las demás regulaciones; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLISR",
+   "id": "140",
+   "veredicto": "ERROR",
+   "motivo": "La segunda pregunta aplica la obligación de tener tres años de declaraciones a cualquier persona moral con fines no lucrativos, pero el artículo (vía el art. 82, fr. VI) solo la impone a las autorizadas para recibir donativos deducibles."
+  },
+  {
+   "ley": "LIF",
+   "id": "17",
+   "veredicto": "FIEL",
+   "motivo": "El resumen coincide con el artículo: entero hasta el cobro, ingresos netos tras restar erogaciones (también en acciones, cesión de derechos y desincorporación), reglas sobre remanentes y pasivos, y destino de los ingresos de la Ley General de Víctimas; las tres preguntas se responden con el texto."
+  },
+  {
+   "ley": "RLISR",
+   "id": "244",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con el texto: registrar las deducciones en cuentas de orden cumple el requisito del artículo 147, fracción V, de la Ley."
+  },
+  {
+   "ley": "CFF",
+   "id": "133-D",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge con exactitud los requisitos (arts. 18, 122 y 123), el plazo de cinco días y el trámite tradicional, y el artículo responde las tres preguntas, incluida la de los agravios de forma, que se tienen por no formulados."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.3.1.8",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien al sujeto (persona moral del Título II con objeto social de emisión), el capital mínimo de $10,000,000.00, el Anexo 10 y las fichas 4/ISR y 5/ISR, y advierte que hay otros requisitos; las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.6.1",
+   "veredicto": "FIEL",
+   "motivo": "El resumen remite correctamente a la ficha 14/ISR del Anexo 2 para efectos del art. 63, fr. II LISR, aclara que la regla no enumera los documentos, y las tres preguntas se responden con esa remisión."
+  },
+  {
+   "ley": "RMF",
+   "id": "3.2.9",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente la integración y disminución de la cuenta y la exclusión de dividendos en acciones o reinvertidos dentro de 30 días, y las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "RLISR",
+   "id": "295",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien a los sujetos, la exclusión de ingresos, la exención de la declaración del artículo 178 y su traslado a la persona moral residente en México; el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RMF",
+   "id": "2.11.7",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien los sujetos (embargo previo a la autorización del pago a plazos), los bienes, depósitos o seguros, la condición de garantizar el interés fiscal según la ficha 60/CFF del Anexo 2 y la liberación al quedar constituida la garantía; las tres preguntas se responden con la regla."
+  },
+  {
+   "ley": "RLISR",
+   "id": "267",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien la remisión a los arts. 36, 131 y 138, la no deducibilidad de bienes deducidos por el art. 103-II, el costo ajustado (Título IV, Cap. IV) y la inclusión de monumentos; el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "CFF",
+   "id": "86-H",
+   "veredicto": "FIEL",
+   "motivo": "Las multas ($10 a $20 por cajetilla; $31,560 a $473,350 cada vez), los sujetos, la clausura de 15 días por reincidencia y la cancelación de códigos por el SAT coinciden con el texto, y las tres preguntas se responden con el artículo."
+  }
+ ]
+}

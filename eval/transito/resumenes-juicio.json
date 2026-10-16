@@ -1,0 +1,251 @@
+{
+ "fecha": "2026-10-16",
+ "juez": "claude-opus-5-5",
+ "modelos": [
+  "claude-sonnet-5-5"
+ ],
+ "n": 40,
+ "fieles": 36,
+ "juicios": [
+  {
+   "ley": "LM",
+   "id": "253",
+   "veredicto": "FIEL",
+   "motivo": "El resumen conserva el carácter potestativo («podrá»), el rango adicional del 50% al 100% de las cuantías y los tres criterios del artículo; las tres preguntas se responden con el texto."
+  },
+  {
+   "ley": "LM",
+   "id": "215",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce la obligación, el sujeto emisor (la Secretaría) y el marco normativo, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LM",
+   "id": "64",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce el texto: obligación de licencia para todo conductor, incluidos motociclistas y eléctricos personales, y permisos de uso particular para personas de entre 15 y 18 años; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "120",
+   "veredicto": "FIEL",
+   "motivo": "Lo que afirma el resumen (originales para cotejo, CURP o acta constitutiva, tablas para particular y público, verificación de robo, tenencia y refrendo de 5 años, línea de captura) está en el texto, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "LCC",
+   "id": "74",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce bien la suspensión, el plazo máximo de dos horas, el defensor de oficio y la excepción para menores y personas con discapacidad; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "168",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente las fracciones I, IV, V, VI, XI, XIII, XIV y XV, y el artículo responde las tres preguntas (la revista vehicular es anual)."
+  },
+  {
+   "ley": "LM",
+   "id": "111",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge con exactitud la excepción por caso fortuito o fuerza mayor, el aviso a la Secretaría si la suspensión pasa de 48 horas, la sanción por omitirlo y la reanudación inmediata con constancias; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LM",
+   "id": "231",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge con exactitud a los sujetos, los niveles escolares, los temas y la promoción de parques en todas las alcaldías, y el artículo responde las tres preguntas (la tercera, en el sentido de que la Secretaría promoverá su apertura)."
+  },
+  {
+   "ley": "RLM",
+   "id": "33",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge con exactitud la orientación básica y elemental sobre trámites, módulos y dependencia encargada, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RT",
+   "id": "28",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien las dos prohibiciones y sus sanciones (500/550/600 UMA y tres puntos; 80/100/130 UMA y seis puntos), y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "LM",
+   "id": "131",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente los sujetos y las ocho causas de revocación, incluidas las cifras de tres lesiones y una muerte imputables al conductor, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "LCC",
+   "id": "118",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge con exactitud el sujeto, lo que se entrega, la responsabilidad estricta y la constancia en el registro, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "LCC",
+   "id": "85",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge bien quién notifica, los ocho elementos mínimos (enumerados como «entre ellos»), la constancia de recepción y la citación del menor por medio de quien ejerza patria potestad, custodia o tutela; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LM",
+   "id": "114",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge las tres causales de caducidad con sus condiciones exactas: el plazo de la concesión salvo caso fortuito o fuerza mayor, la suspensión mayor de quince días por causas imputables al concesionario y la garantía en la forma señalada por la Secretaría. Las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LM",
+   "id": "27",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge las tres facultades del artículo con su alcance correcto, y las tres preguntas se responden con el texto."
+  },
+  {
+   "ley": "LM",
+   "id": "96",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce el alcance de las concesiones (sin derechos reales ni de exclusividad; uso, aprovechamiento y explotación conforme a la normativa; cesión según el art. 104), y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RLM",
+   "id": "10",
+   "veredicto": "ERROR",
+   "motivo": "La primera pregunta pide quiénes integran la Comisión, pero el artículo no los enumera: remite a la Ley y solo dice que los integrantes tienen voz y voto."
+  },
+  {
+   "ley": "RLM",
+   "id": "237-Bis",
+   "veredicto": "FIEL",
+   "motivo": "Las multas de 250 a 400 UMA (fracciones I y II) y de 100 a 200 UMA (fracción III), la remisión al depósito y la facultad de la Secretaría para revocar y dar de baja constancias coinciden con el artículo, y las tres preguntas se responden con él."
+  },
+  {
+   "ley": "LM",
+   "id": "118",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce sujetos, periodicidad anual, tipo de inspección y finalidad del artículo, y las tres preguntas se responden con el texto."
+  },
+  {
+   "ley": "RLM",
+   "id": "69",
+   "veredicto": "FIEL",
+   "motivo": "La definición, los cinco tipos, el límite de 70 kg en vehículos de hasta 3.5 toneladas y motocicletas, y la excepción ambiental coinciden con el artículo; las tres preguntas se responden con él."
+  },
+  {
+   "ley": "LM",
+   "id": "218",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge al sujeto (la Secretaría), ambas condiciones (que lo considere conveniente y que lo permitan los ordenamientos federales) y la finalidad, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "210",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con el artículo: notifican las Delegaciones, el plazo es de diez días sin respuesta favorable y después la Agencia da seguimiento y coordina los trabajos."
+  },
+  {
+   "ley": "RLM",
+   "id": "171",
+   "veredicto": "ERROR",
+   "motivo": "La primera pregunta pide qué opina el Órgano Regulador sobre el Metrobús, pero el artículo solo dice que emitirá su opinión, sin indicar su contenido."
+  },
+  {
+   "ley": "LCC",
+   "id": "123",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce la equivalencia mínima con la categoría básica de Agentes del Ministerio Público adscritos a Juzgados del Fuero Común, los criterios y la disponibilidad presupuestal, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "LCC",
+   "id": "136",
+   "veredicto": "FIEL",
+   "motivo": "El resumen dice lo mismo que el artículo: la Dirección reúne las pruebas conducentes y ordena diligencias para esclarecer los hechos de la queja y los derivados de las supervisiones; el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "LM",
+   "id": "21",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente la presidencia, la suplencia, los consejeros permanentes, los titulares de las alcaldías como invitados permanentes, las sesiones trimestrales públicas con acta y los consejos por alcaldía, y el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RLM",
+   "id": "3",
+   "veredicto": "ERROR",
+   "motivo": "La primera pregunta habla de los plazos de la Ley de Movilidad, pero el artículo solo regula los términos y plazos del Reglamento, así que no se responde con este texto."
+  },
+  {
+   "ley": "LM",
+   "id": "144",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge la publicación en Internet de la Secretaría, la entrega a quien acredite interés legítimo y la excepción por información reservada o confidencial; las tres preguntas se responden con el artículo (la tercera, por remisión a las leyes correspondientes)."
+  },
+  {
+   "ley": "LM",
+   "id": "123",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente el permiso de la Secretaría, los requisitos, el pago de derechos, lo que fija el permiso y la vigencia máxima de tres años; las preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "223",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente la obligación de la Secretaría, su finalidad, el alcance (pasajeros y carga, todas las modalidades) y las siete condiciones, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "19",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente el objeto, el contenido, quién determina los temas y la vigencia, y quién emite los programas, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "26",
+   "veredicto": "ERROR",
+   "motivo": "El resumen es fiel, pero la tercera pregunta no se responde con el artículo: el texto solo dice que los estudios y proyectos se integran en el banco de proyectos de infraestructura para la movilidad, no explica para qué sirve ese banco."
+  },
+  {
+   "ley": "RLM",
+   "id": "5",
+   "veredicto": "FIEL",
+   "motivo": "El resumen y las preguntas coinciden con el artículo: voz y voto de los consejeros permanentes, solo voz para los invitados, cargo honorífico, mayoría del 50% más uno de los asistentes y voto de calidad del Presidente en caso de empate."
+  },
+  {
+   "ley": "RLM",
+   "id": "241",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce correctamente que la Secretaría elaborará los lineamientos con las condiciones y requisitos del reconocimiento anual y público a los concesionarios del artículo 234, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "134",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce sujetos, obligación (alta ante la Secretaría) y finalidad (circular en vías públicas de la CDMX), y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "92",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge la intransferibilidad de los derechos y obligaciones, la nulidad de cualquier enajenación o transmisión y su falta de reconocimiento por la Secretaría; las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LM",
+   "id": "185",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce sujetos, coordinación, finalidad y el Manual a cargo de la Secretaría, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "RLM",
+   "id": "198",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge correctamente el cuarto trimestre, la publicación en la Gaceta y en dos periódicos con al menos cinco días de anticipación, la frase incompleta sobre organismos descentralizados y la alteración de tarifas como causal de cancelación; el artículo responde las tres preguntas."
+  },
+  {
+   "ley": "RLM",
+   "id": "158",
+   "veredicto": "FIEL",
+   "motivo": "El resumen reproduce que la implementación se determina por el estudio técnico y los demás estudios que la Secretaría considere necesarios, y las tres preguntas se responden con el artículo."
+  },
+  {
+   "ley": "LCC",
+   "id": "110",
+   "veredicto": "FIEL",
+   "motivo": "El resumen recoge con exactitud los tres años, la sustitución escalonada y la no reelección para las fracciones V y VII, y el nombramiento y remoción por la Alcaldía para la fracción IX. Las preguntas se responden con el artículo, aunque las dos primeras aplican solo a las fracciones V y VII."
+  }
+ ]
+}
