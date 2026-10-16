@@ -116,9 +116,9 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
   return metodos
 }
 
-const naturales = new Map((JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { n: number; pregunta: string }[]).map(p => [p.n, p.pregunta]))
+const naturales = new Map((JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { n: number; pregunta: string; modelo?: string }[]).map(p => [p.n, p]))
 const porTitulo = await metodosPara(criterios.map(c => c.tema), 'preguntas', process.argv.includes('--rerank'))
-const porPregunta = await metodosPara(criterios.map(c => naturales.get(c.n)!), 'naturales', false)
+const porPregunta = await metodosPara(criterios.map(c => naturales.get(c.n)!.pregunta), 'naturales', false)
 
 type Rangos = (number | null)[]
 
@@ -136,7 +136,11 @@ function intervalo(a: Rangos, metrica: (rs: Rangos) => number, b?: Rangos) {
   return [vals[50], vals[1949]]
 }
 
-function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], consulta: (i: number) => string) {
+/**
+ * Scores every method on the questions in `idx`. Δhit@5 compares each method with keyword search over the same
+ * documents: rows marked "· leyes" against "keyword · leyes", the rest against "keyword".
+ */
+function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], consulta: (i: number) => string, modelo?: (i: number) => string | undefined) {
   const filas = Object.entries(metodos).map(([nombre, hits]) => {
     const rangos = idx.map(i => {
       const r = hits[i].slice(0, 10).findIndex(h => criterios[i].esperados.includes(`${h.ley}:${h.id}`))
@@ -146,16 +150,16 @@ function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], 
     const mrr = (rs = rangos) => rs.reduce<number>((s, r) => s + (r ? 1 / r : 0), 0) / rs.length
     return { nombre, hit1: hit(1), hit5: hit(5), hit10: hit(10), mrr: mrr(), ic5: intervalo(rangos, rs => hit(5, rs)), icMrr: intervalo(rangos, mrr), rangos }
   })
-  const base = filas[0].rangos
+  const base = (f: (typeof filas)[number]) => filas.find(b => b.nombre === (f.nombre.endsWith(' · leyes') ? 'keyword · leyes' : 'keyword')) ?? filas[0]
   const hit5 = (rs: Rangos) => rs.filter(r => r !== null && r <= 5).length / rs.length
-  for (const f of filas) Object.assign(f, { delta5: intervalo(f.rangos, hit5, base) })
+  for (const f of filas) Object.assign(f, { delta5: intervalo(f.rangos, hit5, base(f).rangos) })
   const pct = (x: number) => `${(100 * x).toFixed(1)}%`.padStart(6)
   const ic = ([a, b]: number[], signo = false) =>
     `[${[a, b].map(x => `${signo && x > 0 ? '+' : ''}${(100 * x).toFixed(0)}`).join(', ')}]`.padEnd(11)
   console.log(`\n${titulo}  n=${idx.length}\n${'method'.padEnd(24)} hit@1  hit@5 (95% CI)    Δhit@5 vs keyword  hit@10  MRR@10`)
   for (const f of filas as (typeof filas[number] & { delta5: number[] })[])
     console.log(
-      `${f.nombre.padEnd(24)} ${pct(f.hit1)} ${pct(f.hit5)} ${ic(f.ic5)} ${f === filas[0] ? ''.padEnd(18) : `${(100 * (f.hit5 - filas[0].hit5) >= 0 ? '+' : '') + (100 * (f.hit5 - filas[0].hit5)).toFixed(1)} ${ic(f.delta5, true)}`.padEnd(18)} ${pct(f.hit10)}  ${f.mrr.toFixed(3)}`,
+      `${f.nombre.padEnd(24)} ${pct(f.hit1)} ${pct(f.hit5)} ${ic(f.ic5)} ${f === base(f) ? ''.padEnd(18) : `${(100 * (f.hit5 - base(f).hit5) >= 0 ? '+' : '') + (100 * (f.hit5 - base(f).hit5)).toFixed(1)} ${ic(f.delta5, true)}`.padEnd(18)} ${pct(f.hit10)}  ${f.mrr.toFixed(3)}`,
     )
   return {
     n: idx.length,
@@ -165,6 +169,7 @@ function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], 
       materia: criterios[i].materia,
       tema: consulta(i),
       esperados: criterios[i].esperados,
+      ...(modelo?.(i) ? { modelo: modelo(i) } : {}),
       rangos: Object.fromEntries(filas.map(f => [f.nombre, f.rangos[j]])),
     })),
   }
@@ -186,7 +191,13 @@ function comparar(metodos: Record<string, Hit[][]>, a: string, b: string, idx: n
 const anexo = (a: number) => criterios.flatMap((c, i) => (c.anexo === a ? [i] : []))
 const ajuste = medir('Anexo 7, criterio titles', porTitulo, anexo(7), i => criterios[i].tema)
 const reserva = medir('Anexo 3, criterio titles (held out)', porTitulo, anexo(3), i => criterios[i].tema)
-const comunes = medir('Plain-language questions, both annexes', porPregunta, criterios.map((_, i) => i), i => naturales.get(criterios[i].n)!)
+const comunes = medir(
+  'Plain-language questions, both annexes',
+  porPregunta,
+  criterios.map((_, i) => i),
+  i => naturales.get(criterios[i].n)!.pregunta,
+  i => naturales.get(criterios[i].n)!.modelo,
+)
 writeFileSync(
   'public/eval.json',
   JSON.stringify({
