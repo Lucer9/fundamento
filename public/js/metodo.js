@@ -1,11 +1,12 @@
-import { EN_USO, esAborto, errorHtml, etiqueta, html, LEYES, nf, pct, request, rutaClave } from './lib.js'
+import { badge, corto, EN_USO, FAMILIAS, familia, gql, esAborto, errorHtml, etiqueta, html, nf, pct, request, rutaClave } from './lib.js'
 
 const BASE = 'keyword'
 const LETRAS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const EJEMPLO = `{
-  article(law: LISR, number: "151") {
+  article(law: RMF, number: "2.7.1.21") {
+    title
+    cites { key }
     citedBy { key }
-    criteria { kind title }
   }
 }`
 
@@ -46,27 +47,43 @@ const conjuntos = ev =>
 
 const puntos = x => `${x >= 0 ? '+' : '−'}${Math.abs(x * 100).toFixed(1)}`
 
+const iv = ([lo, hi]) => `${puntos(lo)} a ${puntos(hi)}`
+const cruzaCero = ([lo, hi]) => lo <= 0 && hi >= 0
+
+/**
+ * Findings stated only from what eval.json carries: each one renders when its methods (and, for paired
+ * claims, its entry in `naturales.comparaciones`) exist, so a smaller rerun drops the claim instead of
+ * keeping a stale number.
+ */
 function hallazgos(cs) {
   const set = k => cs.find(c => c.clave === k)
   const m = (s, n) => s?.metodos.find(x => x.nombre === n)
   const com = set('comun')
   const a7 = set('anexo7')
+  const comparaciones = com?.comparaciones ?? []
+  const par = (a, b) => comparaciones.find(c => c.a === a && c.b === b)
   const out = []
-  const g = m(com, 'vector gemma')
+  const prod = m(com, EN_USO)
   const kw = m(com, BASE)
-  if (g?.delta5 && kw)
-    out.push(`En preguntas en lenguaje común, los vectores superan por mucho a las palabras clave: vector gemma trae un artículo esperado entre los 5 primeros resultados ${((g.hit5 - kw.hit5) * 100).toFixed(1)} puntos más seguido (intervalo pareado de 95%: ${puntos(g.delta5[0])} a ${puntos(g.delta5[1])}).`)
-  const vb = m(com, 'vector bge-m3')
-  const hb = m(com, 'hybrid bge-m3')
-  const par = (a, b) => com.comparaciones?.find(c => c.a === a && c.b === b)
-  const vh = par('vector bge-m3', 'hybrid bge-m3')
-  if (vb && hb && vh && vh.hit1[0] > 0)
-    out.push(`Sumar palabras clave a los vectores (búsqueda híbrida) bajó hit@1 en esas preguntas: con bge-m3, ${pct(vb.hit1)} solo con vectores contra ${pct(hb.hit1)} en híbrida (diferencia pareada de 95%: ${puntos(vh.hit1[0])} a ${puntos(vh.hit1[1])} puntos a favor de vectores). Por eso el sitio usa solo vectores.`)
-  const modelos = [par('vector gemma', 'vector bge-m3'), par('vector gemma', 'vector qwen3')]
-  if (modelos.every(c => c && c.hit5[0] < 0 && c.hit5[1] > 0)) out.push('Con este número de preguntas no se pueden separar gemma, bge-m3 y qwen3.')
+  if (prod?.delta5 && kw)
+    out.push(`En preguntas en lenguaje común, los vectores superan por mucho a las palabras clave: ${nombre(EN_USO).toLowerCase()} trae un artículo esperado entre los 5 primeros resultados ${((prod.hit5 - kw.hit5) * 100).toFixed(1)} puntos más seguido (intervalo pareado de 95%: ${iv(prod.delta5)}).`)
+  const fusion = comparaciones.find(c => /^vector /.test(c.a) && c.b === c.a.replace(/^vector /, 'hybrid ') && c.hit1?.[0] > 0)
+  if (fusion && m(com, fusion.a) && m(com, fusion.b)) {
+    const modelo = fusion.a.replace(/^vector /, '')
+    out.push(`Sumar palabras clave a los vectores (búsqueda híbrida) bajó hit@1 en esas preguntas: con ${modelo}, ${pct(m(com, fusion.a).hit1)} solo con vectores contra ${pct(m(com, fusion.b).hit1)} en híbrida (diferencia pareada de 95%: ${iv(fusion.hit1)} puntos a favor de vectores).${/^vector /.test(EN_USO) ? ' Por eso el sitio usa solo vectores.' : ''}`)
+  }
+  const rivales = comparaciones.filter(c => c.a === EN_USO && /^vector /.test(c.b) && !c.b.startsWith(`${EN_USO} `) && c.hit5 && cruzaCero(c.hit5))
+  if (rivales.length) out.push(`Con este número de preguntas no se puede separar ${nombre(EN_USO).toLowerCase()} de ${rivales.map(c => nombre(c.b).toLowerCase()).join(' ni de ')}: los intervalos pareados de hit@5 cruzan el cero.`)
+  const recorte = par(EN_USO, `${EN_USO} 768d`)
+  if (recorte?.hit5)
+    out.push(
+      cruzaCero(recorte.hit5)
+        ? `Recortar los vectores de 768 a 512 dimensiones no cambió el resultado de forma medible: la diferencia pareada en hit@5 (512 menos 768) va de ${iv(recorte.hit5)} puntos.`
+        : `Recortar los vectores de 768 a 512 dimensiones ${recorte.hit5[0] > 0 ? 'mejoró' : 'empeoró'} hit@5: la diferencia pareada (512 menos 768) va de ${iv(recorte.hit5)} puntos.`,
+    )
   const v7 = m(a7, 'vector bge-m3')
   const r7 = m(a7, 'vector bge-m3 + rerank')
-  if (v7 && r7) out.push(`Reordenar los resultados con un modelo reranker empeoró la búsqueda: en el Anexo 7, hit@1 bajó de ${pct(v7.hit1)} a ${pct(r7.hit1)}.`)
+  if (v7 && r7 && r7.hit1 < v7.hit1) out.push(`Reordenar los resultados con un modelo reranker empeoró la búsqueda: en el Anexo 7, hit@1 bajó de ${pct(v7.hit1)} a ${pct(r7.hit1)}.`)
   return out
 }
 
@@ -80,6 +97,7 @@ export default {
         <h1 tabindex="-1">Cómo se mide la búsqueda</h1>
         <p class="deck">Cada pregunta de prueba sale de un criterio que publica el SAT en la Resolución Miscelánea Fiscal 2026, y se califica con los artículos que ese criterio cita.</p>
       </header>
+      <p class="scope muted" data-slot="scope"></p>
       <div class="prose" data-slot="prose"></div>
       <div data-slot="eval"><div aria-hidden="true">${Array.from({ length: 6 }, () => html`<span class="sk"></span>`)}</div></div>
       <section class="panel" aria-labelledby="resp-h" data-slot="respuestas" hidden></section>
@@ -94,13 +112,23 @@ export default {
       b => {
         const ms = Math.round(performance.now() - t0)
         const n = b.extensions?.d1Queries
-        main.querySelector('[data-slot=live]').textContent = `Ejecutada al abrir esta página: ${b.data.article.citedBy.length} artículos la citan, ${b.data.article.criteria.length} criterios. Respondió en ${nf.format(ms)} ms${n != null ? ` con ${n} ${n === 1 ? 'consulta' : 'consultas'} a la base de datos` : ''}.`
+        const a = b.data.article
+        main.querySelector('[data-slot=live]').textContent = `Ejecutada al abrir esta página: la regla cita ${nf.format(a?.cites.length ?? 0)} textos y la citan ${nf.format(a?.citedBy.length ?? 0)}. Respondió en ${nf.format(ms)} ms${n != null ? ` con ${n} ${n === 1 ? 'consulta' : 'consultas'} a la base de datos` : ''}.`
       },
       e => {
         if (!esAborto(e)) main.querySelector('[data-slot=live]').textContent = `No se pudo ejecutar: ${e.message}`
       },
     )
     respuestas(main.querySelector('[data-slot=respuestas]'))
+    gql('{ stats { articles } laws { code } }', {}, ctx.signal).then(
+      ({ stats, laws }) => {
+        const n = f => laws.filter(l => familia(l.code) === f).length
+        const partes = FAMILIAS.map(f => [n(f.id), f]).filter(([k]) => k)
+        const texto = partes.map(([k, f]) => (f.id === 'miscelanea' ? (k === 1 ? 'la Resolución Miscelánea Fiscal 2026' : `${k} misceláneas`) : `${k} ${k === 1 ? f.uno : f.nombre.toLowerCase()}`))
+        main.querySelector('[data-slot=scope]').textContent = `El índice cubre ${laws.length} documentos: ${texto.slice(0, -1).join(', ')}${texto.length > 1 ? ' y ' : ''}${texto[texto.length - 1]}, con ${nf.format(stats.articles)} artículos y reglas.`
+      },
+      () => {},
+    )
     evalP ??= fetch('/eval.json').then(r => {
       if (!r.ok || !r.headers.get('content-type')?.includes('json')) throw new Error('No se encontró eval.json.')
       return r.json()
@@ -117,14 +145,14 @@ export default {
     const cs = conjuntos(ev)
     orden = [...new Set([...ev.metodos, ...cs.flatMap(c => c.metodos)].map(m => m.nombre))]
     const puntosClave = hallazgos(cs)
-    main.querySelector('[data-slot=prose]').innerHTML = html`<div class="prose-main"><p>Cada criterio del SAT cita los artículos en los que se apoya. Una pregunta cuenta como acierto si alguno de esos artículos aparece entre los primeros resultados. Hay tres conjuntos de preguntas:</p>
+    main.querySelector('[data-slot=prose]').innerHTML = html`<div class="prose-main"><p>Cada criterio del SAT cita los artículos en los que se apoya. Una pregunta cuenta como acierto si alguno de esos artículos aparece entre los primeros resultados. Hay ${['ningún', 'un', 'dos', 'tres', 'cuatro'][cs.length] ?? cs.length} ${cs.length === 1 ? 'conjunto' : 'conjuntos'} de preguntas:</p>
       <ul class="sets">${cs.map(c => html`<li><strong>${c.nombre}</strong>, ${nf.format(c.n)} preguntas. ${c.rol}</li>`)}</ul></div>
       <aside class="prose-side"><dl class="defs">
         <div><dt>hit@k</dt><dd>Proporción de preguntas con un acierto entre los primeros k resultados.</dd></div>
         <div><dt>MRR</dt><dd>Promedio de 1 / posición del primer acierto.</dd></div>
         <div><dt>Rangos</dt><dd>Intervalos de confianza de 95% por bootstrap.</dd></div>
       </dl>
-      <p class="muted small">Resultados del ${ev.fecha}. Este sitio usa búsqueda vectorial con embeddinggemma-300m (<strong>${nombre(EN_USO).toLowerCase()}</strong> en las tablas); los artículos que la pregunta nombra van primero.</p></aside>
+      <p class="muted small">Resultados del ${ev.fecha}. Este sitio usa búsqueda vectorial con embeddinggemma-300m${orden.includes(`${EN_USO} 768d`) ? ', recortada a 512 dimensiones' : ''} (<strong>${nombre(EN_USO).toLowerCase()}</strong> en las tablas); los artículos que la pregunta nombra van primero.</p></aside>
       ${puntosClave.length ? html`<section class="findings" aria-labelledby="hall-h"><h2 class="section-h" id="hall-h">Lo que muestran los números</h2><ol>${puntosClave.map(t => html`<li>${t}</li>`)}</ol></section>` : ''}`
     const pedido = ctx.params.get('conjunto')
     const alias = { reservado: 'anexo3', ajuste: 'anexo7' }
@@ -207,7 +235,7 @@ function pintar(cs) {
       <h2 class="section-h" id="exp-h">Pregunta por pregunta</h2>
       <form class="exp-filters" role="search" aria-label="Filtrar preguntas">
         <label class="field"><span>Buscar en las preguntas</span><input type="search" name="texto" value="${vista.texto}" autocomplete="off"></label>
-        <label class="field"><span>Ley</span><select name="materia"><option value="">Todas</option>${Object.keys(LEYES).map(k => html`<option value="${k}" ${vista.materia === k ? 'selected' : ''}>${k}</option>`)}</select></label>
+        <label class="field"><span>Documento</span><select name="materia"><option value="">Todos</option>${[...new Set(c.preguntas.map(p => p.materia))].sort().map(k => html`<option value="${k}" ${vista.materia === k ? 'selected' : ''}>${corto(k)}</option>`)}</select></label>
         <label class="field"><span>Mostrar</span><select name="mostrar">
           ${[
             ['todas', 'Todas'],
@@ -260,7 +288,7 @@ function filas(c) {
     ? html`<div class="exp-head" aria-hidden="true" style="--n:${ms.length}"><span>Pregunta</span><span>Artículos</span><span class="exp-ranks">${ms.map(m => html`<span>${letra(m)}</span>`)}</span></div>
       <ol class="exp-list" style="--n:${ms.length}">${visibles.map(
         p => html`<li class="exp-row">
-          <div class="exp-q"><span class="badge">${p.materia}</span>${p.id ? html`<span class="crit-id">${p.id}</span>` : ''}<p>${p.tema}</p></div>
+          <div class="exp-q">${badge(p.materia)}${p.id ? html`<span class="crit-id">${p.id}</span>` : ''}<p>${p.tema}</p></div>
           <p class="exp-arts">${p.esperados.map(k => html`<a href="${rutaClave(k)}">${etiqueta(k)}</a>`)}</p>
           <ul class="exp-ranks" aria-label="Posición por método">${ms.map(
             m => html`<li class="rk" data-r="${nivel(p.rangos[m])}" title="${`${nombre(m)}: ${p.rangos[m] == null ? 'sin acierto en los 10 primeros' : `posición ${p.rangos[m]}`}`}"><span class="rk-l" aria-hidden="true">${letra(m)}</span><span class="sr-only">${nombre(m)}: </span><span class="rk-n">${p.rangos[m] ?? '—'}</span></li>`,

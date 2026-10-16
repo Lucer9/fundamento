@@ -1,4 +1,4 @@
-import { anunciar, cuenta, EN_USO, errorHtml, esAborto, esc, extracto, gql, html, LEYES, niveles, numero, pct, raw, request, ruta, terminos, TIPO_CRITERIO } from './lib.js'
+import { anunciar, badge, corto, cuenta, DOCS, EN_USO, errorHtml, esAborto, esc, esDoc, etiqueta, extracto, gql, html, niveles, opcionesDocs, pct, raw, request, ruta, terminos, TIPO_CRITERIO, titulo } from './lib.js'
 
 const MODOS = [
   { id: 'semantica', api: 'VECTOR', nombre: 'Semántica' },
@@ -18,7 +18,7 @@ const EJEMPLOS = [
 const SEARCH = `query Buscar($q: String!, $mode: SearchMode, $law: LawCode) {
   search(query: $q, mode: $mode, law: $law, first: 10) {
     score passage
-    article { key number law { code name } location repealed }
+    article { key number title law { code name } location repealed }
   }
 }`
 const ANSWER = `query Responder($q: String!) {
@@ -32,7 +32,7 @@ let portada = null
 const leer = params => ({
   q: (params.get('q') ?? '').trim(),
   modo: MODOS.find(m => m.id === params.get('modo')) ?? MODOS[0],
-  ley: LEYES[params.get('ley')] ? params.get('ley') : '',
+  ley: esDoc(params.get('ley')) ? params.get('ley') : '',
 })
 
 const enlace = ({ q, modo, ley }) => {
@@ -63,10 +63,10 @@ export default {
             ${MODOS.map(m => html`<label><input type="radio" name="modo" value="${m.id}"><span>${m.nombre}</span></label>`)}
           </fieldset>
           <label class="select">
-            <span class="sr-only">Ley</span>
+            <span class="sr-only">Documento</span>
             <select name="ley">
-              <option value="">Todas</option>
-              ${Object.keys(LEYES).map(k => html`<option value="${k}">${k}</option>`)}
+              <option value="">Todos</option>
+              ${opcionesDocs()}
             </select>
           </label>
         </div>
@@ -108,9 +108,9 @@ export default {
 
 function inicio(ctx) {
   el.querySelector('[data-slot=top]').innerHTML = html`<header class="hero">
-    <p class="kicker">LISR · LIVA · CFF <span aria-hidden="true">—</span> texto vigente</p>
+    <p class="kicker">Leyes · Reglamentos · Miscelánea 2026</p>
     <h1 tabindex="-1">La ley fiscal, en tus palabras.</h1>
-    <p class="deck">Busca en la Ley del ISR, la Ley del IVA y el Código Fiscal de la Federación. Cada resultado lleva al artículo vigente, con lo que cita y quién lo cita.</p>
+    <p class="deck">Busca en las leyes fiscales federales, sus reglamentos y la Resolución Miscelánea Fiscal 2026. Cada resultado lleva al texto vigente, con lo que cita y quién lo cita.</p>
   </header>`
   const below = el.querySelector('[data-slot=below]')
   below.innerHTML = html`<section class="examples" aria-labelledby="ej-h">
@@ -118,15 +118,15 @@ function inicio(ctx) {
       <ul class="chips">${EJEMPLOS.map(q => html`<li><a class="chip" href="${enlace({ q, modo: MODOS[0], ley: '' })}">${q}</a></li>`)}</ul>
     </section>
     <section class="figures" aria-label="En cifras" data-slot="cifras"></section>`
-  portada ??= Promise.all([gql('{ stats { articles citations } }'), fetch('/eval.json').then(r => (r.ok ? r.json() : null)).catch(() => null)]).catch(() => null)
+  portada ??= Promise.all([gql('{ stats { articles citations } laws { code } }'), fetch('/eval.json').then(r => (r.ok ? r.json() : null)).catch(() => null)]).catch(() => null)
   return portada.then(datos => {
     const slot = below.querySelector('[data-slot=cifras]')
     if (!datos || !slot) return
-    const [{ stats }, ev] = datos
+    const [{ stats, laws }, ev] = datos
     const set = ev?.naturales ?? ev
     const prod = set?.metodos?.find(m => m.nombre === EN_USO)
     slot.innerHTML = html`<dl class="figures-row">
-      <div><dt>artículos vigentes en tres leyes</dt><dd>${stats.articles.toLocaleString('es-MX')}</dd></div>
+      <div><dt>artículos y reglas vigentes en ${laws.length} documentos</dt><dd>${stats.articles.toLocaleString('es-MX')}</dd></div>
       <div><dt>citas entre artículos, cada una un enlace</dt><dd>${stats.citations.toLocaleString('es-MX')}</dd></div>
       ${prod ? html`<div><dt>de ${set.n} preguntas en lenguaje común, escritas a partir de criterios del SAT, traen entre sus 5 primeros resultados un artículo que el criterio cita. <a href="/como-funciona">Cómo se mide</a></dt><dd>${pct(prod.hit5, 0)}</dd></div>` : ''}
     </dl>`
@@ -172,7 +172,7 @@ function resultados(s, ctx) {
 
 function listaHtml(hits, s, degradada) {
   const stems = terminos(s.q)
-  const filtro = [degradada ? 'por palabras' : s.modo.nombre.toLowerCase(), s.ley ? `solo ${s.ley}` : ''].filter(Boolean).join(', ')
+  const filtro = [degradada ? 'por palabras' : s.modo.nombre.toLowerCase(), s.ley ? `solo ${corto(s.ley)}` : ''].filter(Boolean).join(', ')
   const head = html`${degradada ? html`<p class="degraded" role="status">Búsqueda por palabras: el modelo semántico no está disponible en este momento.</p>` : ''}<div class="results-head"><h2 id="results-h" class="label">Artículos</h2><p class="results-count">${cuenta(hits.length, 'resultado')} <span class="muted">· búsqueda ${filtro}</span></p></div>`
   if (!hits.length) return html`${head}<div class="empty"><p>No encontramos artículos para esa búsqueda.</p><p class="muted">Prueba con otras palabras o con una pregunta más corta.</p></div>`
   return html`${head}<ol class="hits">${hits.map((h, i) => {
@@ -183,8 +183,9 @@ function listaHtml(hits, s, degradada) {
     return html`<li class="hit">
       <span class="hit-rank" aria-hidden="true">${i + 1}</span>
       <div class="hit-body">
-        <p class="hit-meta"><abbr class="badge" title="${a.law.name}">${a.law.code}</abbr><span class="hit-law">${a.law.name}</span></p>
-        <h3 class="hit-title"><a href="${href}" data-pasaje="${h.passage}">Artículo ${numero(a.number)}</a>${a.repealed ? html` <span class="tag">Derogado</span>` : ''}</h3>
+        <p class="hit-meta">${badge(a.law.code)}<span class="hit-law">${a.law.name}</span></p>
+        <h3 class="hit-title"><a href="${href}" data-pasaje="${h.passage}">${titulo(a.law.code, a.number)}</a>${a.repealed ? html` <span class="tag">Derogado</span>` : ''}</h3>
+        ${a.title ? html`<p class="hit-rule">${a.title}</p>` : ''}
         ${ns.length ? html`<p class="hit-loc">${ns.filter(n => n.label).map(n => n.label).join(' › ')}${ultimo?.name ? html`<span class="hit-loc-name"> · ${ultimo.name}</span>` : ''}</p>` : ''}
         <p class="hit-passage">${extracto(h.passage, stems)}</p>
       </div>
@@ -195,8 +196,8 @@ function listaHtml(hits, s, degradada) {
 function citasHtml(text, criterios) {
   const porNumero = new Map(criterios.map(c => [String(c.number), c]))
   const chip = r => {
-    const ley = r.match(/^(LISR|LIVA|CFF)\s+(.+)$/)
-    if (ley) return `<a class="cite" href="${ruta(ley[1], ley[2])}">${ley[1]}&nbsp;${esc(numero(ley[2]))}</a>`
+    const ley = r.match(/^([A-Z]{2,8})\s+(\d[\w.-]*)$/)
+    if (ley && esDoc(ley[1])) return `<a class="cite" href="${ruta(ley[1], ley[2])}" title="${esc(`${DOCS[ley[1]].nombre}, ${titulo(ley[1], ley[2]).toLowerCase()}`)}">${esc(etiqueta(`${ley[1]}:${ley[2]}`)).replace(' ', '&nbsp;')}</a>`
     const sat = r.match(/^SAT\s+(\d+)$/)
     if (!sat) return null
     const c = porNumero.get(sat[1])
@@ -235,7 +236,7 @@ function respuesta(q, slot) {
       const criterios = answer.criteria ?? []
       slot.innerHTML = html`<div class="answer-text" id="answer-text">${answer.text ? citasHtml(answer.text, criterios) : html`<p>Sin respuesta.</p>`}</div>
         <button class="answer-more" type="button" aria-expanded="false" aria-controls="answer-text" hidden>Leer la respuesta completa</button>
-        ${answer.sources.length ? html`<p class="answer-sources"><span class="label">Fuentes</span> ${answer.sources.map(a => html`<a href="${ruta(a.law.code, a.number)}">${a.law.code} ${numero(a.number)}</a>`)}</p>` : ''}
+        ${answer.sources.length ? html`<p class="answer-sources"><span class="label">Fuentes</span> ${answer.sources.map(a => html`<a href="${ruta(a.law.code, a.number)}" title="${DOCS[a.law.code]?.nombre ?? a.law.code}">${etiqueta(a.key)}</a>`)}</p>` : ''}
         ${criterios.length ? html`<div class="answer-crit"><p class="label">Criterios del SAT citados</p><ul>${criterios.map(c => html`<li id="sat-${c.number}" tabindex="-1"><span class="answer-crit-meta">${TIPO_CRITERIO[c.kind] ?? 'Criterio'}${c.id ? html` · <span class="crit-id">${c.id}</span>` : ''}</span><span class="answer-crit-title">${c.title}</span></li>`)}</ul></div>` : ''}
         <p class="answer-note">Respuesta generada con IA a partir de los artículos y criterios citados. Puede equivocarse: revisa las fuentes. <span class="answer-model">Modelo: ${modelo}${answer.cached ? ', respuesta guardada' : ''}.</span></p>`
       const texto = slot.querySelector('.answer-text')

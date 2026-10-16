@@ -1,7 +1,8 @@
-import { esAborto, html } from './lib.js'
+import { DOCS, esAborto, html } from './lib.js'
 
 const main = document.getElementById('main')
-const LEY = /^\/(LISR|LIVA|CFF)\/([^/]+)\/?$/i
+const LEY = new RegExp(`^/(${Object.keys(DOCS).join('|')})/([^/]+)/?$`, 'i')
+const ARCHIVO = /\.(json|js|css|pdf|png|jpe?g|svg|webp|ico|txt|xml|html)$/i
 
 const rutas = [
   { test: p => p === '/', page: () => import('./buscar.js') },
@@ -22,7 +23,7 @@ const noEncontrada = {
     el.innerHTML = html`<section class="empty-page">
       <p class="kicker">Error 404</p>
       <h1 tabindex="-1">Esta página no existe</h1>
-      <p class="deck">Puede que el enlace esté mal escrito. Los artículos viven en direcciones como <a href="/LISR/27">/LISR/27</a> o <a href="/CFF/29-A">/CFF/29-A</a>.</p>
+      <p class="deck">Puede que el enlace esté mal escrito. Los artículos viven en direcciones como <a href="/LISR/27">/LISR/27</a> o <a href="/RCFF/29">/RCFF/29</a>, y las reglas de la Miscelánea en <a href="/RMF/2.7.1.21">/RMF/2.7.1.21</a>.</p>
       <p><a class="button" href="/">Ir al buscador</a></p>
     </section>`
   },
@@ -90,7 +91,7 @@ document.addEventListener('click', e => {
   const a = e.target.closest('a[href]')
   if (!a || a.target || a.hasAttribute('download')) return
   const url = new URL(a.href)
-  if (url.origin !== location.origin || url.pathname.startsWith('/graphql') || /\.\w+$/.test(url.pathname)) return
+  if (url.origin !== location.origin || url.pathname.startsWith('/graphql') || ARCHIVO.test(url.pathname)) return
   if (url.pathname === location.pathname && url.search === location.search && url.hash) return
   e.preventDefault()
   navigate(url.pathname + url.search + url.hash, { state: a.dataset.pasaje ? { pasaje: a.dataset.pasaje } : {} })

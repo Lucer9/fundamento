@@ -1,17 +1,31 @@
-import { esc, gql, numero, rutaClave, ubicacionCorta } from './lib.js'
+import { corto, DOCS, esc, etiqueta, FAMILIAS, familia, gql, rutaClave, ubicacionCorta } from './lib.js'
 
-const GRAFO = `{ laws { code articleKeys } citations { from to } }`
-const UBICACION = `query Ubicacion($l: LawCode!, $n: String!) { article(law: $l, number: $n) { location } }`
-const ORDEN = ['LISR', 'LIVA', 'CFF']
+const GRAFO = `{ laws { code name articleKeys } citations { from to } }`
+const UBICACION = `query Ubicacion($l: LawCode!, $n: String!) { article(law: $l, number: $n) { title location } }`
 const TAU = Math.PI * 2
-const HUECO = 0.045 * TAU
+const HUECO = 0.011 * TAU
+const VISIBLES = new Set(['ley', 'reglamento'])
 
 let datos = null
 
+/**
+ * The whole citation graph in one request: documents in reading order (each reglamento right after
+ * the law it carries out, the Miscelánea last), one node per article or rule, one edge per citation.
+ */
 async function cargar() {
   const { laws, citations } = await gql(GRAFO)
-  const porLey = ORDEN.map(c => laws.find(l => l.code === c)?.articleKeys ?? [])
-  const nodos = porLey.flat().map(key => ({ key, ley: key.split(':')[0], loc: null, entra: [], sale: [] }))
+  const porCodigo = new Map(laws.map(l => [l.code, l]))
+  const orden = []
+  for (const l of laws.filter(l => familia(l.code) === 'ley')) {
+    orden.push(l)
+    for (const r of laws) if (DOCS[r.code]?.de === l.code) orden.push(r)
+  }
+  for (const l of laws) if (!orden.includes(l)) orden.push(l)
+  const docs = orden.map(l => {
+    const fam = familia(l.code)
+    return { code: l.code, nombre: l.name, fam, nodos: porCodigo.get(l.code).articleKeys.map(key => ({ key, ley: l.code, fam, loc: null, entra: [], sale: [], a: null })) }
+  })
+  const nodos = docs.flatMap(x => x.nodos)
   const idx = new Map(nodos.map(n => [n.key, n]))
   const aristas = []
   for (const { from, to } of citations) {
@@ -22,153 +36,220 @@ async function cargar() {
     a.sale.push(b)
     b.entra.push(a)
   }
-  const paso = (TAU - HUECO * ORDEN.length) / nodos.length
-  let ang = -Math.PI / 2 + HUECO / 2
-  const arcos = ORDEN.map((c, j) => {
-    const desde = ang
-    for (const n of nodos.filter(n => n.ley === c)) {
-      n.a = ang + paso / 2
-      ang += paso
-    }
-    const arco = { c, n: porLey[j].length, desde, hasta: ang }
-    ang += HUECO
-    return arco
-  })
-  return { nodos, aristas, arcos, maximo: nodos.reduce((m, n) => (n.entra.length > m.entra.length ? n : m)) }
+  return { docs, nodos, aristas }
 }
 
+/** Shared, cached load of the graph (the explorer and the document matrix both read it). */
+export const cargarGrafo = () =>
+  (datos ??= cargar().catch(e => {
+    datos = null
+    throw e
+  }))
+
 /**
- * Circular citation graph on a canvas: articles sit on the rim in law order, citations are chords.
- * Hover or arrow keys pick an article, click or Enter opens it. Returns `{ setLey, destroy }`.
+ * Circular citation graph on a canvas. Edges are drawn once into an offscreen layer; hovering, tapping
+ * or arrow keys only paint the chosen article's edges on top, so it stays fast with thousands of edges.
+ * Returns `{ setLey, destroy }`.
  */
 export function montarRed(root, { navigate, ley = '' }) {
-  root.innerHTML = `<div class="net-stage"><canvas class="net-canvas" tabindex="0" role="img" aria-describedby="net-info"></canvas><p class="net-loading">Cargando artículos y citas…</p></div>
+  const visibles = new Set(VISIBLES)
+  if (ley) visibles.add(familia(ley))
+  root.innerHTML = `<fieldset class="net-toggles"><legend class="filter-legend">Mostrar</legend>${FAMILIAS.map(
+    f => `<label class="chk"><input type="checkbox" value="${f.id}"${visibles.has(f.id) ? ' checked' : ''}><span><i data-fam="${f.id}"></i>${f.nombre}</span></label>`,
+  ).join('')}</fieldset>
+    <div class="net-stage"><canvas class="net-canvas" tabindex="0" role="img" aria-describedby="net-info"></canvas><p class="net-loading">Cargando artículos y citas…</p></div>
     <p class="net-info" id="net-info" aria-live="polite"></p>`
   const stage = root.querySelector('.net-stage')
   const canvas = root.querySelector('canvas')
   const info = root.querySelector('.net-info')
   const g = canvas.getContext('2d')
+  const base = document.createElement('canvas')
+  const gb = base.getContext('2d')
   let d = null
   let w = 0
   let foco = null
   let fijo = false
   let filtro = ley
   let pedido = 0
+  let sucio = true
   let vivo = true
+  let orden = []
+  let arcos = []
 
-  const geo = () => {
-    const r = w / 2 - (w < 480 ? 40 : 60)
-    return { cx: w / 2, cy: w / 2, r }
-  }
+  const geo = () => ({ cx: w / 2, cy: w / 2, r: w / 2 - (w < 480 ? 44 : 64) })
   const punto = (n, rr, { cx, cy } = geo()) => [cx + Math.cos(n.a) * rr, cy + Math.sin(n.a) * rr]
+  const tintas = () => {
+    const css = getComputedStyle(root)
+    const v = k => css.getPropertyValue(k).trim()
+    return { ink: v('--ink'), paper: v('--paper'), muted: v('--muted'), accent: v('--accent'), fam: { ley: v('--fam-ley'), reglamento: v('--fam-reglamento'), miscelanea: v('--fam-miscelanea') } }
+  }
+  const escala = () => (w < 480 ? 0.32 : 0.5)
+  const radio = n => 0.7 + Math.sqrt(n.entra.length) * escala()
+
+  const disponer = () => {
+    for (const n of d.nodos) n.a = null
+    const docs = d.docs.filter(x => visibles.has(x.fam))
+    const total = docs.reduce((s, x) => s + x.nodos.length, 0)
+    const paso = (TAU - HUECO * docs.length) / Math.max(1, total)
+    let ang = -Math.PI / 2 + HUECO / 2
+    orden = []
+    arcos = docs.map(x => {
+      const desde = ang
+      for (const n of x.nodos) {
+        n.a = ang + paso / 2
+        orden.push(n)
+        ang += paso
+      }
+      const arco = { ...x, desde, hasta: ang }
+      ang += HUECO
+      return arco
+    })
+    canvas.setAttribute('aria-label', `Red circular de ${orden.length} artículos y reglas, agrupados por documento: ${arcos.map(a => `${corto(a.code)} ${a.nodos.length}`).join(', ')}.`)
+  }
+
+  const curva = (ctx, a, b, G) => {
+    const [x1, y1] = punto(a, G.r, G)
+    const [x2, y2] = punto(b, G.r, G)
+    let da = Math.abs(a.a - b.a)
+    if (da > Math.PI) da = TAU - da
+    const k = (1 - da / Math.PI) * 0.85
+    ctx.moveTo(x1, y1)
+    ctx.quadraticCurveTo(G.cx + ((x1 + x2) / 2 - G.cx) * k, G.cy + ((y1 + y2) / 2 - G.cy) * k, x2, y2)
+  }
+
+  const rotulos = (ctx, T, G, atenuar) => {
+    const borde = G.r + 2 * radio(d.maximo) + 5
+    const cajas = []
+    ctx.font = `600 ${w < 480 ? 10.5 : 12}px "Schibsted Grotesk", sans-serif`
+    ctx.textBaseline = 'middle'
+    ctx.textAlign = 'left'
+    for (const arco of arcos) {
+      const fuera = atenuar && filtro && filtro !== arco.code
+      ctx.strokeStyle = T.fam[arco.fam]
+      ctx.globalAlpha = fuera ? 0.3 : 0.95
+      ctx.lineWidth = arco.code === filtro ? 3 : 1.25
+      ctx.beginPath()
+      ctx.arc(G.cx, G.cy, borde, arco.desde + 0.003, Math.max(arco.desde + 0.006, arco.hasta - 0.003))
+      ctx.stroke()
+      const medio = (arco.desde + arco.hasta) / 2
+      const c = Math.cos(medio)
+      const tw = ctx.measureText(arco.code).width
+      for (const extra of [10, 24, 38, 52]) {
+        const lx = G.cx + c * (borde + extra)
+        const ly = G.cy + Math.sin(medio) * (borde + extra)
+        const x0 = Math.max(2, Math.min(w - 2 - tw, Math.abs(c) < 0.2 ? lx - tw / 2 : c > 0 ? lx : lx - tw))
+        const caja = { x: x0 - 3, y: ly - 8, w: tw + 6, h: 16 }
+        if (extra < 52 && cajas.some(o => caja.x < o.x + o.w && o.x < caja.x + caja.w && caja.y < o.y + o.h && o.y < caja.y + caja.h)) continue
+        cajas.push(caja)
+        ctx.globalAlpha = fuera ? 0.4 : 1
+        ctx.fillStyle = arco.code === filtro ? T.accent : T.ink
+        ctx.fillText(arco.code, x0, ly)
+        break
+      }
+    }
+    ctx.globalAlpha = 1
+  }
+
+  const pintarBase = T => {
+    const dpr = window.devicePixelRatio || 1
+    base.width = w * dpr
+    base.height = w * dpr
+    gb.setTransform(dpr, 0, 0, dpr, 0, 0)
+    gb.clearRect(0, 0, w, w)
+    const G = geo()
+    const grupos = new Map()
+    for (const e of d.aristas) {
+      const [a, b] = e
+      if (a.a == null || b.a == null) continue
+      const tocado = !filtro || a.ley === filtro || b.ley === filtro
+      const k = `${tocado ? 1 : 0}${a.fam}`
+      const lista = grupos.get(k) ?? grupos.set(k, []).get(k)
+      lista.push(e)
+    }
+    const alfa = { ley: 0.1, reglamento: 0.22, miscelanea: 0.07 }
+    for (const [k, lista] of [...grupos].sort(([x], [y]) => x.localeCompare(y))) {
+      const tocado = k[0] === '1'
+      const fam = k.slice(1)
+      gb.strokeStyle = T.fam[fam]
+      gb.globalAlpha = tocado ? (filtro ? Math.min(0.6, alfa[fam] * 3) : alfa[fam]) : 0.025
+      gb.lineWidth = w < 480 ? 0.5 : 0.7
+      gb.beginPath()
+      for (const [a, b] of lista) curva(gb, a, b, G)
+      gb.stroke()
+    }
+    for (const n of orden) {
+      const rad = radio(n)
+      const [x, y] = punto(n, G.r + rad + 1.5, G)
+      gb.globalAlpha = filtro && n.ley !== filtro ? 0.18 : 0.6
+      gb.fillStyle = T.fam[n.fam]
+      gb.beginPath()
+      gb.arc(x, y, rad, 0, TAU)
+      gb.fill()
+    }
+    gb.globalAlpha = 1
+    rotulos(gb, T, G, true)
+    sucio = false
+  }
 
   const dibujar = () => {
     pedido = 0
     if (!d || !w) return
-    const css = getComputedStyle(root)
-    const tinta = css.getPropertyValue('--ink').trim()
-    const acento = css.getPropertyValue('--accent').trim()
-    const suave = css.getPropertyValue('--muted').trim()
+    const T = tintas()
+    if (sucio) pintarBase(T)
     const dpr = window.devicePixelRatio || 1
+    g.setTransform(1, 0, 0, 1, 0, 0)
+    g.clearRect(0, 0, canvas.width, canvas.height)
+    g.drawImage(base, 0, 0)
+    if (!foco || foco.a == null) return
     g.setTransform(dpr, 0, 0, dpr, 0, 0)
-    g.clearRect(0, 0, w, w)
     const G = geo()
-    const { cx, cy, r } = G
-
-    const grupos = new Map()
-    const meter = (estilo, e) => (grupos.get(estilo) ?? grupos.set(estilo, []).get(estilo)).push(e)
-    for (const e of d.aristas) {
-      const [a, b] = e
-      const cruza = a.ley !== b.ley
-      if (foco) {
-        if (a === foco) meter('sale', e)
-        else if (b === foco) meter('entra', e)
-        else meter('fondo', e)
-      } else if (filtro && a.ley !== filtro && b.ley !== filtro) meter('fondo', e)
-      else meter(cruza ? 'cruza' : 'misma', e)
-    }
-    const ESTILO = {
-      fondo: [tinta, foco || filtro ? 0.035 : 0.08, 0.6],
-      misma: [tinta, filtro ? 0.16 : 0.11, 0.7],
-      cruza: [acento, filtro ? 0.55 : 0.4, 0.8],
-      entra: [tinta, 0.75, 1.1],
-      sale: [acento, 0.95, 1.4],
-    }
-    for (const k of ['fondo', 'misma', 'cruza', 'entra', 'sale']) {
-      const lista = grupos.get(k)
-      if (!lista) continue
-      const [color, alfa, ancho] = ESTILO[k]
-      g.strokeStyle = color
-      g.globalAlpha = alfa
-      g.lineWidth = ancho
+    g.globalAlpha = 0.78
+    g.fillStyle = T.paper
+    g.fillRect(0, 0, w, w)
+    const entra = foco.entra.filter(n => n.a != null)
+    const sale = foco.sale.filter(n => n.a != null)
+    g.lineWidth = 1
+    g.globalAlpha = 0.7
+    g.strokeStyle = T.ink
+    g.beginPath()
+    for (const n of entra) curva(g, n, foco, G)
+    g.stroke()
+    g.lineWidth = 1.4
+    g.globalAlpha = 0.95
+    g.strokeStyle = T.accent
+    g.beginPath()
+    for (const n of sale) curva(g, foco, n, G)
+    g.stroke()
+    for (const n of [...entra, ...sale, foco]) {
+      const rad = radio(n) + (n === foco ? 1.5 : 0)
+      const [x, y] = punto(n, G.r + radio(n) + 1.5, G)
+      g.globalAlpha = 1
+      g.fillStyle = n === foco || sale.includes(n) ? T.accent : T.fam[n.fam]
       g.beginPath()
-      for (const [a, b] of lista) {
-        const [x1, y1] = punto(a, r, G)
-        const [x2, y2] = punto(b, r, G)
-        let da = Math.abs(a.a - b.a)
-        if (da > Math.PI) da = TAU - da
-        const k2 = 1 - da / Math.PI
-        const mx = (x1 + x2) / 2
-        const my = (y1 + y2) / 2
-        g.moveTo(x1, y1)
-        g.quadraticCurveTo(cx + (mx - cx) * k2 * 0.85, cy + (my - cy) * k2 * 0.85, x2, y2)
-      }
-      g.stroke()
-    }
-
-    const vecinos = foco ? new Set([...foco.entra, ...foco.sale]) : null
-    const escala = w < 480 ? 0.45 : 0.7
-    const radio = n => 0.9 + Math.sqrt(n.entra.length) * escala
-    const borde = r + 2 * radio(d.maximo) + 6
-    for (const n of d.nodos) {
-      const atenuado = (vecinos && n !== foco && !vecinos.has(n)) || (!foco && filtro && n.ley !== filtro)
-      const rad = radio(n)
-      const [x, y] = punto(n, r + rad + 1.5, G)
-      g.globalAlpha = atenuado ? 0.15 : n === foco ? 1 : 0.55
-      g.fillStyle = n === foco || (vecinos && foco.sale.includes(n)) ? acento : tinta
-      g.beginPath()
-      g.arc(x, y, n === foco ? rad + 1.5 : rad, 0, TAU)
+      g.arc(x, y, rad, 0, TAU)
       g.fill()
     }
-
-    g.globalAlpha = 1
+    rotulos(g, T, G, false)
+    const texto = etiqueta(foco.key)
     g.font = `600 ${w < 480 ? 11 : 12}px "Schibsted Grotesk", sans-serif`
-    if (foco) {
-      const [ley, num] = foco.key.split(':')
-      const texto = `${ley} ${numero(num)}`
-      const c = Math.cos(foco.a)
-      const [fx, fy] = punto(foco, borde + 10, G)
-      const tw = g.measureText(texto).width
-      const x0 = Math.max(2, Math.min(w - 2 - tw, c > 0.2 ? fx : c < -0.2 ? fx - tw : fx - tw / 2))
-      g.fillStyle = getComputedStyle(root).getPropertyValue('--paper').trim()
-      g.fillRect(x0 - 4, fy - 9, tw + 8, 18)
-      g.fillStyle = acento
-      g.textBaseline = 'middle'
-      g.textAlign = 'left'
-      g.fillText(texto, x0, fy)
-    }
-    g.textBaseline = 'middle'
-    for (const arco of d.arcos) {
-      const medio = (arco.desde + arco.hasta) / 2
-      g.strokeStyle = filtro && filtro !== arco.c ? suave : tinta
-      g.globalAlpha = filtro && filtro !== arco.c ? 0.35 : 0.9
-      g.lineWidth = 1
-      g.beginPath()
-      g.arc(cx, cy, borde, arco.desde + 0.004, arco.hasta - 0.004)
-      g.stroke()
-      const lx = cx + Math.cos(medio) * (borde + 10)
-      const ly = cy + Math.sin(medio) * (borde + 10)
-      const tw = g.measureText(arco.c).width
-      const c = Math.cos(medio)
-      const x0 = Math.abs(c) < 0.2 ? lx - tw / 2 : c > 0 ? lx : lx - tw
-      g.fillStyle = filtro && filtro !== arco.c ? suave : tinta
-      g.textAlign = 'left'
-      g.fillText(arco.c, Math.max(2, Math.min(w - 2 - tw, x0)), ly)
-    }
+    const tw = g.measureText(texto).width
+    const c = Math.cos(foco.a)
+    const [fx, fy] = punto(foco, G.r - 14, G)
+    const x0 = Math.max(2, Math.min(w - 2 - tw, c > 0.2 ? fx - tw : c < -0.2 ? fx : fx - tw / 2))
     g.globalAlpha = 1
+    g.fillStyle = T.paper
+    g.fillRect(x0 - 4, fy - 9, tw + 8, 18)
+    g.fillStyle = T.accent
+    g.textBaseline = 'middle'
+    g.textAlign = 'left'
+    g.fillText(texto, x0, fy)
   }
   const pintar = () => {
     if (!pedido) pedido = requestAnimationFrame(dibujar)
+  }
+  const rehacer = () => {
+    sucio = true
+    pintar()
   }
 
   let espera = 0
@@ -176,10 +257,10 @@ export function montarRed(root, { navigate, ley = '' }) {
     if (n.loc != null || n.pidiendo) return
     clearTimeout(espera)
     espera = setTimeout(() => {
-      const [l, num] = n.key.split(':')
+      const i = n.key.indexOf(':')
       n.pidiendo = true
-      gql(UBICACION, { l, n: num })
-        .then(r => (n.loc = ubicacionCorta(r.article?.location ?? [])))
+      gql(UBICACION, { l: n.key.slice(0, i), n: n.key.slice(i + 1) })
+        .then(r => (n.loc = r.article?.title ?? ubicacionCorta(r.article?.location ?? [])))
         .catch(() => (n.loc = ''))
         .finally(() => {
           n.pidiendo = false
@@ -191,12 +272,12 @@ export function montarRed(root, { navigate, ley = '' }) {
   const describir = () => {
     if (!d) return
     if (!foco) {
-      info.innerHTML = `<span class="muted">Cada punto es un artículo; su tamaño crece con las citas que recibe. Pasa el cursor o toca un punto. Con el teclado, usa las flechas y Enter.</span>`
+      info.innerHTML = `<span class="muted">Cada punto es un artículo o una regla; crece con las citas que recibe. Pasa el cursor o toca un punto. Con el teclado, usa las flechas y Enter.</span>`
       return
     }
-    const [ley, n] = foco.key.split(':')
     ubicar(foco)
-    info.innerHTML = `<strong class="net-key">${esc(`${ley} ${numero(n)}`)}</strong><span class="muted net-loc">${foco.loc == null ? '…' : esc(foco.loc)}</span><span class="net-counts"><span class="net-out">Cita ${foco.sale.length}</span><span class="net-in">Lo citan ${foco.entra.length}</span></span><a class="net-open" href="${rutaClave(foco.key)}">Abrir artículo</a>`
+    const vis = n => n.a != null
+    info.innerHTML = `<strong class="net-key">${esc(etiqueta(foco.key))}</strong><span class="muted">${esc(corto(foco.ley))}</span><span class="net-loc">${foco.loc == null ? '…' : esc(foco.loc)}</span><span class="net-counts"><span class="net-out">Cita ${foco.sale.length}</span><span class="net-in">Lo citan ${foco.entra.length}</span>${foco.sale.some(n => !vis(n)) || foco.entra.some(n => !vis(n)) ? '<span class="muted">(algunas, en documentos ocultos)</span>' : ''}</span><a class="net-open" href="${rutaClave(foco.key)}">Abrir</a>`
   }
 
   const elegir = (n, pin = fijo) => {
@@ -218,7 +299,7 @@ export function montarRed(root, { navigate, ley = '' }) {
     const ang = Math.atan2(y - cy, x - cx)
     let best = null
     let bd = Infinity
-    for (const n of d.nodos) {
+    for (const n of orden) {
       let da = Math.abs(n.a - ang)
       if (da > Math.PI) da = TAU - da
       if (da < bd) {
@@ -247,8 +328,7 @@ export function montarRed(root, { navigate, ley = '' }) {
     elegir(n, !!n)
   })
   canvas.addEventListener('keydown', ev => {
-    if (!d) return
-    const orden = d.nodos
+    if (!d || !orden.length) return
     const i = foco ? orden.indexOf(foco) : -1
     if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') elegir(orden[(i + 1) % orden.length], true)
     else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') elegir(orden[(i - 1 + orden.length) % orden.length], true)
@@ -260,7 +340,19 @@ export function montarRed(root, { navigate, ley = '' }) {
     ev.preventDefault()
   })
   canvas.addEventListener('focus', () => {
-    if (!foco && d) elegir(d.maximo, true)
+    if (!foco && d) elegir(orden.reduce((m, n) => (n.entra.length > m.entra.length ? n : m), orden[0]), true)
+  })
+  root.querySelector('.net-toggles').addEventListener('change', e => {
+    if (e.target.checked) visibles.add(e.target.value)
+    else visibles.delete(e.target.value)
+    if (!visibles.size) {
+      visibles.add(e.target.value)
+      e.target.checked = true
+    }
+    if (!d) return
+    disponer()
+    if (foco?.a == null) elegir(null, false)
+    rehacer()
   })
 
   const medir = () => {
@@ -272,26 +364,22 @@ export function montarRed(root, { navigate, ley = '' }) {
     canvas.height = w * dpr
     canvas.style.width = `${w}px`
     canvas.style.height = `${w}px`
-    pintar()
+    rehacer()
   }
   const ro = new ResizeObserver(medir)
   ro.observe(stage)
   const mq = matchMedia('(prefers-color-scheme: dark)')
-  mq.addEventListener('change', pintar)
+  mq.addEventListener('change', rehacer)
   medir()
 
-  datos ??= cargar().catch(e => {
-    datos = null
-    throw e
-  })
-  datos.then(
+  cargarGrafo().then(
     x => {
       if (!vivo) return
-      d = x
+      d = { ...x, maximo: x.nodos.reduce((m, n) => (n.entra.length > m.entra.length ? n : m)) }
       root.querySelector('.net-loading')?.remove()
-      canvas.setAttribute('aria-label', `Red circular de ${d.nodos.length} artículos y ${d.aristas.length} citas entre ellos, agrupados por ley: ${d.arcos.map(a => `${a.c} ${a.n}`).join(', ')}.`)
+      disponer()
       describir()
-      pintar()
+      rehacer()
     },
     e => {
       if (!vivo) return
@@ -302,13 +390,18 @@ export function montarRed(root, { navigate, ley = '' }) {
   return {
     setLey(l) {
       filtro = l
-      pintar()
+      if (l && !visibles.has(familia(l))) {
+        visibles.add(familia(l))
+        root.querySelector(`.net-toggles input[value="${familia(l)}"]`).checked = true
+        if (d) disponer()
+      }
+      rehacer()
     },
     destroy() {
       vivo = false
       clearTimeout(espera)
       ro.disconnect()
-      mq.removeEventListener('change', pintar)
+      mq.removeEventListener('change', rehacer)
       if (pedido) cancelAnimationFrame(pedido)
     },
   }

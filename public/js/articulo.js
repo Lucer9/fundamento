@@ -1,11 +1,12 @@
-import { coincidencias, errorHtml, esc, fecha, fechaLargaDe, gql, html, LEYES, marcar, numero, raw, ruta, terminos, ubicacionCorta, ubicacionHtml } from './lib.js'
+import { badge, coincidencias, corto, DOCS, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gql, html, marcar, numero, raw, ruta, terminos, titulo, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
 
 const QUERY = `query Articulo($law: LawCode!, $n: String!) {
   article(law: $law, number: $n) {
-    key number law { code name } location text repealed amendedOn amountsUpdatedOn
+    key number title location text repealed amendedOn amountsUpdatedOn
+    law { code name kind source regulates { code name } }
     links { start end target { key number law { code } } }
-    cites { key number law { code } location }
-    citedBy { key number law { code } location }
+    cites { key number title law { code } location }
+    citedBy { key number title law { code } location }
     criteria { id kind title text }
   }
 }`
@@ -22,11 +23,11 @@ export default {
   async mount(main, ctx) {
     const ley = ctx.match[1].toUpperCase()
     const n = decodeURIComponent(ctx.match[2])
-    document.title = `${ley} ${numero(n)} · fundamento`
+    document.title = `${etiqueta(`${ley}:${n}`)} · ${corto(ley)} · fundamento`
     main.innerHTML = html`<article class="art" aria-busy="true">
       <header class="art-head">
-        <p class="kicker">${ley} · ${LEYES[ley]}</p>
-        <h1 tabindex="-1">Artículo ${numero(n)}</h1>
+        <p class="kicker art-doc">${badge(ley)} <span>${DOCS[ley].nombre}</span></p>
+        <h1 tabindex="-1">${titulo(ley, n)}</h1>
         <div aria-hidden="true" class="art-loading"><span class="sk sk-m"></span><span class="sk sk-s"></span></div>
       </header>
       <div class="lawtext" aria-hidden="true">${[0, 1, 2, 3, 4, 5].map(i => html`<p><span class="sk"></span><span class="sk"></span><span class="sk ${i % 2 ? 'sk-l' : 'sk-m'}"></span></p>`)}</div>
@@ -44,8 +45,8 @@ export default {
     } catch (e) {
       if (ctx.signal.aborted) throw e
       main.innerHTML = html`<section class="empty-page">
-        <p class="kicker">${ley} ${numero(n)}</p>
-        <h1 tabindex="-1">No se pudo cargar el artículo</h1>
+        <p class="kicker">${etiqueta(`${ley}:${n}`)}</p>
+        <h1 tabindex="-1">No se pudo cargar ${unidad(ley) === 'Regla' ? 'la regla' : 'el artículo'}</h1>
         ${errorHtml(e, 'Detalle')}
         <p><a class="button" href="${location.pathname + location.search}">Reintentar</a></p>
       </section>`
@@ -54,30 +55,34 @@ export default {
     if (ctx.signal.aborted) return
     const a = data.article
     if (!a) {
-      document.title = `Artículo no encontrado · fundamento`
+      const regla = unidad(ley) === 'Regla'
+      document.title = `${regla ? 'Regla' : 'Artículo'} no encontrado · fundamento`
       main.innerHTML = html`<section class="empty-page">
         <p class="kicker">Error 404</p>
-        <h1 tabindex="-1">${ley} no tiene un artículo ${numero(n)}</h1>
-        <p class="deck">Revisa el número. Los artículos con letra o bis se escriben con guiones, como <a href="/CFF/29-A">CFF 29-A</a> o <a href="/LIVA/18-H-Bis">LIVA 18-H Bis</a>.</p>
+        <h1 tabindex="-1">${regla ? `La ${DOCS[ley].corto} no tiene una regla ${n}` : `${DOCS[ley].corto} no tiene un artículo ${numero(n)}`}</h1>
+        <p class="deck">Revisa el número. Los artículos con letra o bis se escriben con guiones, como <a href="/CFF/29-A">CFF 29-A</a> o <a href="/LIVA/18-H-Bis">LIVA 18-H Bis</a>; las reglas de la Miscelánea, con puntos, como <a href="/RMF/2.7.1.21">2.7.1.21</a>.</p>
         <p class="actions"><a class="button" href="/">Ir al buscador</a><a class="button button--quiet" href="/explorar">Ver los más citados</a></p>
       </section>`
       return
     }
-    document.title = `${a.law.code} ${numero(a.number)} · ${a.law.name} · fundamento`
+    document.title = `${a.title ? `${etiqueta(a.key)}. ${a.title}` : etiqueta(a.key)} · ${corto(a.law.code)} · fundamento`
+    const esRegla = familia(a.law.code) === 'miscelanea'
+    const citantes = a.citedBy.some(r => familia(r.law.code) === 'miscelanea') ? (a.citedBy.some(r => familia(r.law.code) !== 'miscelanea') ? 'artículos y reglas' : a.citedBy.length === 1 ? 'regla' : 'reglas') : a.citedBy.length === 1 ? 'artículo' : 'artículos'
     const q = (ctx.params.get('q') ?? '').trim()
     const { cuerpo, primero } = texto(a, q, ctx.state)
     main.innerHTML = html`<article class="art${a.repealed ? ' art--derogado' : ''}">
       <header class="art-head">
-        <p class="kicker"><abbr class="badge" title="${a.law.name}">${a.law.code}</abbr> ${a.law.name}</p>
-        <h1 tabindex="-1">Artículo ${numero(a.number)}</h1>
-        ${a.location.length ? html`<ol class="art-loc" aria-label="Ubicación en la ley">${ubicacionHtml(a.location)}</ol>` : ''}
+        <p class="kicker art-doc">${badge(a.law.code)} <span>${a.law.name}</span></p>
+        ${docLinea(a.law)}
+        ${esRegla ? html`<p class="art-num">Regla ${a.number}</p><h1 class="art-h1--regla" tabindex="-1">${a.title ?? `Regla ${a.number}`}</h1>` : html`<h1 tabindex="-1">${titulo(a.law.code, a.number)}</h1>`}
+        ${a.location.length ? html`<ol class="art-loc" aria-label="Ubicación en el documento">${ubicacionHtml(a.location)}</ol>` : ''}
         <dl class="art-facts">
-          <div><dt>Reformas</dt><dd>${a.amendedOn.length ? html`<a href="#reformas">${a.amendedOn.length}</a><span class="fact-sub">última ${fecha(a.amendedOn[a.amendedOn.length - 1])}</span>` : html`0<span class="fact-sub">sin anotar</span>`}</dd></div>
-          <div><dt>Lo citan</dt><dd>${a.citedBy.length ? html`<a href="#lo-citan">${a.citedBy.length}</a>` : '0'}<span class="fact-sub">${a.citedBy.length === 1 ? 'artículo' : 'artículos'}</span></dd></div>
+          ${esRegla && !a.amendedOn.length ? '' : html`<div><dt>Reformas</dt><dd>${a.amendedOn.length ? html`<a href="#reformas">${a.amendedOn.length}</a><span class="fact-sub">última ${fecha(a.amendedOn[a.amendedOn.length - 1])}</span>` : html`0<span class="fact-sub">sin anotar</span>`}</dd></div>`}
+          <div><dt>Lo citan</dt><dd>${a.citedBy.length ? html`<a href="#lo-citan">${a.citedBy.length}</a>` : '0'}<span class="fact-sub">${citantes}</span></dd></div>
           <div><dt>Criterios</dt><dd>${a.criteria.length ? html`<a href="#criterios">${a.criteria.length}</a>` : '0'}<span class="fact-sub">del SAT</span></dd></div>
         </dl>
       </header>
-      ${a.repealed ? html`<p class="derogado-note"><span class="tag tag--solid">Derogado</span> Este artículo ya no está vigente. La ley conserva su número.</p>` : ''}
+      ${a.repealed ? html`<p class="derogado-note"><span class="tag tag--solid">Derogado</span> ${esRegla ? 'Esta regla ya no está vigente.' : 'Este artículo ya no está vigente. La ley conserva su número.'}</p>` : ''}
       ${q && primero >= 0 ? html`<p class="highlight-note"><span>Resaltado: <strong>«${q}»</strong></span><a href="${location.pathname}">Quitar</a></p>` : ''}
       <div class="art-grid">
         <div class="art-main">
@@ -85,9 +90,9 @@ export default {
           ${criteriosHtml(a.criteria)}
         </div>
         <aside class="art-rail" aria-label="Relaciones del artículo">
-          ${listaHtml('Este artículo cita', 'cita', a.cites, a.law.code, 'No cita otros artículos de estas leyes.')}
-          ${listaHtml(`Lo citan`, 'lo-citan', a.citedBy, a.law.code, 'Ningún artículo lo cita.')}
-          ${reformasHtml(a.amendedOn, a.amountsUpdatedOn ?? [])}
+          ${listaHtml(esRegla ? 'Esta regla cita' : 'Este artículo cita', 'cita', a.cites, a.law.code, 'No cita otros textos de este índice.')}
+          ${listaHtml(`Lo citan`, 'lo-citan', a.citedBy, a.law.code, esRegla ? 'Ningún texto del índice cita esta regla.' : 'Ningún texto del índice lo cita.')}
+          ${esRegla && !a.amendedOn.length && !(a.amountsUpdatedOn ?? []).length ? '' : reformasHtml(a.amendedOn, a.amountsUpdatedOn ?? [])}
         </aside>
       </div>
     </article>`
@@ -134,7 +139,7 @@ function texto(a, q, state) {
       out += plano(i, l.start)
       const t = l.target
       const ext = t.law.code !== a.law.code
-      out += `<a class="ref${ext ? ' ref--ext' : ''}" href="${ruta(t.law.code, t.number)}" title="${esc(`${t.law.code} ${numero(t.number)}`)}"${ext ? ` data-ley="${t.law.code}"` : ''}>${esc(text.slice(l.start, l.end))}</a>`
+      out += `<a class="ref${ext ? ' ref--ext' : ''}" href="${ruta(t.law.code, t.number)}" title="${esc(`${DOCS[t.law.code]?.nombre ?? t.law.code}, ${titulo(t.law.code, t.number).toLowerCase()}`)}"${ext ? ` data-ley="${t.law.code}"` : ''}>${esc(text.slice(l.start, l.end))}</a>`
       i = l.end
     }
     return out + plano(i, e)
@@ -142,10 +147,17 @@ function texto(a, q, state) {
 
   let pos = 0
   let primero = -1
-  const pars = text.split('\n').map((par, idx) => {
-    const s = pos
-    const e = pos + par.length
-    pos = e + 1
+  const rangos = []
+  for (const linea of text.split('\n')) {
+    const r = { s: pos, e: pos + linea.length }
+    pos = r.e + 1
+    const prev = rangos[rangos.length - 1]
+    const t = linea.trim()
+    if (prev && /^[a-záéíóúñü]/.test(t) && !INCISO.test(t) && !/[.:;)]$/.test(text.slice(prev.s, prev.e).trim())) prev.e = r.e
+    else rangos.push(r)
+  }
+  const pars = rangos.map(({ s, e }, idx) => {
+    const par = text.slice(s, e)
     if (!par.trim()) return ''
     if (NOTA.test(par.trim())) return `<p class="is-nota"><span>${esc(par.trim())}</span></p>`
     const resaltar = desde >= 0 && e > desde && s < hasta
@@ -163,17 +175,41 @@ function texto(a, q, state) {
   return { cuerpo: raw(pars.join('')), primero }
 }
 
-const ordenar = (lista, ley) =>
-  [...lista].sort((x, y) => (x.law.code === ley ? 0 : 1) - (y.law.code === ley ? 0 : 1) || x.law.code.localeCompare(y.law.code) || x.number.localeCompare(y.number, 'es', { numeric: true }))
+const EDITOR = [
+  [/diputados\.gob\.mx/, 'Cámara de Diputados'],
+  [/sat\.gob\.mx/, 'SAT'],
+  [/dof\.gob\.mx/, 'Diario Oficial'],
+]
 
-function listaHtml(titulo, id, lista, ley, vacio) {
-  const items = ordenar(lista, ley)
-  const item = r => html`<li><a href="${ruta(r.law.code, r.number)}"><span class="ref-key">${r.law.code} ${numero(r.number)}</span><span class="ref-loc">${ubicacionCorta(r.location)}</span></a></li>`
+/** One quiet line under the document name: the law a reglamento carries out, and the official PDF. */
+function docLinea(law) {
+  const editor = EDITOR.find(([re]) => re.test(law.source ?? ''))?.[1]
+  const partes = [
+    law.regulates && html`Reglamenta ${elLa(law.regulates.name)} <a href="/explorar?ley=${law.regulates.code}">${law.regulates.name}</a>`,
+    law.source && html`<a class="ext" href="${law.source}" target="_blank" rel="noopener">Texto oficial en PDF${editor ? `, ${editor}` : ''}<span class="sr-only"> (abre en otra pestaña)</span></a>`,
+  ].filter(Boolean)
+  return partes.length ? html`<p class="art-docline">${partes.map(p => html`<span>${p}</span>`)}</p>` : ''
+}
+
+const orden = Object.keys(DOCS)
+
+const numerico = (x, y) => x.number.localeCompare(y.number, 'es', { numeric: true })
+
+/** References grouped by document: the article's own document first, then the rest in index order. */
+function listaHtml(encabezado, id, lista, ley, vacio) {
+  const grupos = new Map()
+  for (const r of [...lista].sort(numerico)) (grupos.get(r.law.code) ?? grupos.set(r.law.code, []).get(r.law.code)).push(r)
+  const docs = [...grupos.keys()].sort((x, y) => (x === ley ? -1 : y === ley ? 1 : orden.indexOf(x) - orden.indexOf(y)))
+  const item = r => html`<li><a href="${ruta(r.law.code, r.number)}"><span class="ref-key">${etiqueta(r.key)}</span><span class="ref-loc">${r.title ?? ubicacionCorta(r.location)}</span></a></li>`
+  const varios = docs.length > 1
+  const grupo = c => {
+    const xs = grupos.get(c)
+    const n = varios ? 4 : 8
+    return html`${varios ? html`<h3 class="ref-group">${corto(c)} <span class="count">${xs.length}</span></h3>` : ''}<ul class="reflist">${xs.slice(0, n).map(item)}</ul>${xs.length > n + 1 ? html`<details class="more"><summary>Ver ${xs.length - n} más${varios ? ` de ${corto(c)}` : ''}</summary><ul class="reflist">${xs.slice(n).map(item)}</ul></details>` : xs.length === n + 1 ? html`<ul class="reflist">${item(xs[n])}</ul>` : ''}`
+  }
   return html`<section class="rail-sec" id="${id}" aria-labelledby="${id}-h">
-    <h2 class="label" id="${id}-h">${titulo}${lista.length ? html` <span class="count">${lista.length}</span>` : ''}</h2>
-    ${items.length
-      ? html`<ul class="reflist">${items.slice(0, 8).map(item)}</ul>${items.length > 8 ? html`<details class="more"><summary>Ver ${items.length - 8} más</summary><ul class="reflist">${items.slice(8).map(item)}</ul></details>` : ''}`
-      : html`<p class="muted small">${vacio}</p>`}
+    <h2 class="label" id="${id}-h">${encabezado}${lista.length ? html` <span class="count">${lista.length}</span>` : ''}</h2>
+    ${lista.length ? docs.map(grupo) : html`<p class="muted small">${vacio}</p>`}
   </section>`
 }
 

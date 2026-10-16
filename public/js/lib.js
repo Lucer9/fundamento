@@ -2,11 +2,42 @@ export const EN_USO = 'vector gemma'
 
 export const TIPO_CRITERIO = { NORMATIVE: 'Criterio normativo', IMPROPER_PRACTICE: 'Práctica indebida' }
 
-export const LEYES = {
-  LISR: 'Ley del Impuesto sobre la Renta',
-  LIVA: 'Ley del Impuesto al Valor Agregado',
-  CFF: 'Código Fiscal de la Federación',
+export const FAMILIAS = [
+  { id: 'ley', nombre: 'Leyes', uno: 'ley', kind: 'LAW' },
+  { id: 'reglamento', nombre: 'Reglamentos', uno: 'reglamento', kind: 'REGULATION' },
+  { id: 'miscelanea', nombre: 'Miscelánea', uno: 'miscelánea', kind: 'RULES' },
+]
+
+/** Every document the API indexes, in reading order, with the short label used on chips and badges. */
+export const DOCS = {
+  LISR: { corto: 'Ley del ISR', nombre: 'Ley del Impuesto sobre la Renta', familia: 'ley' },
+  LIVA: { corto: 'Ley del IVA', nombre: 'Ley del Impuesto al Valor Agregado', familia: 'ley' },
+  LIEPS: { corto: 'Ley del IEPS', nombre: 'Ley del Impuesto Especial sobre Producción y Servicios', familia: 'ley' },
+  CFF: { corto: 'Código Fiscal', nombre: 'Código Fiscal de la Federación', familia: 'ley' },
+  LIF: { corto: 'Ley de Ingresos 2026', nombre: 'Ley de Ingresos de la Federación para 2026', familia: 'ley' },
+  RLISR: { corto: 'Reglamento LISR', nombre: 'Reglamento de la Ley del Impuesto sobre la Renta', familia: 'reglamento', de: 'LISR' },
+  RLIVA: { corto: 'Reglamento LIVA', nombre: 'Reglamento de la Ley del Impuesto al Valor Agregado', familia: 'reglamento', de: 'LIVA' },
+  RLIEPS: { corto: 'Reglamento LIEPS', nombre: 'Reglamento de la Ley del Impuesto Especial sobre Producción y Servicios', familia: 'reglamento', de: 'LIEPS' },
+  RCFF: { corto: 'Reglamento CFF', nombre: 'Reglamento del Código Fiscal de la Federación', familia: 'reglamento', de: 'CFF' },
+  RMF: { corto: 'Miscelánea 2026', nombre: 'Resolución Miscelánea Fiscal para 2026', familia: 'miscelanea' },
 }
+
+export const esDoc = c => Object.hasOwn(DOCS, c)
+export const elLa = nombre => (/^C[oó]digo/.test(nombre) ? 'el' : 'la')
+export const deLa = nombre => (/^C[oó]digo/.test(nombre) ? 'del' : 'de la')
+export const corto = c => DOCS[c]?.corto ?? c
+export const familia = c => DOCS[c]?.familia ?? 'ley'
+export const unidad = c => (familia(c) === 'miscelanea' ? 'Regla' : 'Artículo')
+
+/** `<optgroup>`s of every document grouped by family, for native selects. */
+export const opcionesDocs = (actual = '') =>
+  FAMILIAS.map(
+    f => html`<optgroup label="${f.nombre}">${Object.entries(DOCS)
+      .filter(([, d]) => d.familia === f.id)
+      .map(([c, d]) => html`<option value="${c}" ${c === actual ? 'selected' : ''}>${d.corto}</option>`)}</optgroup>`,
+  )
+
+export const badge = c => html`<abbr class="badge" data-fam="${familia(c)}" title="${DOCS[c]?.nombre ?? c}">${corto(c)}</abbr>`
 
 /**
  * POST a GraphQL operation. Resolves to the full response body; GraphQL errors and network
@@ -75,15 +106,19 @@ export const rutaClave = key => {
   return ruta(ley, n)
 }
 export const etiqueta = key => {
-  const [ley, n] = key.split(':')
-  return `${ley} ${numero(n)}`
+  const i = key.indexOf(':')
+  const ley = key.slice(0, i)
+  const n = key.slice(i + 1)
+  return familia(ley) === 'miscelanea' ? `Regla ${n}` : `${ley} ${numero(n)}`
 }
 
-const NIVEL = /^(T[IÍ]TULO|CAP[IÍ]TULO|SECCI[OÓ]N)\s+([IVXL]+(?:\s+(?:BIS|TER|QU[AÁ]TER))?|PRIMERO|SEGUNDO|TERCERO|CUARTO|QUINTO|SEXTO|S[EÉ]PTIMO|OCTAVO|NOVENO|D[EÉ]CIMO|[UÚ]NICO)(?=\s|$)\s*(.*)$/i
+export const titulo = (ley, n) => `${unidad(ley)} ${numero(n)}`
+
+const NIVEL = /^(T[IÍ]TULO|CAP[IÍ]TULO|SECCI[OÓ]N)\s+(\d+(?:\.\d+)*\.?|[IVXL]+(?:\s+(?:BIS|TER|QU[AÁ]TER))?|PRIMERO|SEGUNDO|TERCERO|CUARTO|QUINTO|SEXTO|S[EÉ]PTIMO|OCTAVO|NOVENO|D[EÉ]CIMO|[UÚ]NICO)(?=\s|$)\s*(.*)$/i
 const ACENTOS = { titulo: 'Título', capitulo: 'Capítulo', seccion: 'Sección', unico: 'Único', septimo: 'Séptimo', decimo: 'Décimo' }
 const plano = s => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
 const palabra = w => ACENTOS[plano(w)] ?? w[0].toUpperCase() + w.slice(1).toLowerCase()
-const oracion = s => (s ? s[0].toUpperCase() + s.slice(1).toLowerCase() : '')
+const oracion = s => (!s ? '' : s === s.toUpperCase() ? s[0] + s.slice(1).toLowerCase() : s[0].toUpperCase() + s.slice(1))
 
 /**
  * One heading from `Article.location` ("TÍTULO IV DE LAS PERSONAS FÍSICAS", "CAPITULO UNICO")
@@ -92,7 +127,11 @@ const oracion = s => (s ? s[0].toUpperCase() + s.slice(1).toLowerCase() : '')
 export function nivel(s) {
   const m = s.trim().match(NIVEL)
   if (!m) return { label: '', name: oracion(s.trim()) }
-  const ord = m[2].split(/\s+/).map(w => (/^[IVXL]+$/i.test(w) ? w.toUpperCase() : palabra(w))).join(' ')
+  const ord = m[2]
+    .replace(/\.$/, '')
+    .split(/\s+/)
+    .map(w => (/^[IVXL]+$/i.test(w) ? w.toUpperCase() : palabra(w)))
+    .join(' ')
   return { label: `${palabra(m[1])} ${ord}`, name: oracion(m[3]) }
 }
 

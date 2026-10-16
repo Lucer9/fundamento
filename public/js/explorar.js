@@ -1,9 +1,9 @@
-import { cuenta, errorHtml, esAborto, fecha, fechaLargaDe, gql, html, LEYES, nf, numero, ruta, ubicacionCorta } from './lib.js'
-import { montarRed } from './red.js'
+import { cuenta, deLa, DOCS, errorHtml, esAborto, esDoc, etiqueta, FAMILIAS, familia, fecha, fechaLargaDe, gql, html, nf, opcionesDocs, ruta, ubicacionCorta } from './lib.js'
+import { cargarGrafo, montarRed } from './red.js'
 
-const RESUMEN = `{ stats { articles citations chunks criteria } laws { code name articleCount } }`
+const RESUMEN = `{ stats { articles citations chunks criteria } laws { code name kind regulates { code } source articleCount } }`
 const DETALLE = `query Explorar($law: LawCode) {
-  mostCited(first: 20, law: $law) { count article { key number law { code } location } }
+  mostCited(first: 20, law: $law) { count article { key number title law { code } location } }
   amendments(law: $law) { date articles { key } }
 }`
 
@@ -18,29 +18,28 @@ let red = null
 let el = null
 let todas = false
 
+const leyDe = params => (esDoc(params.get('ley')) ? params.get('ley') : '')
+
 export default {
   nombre: 'explorar',
   async mount(main, ctx) {
     el = main
     todas = false
     document.title = 'Explorar · fundamento'
-    const ley = LEYES[ctx.params.get('ley')] ? ctx.params.get('ley') : ''
+    const ley = leyDe(ctx.params)
     main.innerHTML = html`<header class="page-head">
         <p class="kicker">Explorar</p>
-        <h1 tabindex="-1">Tres leyes, citadas entre sí</h1>
+        <h1 tabindex="-1">Quién cita a quién</h1>
         <p class="deck" data-slot="deck">&nbsp;</p>
       </header>
-      <section class="volumes" aria-label="Leyes" data-slot="laws"><div class="sk sk-block"></div></section>
+      <section class="volumes" aria-label="Documentos" data-slot="laws"><div class="sk sk-block"></div></section>
       <div class="filterbar">
-        <fieldset class="seg" data-slot="filtro">
-          <legend class="filter-legend">Ley</legend>
-          ${[['', 'Todas'], ...Object.keys(LEYES).map(k => [k, k])].map(([v, t]) => html`<label><input type="radio" name="ley" value="${v}" ${v === ley ? 'checked' : ''}><span>${t}</span></label>`)}
-        </fieldset>
+        <label class="field field--inline"><span>Documento</span><select name="ley" data-slot="filtro"><option value="">Todos</option>${opcionesDocs(ley)}</select></label>
       </div>
       <div class="explore-grid">
         <section class="panel" aria-labelledby="mc-h">
           <h2 class="section-h" id="mc-h">Los más citados</h2>
-          <p class="muted small">Cuántos artículos distintos remiten a cada uno.</p>
+          <p class="muted small">Cuántos artículos o reglas distintos remiten a cada uno.</p>
           <div data-slot="cited"></div>
         </section>
         <section class="panel" aria-labelledby="am-h">
@@ -52,9 +51,14 @@ export default {
       <section class="panel net" aria-labelledby="net-h">
         <div class="net-head">
           <h2 class="section-h" id="net-h">Red de citas</h2>
-          <p class="muted small">Las líneas grises unen artículos de la misma ley; las de color cruzan de una ley a otra.</p>
+          <p class="muted small">Cada línea es una cita, del color del documento que cita: tinta para las leyes, azul para los reglamentos, guinda para la Miscelánea. Cada reglamento va junto a su ley.</p>
         </div>
         <div class="net-body" data-slot="net"></div>
+      </section>
+      <section class="panel" aria-labelledby="mx-h">
+        <h2 class="section-h" id="mx-h">Citas entre documentos</h2>
+        <p class="muted small">Cada fila es el documento que cita; cada columna, el citado. La diagonal son citas dentro del mismo documento.</p>
+        <div data-slot="matriz"><div aria-hidden="true">${Array.from({ length: 5 }, () => html`<span class="sk"></span>`)}</div></div>
       </section>`
     main.querySelector('[data-slot=filtro]').addEventListener('change', e => {
       const v = e.target.value
@@ -65,16 +69,19 @@ export default {
     pedir(RESUMEN).then(
       ({ stats, laws }) => {
         if (ctx.signal.aborted) return
-        const total = laws.reduce((s, l) => s + l.articleCount, 0)
-        main.querySelector('[data-slot=deck]').textContent = `${nf.format(stats.articles)} artículos, ${nf.format(stats.citations)} citas entre ellos y ${nf.format(stats.criteria)} criterios del SAT que los interpretan.`
-        main.querySelector('[data-slot=laws]').innerHTML = html`<ol class="volume-bar" aria-hidden="true">${laws.map(l => html`<li style="flex-grow:${l.articleCount}"></li>`)}</ol>
-          <ul class="volume-list">${laws.map(
-            l => html`<li><span class="volume-code">${l.code}</span><span class="volume-name">${l.name}</span><span class="volume-n">${cuenta(l.articleCount, 'artículo')} <span class="muted">· ${Math.round((l.articleCount / total) * 100)}%</span></span></li>`,
-          )}</ul>
-          <p class="muted small volume-foot">${nf.format(stats.chunks)} fragmentos indexados para la búsqueda.</p>`
+        main.querySelector('[data-slot=deck]').textContent = `${nf.format(stats.articles)} artículos y reglas en ${laws.length} documentos, ${nf.format(stats.citations)} citas entre ellos y ${nf.format(stats.criteria)} criterios del SAT que los interpretan.`
+        main.querySelector('[data-slot=laws]').innerHTML = volumenesHtml(laws, stats)
       },
       e => {
-        if (!esAborto(e)) main.querySelector('[data-slot=laws]').innerHTML = errorHtml(e, 'No se pudieron cargar las leyes')
+        if (!esAborto(e)) main.querySelector('[data-slot=laws]').innerHTML = errorHtml(e, 'No se pudieron cargar los documentos')
+      },
+    )
+    cargarGrafo().then(
+      g => {
+        if (!ctx.signal.aborted && main.isConnected) main.querySelector('[data-slot=matriz]').innerHTML = matrizHtml(g)
+      },
+      e => {
+        if (!esAborto(e) && main.isConnected) main.querySelector('[data-slot=matriz]').innerHTML = errorHtml(e, 'No se pudieron cargar las citas')
       },
     )
     await this.update(ctx)
@@ -85,9 +92,8 @@ export default {
   },
 
   async update(ctx) {
-    const ley = LEYES[ctx.params.get('ley')] ? ctx.params.get('ley') : ''
-    const filtro = el.querySelector('[data-slot=filtro]')
-    filtro.querySelector(`input[value="${ley}"]`).checked = true
+    const ley = leyDe(ctx.params)
+    el.querySelector('[data-slot=filtro]').value = ley
     red?.setLey(ley)
     const cited = el.querySelector('[data-slot=cited]')
     const amend = el.querySelector('[data-slot=amend]')
@@ -109,6 +115,48 @@ export default {
   },
 }
 
+const EDITOR = url => (/sat\.gob\.mx/.test(url) ? 'SAT' : /diputados\.gob\.mx/.test(url) ? 'Cámara de Diputados' : 'fuente oficial')
+
+/** The ten documents grouped by family: a proportional bar, then name, size and official PDF for each. */
+function volumenesHtml(laws, stats) {
+  const total = laws.reduce((s, l) => s + l.articleCount, 0)
+  const grupos = FAMILIAS.map(f => ({ ...f, docs: laws.filter(l => familia(l.code) === f.id) })).filter(f => f.docs.length)
+  const enOrden = grupos.flatMap(f => f.docs)
+  return html`<ol class="volume-bar" aria-hidden="true">${enOrden.map(l => html`<li data-fam="${familia(l.code)}" style="flex-grow:${l.articleCount}"></li>`)}</ol>
+    <div class="volume-groups">${grupos.map(
+      f => html`<section class="volume-group" aria-labelledby="vg-${f.id}">
+        <h2 class="volume-fam" id="vg-${f.id}"><i data-fam="${f.id}"></i>${f.nombre} <span class="count">${f.docs.length}</span></h2>
+        <ul class="volume-list">${f.docs.map(
+          l => html`<li>
+            <a class="volume-link" href="/explorar?ley=${l.code}"><span class="volume-code">${l.code}</span><span class="volume-name">${l.name}</span></a>
+            <span class="volume-n">${cuenta(l.articleCount, f.id === 'miscelanea' ? 'regla' : 'artículo')} <span class="muted">· ${((l.articleCount / total) * 100).toFixed(l.articleCount / total < 0.01 ? 1 : 0)}%</span>${l.regulates ? html` <span class="muted">· ${deLa(DOCS[l.regulates.code]?.corto ?? '')} ${DOCS[l.regulates.code]?.corto ?? l.regulates.code}</span>` : ''}</span>
+            <a class="volume-pdf" href="${l.source}" target="_blank" rel="noopener" title="${`PDF oficial, ${EDITOR(l.source)}`}">PDF<span class="sr-only"> oficial de ${l.name}, ${EDITOR(l.source)} (abre en otra pestaña)</span></a>
+          </li>`,
+        )}</ul>
+      </section>`,
+    )}</div>
+    <p class="muted small volume-foot">${nf.format(stats.chunks)} fragmentos indexados para la búsqueda.</p>`
+}
+
+/** Document-by-document citation counts as an accessible table, tinted on a log scale. */
+function matrizHtml({ docs, aristas }) {
+  const codigos = docs.map(d => d.code)
+  const pos = new Map(codigos.map((c, i) => [c, i]))
+  const m = codigos.map(() => codigos.map(() => 0))
+  for (const [a, b] of aristas) m[pos.get(a.ley)][pos.get(b.ley)]++
+  const max = Math.max(1, ...m.flat())
+  const tono = v => (v ? Math.round(8 + (Math.log(v) / Math.log(max)) * 52) : 0)
+  return html`<div class="table-wrap matrix-wrap"><table class="matrix">
+    <caption class="sr-only">Citas entre documentos: filas, documento que cita; columnas, documento citado.</caption>
+    <thead><tr><th scope="col"><span class="sr-only">Cita ↓, citado →</span></th>${codigos.map(c => html`<th scope="col"><abbr title="${DOCS[c]?.nombre ?? c}">${c}</abbr></th>`)}</tr></thead>
+    <tbody>${codigos.map(
+      (c, i) => html`<tr><th scope="row"><abbr title="${DOCS[c]?.nombre ?? c}">${c}</abbr></th>${m[i].map(
+        (v, j) => html`<td class="${i === j ? 'diag' : ''}" style="${v ? `--t:${tono(v)}%` : ''}" title="${`${c} cita a ${codigos[j]}: ${nf.format(v)}`}">${v ? nf.format(v) : html`<span class="muted" aria-label="0">·</span>`}</td>`,
+      )}</tr>`,
+    )}</tbody>
+  </table></div>`
+}
+
 function citadosHtml(lista) {
   if (!lista.length) return html`<p class="muted">Sin citas.</p>`
   const max = lista[0].count
@@ -116,7 +164,7 @@ function citadosHtml(lista) {
     ({ count, article: a }, i) => html`<li>
       <a href="${ruta(a.law.code, a.number)}">
         <span class="bar-rank">${i + 1}</span>
-        <span class="bar-label"><span class="bar-key">${a.law.code} ${numero(a.number)}</span><span class="bar-loc">${ubicacionCorta(a.location)}</span></span>
+        <span class="bar-label"><span class="bar-key">${etiqueta(a.key)}</span><span class="bar-loc">${a.title ?? ubicacionCorta(a.location)}</span></span>
         <span class="bar-n">${count}</span>
         <span class="bar-track" aria-hidden="true"><span style="width:${((count / max) * 100).toFixed(1)}%"></span></span>
       </a>
