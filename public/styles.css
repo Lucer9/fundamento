@@ -2271,6 +2271,10 @@ mark {
   font: 400 15px/1.5 var(--sans);
 }
 
+.filterbar[hidden] {
+  display: none;
+}
+
 .filterbar {
   display: flex;
   flex-wrap: wrap;

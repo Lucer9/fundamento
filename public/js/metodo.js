@@ -14,12 +14,20 @@ let vista = { conjunto: '', materia: '', texto: '', mostrar: 'todas', limite: 25
 let orden = []
 let enUso = ''
 
+/** A method's name for readers: "hybrid gemma + Claude · leyes" → "Híbrida gemma con reescritura de Claude · leyes". */
 const nombre = m =>
   m
     .replace(/^keyword\b/, 'Palabras clave')
     .replace(/^vector\b/, 'Vector')
     .replace(/^hybrid\b/, 'Híbrida')
+    .replace(/ \+ Claude\b/, ' con reescritura de Claude')
     .replace(/\+ rerank$/, '+ reordenamiento')
+
+/** The same name inside a sentence: lowercase first letter, proper names ("Claude") untouched. */
+const nombreMin = m => {
+  const t = nombre(m)
+  return t[0].toLowerCase() + t.slice(1)
+}
 
 const letra = m => LETRAS[orden.indexOf(m)] ?? '?'
 const NUMEROS = ['ningún', 'un', 'dos', 'tres', 'cuatro']
@@ -76,14 +84,17 @@ const iv = ([lo, hi]) => `${puntos(lo)} a ${puntos(hi)}`
 const cruzaCero = ([lo, hi]) => lo <= 0 && hi >= 0
 
 const sinAlcance = n => n.replace(/ · .+$/, '')
-const modelo = n => sinAlcance(n).replace(/^(vector|hybrid|keyword)\s*/, '').replace(/ \d+d$/, '')
+const alcanceDe = n => (n.includes(' · ') ? n.slice(n.indexOf(' · ')) : '')
+const modelo = n => sinAlcance(n).replace(/^(vector|hybrid|keyword)\s*/, '').replace(/ \+ Claude$/, '').replace(/ \d+d$/, '')
 const efecto = ([lo, hi], mejor, peor, igual) => (lo > 0 ? mejor : hi < 0 ? peor : igual)
+const negar = ([lo, hi]) => [-hi, -lo]
+const REESCRITA = / \+ Claude\b/
 
 /**
  * Findings stated only from what eval.json carries: each one renders when its methods (and, for paired
  * claims, its entry in `naturales.comparaciones`) exist, so a smaller rerun drops the claim instead of
  * keeping a stale number. The in-production method comes from `enUso`; its " · <list>" suffix names the
- * search list it ranks on its own.
+ * search list it ranks on its own, and `delta5` is always against keyword search over the same documents.
  */
 function hallazgos(cs) {
   const set = k => cs.find(c => c.clave === k)
@@ -93,61 +104,98 @@ function hallazgos(cs) {
   const comparaciones = com?.comparaciones ?? []
   const par = (a, b) => comparaciones.find(c => c.a === a && c.b === b)
   const out = []
-  if (!enUso) return out
-  const prod = m(com, enUso)
-  const alcance = enUso.includes(' · ') ? enUso.slice(enUso.indexOf(' · ')) : ''
+  if (!enUso || !com) return out
+  const alcance = alcanceDe(enUso)
   const lista = SITIO.site.lists.find(l => alcance === ` · ${l.title.toLowerCase()}`)
-  const solo = lista ? `«${lista.title}»` : ''
-  const base = nombre(sinAlcance(enUso)).toLowerCase()
+  const solo = lista ? `buscando solo en «${lista.title}», ` : ''
+  const chico = com.n < 60
+  const cifra = x => `${pct(x)}${chico ? ` (${Math.round(x * com.n)} de ${com.n})` : ''}`
+  const dePrimero = (a, b) => `${cifra(a)} contra ${cifra(b)}`
 
-  const familiaEnUso = /^hybrid /.test(enUso) ? 'hibrida' : /^vector /.test(enUso) ? 'vector' : ''
-  const quien = familiaEnUso === 'hibrida' ? 'combinar palabras clave y vectores supera a las palabras clave solas' : 'los vectores superan a las palabras clave'
-  const contraPalabras = par(enUso, `keyword${alcance}`)
-  const kw = contraPalabras ? m(com, contraPalabras.b) : !alcance && m(com, BASE)
-  const iv5 = contraPalabras?.hit5 ?? (!alcance && prod?.delta5)
-  if (prod && kw && iv5 && familiaEnUso) {
-    const dif = `${((prod.hit5 - kw.hit5) * 100).toFixed(1)} puntos`
+  const vec = m(com, `vector gemma${alcance}`) ?? m(com, 'vector gemma')
+  const kwVec = vec && m(com, `keyword${alcanceDe(vec.nombre)}`)
+  const vecIv = vec && (par(vec.nombre, kwVec?.nombre)?.hit5 ?? vec.delta5)
+  if (vec && kwVec && vecIv) {
+    const dif = `${((vec.hit5 - kwVec.hit5) * 100).toFixed(1)} puntos`
+    const donde = alcanceDe(vec.nombre) ? solo : ''
     out.push(
       efecto(
-        iv5,
-        `${com.frase}, ${quien}: ${solo ? `buscando solo en ${solo}, ` : ''}${base} trae un artículo esperado entre los 5 primeros resultados ${dif} más seguido que la búsqueda por palabras (intervalo pareado de 95%: ${iv(iv5)}).`,
-        `${com.frase}, la búsqueda por palabras supera a ${base} en hit@5 (intervalo pareado de 95%: ${iv(iv5)}).`,
-        `${com.frase}, la ventaja de ${base} sobre la búsqueda por palabras (${dif} en hit@5) no se distingue del ruido: el intervalo pareado de 95% va de ${iv(iv5)}.`,
+        vecIv,
+        `${com.frase}, los vectores superan a las palabras clave: ${donde}vector gemma trae un artículo esperado entre los 5 primeros resultados ${dif} más seguido que la búsqueda por palabras (intervalo pareado de 95%: ${iv(vecIv)}).`,
+        `${com.frase}, la búsqueda por palabras supera a los vectores en hit@5 (intervalo pareado de 95%: ${iv(vecIv)}).`,
+        `${com.frase}, la ventaja de los vectores sobre las palabras clave (${dif} en hit@5) no se distingue del ruido: el intervalo pareado de 95% va de ${iv(vecIv)}.`,
       ),
     )
   }
 
-  const separar = alcance && par(enUso, sinAlcance(enUso))
+  const separar = comparaciones.filter(c => alcanceDe(c.a) && c.b === sinAlcance(c.a) && c.hit1).sort((x, y) => (y.a === enUso) - (x.a === enUso))[0]
+  const dentro = separar && m(com, separar.a)
   const mezcla = separar && m(com, separar.b)
-  if (prod && mezcla && separar.hit1 && solo)
-    out.push(`Buscar en ${solo} por separado ${efecto(separar.hit1, 'mejoró', 'empeoró', 'no cambió de forma medible')} el primer resultado: con ${base}, el artículo esperado quedó en primer lugar en ${pct(prod.hit1)} de las preguntas buscando solo ahí, contra ${pct(mezcla.hit1)} con todos los documentos en una sola lista (diferencia pareada de 95%: ${iv(separar.hit1)} puntos).${separar.hit1[0] > 0 && SITIO.site.lists.length > 1 ? ` Por eso los resultados se muestran en ${NUMEROS[SITIO.site.lists.length] ?? SITIO.site.lists.length} listas.` : ''}`)
+  if (dentro && mezcla && lista)
+    out.push(`Buscar en «${lista.title}» por separado ${efecto(separar.hit1, 'mejoró', 'empeoró', 'no cambió de forma medible')} el primer resultado: con ${nombreMin(sinAlcance(separar.a))}, el artículo esperado quedó en primer lugar en ${pct(dentro.hit1)} de las preguntas buscando solo ahí, contra ${pct(mezcla.hit1)} con todos los documentos en una sola lista (diferencia pareada de 95%: ${iv(separar.hit1)} puntos).${separar.hit1[0] > 0 && SITIO.site.lists.length > 1 ? ` Por eso los resultados se muestran en ${NUMEROS[SITIO.site.lists.length] ?? SITIO.site.lists.length} listas.` : ''}`)
 
-  const fusion = comparaciones.find(c => /^vector /.test(c.a) && c.b === c.a.replace(/^vector /, 'hybrid ') && c.hit1 && c.hit5)
-  const va = fusion && m(com, fusion.a)
-  const hb = fusion && m(com, fusion.b)
-  if (va && hb && familiaEnUso === 'hibrida' && sinAlcance(enUso) === fusion.b) {
-    const top5 = r => r != null && r <= 5
-    const gana = com.preguntas.filter(p => top5(p.rangos[fusion.b]) && !top5(p.rangos[fusion.a])).length
-    const pierde = com.preguntas.filter(p => top5(p.rangos[fusion.a]) && !top5(p.rangos[fusion.b])).length
-    const de = x => `${Math.round(x.hit5 * com.n)} de ${com.n}`
+  const simple = comparaciones.find(c => c.a === 'vector gemma' && c.b === 'hybrid gemma' && c.hit1 && c.hit5)
+  const sv = simple && m(com, simple.a)
+  const sh = simple && m(com, simple.b)
+  if (sv && sh) {
+    const h5 = negar(simple.hit5)
+    const h1 = negar(simple.hit1)
+    const v5 = efecto(h5, 'subió', 'bajó', '')
+    const v1 = efecto(h1, 'subió', 'bajó', '')
+    const en1 = v1 ? `En hit@1 ${v1 === v5 ? 'también ' : ''}${v1}` : 'En hit@1 no hubo diferencia medible'
     out.push(
-      `Sumar palabras clave a los vectores (búsqueda híbrida) puso un artículo esperado entre los 5 primeros resultados en ${de(hb)} preguntas, contra ${de(va)} solo con vectores: ${gana === 1 ? 'ganó una pregunta' : `ganó ${gana}`} y ${pierde === 0 ? 'no perdió ninguna' : pierde === 1 ? 'perdió una' : `perdió ${pierde}`}. ${efecto(
-        fusion.hit5,
-        `La diferencia pareada favorece a los vectores (de ${iv(fusion.hit5)} puntos, vectores menos híbrida).`,
-        `La diferencia pareada favorece a la híbrida (de ${iv(fusion.hit5)} puntos, vectores menos híbrida).`,
-        `Con ${com.n} preguntas, la diferencia pareada (de ${iv(fusion.hit5)} puntos, vectores menos híbrida) todavía toca el cero.`,
-      )} El sitio usa la búsqueda híbrida.`,
+      `Sumar palabras clave sobre la pregunta tal cual a los vectores (búsqueda híbrida simple) ${v5 ? `${v5} hit@5` : 'no movió hit@5 de forma medible'}: ${dePrimero(sh.hit5, sv.hit5)} solo con vectores (diferencia pareada de 95%: ${iv(h5)} puntos). ${en1}: ${pct(sh.hit1)} contra ${pct(sv.hit1)} (${iv(h1)} puntos).${
+        /^vector /.test(enUso) && (h5[1] < 0 || h1[1] < 0) ? ' Por eso el sitio usa solo vectores.' : ''
+      }`,
     )
-  } else if (va && hb) {
-    const cifras = `con ${modelo(fusion.a)}, ${pct(va.hit1)} solo con vectores contra ${pct(hb.hit1)} en híbrida (diferencia pareada de 95%: ${iv(fusion.hit1)} puntos)`
+  }
+
+  const vsVec = comparaciones.filter(c => REESCRITA.test(c.a) && /^hybrid /.test(c.a) && /^vector /.test(c.b) && alcanceDe(c.a) === alcanceDe(c.b) && c.hit5).sort((x, y) => (y.a === enUso) - (x.a === enUso))[0]
+  const vsHib = comparaciones.find(c => REESCRITA.test(c.a) && /^hybrid /.test(c.a) && c.b === c.a.replace(REESCRITA, '') && c.hit5)
+  const conClaude = m(com, vsVec?.a ?? vsHib?.a)
+  if (conClaude && (vsVec || vsHib)) {
+    const cruza1 = c => (c.hit1 ? ` (${iv(c.hit1)}${cruzaCero(c.hit1) ? ', todavía cruza el cero' : ''})` : '')
+    const partes = []
+    if (vsVec) {
+      const v = m(com, vsVec.b)
+      partes.push(
+        `${alcanceDe(vsVec.a) ? solo : ''}la híbrida con reescritura acertó entre los 5 primeros resultados ${dePrimero(conClaude.hit5, v.hit5)} solo con vectores (diferencia pareada de 95%: ${iv(vsVec.hit5)} puntos)${vsVec.hit1 ? `, y en hit@1 ${pct(conClaude.hit1)} contra ${pct(v.hit1)}${cruza1(vsVec)}` : ''}`,
+      )
+    }
+    if (vsHib) {
+      const h = m(com, vsHib.b)
+      const c = m(com, vsHib.a)
+      const enTodo = vsVec && alcanceDe(vsVec.a) && !alcanceDe(vsHib.a) ? 'con todos los documentos en una sola lista, ' : ''
+      const igual5 = vsHib.hit5[0] === 0 && vsHib.hit5[1] === 0
+      partes.push(
+        igual5
+          ? `${enTodo}frente a la híbrida simple no cambió ningún acierto entre los 5 primeros (${chico ? `${Math.round(c.hit5 * com.n)} de ${com.n}` : pct(c.hit5)} en ambas)${vsHib.hit1 ? `; en hit@1, ${pct(c.hit1)} contra ${pct(h.hit1)}${cruza1(vsHib)}` : ''}`
+          : `${enTodo}frente a la híbrida simple, ${dePrimero(c.hit5, h.hit5)} entre los 5 primeros (${iv(vsHib.hit5)} puntos)`,
+      )
+    }
+    const perdia = simple && simple.hit5[0] > 0
+    const gana = vsVec && vsVec.hit5[0] > 0
+    const cierre = sinAlcance(enUso) === sinAlcance(conClaude.nombre) ? ' Así busca el sitio.' : ''
     out.push(
-      efecto(
-        fusion.hit1,
-        `Sumar palabras clave a los vectores (búsqueda híbrida) bajó hit@1: ${cifras}.${familiaEnUso === 'vector' ? ' Por eso el sitio usa solo vectores.' : ''}`,
-        `Sumar palabras clave a los vectores (búsqueda híbrida) subió hit@1: ${cifras}.`,
-        `Sumar palabras clave a los vectores (búsqueda híbrida) no cambió hit@1 de forma medible: ${cifras}.`,
-      ),
+      perdia && gana
+        ? `Reescribir la pregunta con las palabras de la ley antes de buscar por palabras clave convirtió la fusión de una pérdida en una ganancia: ${partes.join('; ')}.${cierre}`
+        : `Con la pregunta reescrita en las palabras de la ley antes de buscar por palabras clave, ${partes.join('; ')}.${cierre}`,
     )
+  }
+
+  const solaClaude = m(com, `keyword + Claude${alcance}`) ?? m(com, 'keyword + Claude')
+  if (solaClaude) {
+    const kw = m(com, `keyword${alcanceDe(solaClaude.nombre)}`)
+    const contraKw = par(solaClaude.nombre, kw?.nombre)?.hit5 ?? solaClaude.delta5
+    const contraVec = comparaciones.find(c => c.a === solaClaude.nombre && /^vector /.test(c.b) && c.hit5)
+    const v = contraVec && m(com, contraVec.b)
+    const frente = v ? efecto(contraVec.hit5, ', e incluso supera a los vectores', ', aunque queda por debajo de los vectores', ', y no se distingue de los vectores') : ''
+    if (kw && contraKw)
+      out.push(
+        `Sin vectores, la reescritura sola ${efecto(contraKw, 'mejora', 'empeora', 'no mejora de forma medible')} la búsqueda por palabras clave: ${alcanceDe(solaClaude.nombre) ? solo : ''}acierta entre los 5 primeros ${dePrimero(solaClaude.hit5, kw.hit5)} con la pregunta tal cual (${iv(contraKw)} puntos)${
+          v ? `${frente} (${pct(v.hit5)}; ${iv(contraVec.hit5)} puntos)` : ''
+        }. Como no necesita embeddings, es el respaldo cuando Workers AI no responde.`,
+      )
   }
 
   const rivales = comparaciones.filter(c => /^vector /.test(c.a) && /^vector /.test(c.b) && modelo(c.a) === modelo(enUso) && modelo(c.b) !== modelo(c.a) && c.hit5 && cruzaCero(c.hit5))
@@ -178,11 +226,14 @@ function hallazgos(cs) {
 /** How production searches, from `enUso`: vectors alone or hybrid, and whether gemma's vectors are cut to 512 dimensions. */
 function produccion() {
   const gemma = / gemma\b/.test(enUso)
-  const recortados = gemma && orden.some(n => / 768d$/.test(n))
-  if (/^vector /.test(enUso)) return `Este sitio usa búsqueda vectorial${gemma ? ` con embeddinggemma-300m${recortados ? ', recortada a 512 dimensiones' : ''}` : ''}`
-  if (/^hybrid /.test(enUso)) return `Este sitio usa búsqueda híbrida: palabras clave más vectores${gemma ? ` de embeddinggemma-300m${recortados ? ' recortados a 512 dimensiones' : ''}` : ''}`
-  if (/^keyword/.test(enUso)) return 'Este sitio usa búsqueda por palabras clave'
-  return `Este sitio usa la búsqueda «${nombre(enUso).toLowerCase()}»`
+  const dims = gemma && orden.some(n => / 768d$/.test(n)) ? ' (512 dimensiones)' : ''
+  const vectores = gemma ? `vectores de embeddinggemma-300m${dims}` : 'vectores'
+  if (/^vector /.test(enUso)) return `Este sitio usa búsqueda vectorial: ${vectores}`
+  if (/^hybrid /.test(enUso) && REESCRITA.test(enUso))
+    return `Este sitio usa búsqueda híbrida: ${vectores} más palabras clave sobre la reescritura de la pregunta que hace Claude Haiku en las palabras de la ley`
+  if (/^hybrid /.test(enUso)) return `Este sitio usa búsqueda híbrida: palabras clave más ${vectores}`
+  if (/^keyword/.test(enUso)) return `Este sitio usa búsqueda por palabras clave${REESCRITA.test(enUso) ? ' sobre la reescritura de la pregunta que hace Claude Haiku' : ''}`
+  return `Este sitio usa la búsqueda «${nombreMin(enUso)}»`
 }
 
 /** "El índice cubre 10 documentos: 5 leyes, 4 reglamentos y la Resolución…", from the site's documents. */
@@ -246,7 +297,7 @@ export default {
       main.querySelector('[data-slot=eval]').innerHTML = html`<p class="muted">Todavía no hay resultados publicados para este sitio.</p>`
       return
     }
-    orden = [...new Set([...(ev.metodos ?? []), ...cs.flatMap(c => c.metodos)].map(m => m.nombre))]
+    orden = [...new Set([...cs.flatMap(c => c.metodos), ...(ev.metodos ?? [])].map(m => m.nombre))]
     const puntosClave = hallazgos(cs)
     const listas = SITIO.site.lists
     main.querySelector('[data-slot=prose]').innerHTML = html`<div class="prose-main"><p>${sat ? 'Cada criterio del SAT cita los artículos en los que se apoya. ' : ''}Una pregunta cuenta como acierto si alguno de ${sat ? 'esos artículos' : 'los artículos que la responden'} aparece entre los primeros resultados. Hay ${NUMEROS[cs.length] ?? cs.length} ${cs.length === 1 ? 'conjunto' : 'conjuntos'} de preguntas:</p>
@@ -256,7 +307,13 @@ export default {
         <div><dt>MRR</dt><dd>Promedio de 1 / posición del primer acierto.</dd></div>
         <div><dt>Rangos</dt><dd>Intervalos de confianza de 95% por bootstrap.</dd></div>
       </dl>
-      <p class="muted small">Resultados del ${ev.fecha}.${enUso ? html` ${produccion()}${listas.length > 1 ? `, con ${listas.map(l => `«${l.title}»`).join(' y ')} en listas separadas` : ''} (<strong>${nombre(enUso).toLowerCase()}</strong> en las tablas); los artículos que la pregunta nombra van primero.` : ''}</p></aside>
+      <p class="muted small">Resultados del ${ev.fecha}.${
+        enUso
+          ? html` ${produccion()} (<strong>${nombreMin(enUso)}</strong> en las tablas).${
+              listas.length > 1 ? ` Muestra ${listas.map(l => `«${l.title}»`).join(' y ')} en listas separadas, y los artículos que la pregunta nombra van primero.` : ' Los artículos que la pregunta nombra van primero.'
+            }${/^hybrid /.test(enUso) && REESCRITA.test(enUso) ? ' Si los vectores no están disponibles, busca solo con la reescritura.' : ''}`
+          : ''
+      }</p></aside>
       ${puntosClave.length ? html`<section class="findings" aria-labelledby="hall-h"><h2 class="section-h" id="hall-h">Lo que muestran los números</h2><ol>${puntosClave.map(t => html`<li>${t}</li>`)}</ol></section>` : ''}`
     const pedido = ctx.params.get('conjunto')
     const alias = { reservado: 'anexo3', ajuste: 'anexo7' }
@@ -278,16 +335,17 @@ function pintar(cs) {
   const p3 = x => x.toFixed(2)
 
   const base = ms.find(m => m.nombre === BASE)
-  const comparables = ms.filter(m => m !== base && m.delta5)
+  const baseDe = m => ms.find(x => x.nombre === `${BASE}${alcanceDe(m.nombre)}`) ?? base
+  const comparables = ms.filter(m => m.delta5 && !/^keyword( · .+)?$/.test(m.nombre))
   const tope = Math.max(0.1, ...cs.flatMap(s => s.metodos.flatMap(m => (m.delta5 ? m.delta5.map(Math.abs) : []))))
   const dom = Math.ceil((tope * 100) / 10) * 10
   const x = v => ((v * 100 + dom) / (2 * dom)) * 100
   const sig = comparables.filter(m => m.delta5[0] > 0 || m.delta5[1] < 0)
-  const mejor = [...sig].sort((a, b) => b.hit5 - a.hit5)[0]
+  const mejor = [...sig].sort((a, b) => b.hit5 - baseDe(b).hit5 - (a.hit5 - baseDe(a).hit5) || (b.nombre === enUso) - (a.nombre === enUso))[0]
   const resumen = !base
     ? ''
     : sig.length
-      ? `${c.frase}, ${sig.length === 1 ? 'un método supera' : `${sig.length} métodos superan`} a palabras clave en hit@5 con un intervalo que no cruza el cero. El mayor es ${nombre(mejor.nombre).toLowerCase()}: ${puntos(mejor.hit5 - base.hit5)} puntos (de ${puntos(mejor.delta5[0])} a ${puntos(mejor.delta5[1])}).`
+      ? `${c.frase}, ${sig.length === 1 ? 'un método supera' : `${sig.length} métodos superan`} a palabras clave en hit@5 con un intervalo que no cruza el cero. El mayor es ${nombreMin(mejor.nombre)}: ${puntos(mejor.hit5 - baseDe(mejor).hit5)} puntos (de ${puntos(mejor.delta5[0])} a ${puntos(mejor.delta5[1])}).`
       : `${c.frase}, ningún método se distingue de palabras clave: todos los intervalos de la diferencia en hit@5 cruzan el cero.`
 
   slot.innerHTML = html`<div class="filterbar"${cs.length < 2 ? ' hidden' : ''}>
@@ -323,7 +381,7 @@ function pintar(cs) {
       <figure class="forest">
         <div class="forest-axis" aria-hidden="true"><span class="forest-name">puntos</span><span class="forest-ticks">${[-dom, -dom / 2, 0, dom / 2, dom].map(t => html`<span style="left:${x(t / 100)}%">${t > 0 ? '+' : t < 0 ? '−' : ''}${Math.abs(t)}</span>`)}</span></div>
         <ul>${comparables.map(m => {
-          const d = m.hit5 - base.hit5
+          const d = m.hit5 - baseDe(m).hit5
           const s = m.delta5[0] > 0 || m.delta5[1] < 0
           return html`<li class="${s ? 'is-sig' : ''}">
             <span class="forest-name"><span class="key">${letra(m.nombre)}</span>${nombre(m.nombre)}</span>
@@ -331,7 +389,7 @@ function pintar(cs) {
             <span class="forest-v">${puntos(d)} <span class="ic">${puntos(m.delta5[0])} a ${puntos(m.delta5[1])}</span></span>
           </li>`
         })}</ul>
-        <figcaption class="muted small">Puntos porcentuales de hit@5 sobre palabras clave, con su intervalo pareado de 95%. En color, los intervalos que no cruzan el cero.</figcaption>
+        <figcaption class="muted small">Puntos porcentuales de hit@5 sobre la búsqueda por palabras clave en los mismos documentos, con su intervalo pareado de 95%. En color, los intervalos que no cruzan el cero.</figcaption>
       </figure>
     </section>`
       : ''}
