@@ -237,6 +237,7 @@ function parecidas(fs, q) {
   if (!stems.length) return []
   const exacta = normal(q)
   return fs
+    .filter(f => f.verified)
     .map(f => ({ f, n: stems.filter(st => coincidencias(f.question, [st]).length).length, exacta: normal(f.question) === exacta }))
     .filter(x => x.exacta || (stems.length === 1 ? x.n === 1 : x.n >= 2 && x.n / stems.length >= 0.5))
     .sort((a, b) => b.exacta - a.exacta || b.n / stems.length - a.n / stems.length || a.f.question.length - b.f.question.length)

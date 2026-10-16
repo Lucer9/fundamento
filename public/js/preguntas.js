@@ -31,8 +31,8 @@ function agrupar(faqs) {
 /** How a checked answer was checked, in this site's terms, for one answer or for several. */
 const revision = (varias = false) =>
   tieneCriterios()
-    ? `revisada${varias ? 's' : ''} por otro modelo contra el criterio del SAT del que salió ${varias ? 'cada' : 'la'} pregunta`
-    : `revisada${varias ? 's' : ''} por otro modelo contra una respuesta de referencia escrita a mano`
+    ? `comparada${varias ? 's' : ''} por un segundo modelo (Claude Opus) con el criterio del SAT del que salió ${varias ? 'cada' : 'la'} pregunta, y marcada${varias ? 's' : ''} como correcta${varias ? 's' : ''}`
+    : `comparada${varias ? 's' : ''} por un segundo modelo (Claude Opus) con una respuesta escrita a mano a partir de los artículos, y marcada${varias ? 's' : ''} como correcta${varias ? 's' : ''}`
 
 export default {
   nombre: 'preguntas',
@@ -45,14 +45,13 @@ export default {
 async function indice(main, ctx) {
   titular('Preguntas frecuentes')
   if (!ctx.ssr)
-    main.innerHTML = html`<header class="page-head"><p class="kicker">Preguntas frecuentes</p><h1 tabindex="-1">Preguntas frecuentes</h1></header>
+    main.innerHTML = html`<header class="page-head"><h1 tabindex="-1">Preguntas frecuentes</h1></header>
       <div aria-hidden="true" class="faq-loading">${Array.from({ length: 8 }, () => html`<span class="sk"></span>`)}</div>`
-  const faqs = await cargarFaqs()
+  const faqs = (await cargarFaqs()).filter(f => f.verified)
   if (ctx.signal.aborted) return
-  const revisadas = faqs.filter(f => f.verified).length
+  const revisadas = faqs.length
   const docs = agrupar(faqs).map(([g]) => g)
   main.innerHTML = html`<header class="page-head">
-      <p class="kicker">Preguntas frecuentes</p>
       <h1 tabindex="-1">Preguntas frecuentes</h1>
       <p class="deck">${
         faqs.length

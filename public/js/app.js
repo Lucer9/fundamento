@@ -148,6 +148,10 @@ cargarSitio().then(
     render()
   },
   e => {
-    main.innerHTML = html`<section class="empty-page"><p class="kicker">Sin conexión</p><h1 tabindex="-1">No se pudo cargar el buscador</h1><div class="error" role="alert"><p class="error-title">Detalle</p><p>${e.message}</p></div><p><a class="button" href="${location.pathname + location.search}" target="_self">Reintentar</a></p></section>`
+    if (main.querySelector(':scope > .ssr')) {
+      main.insertAdjacentHTML('afterbegin', html`<p class="notice notice--banda" role="status">No se pudo conectar con el buscador: estás viendo el texto sin búsqueda ni enlaces. <a href="${location.pathname + location.search}" target="_self">Reintentar</a></p>`.s)
+      return
+    }
+    main.innerHTML = html`<section class="empty-page"><h1 tabindex="-1">No se pudo cargar el buscador</h1><div class="error" role="alert"><p class="error-title">Detalle</p><p>${e.message}</p></div><p><a class="button" href="${location.pathname + location.search}" target="_self">Reintentar</a></p></section>`
   },
 )

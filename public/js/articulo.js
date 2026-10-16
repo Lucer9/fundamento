@@ -113,7 +113,7 @@ export default {
     </article>`
     preguntas.then(fs => {
       const slot = main.querySelector('[data-slot=faqs]')
-      const citan = fs.filter(f => f.sources.some(s => s.key === a.key))
+      const citan = fs.filter(f => f.verified && f.sources.some(s => s.key === a.key))
       if (slot && !ctx.signal.aborted && citan.length) slot.outerHTML = faqsHtml(citan, esRegla).s
     })
     const hit = main.querySelector('.lawtext .is-hit')
