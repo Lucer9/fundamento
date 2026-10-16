@@ -1,6 +1,7 @@
 import DataLoader from 'dataloader'
 import { GraphQLError } from 'graphql'
 import { MODELOS, SQL_FTS, consultaFts, expandir, porArticulo, recortar, rrf, terminos, type Hit, type Modelo } from './buscar.ts'
+import { claude, pedidoReescritura } from './claude.ts'
 import { CORPUS } from './corpus.ts'
 import { referencias, type Ley } from './parse.ts'
 
@@ -19,6 +20,7 @@ export interface Env {
   ANTHROPIC_BASE_URL?: string
   EMBED_URL?: string
   GOOGLE_SITE_VERIFICATION?: string
+  REWRITE_MODEL?: string
   DEV?: string
 }
 
@@ -26,7 +28,13 @@ export type Fila = { ley: Ley; id: string; orden: number; ubicacion: string; tex
 export type Criterio = { n: number; anexo: number; id: string; materia: Ley; tema: string; texto: string }
 
 /** Per-request ledger: D1 access that counts round trips, whether search fell back to keywords, and query embeddings already computed. */
-export type Db = { n: number; degradado: boolean; vectores: Map<string, Promise<number[]>>; all<T>(sql: string, ...params: unknown[]): Promise<T[]> }
+export type Db = {
+  n: number
+  degradado: boolean
+  vectores: Map<string, Promise<number[]>>
+  reescrituras: Map<string, Promise<string>>
+  all<T>(sql: string, ...params: unknown[]): Promise<T[]>
+}
 
 export type Ctx = {
   env: Env
@@ -47,6 +55,7 @@ export function db(env: Env): Db {
     n: 0,
     degradado: false,
     vectores: new Map(),
+    reescrituras: new Map(),
     async all<T>(sql: string, ...params: unknown[]) {
       d.n++
       return (await env.DB.prepare(sql).bind(...params).all<T>()).results
@@ -146,9 +155,32 @@ export function loaders(d: Db, batch: boolean) {
 export const cargar = async (ctx: Ctx, keys: string[]) =>
   (await ctx.load.articulo.loadMany(keys)).filter((a): a is Fila => !!a && !(a instanceof Error))
 
-async function textoHits(d: Db, query: string): Promise<Hit[]> {
-  const m = consultaFts(expandir(query))
+async function textoHits(d: Db, query: string, extra = ''): Promise<Hit[]> {
+  const m = consultaFts(`${expandir(query)} ${extra}`)
   return m ? d.all<Hit>(SQL_FTS, m, 200) : []
+}
+
+/**
+ * The query in the law's own words, written by Claude for keyword search ("plazo declaración anual personas físicas
+ * abril"), cached per question in D1 and once per request. Empty without an Anthropic key or if Claude fails, so
+ * search goes on without it.
+ */
+function reescribir(env: Env, d: Db, query: string): Promise<string> {
+  if (!env.ANTHROPIC_API_KEY) return Promise.resolve('')
+  const q = query.trim().toLowerCase()
+  if (!d.reescrituras.has(q))
+    d.reescrituras.set(
+      q,
+      (async () => {
+        const [hecha] = await d.all<{ terminos: string }>(`select terminos from reescritura where q = ?1`, q).catch(() => [])
+        if (hecha) return hecha.terminos
+        const modelo = env.REWRITE_MODEL ?? 'claude-haiku-5-5'
+        const terminos = (await claude(env, modelo, pedidoReescritura(CORPUS.materia), query, 200)).replace(/\s+/g, ' ').trim()
+        await d.all(`insert or replace into reescritura (q, terminos, modelo) values (?1, ?2, ?3)`, q, terminos, modelo).catch(() => [])
+        return terminos
+      })().catch(() => ''),
+    )
+  return d.reescrituras.get(q)!
 }
 
 /** The query's embedding, computed once per request even when the request runs several searches. */
@@ -196,8 +228,8 @@ export type Modo = 'KEYWORD' | 'VECTOR' | 'HYBRID'
  * the Reglamento de Tránsito) and 4 from the second (reglamentos and Miscelánea; the related laws), at most `maximo`
  * per article, plus the closest SAT criterios. Each list gets its own quota because ranked together, rules that
  * paraphrase the law pushed the law itself down (hit@1 45.7% → 29.5%). Vector-only where keyword fusion lowered
- * accuracy (tax law). Where fusion helped (traffic law, CORPUS.modo HYBRID), answers read the top six articles of a
- * hybrid search instead, the same ranking the site shows. If the query can't be embedded (Workers AI out of allowance),
+ * accuracy (tax law). Where fusion helped (traffic law, CORPUS.contexto 'busqueda'), answers read the top six
+ * articles of a hybrid search instead, the same ranking the site shows. If the query can't be embedded (Workers AI out of allowance),
  * answers fall back to the best keyword articles of each list, without SAT criterios.
  */
 export async function contexto(env: Env, d: Db, query: string, criterios: number, excluir: number | null, maximo = 3) {
@@ -208,7 +240,7 @@ export async function contexto(env: Env, d: Db, query: string, criterios: number
     const hits = await Promise.all(CORPUS.listas.map((l, i) => buscar(env, d, query, 'KEYWORD', null, cuotas[i] ?? 2, l.leyes)))
     return { trozos: CORPUS.siguiente ? await conSiguiente(d, hits.flat()) : hits.flat(), criterios: [] }
   }
-  if (CORPUS.modo === 'HYBRID') {
+  if (CORPUS.contexto === 'busqueda') {
     const [hits, crit] = await Promise.all([buscar(env, d, query, 'HYBRID', null, 6), criterios ? criteriosHits(env, d, v, criterios, excluir) : []])
     return { trozos: CORPUS.siguiente ? await conSiguiente(d, hits) : hits, criterios: crit }
   }
@@ -303,7 +335,7 @@ export async function buscar(env: Env, d: Db, query: string, modo: Modo, ley: Le
   if (query.length > 500) throw new GraphQLError('La búsqueda admite hasta 500 caracteres.')
   const [fijos, kw, vec] = await Promise.all([
     nombrados(d, query),
-    modo === 'VECTOR' ? [] : textoHits(d, query).then(porArticulo),
+    modo === 'VECTOR' ? [] : reescribir(env, d, query).then(x => textoHits(d, query, x)).then(porArticulo),
     modo === 'KEYWORD'
       ? []
       : embeber(env, d, query)
@@ -314,7 +346,14 @@ export async function buscar(env: Env, d: Db, query: string, modo: Modo, ley: Le
             return null
           }),
   ])
-  const hits = d.degradado || modo === 'KEYWORD' ? (kw.length || modo === 'KEYWORD' ? kw : porArticulo(await textoHits(d, query))) : modo === 'HYBRID' ? rrf([kw, vec!]) : vec!
+  const hits =
+    d.degradado || modo === 'KEYWORD'
+      ? kw.length || modo === 'KEYWORD'
+        ? kw
+        : porArticulo(await textoHits(d, query, await reescribir(env, d, query)))
+      : modo === 'HYBRID'
+        ? rrf([kw, vec!])
+        : vec!
   const vistos = new Set(fijos.map(h => `${h.ley}:${h.id}`))
   return [...fijos, ...hits.filter(h => !vistos.has(`${h.ley}:${h.id}`))]
     .filter(h => (!ley || h.ley === ley) && (!leyes || leyes.includes(h.ley)))

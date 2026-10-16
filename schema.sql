@@ -91,3 +91,10 @@ create table if not exists faq (
   verificada integer not null,
   fecha text not null
 );
+
+create table if not exists reescritura (
+  q text primary key,
+  terminos text not null,
+  modelo text not null,
+  creado text not null default (datetime('now'))
+);

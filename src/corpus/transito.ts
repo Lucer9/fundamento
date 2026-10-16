@@ -80,6 +80,8 @@ export const TRANSITO: Corpus = {
   },
   alias: {},
   modo: 'HYBRID',
+  contexto: 'busqueda',
+  materia: 'los reglamentos y leyes de tránsito de la Ciudad de México',
   listas: [{ titulo: 'Artículos', nota: '', leyes: ['RT', 'LM', 'RLM', 'LCC', 'CFCDMX'] }],
   prompt: `Eres "semáforo", un buscador del Reglamento de Tránsito de la Ciudad de México (RT) y de las leyes que lo rodean: la Ley de Movilidad (LM), su reglamento (RLM), la Ley de Cultura Cívica (LCC) y el Código Fiscal de la Ciudad de México (CFCDMX).
 Responde en español, en dos a cinco frases, usando solo los artículos que se te dan.

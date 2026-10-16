@@ -47,7 +47,9 @@ Plain-language questions, n = 189:
 | hybrid gemma, one ranking               | 23.3% | 53.4% | 65.1%  | 0.358  |
 | vector gemma 768 d, one ranking         | 28.6% | 61.4% | 73.5%  | 0.429  |
 | vector gemma 512 d, one ranking         | 30.7% | 65.1% | 76.2%  | 0.437  |
-| **vector gemma 512 d, laws only (live)**| 45.5% | 75.7% | 83.6%  | 0.574  |
+| vector gemma 512 d, laws only           | 45.5% | 75.7% | 83.6%  | 0.574  |
+| keyword on Claude's rewrite, laws only  | 34.9% | 67.7% | 78.3%  | 0.486  |
+| **hybrid: vectors + keyword on Claude's rewrite, laws only (live)** | 49.7% | 80.4% | 85.7% | 0.628 |
 
 Criterio titles, Anexo 7 (n = 133) / Anexo 3 held out (n = 56), hit@5:
 
@@ -69,7 +71,13 @@ What the numbers support:
 - **512 dimensions are enough.** embeddinggemma is trained so its first dimensions stand alone; cut to 512 it
   scored no worse than 768 (hit@5 +0.5 to +7.9). The free plan's 5M stored dimensions hold 7,111 vectors at 512
   but not at 768.
-- **Keyword fusion still hurts.** Vector beats hybrid on hit@1 by 1.6 to 13.2 points.
+- **Keyword fusion hurts, unless Claude rewrites the query first.** Plain keyword fused with vectors loses to
+  vectors alone (hit@1 −1.6 to −13.2 points). But Claude Haiku can rewrite each question in the law's own words
+  ("plazo declaración anual personas físicas abril"; `scripts/reescribir.ts`), and keyword search on that rewrite
+  fused with vectors beats vectors alone on hit@5 by 1.6 to 7.9 points (laws only, paired). Keyword search on the
+  rewrite alone, needing no embeddings, reaches 67.7% top-5 against 47.1% for plain keywords: that is the fallback
+  when Workers AI is out of allowance. Live search rewrites each query with Haiku (about $0.0003, cached per
+  question in D1) and fuses it with vectors.
 - The held-out Anexo 3 titles agree in direction, but 56 questions separate little.
 
 ## Answer accuracy (`scripts/eval-respuestas.ts`, 2026-10-16)
@@ -137,8 +145,10 @@ the text (`eval/transito/preguntas.json`), each with the articles that answer it
 | method (n = 28)                      | hit@1 | hit@5 | hit@10 | MRR@10 |
 |--------------------------------------|-------|-------|--------|--------|
 | keyword, with street-word synonyms   | 46.4% | 85.7% | 92.9%  | 0.637  |
+| keyword on Claude's rewrite          | 46.4% | 92.9% | 96.4%  | 0.658  |
 | vector gemma 512 d                   | 71.4% | 89.3% | 89.3%  | 0.778  |
-| **hybrid gemma (live)**              | 67.9% | 100%  | 100%   | 0.807  |
+| hybrid gemma                         | 67.9% | 100%  | 100%   | 0.807  |
+| **hybrid with Claude's rewrite (live)** | 71.4% | 100% | 100%  | 0.821  |
 
 What carried over from fundamento and what didn't, measured:
 

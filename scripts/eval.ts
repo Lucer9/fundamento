@@ -36,6 +36,9 @@ const criterios = ANEXOS
     ).map(c => ({ ...c, esperados: JSON.parse(c.esperados) as string[] }))
   : [...naturales.values()].map(p => ({ n: p.n, anexo: 0, id: '', materia: p.esperados[0].split(':')[0], tema: p.pregunta, esperados: p.esperados }))
 
+/** Claude's rewrite of each plain-language question in the law's words (scripts/reescribir.ts), if generated. */
+const REESCRITURAS: Record<string, string> = existsSync(`${EVAL}/reescrituras.json`) ? JSON.parse(readFileSync(`${EVAL}/reescrituras.json`, 'utf8')) : {}
+
 /** The site's first search list (fiscal: the laws): " · leyes" rows rank only its documents. A one-list site ranks everything together. */
 const LISTA = CORPUS.listas[0]
 const UNA_LISTA = CORPUS.listas.length === 1
@@ -107,6 +110,11 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
   const kw = consultas.map(q => porArticulo(fts.all(consultaFts(expandir(q)), 200) as Hit[]))
   metodos.keyword = kw
   if (!UNA_LISTA) metodos[`keyword${SUFIJO}`] = consultas.map(q => porArticulo((fts.all(consultaFts(expandir(q)), 1000) as Hit[]).filter(enLista)))
+  if (consultas.every(q => REESCRITURAS[q])) {
+    const con = (q: string) => consultaFts(`${expandir(q)} ${REESCRITURAS[q]}`)
+    metodos['keyword + Claude'] = consultas.map(q => porArticulo(fts.all(con(q), 200) as Hit[]))
+    if (!UNA_LISTA) metodos[`keyword + Claude${SUFIJO}`] = consultas.map(q => porArticulo((fts.all(con(q), 1000) as Hit[]).filter(enLista)))
+  }
   for (const m of Object.keys(MODELOS) as Modelo[]) {
     const { dims, indice } = MODELOS[m]
     const f = `${DATA}/emb/${m}.docs.f32`
@@ -123,6 +131,11 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
       if (d === indice) metodos[`hybrid ${nombre}`] = vec.map((v, i) => rrf([kw[i], v]))
       if (d === indice && m === 'gemma' && !UNA_LISTA)
         metodos[`vector ${nombre}${SUFIJO}`] = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d, 100, enLista)))
+      if (d === indice && m === 'gemma' && metodos['keyword + Claude']) {
+        metodos[`hybrid ${nombre} + Claude`] = vec.map((v, i) => rrf([metodos['keyword + Claude'][i], v]))
+        if (!UNA_LISTA)
+          metodos[`hybrid ${nombre} + Claude${SUFIJO}`] = metodos[`vector ${nombre}${SUFIJO}`].map((v, i) => rrf([metodos[`keyword + Claude${SUFIJO}`][i], v]))
+      }
     }
   }
   if (metodos['vector bge-m3']) {
@@ -215,6 +228,12 @@ const naturalesJson = {
   ...comunes,
   comparaciones: [
     [`vector gemma${SUFIJO}`, `keyword${SUFIJO}`],
+    [`keyword + Claude${SUFIJO}`, `vector gemma${SUFIJO}`],
+    [`keyword + Claude${SUFIJO}`, `keyword${SUFIJO}`],
+    ['keyword + Claude', 'vector gemma'],
+    [`hybrid gemma + Claude${SUFIJO}`, `vector gemma${SUFIJO}`],
+    ['hybrid gemma + Claude', 'hybrid gemma'],
+    ['keyword + Claude', 'hybrid gemma'],
     [`vector gemma${SUFIJO}`, 'vector gemma'],
     ['vector gemma', 'vector gemma 768d'],
     ['vector gemma', 'vector bge-m3'],
@@ -230,7 +249,7 @@ writeFileSync(
   PUBLICO_EVAL,
   JSON.stringify({
     fecha: new Date().toISOString().slice(0, 10),
-    enUso: `${CORPUS.modo === 'HYBRID' ? 'hybrid' : 'vector'} gemma${UNA_LISTA ? '' : SUFIJO}`,
+    enUso: `${CORPUS.modo === 'HYBRID' ? 'hybrid' : 'vector'} gemma${Object.keys(REESCRITURAS).length ? ' + Claude' : ''}${UNA_LISTA ? '' : SUFIJO}`,
     ...(CORPUS.sinonimos ? { sinonimos: CORPUS.sinonimos.map(([patron, agrega]) => ({ patron: patron.source, agrega })) } : {}),
     ...(ANEXOS
       ? {

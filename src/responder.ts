@@ -1,9 +1,10 @@
 import { GraphQLError } from 'graphql'
 import { encabezado } from './buscar.ts'
 import { multas } from './cdmx.ts'
+import { claude } from './claude.ts'
 import { CORPUS } from './corpus.ts'
 import { LEYES, type Ley } from './parse.ts'
-import { cargar, citantes, contexto, type Ctx, type Env } from './indice.ts'
+import { cargar, citantes, contexto, type Ctx } from './indice.ts'
 
 const SISTEMA = CORPUS.prompt
 
@@ -46,17 +47,6 @@ function salida(out: unknown): string {
   return (o.output ?? []).filter(p => p.type === 'message').flatMap(p => p.content ?? []).map(c => c.text ?? '').join('')
 }
 
-/** Claude through the Anthropic Messages API, or through scripts/claude.ts in dev (ANTHROPIC_BASE_URL). */
-async function claude(env: Env, model: string, system: string, content: string) {
-  const res = await fetch(`${env.ANTHROPIC_BASE_URL ?? 'https://api.anthropic.com'}/v1/messages`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY ?? '', 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model, system, max_tokens: 1024, messages: [{ role: 'user', content }] }),
-  })
-  if (!res.ok) throw new Error(`${model}: ${res.status} ${(await res.text()).slice(0, 300)}`)
-  const j = (await res.json()) as { content: { type: string; text?: string }[] }
-  return j.content.flatMap(b => (b.type === 'text' ? [b.text ?? ''] : [])).join('')
-}
 
 /**
  * Retrieval-grounded answer. Every bracketed citation the model writes is checked against the

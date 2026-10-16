@@ -118,7 +118,9 @@ export const FISCAL: Corpus = {
     },
   },
   alias: { ISR: 'LISR', IVA: 'LIVA', IEPS: 'LIEPS' },
-  modo: 'VECTOR',
+  modo: 'HYBRID',
+  contexto: 'trozos',
+  materia: 'las leyes fiscales federales de México',
   listas: [
     { titulo: 'Leyes', nota: '', leyes: ['LISR', 'LIVA', 'LIEPS', 'CFF', 'LIF'] },
     {
