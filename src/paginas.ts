@@ -96,7 +96,7 @@ async function contenido(env: Env, url: URL): Promise<Pagina> {
       cuerpo: `<article class="ssr"><p>${esc(doc.nombre)}</p><h1>${esc(etiqueta)}</h1>${
         res
           ? `<section><h2>En pocas palabras</h2><p>${esc(res.resumen)}</p>${
-              preguntas.length ? `<h3>Preguntas que responde</h3><ul>${preguntas.map(q => `<li><a href="/?q=${encodeURIComponent(q)}">${esc(q)}</a></li>`).join('')}</ul>` : ''
+              preguntas.length ? `<h3>Preguntas relacionadas</h3><ul>${preguntas.map(q => `<li><a href="/?q=${encodeURIComponent(q)}">${esc(q)}</a></li>`).join('')}</ul>` : ''
             }<p>Resumen escrito con IA a partir del texto oficial; el texto oficial es el que vale.</p></section>`
           : ''
       }${fila.texto
