@@ -48,10 +48,14 @@ const resolvers = {
     law: (_: unknown, { code }: { code: Ley }) => ({ code }),
     article: (_: unknown, a: { law: Ley; number: string }, ctx: Ctx) => ctx.load.articulo.load(clave(a.law, a.number)),
     search: async (_: unknown, a: { query: string; mode: Modo; law?: Ley; laws?: Ley[]; kinds?: string[]; first: number }, ctx: Ctx) => {
+      if (a.query.trim().length < 2) throw new GraphQLError('Escribe al menos 2 caracteres para buscar.')
       if (!(await ctx.env.SEARCH_LIMITER.limit({ key: ctx.ip })).success) throw new GraphQLError('Demasiadas búsquedas, espera un minuto.')
       return buscar(ctx.env, ctx.db, a.query, a.mode, a.law ?? null, a.first, documentos(a.laws, a.kinds))
     },
-    answer: (_: unknown, a: { question: string }, ctx: Ctx) => responder(ctx, a.question),
+    answer: (_: unknown, a: { question: string }, ctx: Ctx) => {
+      if (ctx.soloLectura) throw new GraphQLError('Las respuestas se piden con POST: un enlace GET no puede gastar una respuesta.')
+      return responder(ctx, a.question)
+    },
     mostCited: (_: unknown, a: { first: number; law?: Ley }, ctx: Ctx) =>
       ctx.db.all<{ k: string; count: number }>(
         `select a_ley || ':' || a_id as k, count(distinct de_ley || ':' || de_id) as count from enlace
@@ -189,26 +193,47 @@ const consultasD1: Plugin<Ctx> = {
   }),
 }
 
-const defaultQuery = /* GraphQL */ `# ¿Puedo deducir el deducible del seguro de gastos médicos?
+/** The explorer's first query: the site's first example question, with what this corpus attaches to an article. */
+const defaultQuery = /* GraphQL */ `# ${CORPUS.sitio.ejemplos[0]}
 query {
-  search(query: "deducible del seguro de gastos médicos", first: 3) {
+  search(query: ${JSON.stringify(CORPUS.sitio.ejemplos[0])}, first: 3) {
     score
     article {
       key
       location
       citedBy { key }
-      criteria { title }
+      ${CORPUS.anexos ? 'criteria { title }' : 'fines { times }'}
     }
   }
 }
 `
+
+/**
+ * Headers for every page: the CSP allows the site's own scripts and requests, Google Fonts, inline styles the app
+ * sets, and data: images (the favicon and the CSS icon masks); JSON-LD blocks are data, not script, so they need no
+ * exception. No other site may frame the pages.
+ */
+const SEGURIDAD = {
+  'content-security-policy':
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+  'x-content-type-options': 'nosniff',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'x-frame-options': 'DENY',
+}
+
+const conSeguridad = (res: Response) => {
+  const r = new Response(res.body, res)
+  for (const [k, v] of Object.entries(SEGURIDAD)) r.headers.set(k, v)
+  return r
+}
 
 const yoga = createYoga<{ env: Env }>({
   schema: createSchema({ typeDefs, resolvers }),
   graphqlEndpoint: '/graphql',
   landingPage: false,
   maskedErrors: { errorMessage: 'Algo salió mal. Intenta de nuevo en un momento.' },
-  graphiql: { title: 'fundamento · GraphQL', defaultQuery },
+  graphiql: { title: `${CORPUS.sitio.nombre} · GraphQL`, defaultQuery },
+  cors: false,
   plugins: [
     EnvelopArmorPlugin({ maxDepth: { n: 8 }, maxAliases: { n: 5 }, maxTokens: { n: 1500 }, costLimit: { maxCost: 5000 } }),
     consultasD1,
@@ -219,6 +244,7 @@ const yoga = createYoga<{ env: Env }>({
       env,
       db: d,
       ip: request.headers.get('cf-connecting-ip') ?? 'local',
+      soloLectura: request.method === 'GET',
       modeloRespuesta: (env.DEV === '1' && request.headers.get('x-answer-model')) || (env.ANTHROPIC_API_KEY ? env.CLAUDE_MODEL : env.ANSWER_MODEL),
       evaluando: env.DEV === '1' && request.headers.get('x-eval') === '1',
       excluir: env.DEV === '1' && request.headers.get('x-excluir-criterio') ? Number(request.headers.get('x-excluir-criterio')) : null,
@@ -231,8 +257,11 @@ const yoga = createYoga<{ env: Env }>({
 export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url)
-    if (url.pathname === '/graphql') return yoga.fetch(request, { env })
-    if (url.pathname === '/chat') return chat(request, env)
+    if (url.pathname === '/graphql' || url.pathname === '/chat') {
+      const origen = request.headers.get('origin')
+      if (origen && origen !== url.origin) return Response.json({ message: 'Esta API solo responde a su propio sitio.' }, { status: 403 })
+      return url.pathname === '/graphql' ? yoga.fetch(request, { env }) : chat(request, env)
+    }
     if (url.pathname === '/dev/vec' && env.DEV === '1') {
       const { vector, topK, filter } = await request.json<{ vector: number[]; topK: number; filter?: VectorizeVectorMetadataFilter }>()
       return Response.json(await env.VEC.query(vector, { topK, filter }))
@@ -244,6 +273,6 @@ export default {
     if (url.pathname === '/robots.txt') return robots(url.origin)
     if (url.pathname === '/sitemap.xml') return sitemap(env, url.origin)
     const res = await env.ASSETS.fetch(request)
-    return res.headers.get('content-type')?.includes('text/html') ? pagina(res, env, url) : res
+    return res.headers.get('content-type')?.includes('text/html') ? conSeguridad(await pagina(res, env, url)) : res
   },
 } satisfies ExportedHandler<Env>

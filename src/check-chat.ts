@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict'
 import { leerRespuesta, sse } from './claude.ts'
 import { LEYES } from './parse.ts'
-import { limpiador } from './responder.ts'
+import type { Ctx, Db } from './indice.ts'
+import { POR_IP, cobrar, limpiador } from './responder.ts'
 
 /**
  * Self-check for the streaming pieces behind /chat: the server-sent-event reader, the Messages API stream reader, and
- * the citation cleaner, which must give the same answer however the model's text is cut into pieces.
+ * the citation cleaner, which must give the same answer however the model's text is cut into pieces; and the quotas
+ * that spend an answer: one visitor's daily quota, then the site's daily cap, with no IP stored.
  * Usage: [CORPUS=transito] node src/check-chat.ts
  */
 const cortes = (s: string) => [[s], [...s], ...Array.from({ length: s.length - 1 }, (_, i) => [s.slice(0, i + 1), s.slice(i + 1)])]
@@ -68,4 +70,14 @@ for (const [entrada, salida] of [
     if (entrada === crudo) assert.deepEqual(l.usadas, [`${L} 27`, `${L} 28`, 'SAT 12'])
   }
 }
-console.log('chat: SSE, flujo de la API y limpieza de citas ✓')
+const cuentas = new Map<string, number>()
+const falsa = { all: async (_: string, clave: string) => [{ n: cuentas.set(clave, (cuentas.get(clave) ?? 0) + 1).get(clave) }] } as unknown as Db
+const visita = (ip: string, diario: number) =>
+  ({ env: { ANSWER_LIMITER: { limit: async () => ({ success: true }) }, DAILY_ANSWERS: String(diario) }, db: falsa, ip }) as unknown as Ctx
+for (let i = 0; i < POR_IP; i++) assert.equal(await cobrar(visita('203.0.113.7', 1000)), null)
+assert.match((await cobrar(visita('203.0.113.7', 1000)))!, /muchas preguntas hoy/)
+assert.equal(await cobrar(visita('198.51.100.9', POR_IP + 2)), null)
+assert.equal(await cobrar(visita('198.51.100.9', POR_IP + 2)), null)
+assert.match((await cobrar(visita('198.51.100.9', POR_IP + 2)))!, /Se acabaron las respuestas de hoy/)
+assert.ok([...cuentas.keys()].every(k => /^\d{4}-\d{2}-\d{2}(\|ip:[0-9a-f]{16})?$/.test(k)), [...cuentas.keys()].join(' '))
+console.log('chat: SSE, flujo de la API, limpieza de citas y cuotas ✓')

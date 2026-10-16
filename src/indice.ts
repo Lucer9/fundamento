@@ -21,6 +21,7 @@ export interface Env {
   EMBED_URL?: string
   GOOGLE_SITE_VERIFICATION?: string
   REWRITE_MODEL?: string
+  IP_SALT?: string
   DEV?: string
 }
 
@@ -44,6 +45,8 @@ export type Ctx = {
   evaluando: boolean
   excluir: number | null
   sinCriterios: boolean
+  /** The request came over GET, which may read but never spends a generated answer. */
+  soloLectura?: boolean
   load: ReturnType<typeof loaders>
 }
 
@@ -173,10 +176,23 @@ async function textoHits(d: Db, query: string, extra = ''): Promise<Hit[]> {
   return m ? d.all<Hit>(SQL_FTS, m, 200) : []
 }
 
+/** Claude rewrites per UTC day for the whole site; past it, search runs on the question as typed. */
+export const REESCRITURAS_POR_DIA = 3000
+
+/**
+ * Adds one to a daily counter in `uso` and returns the new count. The key is the UTC day ("2026-10-16", the site's
+ * answers) or the day and what it counts ("2026-10-16|reescrituras", "2026-10-16|ip:<hash>").
+ */
+export async function contar(d: Db, que = '') {
+  const clave = new Date().toISOString().slice(0, 10) + (que && `|${que}`)
+  const [fila] = await d.all<{ n: number }>(`insert into uso (dia, n) values (?1, 1) on conflict (dia) do update set n = n + 1 returning n`, clave)
+  return fila.n
+}
+
 /**
  * The query in the law's own words, written by Claude for keyword search ("plazo declaración anual personas físicas
- * abril"), cached per question in D1 and once per request. Empty without an Anthropic key or if Claude fails, so
- * search goes on without it.
+ * abril"), cached per question in D1 and once per request. Empty without an Anthropic key, past the day's
+ * REESCRITURAS_POR_DIA new rewrites, or if Claude fails, so search goes on without it.
  */
 function reescribir(env: Env, d: Db, query: string): Promise<string> {
   if (!env.ANTHROPIC_API_KEY) return Promise.resolve('')
@@ -187,6 +203,7 @@ function reescribir(env: Env, d: Db, query: string): Promise<string> {
       (async () => {
         const [hecha] = await d.all<{ terminos: string }>(`select terminos from reescritura where q = ?1`, q).catch(() => [])
         if (hecha) return hecha.terminos
+        if ((await contar(d, 'reescrituras')) > REESCRITURAS_POR_DIA) return ''
         const modelo = env.REWRITE_MODEL ?? 'claude-haiku-5-5'
         const terminos = (await claude(env, modelo, pedidoReescritura(CORPUS.materia), query, 200)).replace(/\s+/g, ' ').trim()
         await d.all(`insert or replace into reescritura (q, terminos, modelo) values (?1, ?2, ?3)`, q, terminos, modelo).catch(() => [])

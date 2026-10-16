@@ -4,12 +4,12 @@ import { multas } from './cdmx.ts'
 import { claudeEnVivo, type Mensaje } from './claude.ts'
 import { CORPUS } from './corpus.ts'
 import { LEYES, type Ley } from './parse.ts'
-import { cargar, citantes, contexto, type Ctx } from './indice.ts'
+import { cargar, citantes, contar, contexto, type Ctx } from './indice.ts'
 
 export const SISTEMA = CORPUS.prompt
 
 /** Part of the answer cache key: bump it when retrieval or the prompt changes, so cached answers don't outlive them. */
-const VERSION = '2026-10-16 búsqueda híbrida con reescritura'
+const VERSION = '2026-10-16 formato Art. y viñetas, sin "proporcionados"'
 
 /** Why there is no generated answer (retrieval or the model failed); search keeps working. */
 export const FUERA = 'Las respuestas generadas no están disponibles por ahora. La búsqueda sigue funcionando.'
@@ -69,11 +69,17 @@ export async function guardada(ctx: Ctx, q: string): Promise<Respuesta | null> {
   return null
 }
 
-/** Spends one new answer against the per-IP rate limit and the daily cap; returns why not, in Spanish, or null. */
+/** New answers one visitor (one IP) gets per UTC day, so nobody can spend the site's daily cap alone. */
+export const POR_IP = 25
+
+/** The visitor's IP as a salted hash that changes every day; the IP itself is never stored. */
+const huella = async (ctx: Ctx) => (await sha256(`${ctx.env.IP_SALT ?? ''}|${new Date().toISOString().slice(0, 10)}|${ctx.ip}`)).slice(0, 16)
+
+/** Spends one new answer against the per-minute limit, the visitor's daily quota and the site's daily cap; returns why not, in Spanish, or null. */
 export async function cobrar(ctx: Ctx): Promise<string | null> {
   if (!(await ctx.env.ANSWER_LIMITER.limit({ key: ctx.ip })).success) return 'Demasiadas preguntas, espera un minuto.'
-  const [uso] = await ctx.db.all<{ n: number }>(`insert into uso (dia, n) values (date('now'), 1) on conflict (dia) do update set n = n + 1 returning n`)
-  return uso.n > Number(ctx.env.DAILY_ANSWERS) ? 'Se acabaron las respuestas de hoy. La búsqueda sigue funcionando.' : null
+  if ((await contar(ctx.db, `ip:${await huella(ctx)}`)) > POR_IP) return 'Ya hiciste muchas preguntas hoy. Vuelve mañana; la búsqueda sigue funcionando.'
+  return (await contar(ctx.db)) > Number(ctx.env.DAILY_ANSWERS) ? 'Se acabaron las respuestas de hoy. La búsqueda sigue funcionando.' : null
 }
 
 /** Stores a first answer, keyed by question, model and VERSION, for the GraphQL answer and the chat alike. */
