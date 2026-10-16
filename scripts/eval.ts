@@ -3,6 +3,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, SQL_FTS, consultaFts, expandir, porArticulo, rrf, type Hit, type Modelo } from '../src/buscar.ts'
 import { ANEXOS } from '../src/parse.ts'
 import { CORPUS, DATA, EVAL, PUBLICO_EVAL } from '../src/corpus.ts'
+import { claude } from './dev.ts'
 
 /**
  * Asks every SAT criterio's title as a question and records the rank of the first article the criterio
@@ -10,7 +11,8 @@ import { CORPUS, DATA, EVAL, PUBLICO_EVAL } from '../src/corpus.ts'
  * indebidas) is held out and only ever reported. Keyword search runs the same SQL the Worker runs on D1;
  * vectors are brute-force cosine over the cached embeddings (exact, so any gap to production is
  * Vectorize's approximation). The reranker (--rerank, needs bge-m3 vectors) calls Workers AI through the dev Worker
- * and is cached.
+ * and is cached. --rerank-claude has Claude Haiku reorder the top 30 of the Claude-rewrite methods on the
+ * plain-language questions, cached in <eval>/ordenes.json.
  * Writes public/eval.json for the site.
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
@@ -104,6 +106,37 @@ async function reordenar(base: Hit[][]): Promise<Hit[][]> {
   return out
 }
 
+/**
+ * Claude Haiku reads the best chunk of each of the top 30 articles and names the 10 that best answer the question,
+ * best first; the rest keep their order behind them. Cached in <eval>/ordenes.json by question and candidates.
+ */
+async function reordenarConClaude(consultas: string[], base: Hit[][]): Promise<Hit[][]> {
+  const archivo = `${EVAL}/ordenes.json`
+  const cache: Record<string, number[]> = existsSync(archivo) ? JSON.parse(readFileSync(archivo, 'utf8')) : {}
+  const sistema =
+    `Recibes una pregunta y artículos numerados de ${CORPUS.materia}. Devuelve los números de los 10 artículos que mejor la responden, ` +
+    'del más al menos relevante, separados por comas. Solo los números.'
+  const tops = base.map(hits => hits.slice(0, 30))
+  const claves = tops.map((top, j) => `${consultas[j]}\n${top.map(h => `${h.ley}:${h.id}`).join(',')}`)
+  let i = 0
+  await Promise.all(
+    Array.from({ length: 4 }, async () => {
+      while (i < consultas.length) {
+        const j = i++
+        if (cache[claves[j]]) continue
+        const lista = tops[j].map((h, k) => `[${k + 1}] ${h.ley} ${h.id}: ${(h.texto ?? '').replace(/\s+/g, ' ')}`).join('\n')
+        const r = await claude('claude-haiku-5-5', sistema, `Pregunta: ${consultas[j]}\n\n${lista}`)
+        cache[claves[j]] = [...new Set((r.match(/\d+/g) ?? []).map(Number).filter(n => n >= 1 && n <= tops[j].length))].slice(0, 10)
+        writeFileSync(archivo, JSON.stringify(cache))
+      }
+    }),
+  )
+  return base.map((hits, j) => {
+    const elegidos = cache[claves[j]].map(n => tops[j][n - 1])
+    return [...elegidos, ...hits.filter(h => !elegidos.includes(h))]
+  })
+}
+
 /** Every method's ranked articles for each query; `archivo` picks which cached query embeddings to use. */
 async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturales', rerank: boolean) {
   const metodos: Record<string, Hit[][]> = {}
@@ -147,6 +180,11 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
 
 const porTitulo = ANEXOS ? await metodosPara(criterios.map(c => c.tema), 'preguntas', process.argv.includes('--rerank')) : {}
 const porPregunta = await metodosPara(criterios.map(c => naturales.get(c.n)!.pregunta), 'naturales', false)
+if (process.argv.includes('--rerank-claude'))
+  for (const m of ['keyword + Claude', 'hybrid gemma + Claude']) {
+    const s = UNA_LISTA ? '' : SUFIJO
+    if (porPregunta[m + s]) porPregunta[`${m} + Claude rerank${s}`] = await reordenarConClaude(criterios.map(c => naturales.get(c.n)!.pregunta), porPregunta[m + s])
+  }
 
 type Rangos = (number | null)[]
 
@@ -234,6 +272,10 @@ const naturalesJson = {
     [`hybrid gemma + Claude${SUFIJO}`, `vector gemma${SUFIJO}`],
     ['hybrid gemma + Claude', 'hybrid gemma'],
     ['keyword + Claude', 'hybrid gemma'],
+    [`keyword + Claude + Claude rerank${SUFIJO}`, `hybrid gemma + Claude${SUFIJO}`],
+    [`hybrid gemma + Claude + Claude rerank${SUFIJO}`, `hybrid gemma + Claude${SUFIJO}`],
+    ['keyword + Claude + Claude rerank', 'hybrid gemma + Claude'],
+    ['hybrid gemma + Claude + Claude rerank', 'hybrid gemma + Claude'],
     [`vector gemma${SUFIJO}`, 'vector gemma'],
     ['vector gemma', 'vector gemma 768d'],
     ['vector gemma', 'vector bge-m3'],
