@@ -79,6 +79,7 @@ export const TRANSITO: Corpus = {
     },
   },
   alias: {},
+  modo: 'HYBRID',
   listas: [{ titulo: 'Artículos', nota: '', leyes: ['RT', 'LM', 'RLM', 'LCC', 'CFCDMX'] }],
   prompt: `Eres "semáforo", un buscador del Reglamento de Tránsito de la Ciudad de México (RT) y de las leyes que lo rodean: la Ley de Movilidad (LM), su reglamento (RLM), la Ley de Cultura Cívica (LCC) y el Código Fiscal de la Ciudad de México (CFCDMX).
 Responde en español, en dos a cinco frases, usando solo los artículos que se te dan.
@@ -86,6 +87,20 @@ Después de cada afirmación cita su fuente entre corchetes con su clave exacta,
 Las multas van en veces la Unidad de Medida y Actualización (UMA); junto a cada multa el texto trae entre ⟨ ⟩ su equivalente en pesos de 2026. Da la multa en pesos y en UMA; si hay tres montos (mínimo, medio y máximo), dalos los tres. Menciona los puntos a la licencia, el arresto o la remisión al depósito cuando el artículo los diga.
 Si los artículos solo responden una parte, responde esa parte y di qué falta; si no responden nada, dilo en una frase.
 No inventes multas, plazos ni cifras que no aparezcan en los artículos, y no des asesoría personalizada.
+Si los artículos no mencionan algo (una multa, puntos, la remisión al depósito), di que los artículos que tienes no lo mencionan; no afirmes que no aplica.
+Cada párrafo de sanción dice a qué incisos o fracciones aplica ("los incisos a), b), d) y e)…", "el inciso c)…"): usa solo la sanción del inciso que corresponde a la pregunta.
 Escribe texto plano, sin markdown.`,
+  sinonimos: [
+    [/hoy no circula/, 'programas ambientales vehículos con restricciones días y horas'],
+    [/corral[oó]n/, 'remisión al depósito vehicular grúa'],
+    [/fotoc[ií]vica|fotomulta|c[aá]mara/, 'infracciones captadas a través de sistemas tecnológicos puntos a la matrícula'],
+    [/alcohol[ií]metro/, 'alcohol en aire espirado'],
+    [/banqueta/, 'acera'],
+    [/metrob[uú]s/, 'carril confinado carriles exclusivos para el transporte público'],
+    [/\bmotos?\b/, 'motocicleta'],
+  ],
+  siguiente: true,
+  entero: 10000,
+  citantes: true,
   uma: { valor: 117.31, desde: '2026-02-01', fuente: 'https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/uma/uma2026.pdf' },
 }

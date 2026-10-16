@@ -17,6 +17,12 @@ export const NOMBRES = Object.fromEntries(Object.entries(LEYES).map(([k, v]) => 
  */
 export const terminos = (s: string) => (s.toLowerCase().match(/\p{L}+/gu) ?? []).filter(w => w.length > 1 && !VACIAS.has(w))
 
+/** The query plus the law's wording for any street term in it (CORPUS.sinonimos); the same text is embedded and keyword-searched. */
+export const expandir = (q: string) => {
+  const extra = (CORPUS.sinonimos ?? []).filter(([p]) => p.test(q.toLowerCase())).map(([, t]) => t)
+  return extra.length ? `${q} (${extra.join('; ')})` : q
+}
+
 /** FTS5 MATCH expression: any word may match, bm25 does the weighting. */
 export const consultaFts = (q: string) => [...new Set(terminos(q))].map(t => `"${t}"`).join(' OR ')
 

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
-import { MODELOS, SQL_FTS, consultaFts, porArticulo, rrf, type Hit, type Modelo } from '../src/buscar.ts'
+import { MODELOS, SQL_FTS, consultaFts, expandir, porArticulo, rrf, type Hit, type Modelo } from '../src/buscar.ts'
 import { ANEXOS } from '../src/parse.ts'
 import { CORPUS, DATA, EVAL, PUBLICO_EVAL } from '../src/corpus.ts'
 
@@ -104,9 +104,9 @@ async function reordenar(base: Hit[][]): Promise<Hit[][]> {
 /** Every method's ranked articles for each query; `archivo` picks which cached query embeddings to use. */
 async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturales', rerank: boolean) {
   const metodos: Record<string, Hit[][]> = {}
-  const kw = consultas.map(q => porArticulo(fts.all(consultaFts(q), 200) as Hit[]))
+  const kw = consultas.map(q => porArticulo(fts.all(consultaFts(expandir(q)), 200) as Hit[]))
   metodos.keyword = kw
-  if (!UNA_LISTA) metodos[`keyword${SUFIJO}`] = consultas.map(q => porArticulo((fts.all(consultaFts(q), 1000) as Hit[]).filter(enLista)))
+  if (!UNA_LISTA) metodos[`keyword${SUFIJO}`] = consultas.map(q => porArticulo((fts.all(consultaFts(expandir(q)), 1000) as Hit[]).filter(enLista)))
   for (const m of Object.keys(MODELOS) as Modelo[]) {
     const { dims, indice } = MODELOS[m]
     const f = `${DATA}/emb/${m}.docs.f32`
@@ -230,7 +230,8 @@ writeFileSync(
   PUBLICO_EVAL,
   JSON.stringify({
     fecha: new Date().toISOString().slice(0, 10),
-    enUso: UNA_LISTA ? 'vector gemma' : `vector gemma${SUFIJO}`,
+    enUso: `${CORPUS.modo === 'HYBRID' ? 'hybrid' : 'vector'} gemma${UNA_LISTA ? '' : SUFIJO}`,
+    ...(CORPUS.sinonimos ? { sinonimos: CORPUS.sinonimos.map(([patron, agrega]) => ({ patron: patron.source, agrega })) } : {}),
     ...(ANEXOS
       ? {
           nombre: 'Anexo 7 de la RMF 2026 (criterios normativos)',

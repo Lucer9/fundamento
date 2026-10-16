@@ -1,6 +1,6 @@
 import DataLoader from 'dataloader'
 import { GraphQLError } from 'graphql'
-import { MODELOS, SQL_FTS, consultaFts, porArticulo, recortar, rrf, type Hit, type Modelo } from './buscar.ts'
+import { MODELOS, SQL_FTS, consultaFts, expandir, porArticulo, recortar, rrf, terminos, type Hit, type Modelo } from './buscar.ts'
 import { CORPUS } from './corpus.ts'
 import { referencias, type Ley } from './parse.ts'
 
@@ -133,7 +133,7 @@ export const cargar = async (ctx: Ctx, keys: string[]) =>
   (await ctx.load.articulo.loadMany(keys)).filter((a): a is Fila => !!a && !(a instanceof Error))
 
 async function textoHits(d: Db, query: string): Promise<Hit[]> {
-  const m = consultaFts(query)
+  const m = consultaFts(expandir(query))
   return m ? d.all<Hit>(SQL_FTS, m, 200) : []
 }
 
@@ -144,7 +144,7 @@ function embeber(env: Env, d: Db, query: string) {
       query,
       (async () => {
         const modelo = MODELOS[env.MODEL]
-        const pedido = { text: [modelo.consulta(query)] }
+        const pedido = { text: [modelo.consulta(expandir(query))] }
         const emb = (
           env.EMBED_URL
             ? await (await fetch(env.EMBED_URL, { method: 'POST', body: JSON.stringify({ model: modelo.id, ...pedido }) })).json()
@@ -181,11 +181,16 @@ export type Modo = 'KEYWORD' | 'VECTOR' | 'HYBRID'
  * What an answer is written from: the closest chunks by embedding, 6 from the corpus's first search list (the laws;
  * the Reglamento de Tránsito) and 4 from the second (reglamentos and Miscelánea; the related laws), at most `maximo`
  * per article, plus the closest SAT criterios. Each list gets its own quota because ranked together, rules that
- * paraphrase the law pushed the law itself down (hit@1 45.7% → 29.5%). Vector-only, because on plain-language
- * questions keyword fusion lowered top-1 accuracy.
+ * paraphrase the law pushed the law itself down (hit@1 45.7% → 29.5%). Vector-only where keyword fusion lowered
+ * accuracy (tax law). Where fusion helped (traffic law, CORPUS.modo HYBRID), answers read the top six articles of a
+ * hybrid search instead, the same ranking the site shows.
  */
 export async function contexto(env: Env, d: Db, query: string, criterios: number, excluir: number | null, maximo = 3) {
   const v = await embeber(env, d, query)
+  if (CORPUS.modo === 'HYBRID') {
+    const [hits, crit] = await Promise.all([buscar(env, d, query, 'HYBRID', null, 6), criterios ? criteriosHits(env, d, v, criterios, excluir) : []])
+    return { trozos: CORPUS.siguiente ? await conSiguiente(d, hits) : hits, criterios: crit }
+  }
   const [primera, segunda] = CORPUS.listas
   const [leyes, resto, crit] = await Promise.all([
     vectorHits(env, d, v, primera.leyes),
@@ -202,7 +207,55 @@ export async function contexto(env: Env, d: Db, query: string, criterios: number
       })
       .slice(0, total)
   }
-  return { trozos: segunda ? [...tomar(leyes, 6), ...tomar(resto, 4)] : tomar(leyes, 10), criterios: crit }
+  const trozos = segunda ? [...tomar(leyes, 6), ...tomar(resto, 4)] : tomar(leyes, 10)
+  return { trozos: CORPUS.siguiente ? await conSiguiente(d, trozos) : trozos, criterios: crit }
+}
+
+/** Each chunk followed by the next chunk of the same article, when it isn't already there (CORPUS.siguiente). */
+async function conSiguiente(d: Db, trozos: Hit[]) {
+  const vistos = new Set(trozos.map(h => h.rowid))
+  const filas = await d.all<Hit & { rowid: number }>(
+    `select rowid, ley, id, texto from fragmento where rowid in (select value from json_each(?1))`,
+    JSON.stringify(trozos.map(h => h.rowid! + 1).filter(r => !vistos.has(r))),
+  )
+  const siguiente = new Map(filas.map(f => [f.rowid, f]))
+  return trozos.flatMap(h => {
+    const s = siguiente.get(h.rowid! + 1)
+    if (!s || s.ley !== h.ley || s.id !== h.id || vistos.has(s.rowid)) return [h]
+    vistos.add(s.rowid)
+    return [h, { ...s, score: h.score }]
+  })
+}
+
+/**
+ * Paragraphs of other articles that cite one of `claves`, with the citing article's lead-in when it ends in a colon
+ * ("Sólo procederá la remisión de vehículos al depósito en los siguientes casos:"). Only paragraphs that share a word
+ * with the query (by its first five letters, so "motocicleta" meets "Motocicletas"), best overlap first, so a rule
+ * about motorcycles doesn't reach an answer about seat belts.
+ */
+export async function citantes(d: Db, claves: string[], query: string, maximo = 3) {
+  const filas = await d.all<{ ley: Ley; id: string; inicio: number; texto: string }>(
+    `select distinct e.de_ley as ley, e.de_id as id, e.inicio, a.texto from enlace e join articulo a on a.ley = e.de_ley and a.id = e.de_id
+     where e.a_ley || ':' || e.a_id in (select value from json_each(?1)) and e.de_ley || ':' || e.de_id not in (select value from json_each(?1))`,
+    JSON.stringify(claves),
+  )
+  const raiz = (t: string) => t.slice(0, 5)
+  const palabras = new Set(terminos(expandir(query)).map(raiz))
+  const vistos = new Set<string>()
+  return filas
+    .flatMap(f => {
+      const pars = f.texto.split('\n')
+      let pos = 0
+      const i = pars.findIndex(p => (pos += p.length + 1) > f.inicio)
+      const clave = `${f.ley}:${f.id}:${i}`
+      if (i < 0 || vistos.has(clave)) return []
+      vistos.add(clave)
+      const texto = [...(i > 0 && /:$/.test(pars[0]) ? [pars[0]] : []), pars[i]].join('\n')
+      const comunes = new Set(terminos(texto).map(raiz).filter(t => palabras.has(t))).size
+      return comunes ? [{ ley: f.ley, id: f.id, texto, comunes }] : []
+    })
+    .sort((a, b) => b.comunes - a.comunes)
+    .slice(0, maximo)
 }
 
 /** Articles the query names outright ("LISR 151", "artículo 29-A del CFF"), as hits, if they exist. */

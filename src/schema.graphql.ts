@@ -33,6 +33,8 @@ ${Object.entries(CORPUS.docs)
     description: String!
     "One line for the footer: what the site is not."
     disclaimer: String!
+    "The search mode measured best for this corpus; the site's default."
+    defaultMode: SearchMode!
     "Example questions for the home page."
     examples: [String!]!
     "Search result lists in order; ask for each with search(laws:)."

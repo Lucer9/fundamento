@@ -3,7 +3,7 @@ import { encabezado } from './buscar.ts'
 import { multas } from './cdmx.ts'
 import { CORPUS } from './corpus.ts'
 import { LEYES, type Ley } from './parse.ts'
-import { cargar, contexto, type Ctx, type Env } from './indice.ts'
+import { cargar, citantes, contexto, type Ctx, type Env } from './indice.ts'
 
 const SISTEMA = CORPUS.prompt
 
@@ -85,17 +85,24 @@ export async function responder(ctx: Ctx, pregunta: string) {
   })
   const orden = [...new Set(trozos.map(h => `${h.ley}:${h.id}`))]
   const filas = new Map((await cargar(ctx, orden)).map(f => [`${f.ley}:${f.id}`, f]))
+  let presupuesto = 30000
   const articulos = orden
     .map(k => {
       const [ley, id] = k.split(':') as [Ley, string]
-      const texto = trozos.filter(h => `${h.ley}:${h.id}` === k).map(h => conPesos(h.texto ?? '')).join('\n[…]\n')
-      return `[${ley} ${id}] ${encabezado(ley, id, JSON.parse(filas.get(k)?.ubicacion ?? '[]'), filas.get(k)?.titulo)}\n${texto}`
+      const fila = filas.get(k)
+      const entero = !!CORPUS.entero && !!fila && fila.texto.length <= CORPUS.entero && fila.texto.length <= presupuesto
+      if (entero) presupuesto -= fila!.texto.length
+      const texto = entero ? conPesos(fila!.texto) : trozos.filter(h => `${h.ley}:${h.id}` === k).map(h => conPesos(h.texto ?? '')).join('\n[…]\n')
+      return `[${ley} ${id}] ${encabezado(ley, id, JSON.parse(fila?.ubicacion ?? '[]'), fila?.titulo)}\n${texto}`
     })
     .join('\n\n')
+  const remiten = CORPUS.citantes ? await citantes(ctx.db, orden, q) : []
+  for (const c of remiten) if (!orden.includes(`${c.ley}:${c.id}`)) orden.push(`${c.ley}:${c.id}`)
+  const otros = remiten.map(c => `[${c.ley} ${c.id}] ${encabezado(c.ley, c.id, [])} (fragmento)\n${conPesos(c.texto)}`).join('\n\n')
   const sat = criterios
     .map(c => `[SAT ${c.n}] ${c.anexo === 3 ? 'Práctica que el SAT considera indebida' : 'Criterio normativo del SAT'}: ${c.tema}\n${c.texto.slice(0, 1500)}`)
     .join('\n\n')
-  const usuario = `Artículos:\n\n${articulos}${sat ? `\n\nCriterios del SAT:\n\n${sat}` : ''}\n\nPregunta: ${q}`
+  const usuario = `Artículos:\n\n${articulos}${otros ? `\n\nArtículos que remiten a los anteriores:\n\n${otros}` : ''}${sat ? `\n\nCriterios del SAT:\n\n${sat}` : ''}\n\nPregunta: ${q}`
   const out = await (modelo.startsWith('claude')
     ? claude(ctx.env, modelo, SISTEMA, usuario)
     : ctx.env.AI.run(

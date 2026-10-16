@@ -126,7 +126,7 @@ const NUMERO = String.raw`(?:\d{1,3}(?:,\d{3})+|\d+|${PALABRA}(?:\s+(?:y\s+)?${P
 const SEPARADOR = /\s*,\s+(?:o\s+)?|\s+[oa]\s+/
 const MULTA = new RegExp(
   String.raw`(?<![\p{L}])(?:(?:multa|sanci[óo]n)(?!\p{L})(?:\s+(?:será|por|el|equivalente|a|al|de))*\s*|(?<y>y\s+de\s+))` +
-    String.raw`(?<n>${NUMERO}(?:(?:${SEPARADOR.source})${NUMERO})*)\s+(?:veces\s+la\s+(?:Unidad\s+de\s+Medida|UMA)|Unidades\s+de\s+Medida)(?:\s+y\s+Actualizaci[óo]n)?(?!\p{L})`,
+    String.raw`(?<n>${NUMERO}(?:(?:${SEPARADOR.source})${NUMERO})*)\s+(?:veces\s+la\s+(?:Unidad\s+de\s+Medida|UMA)|Unidades\s+de\s+Medida)(?:\s+y\s+Actualizaci[óo]n)?(?:\s+vigente)?(?!\p{L})`,
   'giu',
 )
 

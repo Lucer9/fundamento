@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
-import { MODELOS, encabezado, type Modelo } from '../src/buscar.ts'
+import { MODELOS, encabezado, expandir, type Modelo } from '../src/buscar.ts'
 import type { Ley } from '../src/parse.ts'
 import { embeberLocal } from './embeddings.ts'
 import { huella } from './huella.ts'
@@ -95,7 +95,7 @@ for (const nombre of (elegidos.length ? elegidos : Object.keys(MODELOS)) as Mode
   }
   writeFileSync(`${DATA}/emb/${nombre}.docs.f32`, await vectores(frags.map(f => m.documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion), f.titulo), f.texto))))
   writeFileSync(qs, await vectores(preguntas.map(m.consulta)))
-  writeFileSync(`${DATA}/emb/${nombre}.naturales.f32`, await vectores(naturales.map(m.consulta)))
+  writeFileSync(`${DATA}/emb/${nombre}.naturales.f32`, await vectores(naturales.map(q => m.consulta(expandir(q)))))
   writeFileSync(`${DATA}/emb/${nombre}.criterios.f32`, await vectores(criterios.map(([t, x]) => m.documento(t, x))))
   console.log(`${nombre}: ${frags.length} fragmentos + ${preguntas.length} criterios, ${nuevos} textos nuevos (${((Date.now() - t0) / 1000).toFixed(0)} s)`)
 }

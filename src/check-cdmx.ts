@@ -84,12 +84,12 @@ assert.equal(escritas[6].texto, 'El Procedimiento tiene por objeto. Artículo 5.
 
 const spans = (t: string) => multas(t).map(m => [m.veces, t.slice(m.inicio, m.fin)])
 const celular = 'serán sancionados con una multa equivalente a 30, 32 o 35 veces la Unidad de Medida y Actualización vigente, tres puntos'
-assert.deepEqual(spans(celular), [[[30, 32, 35], 'multa equivalente a 30, 32 o 35 veces la Unidad de Medida y Actualización']])
+assert.deepEqual(spans(celular), [[[30, 32, 35], 'multa equivalente a 30, 32 o 35 veces la Unidad de Medida y Actualización vigente']])
 assert.deepEqual(spans('la multa será equivalente a 20, 25 o 30 veces la Unidad de Medida y Actualización y seis puntos'), [
   [[20, 25, 30], 'multa será equivalente a 20, 25 o 30 veces la Unidad de Medida y Actualización'],
 ])
 assert.deepEqual(spans('el propietario deberá cubrir una multa de 60 veces la Unidad de Medida y Actualización Vigente'), [
-  [[60], 'multa de 60 veces la Unidad de Medida y Actualización'],
+  [[60], 'multa de 60 veces la Unidad de Medida y Actualización Vigente'],
 ])
 assert.deepEqual(multas('se cancelará y se aplicará una multa de ciento ochenta veces la Unidad de Medida y Actualización')[0].veces, [180])
 assert.deepEqual(multas('se sancionarán con una multa por el equivalente de 1 a 10 veces la Unidad de Medida, o arresto')[0].veces, [1, 10])
@@ -111,7 +111,7 @@ if (existsSync(RT)) {
   assert.deepEqual(rt.map(a => a.id), Array.from({ length: 70 }, (_, i) => String(i + 1)))
   assert.equal(art('61'), 'DEROGADO')
   assert.match(art('38'), /\ne\) Utilizar teléfono celular o cualquier dispositivo de comunicación mientras el vehículo esté en movimiento/)
-  assert.ok(spans(art('38')).some(([v, s]) => String(v) === '30,32,35' && s === 'multa equivalente a 30, 32 o 35 veces la Unidad de Medida y Actualización'))
+  assert.ok(spans(art('38')).some(([v, s]) => String(v) === '30,32,35' && s === 'multa equivalente a 30, 32 o 35 veces la Unidad de Medida y Actualización vigente'))
   assert.ok(art('50').startsWith('Queda prohibido conducir vehículos motorizados cuando se tenga una cantidad de alcohol en la sangre superior a 0.8 gramos por litro o de alcohol en aire espirado superior a 0.4 miligramos por litro'))
   assert.match(art('50'), /arresto administrativo inconmutable de 20 a 36 horas, y seis puntos de penalización/)
   assert.deepEqual(multas(art('50')).map(m => m.veces), [[60]])

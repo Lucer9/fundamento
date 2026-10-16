@@ -26,6 +26,7 @@ const resolvers = {
       tagline: CORPUS.sitio.lema,
       description: CORPUS.sitio.descripcion,
       examples: CORPUS.sitio.ejemplos,
+      defaultMode: CORPUS.modo,
       disclaimer: CORPUS.sitio.aviso,
       lists: CORPUS.listas.map(l => ({ title: l.titulo, note: l.nota, laws: l.leyes })),
       uma: CORPUS.uma ? { value: CORPUS.uma.valor, since: CORPUS.uma.desde, source: CORPUS.uma.fuente } : null,

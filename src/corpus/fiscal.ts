@@ -118,6 +118,7 @@ export const FISCAL: Corpus = {
     },
   },
   alias: { ISR: 'LISR', IVA: 'LIVA', IEPS: 'LIEPS' },
+  modo: 'VECTOR',
   listas: [
     { titulo: 'Leyes', nota: '', leyes: ['LISR', 'LIVA', 'LIEPS', 'CFF', 'LIF'] },
     {
