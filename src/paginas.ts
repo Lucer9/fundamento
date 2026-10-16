@@ -11,7 +11,7 @@ const resumen = (t: string, n = 155) => {
   return s.length > n ? `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…` : s
 }
 
-type Pagina = { titulo: string; descripcion: string; cuerpo?: string; datos?: unknown }
+type Pagina = { titulo: string; descripcion: string; cuerpo?: string; datos?: unknown; estado?: number; noindex?: boolean }
 
 const GUIA = '/si-te-para-un-agente'
 const AUTOR = { '@type': 'Person', name: 'Carlos Aguirre', url: 'https://www.carlosaguirre.workers.dev' }
@@ -52,6 +52,8 @@ function guiaHtml(guia: NonNullable<typeof CORPUS.guia>) {
 async function contenido(env: Env, url: URL): Promise<Pagina> {
   const { nombre, lema, descripcion } = CORPUS.sitio
   const sitio = { titulo: CORPUS.sitio.titulo, descripcion }
+  const noEncontrada: Pagina = { titulo: `Página no encontrada | ${nombre}`, descripcion, estado: 404, noindex: true }
+  if (url.pathname === '/' && url.searchParams.get('q')) return { ...sitio, noindex: true }
   if (url.pathname === '/' && !url.search)
     return {
       ...sitio,
@@ -86,7 +88,7 @@ async function contenido(env: Env, url: URL): Promise<Pagina> {
         .first<{ tema: string; resumen: string; preguntas: string }>()
         .catch(() => null),
     ])
-    if (!fila) return sitio
+    if (!fila) return noEncontrada
     const tema = fila.titulo ?? res?.tema
     const etiqueta = `${doc.tipo === 'reglas' ? 'Regla' : 'Artículo'} ${id}${tema ? `: ${tema}` : ''}`
     const preguntas = res ? (JSON.parse(res.preguntas) as string[]) : []
@@ -119,9 +121,13 @@ async function contenido(env: Env, url: URL): Promise<Pagina> {
   }
   const pregunta = url.pathname.match(/^\/preguntas\/([^/]+)\/?$/)
   if (pregunta) {
-    const f = await env.DB.prepare(`select pregunta, respuesta from faq where slug = ?1`).bind(pregunta[1]).first<{ pregunta: string; respuesta: string }>().catch(() => null)
-    if (!f) return sitio
+    const f = await env.DB.prepare(`select pregunta, respuesta, verificada from faq where slug = ?1`)
+      .bind(pregunta[1])
+      .first<{ pregunta: string; respuesta: string; verificada: number }>()
+      .catch(() => null)
+    if (!f) return noEncontrada
     return {
+      noindex: !f.verificada,
       titulo: `${f.pregunta} | ${nombre}`,
       descripcion: resumen(f.respuesta),
       cuerpo: `<article class="ssr"><h1>${esc(f.pregunta)}</h1>${f.respuesta
@@ -137,14 +143,19 @@ async function contenido(env: Env, url: URL): Promise<Pagina> {
     }
   }
   if (/^\/preguntas\/?$/.test(url.pathname)) {
-    const fs = (await env.DB.prepare(`select slug, pregunta from faq order by pregunta`).all<{ slug: string; pregunta: string }>().catch(() => ({ results: [] }))).results
+    const fs = (await env.DB.prepare(`select slug, pregunta from faq where verificada = 1 order by pregunta`).all<{ slug: string; pregunta: string }>().catch(() => ({ results: [] }))).results
     return {
       titulo: `Preguntas frecuentes | ${nombre}`,
       descripcion: `${fs.length} preguntas respondidas con los artículos que las sustentan. ${descripcion}`.slice(0, 155),
       cuerpo: `<nav class="ssr"><h1>Preguntas frecuentes</h1><ul>${fs.map(f => `<li><a href="/preguntas/${esc(f.slug)}">${esc(f.pregunta)}</a></li>`).join('')}</ul></nav>`,
     }
   }
-  return sitio
+  if (/^\/explorar\/?$/.test(url.pathname))
+    return { titulo: `Explorar: qué artículos se citan entre sí | ${nombre}`, descripcion: `Las citas entre los artículos de ${CORPUS.materia}: cuáles citan más, cuáles los citan y cómo se conectan.` }
+  if (/^\/como-funciona\/?$/.test(url.pathname))
+    return { titulo: `Cómo funciona | ${nombre}`, descripcion: `Cómo ${nombre} busca en ${CORPUS.materia} y responde con los artículos, y qué tan seguido acierta en preguntas de prueba.` }
+  if (url.pathname === '/') return sitio
+  return noEncontrada
 }
 
 /**
@@ -157,12 +168,18 @@ export async function pagina(res: Response, env: Env, url: URL) {
   const canonica = `${url.origin}${url.pathname === '/' ? '/' : url.pathname.replace(/\/$/, '')}`
   const atributo = (valor: string) => ({ element: (e: Element) => void e.setAttribute('content', valor) })
   const cabeza = [
-    `<link rel="canonical" href="${esc(canonica)}">`,
+    ...(p.noindex ? ['<meta name="robots" content="noindex">'] : [`<link rel="canonical" href="${esc(canonica)}">`]),
     `<meta property="og:url" content="${esc(canonica)}">`,
+    `<meta property="og:site_name" content="${esc(nombre)}">`,
+    '<meta property="og:locale" content="es_MX">',
+    `<meta property="og:image" content="${url.origin}/og/${CORPUS.prefijo}.png">`,
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta name="twitter:card" content="summary_large_image">',
     ...(env.GOOGLE_SITE_VERIFICATION ? [`<meta name="google-site-verification" content="${esc(env.GOOGLE_SITE_VERIFICATION)}">`] : []),
     ...(p.datos ? [`<script type="application/ld+json">${JSON.stringify(p.datos).replace(/</g, '\\u003c')}</script>`] : []),
   ].join('')
-  return new HTMLRewriter()
+  const vestida = new HTMLRewriter()
     .on('html', { element: e => void e.setAttribute('data-site', CORPUS.prefijo) })
     .on('a.wordmark', {
       element: e => {
@@ -179,13 +196,14 @@ export async function pagina(res: Response, env: Env, url: URL) {
     .on('.colophon-warn', { element: e => void e.setInnerContent(CORPUS.sitio.aviso) })
     .on('.colophon-fuente', { element: e => void e.setInnerContent(editores()) })
     .transform(res)
+  return p.estado ? new Response(vestida.body, { status: p.estado, headers: vestida.headers }) : vestida
 }
 
 /** Every article, rule and published question, for search engines. */
 export async function sitemap(env: Env, origen: string) {
   const [arts, fs] = await Promise.all([
     env.DB.prepare(`select ley, id from articulo where length(texto) > 40 order by rowid`).all<{ ley: string; id: string }>(),
-    env.DB.prepare(`select slug from faq`).all<{ slug: string }>().catch(() => ({ results: [] as { slug: string }[] })),
+    env.DB.prepare(`select slug from faq where verificada = 1`).all<{ slug: string }>().catch(() => ({ results: [] as { slug: string }[] })),
   ])
   const rutas = ['/', '/preguntas', ...(CORPUS.guia ? [GUIA] : []), '/explorar', '/como-funciona', ...fs.results.map(f => `/preguntas/${f.slug}`), ...arts.results.map(a => `/${a.ley}/${encodeURIComponent(a.id)}`)]
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rutas
