@@ -1,13 +1,15 @@
-import { badge, coincidencias, corto, DOCS, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gql, html, marcar, numero, raw, ruta, terminos, titulo, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
+import { badge, coincidencias, corto, DOCS, editor, elLa, errorHtml, esc, etiqueta, familia, fecha, fechaLargaDe, gaceta, gql, html, marcar, multaHtml, numero, pesos, raw, ruta, SITIO, terminos, tieneCriterios, titulo, tituloPagina, TRAMOS, ubicacionCorta, ubicacionHtml, unidad } from './lib.js'
 
-const QUERY = `query Articulo($law: LawCode!, $n: String!) {
+/** The article query; criteria only where the site has any, fines only where the API turns them into pesos. */
+const consulta = () => `query Articulo($law: LawCode!, $n: String!) {
   article(law: $law, number: $n) {
     key number title location text repealed amendedOn amountsUpdatedOn
     law { code name kind source regulates { code name } }
     links { start end target { key number law { code } } }
     cites { key number title law { code } location }
     citedBy { key number title law { code } location }
-    criteria { id kind title text }
+    ${tieneCriterios() ? 'criteria { id kind title text }' : ''}
+    fines { start end times }
   }
 }`
 
@@ -23,7 +25,7 @@ export default {
   async mount(main, ctx) {
     const ley = ctx.match[1].toUpperCase()
     const n = decodeURIComponent(ctx.match[2])
-    document.title = `${etiqueta(`${ley}:${n}`)} · ${corto(ley)} · fundamento`
+    document.title = tituloPagina(`${etiqueta(`${ley}:${n}`)} · ${corto(ley)}`)
     main.innerHTML = html`<article class="art" aria-busy="true">
       <header class="art-head">
         <p class="kicker art-doc">${badge(ley)} <span>${DOCS[ley].nombre}</span></p>
@@ -35,7 +37,7 @@ export default {
     const key = `${ley}:${n}`
     let p = cache.get(key)
     if (!p) {
-      p = gql(QUERY, { law: ley, n }, ctx.signal)
+      p = gql(consulta(), { law: ley, n }, ctx.signal)
       cache.set(key, p)
       p.catch(() => cache.delete(key))
     }
@@ -56,18 +58,23 @@ export default {
     const a = data.article
     if (!a) {
       const regla = unidad(ley) === 'Regla'
-      document.title = `${regla ? 'Regla' : 'Artículo'} no encontrado · fundamento`
+      document.title = tituloPagina(`${regla ? 'Regla' : 'Artículo'} no encontrado`)
       main.innerHTML = html`<section class="empty-page">
         <p class="kicker">Error 404</p>
         <h1 tabindex="-1">${regla ? `La ${DOCS[ley].corto} no tiene una regla ${n}` : `${DOCS[ley].corto} no tiene un artículo ${numero(n)}`}</h1>
-        <p class="deck">Revisa el número. Los artículos con letra o bis se escriben con guiones, como <a href="/CFF/29-A">CFF 29-A</a> o <a href="/LIVA/18-H-Bis">LIVA 18-H Bis</a>; las reglas de la Miscelánea, con puntos, como <a href="/RMF/2.7.1.21">2.7.1.21</a>.</p>
+        <p class="deck">Revisa el número. Los artículos con letra o bis se escriben con guiones, como 29-A o 18-H-Bis${Object.values(DOCS).some(d => d.familia === 'reglas') ? '; las reglas, con puntos, como 2.7.1.21' : ''}.</p>
         <p class="actions"><a class="button" href="/">Ir al buscador</a><a class="button button--quiet" href="/explorar">Ver los más citados</a></p>
       </section>`
       return
     }
-    document.title = `${a.title ? `${etiqueta(a.key)}. ${a.title}` : etiqueta(a.key)} · ${corto(a.law.code)} · fundamento`
-    const esRegla = familia(a.law.code) === 'miscelanea'
-    const citantes = a.citedBy.some(r => familia(r.law.code) === 'miscelanea') ? (a.citedBy.some(r => familia(r.law.code) !== 'miscelanea') ? 'artículos y reglas' : a.citedBy.length === 1 ? 'regla' : 'reglas') : a.citedBy.length === 1 ? 'artículo' : 'artículos'
+    document.title = tituloPagina(`${a.title ? `${etiqueta(a.key)}. ${a.title}` : etiqueta(a.key)} · ${corto(a.law.code)}`)
+    const esRegla = familia(a.law.code) === 'reglas'
+    const criterios = a.criteria ?? []
+    const multas = a.fines ?? []
+    const reglasCitan = a.citedBy.filter(r => familia(r.law.code) === 'reglas').length
+    const citantes = !a.citedBy.length
+      ? esRegla ? 'reglas' : 'artículos'
+      : reglasCitan === a.citedBy.length ? (reglasCitan === 1 ? 'regla' : 'reglas') : reglasCitan ? 'artículos y reglas' : a.citedBy.length === 1 ? 'artículo' : 'artículos'
     const q = (ctx.params.get('q') ?? '').trim()
     const { cuerpo, primero } = texto(a, q, ctx.state)
     main.innerHTML = html`<article class="art${a.repealed ? ' art--derogado' : ''}">
@@ -79,20 +86,21 @@ export default {
         <dl class="art-facts">
           ${esRegla && !a.amendedOn.length ? '' : html`<div><dt>Reformas</dt><dd>${a.amendedOn.length ? html`<a href="#reformas">${a.amendedOn.length}</a><span class="fact-sub">última ${fecha(a.amendedOn[a.amendedOn.length - 1])}</span>` : html`0<span class="fact-sub">sin anotar</span>`}</dd></div>`}
           <div><dt>Lo citan</dt><dd>${a.citedBy.length ? html`<a href="#lo-citan">${a.citedBy.length}</a>` : '0'}<span class="fact-sub">${citantes}</span></dd></div>
-          <div><dt>Criterios</dt><dd>${a.criteria.length ? html`<a href="#criterios">${a.criteria.length}</a>` : '0'}<span class="fact-sub">del SAT</span></dd></div>
+          ${tieneCriterios() ? html`<div><dt>Criterios</dt><dd>${criterios.length ? html`<a href="#criterios">${criterios.length}</a>` : '0'}<span class="fact-sub">del SAT</span></dd></div>` : ''}
         </dl>
       </header>
+      ${multas.length && SITIO.site.uma ? umaNota(multas) : ''}
       ${a.repealed ? html`<p class="derogado-note"><span class="tag tag--solid">Derogado</span> ${esRegla ? 'Esta regla ya no está vigente.' : 'Este artículo ya no está vigente. La ley conserva su número.'}</p>` : ''}
       ${q && primero >= 0 ? html`<p class="highlight-note"><span>Resaltado: <strong>«${q}»</strong></span><a href="${location.pathname}">Quitar</a></p>` : ''}
       <div class="art-grid">
         <div class="art-main">
           <div class="lawtext">${cuerpo}</div>
-          ${criteriosHtml(a.criteria)}
+          ${tieneCriterios() ? criteriosHtml(criterios, esRegla) : ''}
         </div>
         <aside class="art-rail" aria-label="Relaciones del artículo">
           ${listaHtml(esRegla ? 'Esta regla cita' : 'Este artículo cita', 'cita', a.cites, a.law.code, 'No cita otros textos de este índice.')}
           ${listaHtml(`Lo citan`, 'lo-citan', a.citedBy, a.law.code, esRegla ? 'Ningún texto del índice cita esta regla.' : 'Ningún texto del índice lo cita.')}
-          ${esRegla && !a.amendedOn.length && !(a.amountsUpdatedOn ?? []).length ? '' : reformasHtml(a.amendedOn, a.amountsUpdatedOn ?? [])}
+          ${esRegla && !a.amendedOn.length && !(a.amountsUpdatedOn ?? []).length ? '' : reformasHtml(a.amendedOn, a.amountsUpdatedOn ?? [], a.law.code)}
         </aside>
       </div>
     </article>`
@@ -101,6 +109,18 @@ export default {
       requestAnimationFrame(() => hit.scrollIntoView({ block: 'center' }))
     } else if (ctx.state.pasaje) window.scrollTo(0, 0)
   },
+}
+
+const NOMBRES_TRAMO = { min: 'mínima', med: 'media', max: 'máxima' }
+
+/** The UMA line over an article with fines, keyed with only the tiers its fines use (none when every fine is a single amount). */
+function umaNota(multas) {
+  const { uma } = SITIO.site
+  const usados = new Set(multas.flatMap(f => TRAMOS[f.times.length] ?? []))
+  const clave = ['min', 'med', 'max'].filter(t => usados.has(t))
+  return html`<p class="uma-note">Multas en pesos de ${uma.since.slice(0, 4)}: cada UMA vale ${pesos(uma.value)} desde el ${fechaLargaDe(uma.since)}.${
+    clave.length ? html` <span class="uma-key" aria-hidden="true">${clave.map(t => html`<span class="multa-m" data-t="${t}">${NOMBRES_TRAMO[t]}</span>`)}</span>` : ''
+  }</p>`
 }
 
 function rango(text, q, state) {
@@ -124,15 +144,17 @@ function texto(a, q, state) {
   const { text, links } = a
   const { stems, desde, hasta } = q ? rango(text, q, state) : { stems: [], desde: -1, hasta: -1 }
   const enlaces = [...links].sort((x, y) => x.start - y.start)
+  const multas = (a.fines ?? []).map(f => ({ fin: f.end, html: multaHtml(f.times) })).filter(m => m.html)
 
   const tramo = (s, e, resaltar) => {
     let out = ''
     let i = s
     const plano = (x, y) => {
       if (x >= y) return ''
-      if (!resaltar) return esc(text.slice(x, y))
       const t = text.slice(x, y)
-      return marcar(t, coincidencias(t, stems)).s
+      const extras = multas.filter(m => m.fin > x && m.fin <= y).map(m => ({ at: m.fin - x, html: m.html }))
+      if (!resaltar && !extras.length) return esc(t)
+      return marcar(t, resaltar ? coincidencias(t, stems) : [], extras).s
     }
     for (const l of enlaces) {
       if (l.end <= s || l.start >= e) continue
@@ -175,18 +197,12 @@ function texto(a, q, state) {
   return { cuerpo: raw(pars.join('')), primero }
 }
 
-const EDITOR = [
-  [/diputados\.gob\.mx/, 'Cámara de Diputados'],
-  [/sat\.gob\.mx/, 'SAT'],
-  [/dof\.gob\.mx/, 'Diario Oficial'],
-]
-
 /** One quiet line under the document name: the law a reglamento carries out, and the official PDF. */
 function docLinea(law) {
-  const editor = EDITOR.find(([re]) => re.test(law.source ?? ''))?.[1]
+  const quien = law.source ? editor(law.source).corto : ''
   const partes = [
     law.regulates && html`Reglamenta ${elLa(law.regulates.name)} <a href="/explorar?ley=${law.regulates.code}">${law.regulates.name}</a>`,
-    law.source && html`<a class="ext" href="${law.source}" target="_blank" rel="noopener">Texto oficial en PDF${editor ? `, ${editor}` : ''}<span class="sr-only"> (abre en otra pestaña)</span></a>`,
+    law.source && html`<a class="ext" href="${law.source}" target="_blank" rel="noopener">Texto oficial en PDF${quien ? `, ${quien}` : ''}<span class="sr-only"> (abre en otra pestaña)</span></a>`,
   ].filter(Boolean)
   return partes.length ? html`<p class="art-docline">${partes.map(p => html`<span>${p}</span>`)}</p>` : ''
 }
@@ -213,7 +229,7 @@ function listaHtml(encabezado, id, lista, ley, vacio) {
   </section>`
 }
 
-function reformasHtml(fechas, montos) {
+function reformasHtml(fechas, montos, ley) {
   const fila = f => html`<li><time datetime="${f}" title="${fechaLargaDe(f)}">${fecha(f)}</time></li>`
   const lista = (xs, n = 6) =>
     xs.length <= n + 2
@@ -239,19 +255,19 @@ function reformasHtml(fechas, montos) {
       <div class="strip-ends"><span>${fechas[0].slice(0, 4)}</span><span>${fechas[fechas.length - 1].slice(0, 4)}</span></div>
     </div>
     ${lista([...fechas].reverse())}
-    <p class="muted small">Fechas del Diario Oficial anotadas en el texto.</p>
+    <p class="muted small">Fechas ${gaceta(ley) === 'Gaceta Oficial' ? 'de la Gaceta Oficial' : 'del Diario Oficial'} anotadas en el texto.</p>
     ${cantidades}
   </section>`
 }
 
-function criteriosHtml(criterios) {
+function criteriosHtml(criterios, esRegla) {
   const grupos = [
-    { kind: 'NORMATIVE', titulo: 'Cómo lo interpreta el SAT', nota: 'Criterios normativos, Anexo 7 de la RMF 2026.' },
+    { kind: 'NORMATIVE', titulo: `Cómo ${esRegla ? 'la' : 'lo'} interpreta el SAT`, nota: 'Criterios normativos, Anexo 7 de la RMF 2026.' },
     { kind: 'IMPROPER_PRACTICE', titulo: 'Prácticas que el SAT considera indebidas', nota: 'Prácticas fiscales indebidas, Anexo 3 de la RMF 2026.' },
   ]
     .map(g => ({ ...g, items: criterios.filter(c => c.kind === g.kind) }))
     .filter(g => g.items.length)
-  if (!grupos.length) return html`<section class="crit" id="criterios"><h2 class="label">Criterios del SAT</h2><p class="muted small">Ningún criterio del SAT cita este artículo.</p></section>`
+  if (!grupos.length) return html`<section class="crit" id="criterios"><h2 class="label">Criterios del SAT</h2><p class="muted small">Ningún criterio del SAT cita ${esRegla ? 'esta regla' : 'este artículo'}.</p></section>`
   return html`<div id="criterios">${grupos.map(
     (g, gi) => html`<section class="crit" aria-labelledby="crit-${gi}">
       <h2 class="crit-h" id="crit-${gi}">${g.titulo} <span class="count">${g.items.length}</span></h2>

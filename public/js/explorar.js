@@ -1,7 +1,6 @@
-import { cuenta, deLa, DOCS, errorHtml, esAborto, esDoc, etiqueta, FAMILIAS, familia, fecha, fechaLargaDe, gql, html, nf, opcionesDocs, ruta, ubicacionCorta } from './lib.js'
+import { cuenta, deLa, DOCS, editor, errorHtml, esAborto, esDoc, etiqueta, familia, familiasPresentes, fecha, fechaLargaDe, gaceta, gql, html, nf, opcionesDocs, ruta, SITIO, tema, tituloPagina, ubicacionCorta } from './lib.js'
 import { cargarGrafo, montarRed } from './red.js'
 
-const RESUMEN = `{ stats { articles citations chunks criteria } laws { code name kind regulates { code } source articleCount } }`
 const DETALLE = `query Explorar($law: LawCode) {
   mostCited(first: 20, law: $law) { count article { key number title law { code } location } }
   amendments(law: $law) { date articles { key } }
@@ -20,12 +19,29 @@ let todas = false
 
 const leyDe = params => (esDoc(params.get('ley')) ? params.get('ley') : '')
 
+const COLOR = { ley: 'tinta', reglamento: 'azul' }
+const PLURAL = { ley: 'las leyes', reglamento: 'los reglamentos' }
+
+
+/** Which gazette the reform dates come from: the Diario Oficial, Mexico City's Gaceta Oficial, or both. */
+const gacetas = () => {
+  const g = new Set(Object.keys(DOCS).map(gaceta))
+  return g.size > 1 ? 'del Diario Oficial o de la Gaceta Oficial' : g.has('Gaceta Oficial') ? 'de la Gaceta Oficial de la Ciudad de México' : 'del Diario Oficial'
+}
+
+const leyendaRed = () => {
+  const fams = familiasPresentes()
+  const partes = fams.map(f => (f.id === 'reglas' ? `${tema().acento} para ${f.nombre === 'Reglas' ? 'las reglas' : `la ${f.nombre}`}` : `${COLOR[f.id]} para ${PLURAL[f.id]}`))
+  const lista = partes.length > 1 ? `${partes.slice(0, -1).join(', ')} y ${partes[partes.length - 1]}` : partes[0]
+  return `Cada línea es una cita, del color del documento que cita: ${lista}.${fams.some(f => f.id === 'reglamento') ? ' Cada reglamento va junto a su ley.' : ''}`
+}
+
 export default {
   nombre: 'explorar',
   async mount(main, ctx) {
     el = main
     todas = false
-    document.title = 'Explorar · fundamento'
+    document.title = tituloPagina('Explorar')
     const ley = leyDe(ctx.params)
     main.innerHTML = html`<header class="page-head">
         <p class="kicker">Explorar</p>
@@ -39,19 +55,19 @@ export default {
       <div class="explore-grid">
         <section class="panel" aria-labelledby="mc-h">
           <h2 class="section-h" id="mc-h">Los más citados</h2>
-          <p class="muted small">Cuántos artículos o reglas distintos remiten a cada uno.</p>
+          <p class="muted small">Cuántos ${Object.values(DOCS).some(d => d.familia === 'reglas') ? 'artículos o reglas distintos' : 'artículos distintos'} remiten a cada uno.</p>
           <div data-slot="cited"></div>
         </section>
         <section class="panel" aria-labelledby="am-h">
           <h2 class="section-h" id="am-h">Reformas por fecha</h2>
-          <p class="muted small">Artículos con una reforma anotada en cada edición del Diario Oficial.</p>
+          <p class="muted small">Artículos con una reforma anotada en cada edición ${gacetas()}.</p>
           <div data-slot="amend"></div>
         </section>
       </div>
       <section class="panel net" aria-labelledby="net-h">
         <div class="net-head">
           <h2 class="section-h" id="net-h">Red de citas</h2>
-          <p class="muted small">Cada línea es una cita, del color del documento que cita: tinta para las leyes, azul para los reglamentos, guinda para la Miscelánea. Cada reglamento va junto a su ley.</p>
+          <p class="muted small">${leyendaRed()}</p>
         </div>
         <div class="net-body" data-slot="net"></div>
       </section>
@@ -66,16 +82,10 @@ export default {
     })
     red = montarRed(main.querySelector('[data-slot=net]'), { navigate: ctx.navigate, ley })
 
-    pedir(RESUMEN).then(
-      ({ stats, laws }) => {
-        if (ctx.signal.aborted) return
-        main.querySelector('[data-slot=deck]').textContent = `${nf.format(stats.articles)} artículos y reglas en ${laws.length} documentos, ${nf.format(stats.citations)} citas entre ellos y ${nf.format(stats.criteria)} criterios del SAT que los interpretan.`
-        main.querySelector('[data-slot=laws]').innerHTML = volumenesHtml(laws, stats)
-      },
-      e => {
-        if (!esAborto(e)) main.querySelector('[data-slot=laws]').innerHTML = errorHtml(e, 'No se pudieron cargar los documentos')
-      },
-    )
+    const { stats, laws } = SITIO
+    const unidades = Object.values(DOCS).some(d => d.familia === 'reglas') ? 'artículos y reglas' : 'artículos'
+    main.querySelector('[data-slot=deck]').textContent = `${nf.format(stats.articles)} ${unidades} en ${cuenta(laws.length, 'documento')} y ${nf.format(stats.citations)} citas entre ellos${stats.criteria ? `, más ${nf.format(stats.criteria)} criterios del SAT que los interpretan` : ''}.`
+    main.querySelector('[data-slot=laws]').innerHTML = volumenesHtml(laws, stats)
     cargarGrafo().then(
       g => {
         if (!ctx.signal.aborted && main.isConnected) main.querySelector('[data-slot=matriz]').innerHTML = matrizHtml(g)
@@ -115,12 +125,12 @@ export default {
   },
 }
 
-const EDITOR = url => (/sat\.gob\.mx/.test(url) ? 'SAT' : /diputados\.gob\.mx/.test(url) ? 'Cámara de Diputados' : 'fuente oficial')
+
 
 /** The ten documents grouped by family: a proportional bar, then name, size and official PDF for each. */
 function volumenesHtml(laws, stats) {
   const total = laws.reduce((s, l) => s + l.articleCount, 0)
-  const grupos = FAMILIAS.map(f => ({ ...f, docs: laws.filter(l => familia(l.code) === f.id) })).filter(f => f.docs.length)
+  const grupos = familiasPresentes().map(f => ({ ...f, docs: laws.filter(l => familia(l.code) === f.id) }))
   const enOrden = grupos.flatMap(f => f.docs)
   return html`<ol class="volume-bar" aria-hidden="true">${enOrden.map(l => html`<li data-fam="${familia(l.code)}" style="flex-grow:${l.articleCount}"></li>`)}</ol>
     <div class="volume-groups">${grupos.map(
@@ -129,8 +139,8 @@ function volumenesHtml(laws, stats) {
         <ul class="volume-list">${f.docs.map(
           l => html`<li>
             <a class="volume-link" href="/explorar?ley=${l.code}"><span class="volume-code">${l.code}</span><span class="volume-name">${l.name}</span></a>
-            <span class="volume-n">${cuenta(l.articleCount, f.id === 'miscelanea' ? 'regla' : 'artículo')} <span class="muted">· ${((l.articleCount / total) * 100).toFixed(l.articleCount / total < 0.01 ? 1 : 0)}%</span>${l.regulates ? html` <span class="muted">· ${deLa(DOCS[l.regulates.code]?.corto ?? '')} ${DOCS[l.regulates.code]?.corto ?? l.regulates.code}</span>` : ''}</span>
-            <a class="volume-pdf" href="${l.source}" target="_blank" rel="noopener" title="${`PDF oficial, ${EDITOR(l.source)}`}">PDF<span class="sr-only"> oficial de ${l.name}, ${EDITOR(l.source)} (abre en otra pestaña)</span></a>
+            <span class="volume-n">${cuenta(l.articleCount, f.id === 'reglas' ? 'regla' : 'artículo')} <span class="muted">· ${((l.articleCount / total) * 100).toFixed(l.articleCount / total < 0.01 ? 1 : 0)}%</span>${l.regulates ? html` <span class="muted">· ${deLa(DOCS[l.regulates.code]?.corto ?? '')} ${DOCS[l.regulates.code]?.corto ?? l.regulates.code}</span>` : ''}</span>
+            <a class="volume-pdf" href="${l.source}" target="_blank" rel="noopener" title="${`PDF oficial, ${editor(l.source).corto}`}">PDF<span class="sr-only"> oficial de ${l.name}, ${editor(l.source).corto} (abre en otra pestaña)</span></a>
           </li>`,
         )}</ul>
       </section>`,

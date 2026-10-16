@@ -1,10 +1,10 @@
-import { corto, DOCS, esc, etiqueta, FAMILIAS, familia, gql, rutaClave, ubicacionCorta } from './lib.js'
+import { corto, DOCS, esc, etiqueta, familia, familiasPresentes, gql, rutaClave, ubicacionCorta } from './lib.js'
 
 const GRAFO = `{ laws { code name articleKeys } citations { from to } }`
 const UBICACION = `query Ubicacion($l: LawCode!, $n: String!) { article(law: $l, number: $n) { title location } }`
 const TAU = Math.PI * 2
 const HUECO = 0.011 * TAU
-const VISIBLES = new Set(['ley', 'reglamento'])
+const ALFA = { ley: 0.16, reglamento: 0.2, reglas: 0.065 }
 
 let datos = null
 
@@ -52,9 +52,10 @@ export const cargarGrafo = () =>
  * Returns `{ setLey, destroy }`.
  */
 export function montarRed(root, { navigate, ley = '' }) {
-  const visibles = new Set(VISIBLES)
+  const familias = familiasPresentes()
+  const visibles = new Set(familias.map(f => f.id).filter(id => id !== 'reglas' || familias.length === 1))
   if (ley) visibles.add(familia(ley))
-  root.innerHTML = `<fieldset class="net-toggles"><legend class="filter-legend">Mostrar</legend>${FAMILIAS.map(
+  root.innerHTML = `<fieldset class="net-toggles"${familias.length < 2 ? ' hidden' : ''}><legend class="filter-legend">Mostrar</legend>${familias.map(
     f => `<label class="chk"><input type="checkbox" value="${f.id}"${visibles.has(f.id) ? ' checked' : ''}><span><i data-fam="${f.id}"></i>${f.nombre}</span></label>`,
   ).join('')}</fieldset>
     <div class="net-stage"><canvas class="net-canvas" tabindex="0" role="img" aria-describedby="net-info"></canvas><p class="net-loading">Cargando artículos y citas…</p></div>
@@ -81,7 +82,7 @@ export function montarRed(root, { navigate, ley = '' }) {
   const tintas = () => {
     const css = getComputedStyle(root)
     const v = k => css.getPropertyValue(k).trim()
-    return { ink: v('--ink'), paper: v('--paper'), muted: v('--muted'), accent: v('--accent'), fam: { ley: v('--fam-ley'), reglamento: v('--fam-reglamento'), miscelanea: v('--fam-miscelanea') } }
+    return { ink: v('--ink'), paper: v('--paper'), muted: v('--muted'), accent: v('--accent'), fam: { ley: v('--fam-ley'), reglamento: v('--fam-reglamento'), reglas: v('--fam-reglas') } }
   }
   const escala = () => (w < 480 ? 0.32 : 0.5)
   const radio = n => 0.7 + Math.sqrt(n.entra.length) * escala()
@@ -157,25 +158,32 @@ export function montarRed(root, { navigate, ley = '' }) {
     gb.setTransform(dpr, 0, 0, dpr, 0, 0)
     gb.clearRect(0, 0, w, w)
     const G = geo()
-    const grupos = new Map()
+    const fuera = []
+    const dentro = []
     for (const e of d.aristas) {
       const [a, b] = e
       if (a.a == null || b.a == null) continue
-      const tocado = !filtro || a.ley === filtro || b.ley === filtro
-      const k = `${tocado ? 1 : 0}${a.fam}`
-      const lista = grupos.get(k) ?? grupos.set(k, []).get(k)
-      lista.push(e)
+      if (!filtro || a.ley === filtro || b.ley === filtro) dentro.push(e)
+      else fuera.push(e)
     }
-    const alfa = { ley: 0.1, reglamento: 0.22, miscelanea: 0.07 }
-    for (const [k, lista] of [...grupos].sort(([x], [y]) => x.localeCompare(y))) {
-      const tocado = k[0] === '1'
-      const fam = k.slice(1)
-      gb.strokeStyle = T.fam[fam]
-      gb.globalAlpha = tocado ? (filtro ? Math.min(0.6, alfa[fam] * 3) : alfa[fam]) : 0.025
-      gb.lineWidth = w < 480 ? 0.5 : 0.7
-      gb.beginPath()
-      for (const [a, b] of lista) curva(gb, a, b, G)
-      gb.stroke()
+    gb.lineWidth = w < 480 ? 0.5 : 0.7
+    const escasez = Math.min(4, Math.max(1, Math.sqrt(1800 / Math.max(1, dentro.length))))
+    for (const [lista, alfa] of [
+      [fuera, () => 0.025],
+      [dentro, fam => Math.min(0.7, (filtro ? ALFA[fam] * 2.5 : ALFA[fam]) * escasez)],
+    ]) {
+      lista.sort((x, y) => (x[0].fam < y[0].fam ? -1 : x[0].fam > y[0].fam ? 1 : 0))
+      let fam = null
+      for (const [a, b] of lista) {
+        if (a.fam !== fam) {
+          fam = a.fam
+          gb.strokeStyle = T.fam[fam]
+          gb.globalAlpha = alfa(fam)
+        }
+        gb.beginPath()
+        curva(gb, a, b, G)
+        gb.stroke()
+      }
     }
     for (const n of orden) {
       const rad = radio(n)
@@ -209,17 +217,21 @@ export function montarRed(root, { navigate, ley = '' }) {
     const entra = foco.entra.filter(n => n.a != null)
     const sale = foco.sale.filter(n => n.a != null)
     g.lineWidth = 1
-    g.globalAlpha = 0.7
+    g.globalAlpha = 0.55
     g.strokeStyle = T.ink
-    g.beginPath()
-    for (const n of entra) curva(g, n, foco, G)
-    g.stroke()
+    for (const n of entra) {
+      g.beginPath()
+      curva(g, n, foco, G)
+      g.stroke()
+    }
     g.lineWidth = 1.4
-    g.globalAlpha = 0.95
+    g.globalAlpha = 0.85
     g.strokeStyle = T.accent
-    g.beginPath()
-    for (const n of sale) curva(g, foco, n, G)
-    g.stroke()
+    for (const n of sale) {
+      g.beginPath()
+      curva(g, foco, n, G)
+      g.stroke()
+    }
     for (const n of [...entra, ...sale, foco]) {
       const rad = radio(n) + (n === foco ? 1.5 : 0)
       const [x, y] = punto(n, G.r + radio(n) + 1.5, G)
@@ -272,7 +284,8 @@ export function montarRed(root, { navigate, ley = '' }) {
   const describir = () => {
     if (!d) return
     if (!foco) {
-      info.innerHTML = `<span class="muted">Cada punto es un artículo o una regla; crece con las citas que recibe. Pasa el cursor o toca un punto. Con el teclado, usa las flechas y Enter.</span>`
+      const regla = Object.values(DOCS).some(x => x.familia === 'reglas')
+      info.innerHTML = `<span class="muted">Cada punto es ${regla ? 'un artículo o una regla' : 'un artículo'}; crece con las citas que recibe. Pasa el cursor o toca un punto. Con el teclado, usa las flechas y Enter.</span>`
       return
     }
     ubicar(foco)

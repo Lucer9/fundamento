@@ -1,12 +1,16 @@
-import { DOCS, esAborto, html } from './lib.js'
+import { cargarSitio, DOCS, editor, esAborto, esDoc, fechaLargaDe, html, pesos, SITIO, tema, tieneCriterios, tituloPagina } from './lib.js'
 
 const main = document.getElementById('main')
-const LEY = new RegExp(`^/(${Object.keys(DOCS).join('|')})/([^/]+)/?$`, 'i')
+const LEY = /^\/([A-Za-z][A-Za-z0-9]*)\/([^/]+)\/?$/
+const esArticulo = p => {
+  const m = p.match(LEY)
+  return !!m && esDoc(m[1].toUpperCase())
+}
 const ARCHIVO = /\.(json|js|css|pdf|png|jpe?g|svg|webp|ico|txt|xml|html)$/i
 
 const rutas = [
   { test: p => p === '/', page: () => import('./buscar.js') },
-  { test: p => LEY.test(p), page: () => import('./articulo.js') },
+  { test: esArticulo, page: () => import('./articulo.js') },
   { test: p => p === '/explorar', page: () => import('./explorar.js') },
   { test: p => p === '/como-funciona', page: () => import('./metodo.js') },
 ]
@@ -19,11 +23,13 @@ let ultima = ''
 const noEncontrada = {
   nombre: '404',
   mount(el) {
-    document.title = 'Página no encontrada · fundamento'
+    document.title = tituloPagina('Página no encontrada')
+    const primero = SITIO.site.lists[0]?.laws[0] ?? Object.keys(DOCS)[0]
+    const reglas = Object.keys(DOCS).find(c => DOCS[c].familia === 'reglas')
     el.innerHTML = html`<section class="empty-page">
       <p class="kicker">Error 404</p>
       <h1 tabindex="-1">Esta página no existe</h1>
-      <p class="deck">Puede que el enlace esté mal escrito. Los artículos viven en direcciones como <a href="/LISR/27">/LISR/27</a> o <a href="/RCFF/29">/RCFF/29</a>, y las reglas de la Miscelánea en <a href="/RMF/2.7.1.21">/RMF/2.7.1.21</a>.</p>
+      <p class="deck">Puede que el enlace esté mal escrito. Los artículos viven en direcciones como <a href="/${primero}/1">/${primero}/1</a>${reglas ? html`, y las reglas en <a href="/${reglas}/1.1">/${reglas}/1.1</a>` : ''}.</p>
       <p><a class="button" href="/">Ir al buscador</a></p>
     </section>`
   },
@@ -97,8 +103,40 @@ document.addEventListener('click', e => {
   navigate(url.pathname + url.search + url.hash, { state: a.dataset.pasaje ? { pasaje: a.dataset.pasaje } : {} })
 })
 
+/** Puts the site's name, accent, icon and footer credits on the shared shell. */
+function vestir() {
+  const { site } = SITIO
+  const t = tema()
+  const raiz = document.documentElement
+  if (raiz.dataset.site !== SITIO.slug) raiz.dataset.site = SITIO.slug
+  const marca = document.querySelector('.wordmark')
+  if (marca.textContent !== site.name) {
+    marca.textContent = site.name
+    marca.setAttribute('aria-label', `${site.name}, inicio`)
+  }
+  document.querySelector('link[rel=icon]')?.setAttribute('href', t.icono)
+  const editores = [...new Set(Object.values(DOCS).map(d => editor(d.source).largo))]
+  const lista = editores.length > 1 ? `${editores.slice(0, -1).join(', ')} y ${editores[editores.length - 1]}` : editores[0]
+  const pie = document.querySelector('.colophon-row')
+  pie.querySelector('.colophon-warn').textContent = site.disclaimer
+  pie.querySelector('.colophon-warn + p').textContent = `Texto vigente publicado por ${lista}${tieneCriterios() ? '; criterios del SAT, Anexos 3 y 7 de la RMF 2026' : ''}.`
+  if (site.uma && !pie.querySelector('.colophon-uma'))
+    pie.querySelector('.colophon-links').insertAdjacentHTML(
+      'beforebegin',
+      html`<p class="colophon-uma">Multas en pesos con la UMA de ${pesos(site.uma.value)} vigente desde el ${fechaLargaDe(site.uma.since)} (<a href="${site.uma.source}" target="_blank" rel="noopener">${editor(site.uma.source).corto}</a>).</p>`.s,
+    )
+}
+
 history.scrollRestoration = 'manual'
 addEventListener('popstate', () => {
   if (location.pathname + location.search !== ultima) render({ restaurar: history.state?.y ?? 0 })
 })
-render()
+cargarSitio().then(
+  () => {
+    vestir()
+    render()
+  },
+  e => {
+    main.innerHTML = html`<section class="empty-page"><p class="kicker">Sin conexión</p><h1 tabindex="-1">No se pudo cargar el buscador</h1><div class="error" role="alert"><p class="error-title">Detalle</p><p>${e.message}</p></div><p><a class="button" href="${location.pathname + location.search}" target="_self">Reintentar</a></p></section>`
+  },
+)
