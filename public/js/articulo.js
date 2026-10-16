@@ -16,7 +16,7 @@ const consulta = () => `query Articulo($law: LawCode!, $n: String!) {
 const cache = new Map()
 
 const FRACCION = /^((?:[IVXL]+\.\s+)+)(?=\S)/
-const INCISO = /^([a-z]{1,2}\)|\d{1,2}\.)\s+(?=\S)/
+const INCISO = /^([a-zñ]{1,2}[).]|\d{1,2}\.)\s+(?=\S)/u
 const DEROGA = /^(\(?\s*se deroga\s*\.?\)?\.?|derogad[oa]\.?)$/i
 const NOTA = /^(\d{2}-\d{2}-\d{4}\.\s*)?(cantidad(es)?\s+)?actualizad[oa]s?\s+(en el\s+)?DOF\s+\d{2}-\d{2}-\d{4}\.?$/i
 
@@ -184,7 +184,7 @@ function texto(a, q, state) {
     if (NOTA.test(par.trim())) return `<p class="is-nota"><span>${esc(par.trim())}</span></p>`
     const resaltar = desde >= 0 && e > desde && s < hasta
     if (resaltar && primero < 0) primero = idx
-    const clases = [resaltar ? 'is-hit' : '', DEROGA.test(par.replace(/^([IVXL]+\.|[a-z]{1,2}\))\s*/, '').trim()) ? 'is-derogado' : '']
+    const clases = [resaltar ? 'is-hit' : '', DEROGA.test(par.replace(/^([IVXL]+\.|[a-zñ]{1,2}[).])\s*/u, '').trim()) ? 'is-derogado' : '']
     const f = par.match(FRACCION)
     if (f) {
       const nums = f[1].trim().split(/\s+/)
