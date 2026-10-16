@@ -250,13 +250,15 @@ async function conSiguiente(d: Db, trozos: Hit[]) {
 
 /**
  * Paragraphs of other articles that cite one of `claves`, with the citing article's lead-in when it ends in a colon
- * ("Sólo procederá la remisión de vehículos al depósito en los siguientes casos:"). Only paragraphs that share a word
- * with the query (by its first five letters, so "motocicleta" meets "Motocicletas"), best overlap first, so a rule
- * about motorcycles doesn't reach an answer about seat belts.
+ * ("Sólo procederá la remisión de vehículos al depósito en los siguientes casos:"). Paragraphs citing one of the two
+ * best articles, or covering a cited article whole ("todas las fracciones del artículo 45"), always come, first; the
+ * rest only if they share a word with the query (by its first five letters, so
+ * "motocicleta" meets "Motocicletas"), best overlap first. A paragraph that cites a different fracción still comes,
+ * and the prompt has the model match fracciones.
  */
 export async function citantes(d: Db, claves: string[], query: string, maximo = 3) {
-  const filas = await d.all<{ ley: Ley; id: string; inicio: number; texto: string }>(
-    `select distinct e.de_ley as ley, e.de_id as id, e.inicio, a.texto from enlace e join articulo a on a.ley = e.de_ley and a.id = e.de_id
+  const filas = await d.all<{ ley: Ley; id: string; inicio: number; citado: string; texto: string }>(
+    `select distinct e.de_ley as ley, e.de_id as id, e.inicio, e.a_ley || ':' || e.a_id as citado, a.texto from enlace e join articulo a on a.ley = e.de_ley and a.id = e.de_id
      where e.a_ley || ':' || e.a_id in (select value from json_each(?1)) and e.de_ley || ':' || e.de_id not in (select value from json_each(?1))`,
     JSON.stringify(claves),
   )
@@ -273,9 +275,11 @@ export async function citantes(d: Db, claves: string[], query: string, maximo = 
       vistos.add(clave)
       const texto = [...(i > 0 && /:$/.test(pars[0]) ? [pars[0]] : []), pars[i]].join('\n')
       const comunes = new Set(terminos(texto).map(raiz).filter(t => palabras.has(t))).size
-      return comunes ? [{ ley: f.ley, id: f.id, texto, comunes }] : []
+      const todo = new RegExp(`todas las fracciones del art[íi]culo ${f.citado.split(':')[1].replace(/-/g, '[- ]')}(?!\\d)`, 'i').test(pars[i])
+      const principal = todo || claves.indexOf(f.citado) < 2
+      return comunes || principal ? [{ ley: f.ley, id: f.id, texto, comunes, principal }] : []
     })
-    .sort((a, b) => b.comunes - a.comunes)
+    .sort((a, b) => Number(b.principal) - Number(a.principal) || b.comunes - a.comunes)
     .slice(0, maximo)
 }
 

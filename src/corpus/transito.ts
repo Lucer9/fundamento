@@ -87,7 +87,8 @@ Después de cada afirmación cita su fuente entre corchetes con su clave exacta,
 Las multas van en veces la Unidad de Medida y Actualización (UMA); junto a cada multa el texto trae entre ⟨ ⟩ su equivalente en pesos de 2026. Da la multa en pesos y en UMA; si hay tres montos (mínimo, medio y máximo), dalos los tres. Menciona los puntos a la licencia, el arresto o la remisión al depósito cuando el artículo los diga.
 Si los artículos solo responden una parte, responde esa parte y di qué falta; si no responden nada, dilo en una frase.
 No inventes multas, plazos ni cifras que no aparezcan en los artículos, y no des asesoría personalizada.
-Si los artículos no mencionan algo (una multa, puntos, la remisión al depósito), di que los artículos que tienes no lo mencionan; no afirmes que no aplica.
+Si los artículos no mencionan algo (una multa, puntos, la remisión al depósito), di que los artículos citados no lo mencionan; no afirmes que no aplica.
+Revisa los artículos que remiten a los anteriores: si uno manda el vehículo al depósito por infringir el artículo o la fracción de la pregunta, dilo.
 Cada párrafo de sanción dice a qué incisos o fracciones aplica ("los incisos a), b), d) y e)…", "el inciso c)…"): usa solo la sanción del inciso que corresponde a la pregunta.
 Escribe texto plano, sin markdown.`,
   sinonimos: [

@@ -1,0 +1,531 @@
+[
+ {
+  "n": 1,
+  "pregunta": "¿Cuál es la multa por usar el celular mientras manejo?",
+  "esperados": [
+   "RT:38"
+  ],
+  "referencia": "Está prohibido usar el teléfono celular o cualquier dispositivo de comunicación con el vehículo en movimiento (art. 38, fracción II, inciso e) del Reglamento de Tránsito). La multa es de 30, 32 o 35 veces la UMA, más tres puntos a la licencia y un punto a la matrícula vehicular.",
+  "respuesta": "Usar el celular o cualquier dispositivo de comunicación con el vehículo en movimiento está prohibido a los conductores de vehículos motorizados; la manipulación debe hacerse con el vehículo detenido [RT 38]. La multa es de 30, 32 o 35 UMA, es decir $3,519.30 (mínima), $3,753.92 (media) o $4,105.85 (máxima) en 2026 [RT 38].\n\nAdemás, se imponen tres puntos de penalización a la licencia para conducir y un punto a la matrícula vehicular [RT 38]. Cuál de los tres montos se aplica depende de las sanciones pendientes de cumplimiento que tenga el infractor: la mínima con cero o una, la media con dos o tres, y la máxima con cuatro o más, o si las placas son de otra entidad o país [RT 64].\n\nLos artículos citados no mencionan la remisión del vehículo al depósito por esta infracción: el artículo que lista esos casos solo refiere a motocicletas y VEMEPE por otros incisos del artículo 38 (III incisos c) y e)), no por el uso del celular [RT 67]. Si conduces bicicleta u otro vehículo no motorizado, la prohibición también existe, pero el artículo prevé una amonestación verbal, no multa [RT 38].",
+  "fuentes": [
+   "RT:38",
+   "RT:64",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "La respuesta da la multa de 30, 32 o 35 UMA, los tres puntos a la licencia y el punto a la matrícula, sin contradecir la respuesta correcta.",
+  "segundos": 6.206
+ },
+ {
+  "n": 2,
+  "pregunta": "¿Qué multa me ponen si no uso el cinturón de seguridad?",
+  "esperados": [
+   "RT:37"
+  ],
+  "referencia": "El conductor debe ponerse el cinturón y asegurarse de que todos los pasajeros lo usen (art. 37, fracción II, inciso b)). Si no lo hace, la multa es de 5, 7 o 10 veces la UMA y un punto a la licencia, o un punto a la matrícula si la infracción la capta una cámara.",
+  "respuesta": "Si eres conductor de un vehículo motorizado y tú o algún pasajero no usan bien el cinturón, la multa es de 5, 7 o 10 UMA, es decir $586.55, $821.17 o $1,173.10 en 2026 [RT 37]. Además se aplica un punto de penalización a la licencia, o a la matrícula vehicular si la infracción la capta un sistema tecnológico [RT 37]. El conductor es responsable de que todos los pasajeros lo usen correctamente [RT 37].\n\nSi el pasajero es menor de doce años o mide menos de 1.45 m y no va en el sistema de retención o la plaza trasera que corresponde, la multa es la misma (5, 7 o 10 UMA), con un punto a la placa y un punto a la licencia [RT 39].\n\nLos artículos citados no mencionan la remisión al depósito por no usar el cinturón: el artículo sobre depósito solo menciona, de ese artículo, los incisos de motocicletas y VEMEPE [RT 67].",
+  "fuentes": [
+   "RT:37",
+   "RT:39",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "La respuesta da la multa de 5, 7 o 10 UMA y un punto a la licencia, o a la matrícula si la capta un sistema tecnológico, e indica que el conductor responde por los pasajeros, sin contradecir la respuesta correcta.",
+  "segundos": 9.038
+ },
+ {
+  "n": 3,
+  "pregunta": "¿Qué me pasa si me agarran en el alcoholímetro con más alcohol del permitido?",
+  "esperados": [
+   "RT:50",
+   "RT:51",
+   "LM:68"
+  ],
+  "referencia": "El límite es 0.8 gramos de alcohol por litro de sangre o 0.4 miligramos por litro de aire espirado (cero para transporte público, escolar, de personal, de carga, de sustancias peligrosas y de emergencia); si lo rebasas, la sanción es arresto administrativo inconmutable de 20 a 36 horas, seis puntos a la licencia y el vehículo va al depósito (art. 50 del Reglamento de Tránsito). La primera vez, además, la licencia se suspende un año y debes tomar un tratamiento contra las adicciones (art. 68, fracción III, de la Ley de Movilidad).",
+  "respuesta": "Si superas 0.8 g/L de alcohol en sangre o 0.4 mg/L en aire espirado, te corresponde arresto administrativo inconmutable de 20 a 36 horas y seis puntos de penalización a la licencia [RT 50]. Te presentan ante el Juez Cívico y tu vehículo se remite al depósito, salvo los supuestos del primer párrafo del artículo 68 [RT 51]. Tú pagas el arrastre y el almacenaje [RT 51], y para recuperar el vehículo debes haber cumplido toda la sanción [RT 50]. El agente retiene tu licencia [RT 62]. Si el vehículo no es tuyo y el conductor no cumple la sanción en 30 días, el propietario debe pagar una multa de 60 UMA ($7,038.60) para que se lo entreguen [RT 50]. La licencia se cancela de forma definitiva si te sancionan por segunda vez en un año o por tercera en tres años [LM 67]. Para transporte privado o público de pasajeros o de carga, la cancelación procede desde la primera sanción [LM 67]. Los artículos citados no mencionan una multa en pesos para el conductor por esta infracción.",
+  "fuentes": [
+   "RT:50",
+   "RT:51",
+   "RT:62",
+   "LM:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "INCOMPLETA",
+  "razon": "Da bien los límites, el arresto de 20 a 36 horas, los seis puntos y el depósito, pero omite la suspensión de la licencia por un año y el tratamiento contra las adicciones la primera vez (art. 68, fr. III, LM), además de la tolerancia cero para transporte público y de carga.",
+  "segundos": 8.267
+ },
+ {
+  "n": 4,
+  "pregunta": "Si me sancionan por segunda vez por manejar borracho, ¿me quitan la licencia?",
+  "esperados": [
+   "LM:67",
+   "LM:68"
+  ],
+  "referencia": "Si es la segunda sanción en un año, la licencia se cancela de forma definitiva (art. 67, fracción I, de la Ley de Movilidad); si es la segunda en menos de tres años, se suspende tres años con tratamiento contra las adicciones (art. 68, fracción IV), y la tercera sanción en tres años también la cancela (art. 67, fracción II). Quien maneje con la licencia cancelada, aunque tenga una de otro estado o país, recibe una sanción de 180 veces la UMA y el vehículo va al depósito (art. 68).",
+  "respuesta": "Sí. Si la segunda sanción por conducir bajo los efectos del alcohol o narcóticos ocurre dentro de un año de la primera, la Secretaría debe cancelar de forma definitiva la licencia [LM 67]. Si la segunda sanción ocurre en un periodo menor a tres años (pero no se aplica la cancelación anterior), la licencia se suspende por tres años y la persona debe someterse, a su costa, a un tratamiento contra las adicciones [LM 68]. Además, Seguridad Ciudadana debe retener la licencia durante esos periodos [LM 69-Bis].\n\nSi conduces con licencia cancelada, la sanción es una multa de 180 UMA ($21,115.80) y la remisión del vehículo al depósito [LM 68]. Los artículos citados no dicen cuál es la multa por el manejo en estado de ebriedad en sí, por lo que no puedo darte ese monto.",
+  "fuentes": [
+   "LM:67",
+   "LM:68",
+   "LM:69-Bis"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la cancelación definitiva si la segunda sanción ocurre dentro de un año, la suspensión de tres años con tratamiento contra las adicciones si ocurre en menos de tres años, y la multa de 180 UMA con remisión al depósito por conducir con licencia cancelada; omite solo el caso secundario de la tercera sanción, sin contradecir la respuesta correcta.",
+  "segundos": 7.982
+ },
+ {
+  "n": 5,
+  "pregunta": "¿Cuántos puntos puedo acumular en mi licencia antes de que me la cancelen?",
+  "esperados": [
+   "RT:66"
+  ],
+  "referencia": "La licencia se cancela al acumular 12 puntos de penalización; cada punto dura un año desde la fecha de la boleta y la licencia solo se puede volver a expedir tres años después (art. 66). Si manejas con la licencia cancelada, el vehículo va al depósito y la multa es de 180 veces la UMA.",
+  "respuesta": "La licencia para conducir se cancela al acumular doce puntos de penalización, es decir, puedes llegar a once sin que se cancele [RT 66]. Los puntos se acumulan según lo que indique la sanción de cada artículo del Reglamento, y tienen una vigencia de un año a partir de la fecha de expedición de la boleta de sanción [RT 66]. La acumulación de puntos no te exime de pagar la multa que corresponda a la infracción [RT 66].\n\nSi la licencia se cancela, solo puede reexpedirse después de tres años; si conduces en ese lapso, te corresponde la remisión del vehículo al depósito y una multa de 180 UMA (⟨$21,115.80⟩ en 2026) [RT 66].",
+  "fuentes": [
+   "RT:66"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "La respuesta coincide con la correcta: la licencia se cancela al acumular 12 puntos, cada punto vale un año desde la boleta, la reexpedición es a los tres años y conducir con la licencia cancelada implica la remisión al depósito y una multa de 180 UMA.",
+  "segundos": 14.153
+ },
+ {
+  "n": 6,
+  "pregunta": "¿Cómo funcionan las fotocívicas? ¿Me cobran multa si me capta una cámara?",
+  "esperados": [
+   "RT:64",
+   "LCC:28",
+   "LCC:34"
+  ],
+  "referencia": "Las infracciones captadas por los sistemas tecnológicos restan puntos a la placa, que empieza con 10: cada una resta un punto (cinco si rebasas el límite de velocidad en más de 40%) y las sanciones van de amonestación a cursos en línea, taller de sensibilización presencial y bloques de 2 horas de trabajo comunitario, sin exceder 36 horas (art. 64 del Reglamento; arts. 28, fracción XVIII, y 34 de la Ley de Cultura Cívica). Son multas en dinero cuando se trata de invasión de carriles confinados o de placas de personas morales, transporte público, carga, taxis u otra entidad o país.",
+  "respuesta": "Cuando una cámara capta la infracción, lo normal no es una multa en dinero sino puntos a la matrícula: cada matrícula tiene diez puntos iniciales y cada infracción captada por sistema tecnológico resta uno, salvo exceder por más de 40% el límite de velocidad, que resta cinco [RT 64]. Las sanciones van según los puntos restantes: amonestación en la primera infracción, curso en línea básico, intermedio y avanzado, taller presencial al llegar a 5 puntos, y de 4 a 1 punto, 2 horas de trabajo en favor de la comunidad [RT 64]. Sí son siempre monetarias las captadas por invasión de carriles confinados y las de matrículas de personas morales, transporte público, carga, taxis u otra entidad o país [RT 64]. Se notifican por vía electrónica en tramites.cdmx.gob.mx/infracciones [RT 64].\n\nPor ejemplo, exceder el límite de velocidad en una vía primaria (50 km/h) tiene multa de 10, 15 o 20 UMA ($1,173.10, $1,759.65 o $2,346.20) y, si la capta un sistema tecnológico, de uno a cinco puntos a la matrícula [RT 9]. Los artículos citados no explican el nombre \"fotocívicas\" ni el procedimiento para impugnar la sanción ni el uso de depósito para estos casos.",
+  "fuentes": [
+   "RT:64",
+   "RT:9"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Coincide con la respuesta correcta en los 10 puntos iniciales, la resta de uno por infracción (cinco si se excede la velocidad en más de 40%), la escala de amonestación, cursos en línea, taller presencial y trabajo comunitario en bloques de 2 horas, y las excepciones que se cobran en dinero; solo omite el tope de 36 horas, sin contradecir ningún dato.",
+  "segundos": 10.956
+ },
+ {
+  "n": 7,
+  "pregunta": "¿Cuáles son los límites de velocidad en la Ciudad de México?",
+  "esperados": [
+   "RT:9"
+  ],
+  "referencia": "Si no hay otra señal: 80 km/h en carriles centrales de vías de acceso controlado, 50 en vías primarias, 40 en vías secundarias y laterales, 30 en zonas de tránsito calmado, 20 en zonas escolares, de hospitales, asilos, albergues y casas hogar, y 10 en estacionamientos y vías peatonales (art. 9). Exceder el límite cuesta 10, 15 o 20 veces la UMA con tres puntos a la licencia (seis en las zonas de 30, 20 y 10 km/h), y si lo capta una cámara de uno a cinco puntos a la matrícula, cinco cuando se rebasa en más de 40%.",
+  "respuesta": "A falta de señalamiento restrictivo, los límites son: 80 km/h en los carriles centrales de vías de acceso controlado [RT 9], 50 km/h en vías primarias [RT 9], 40 km/h en vías secundarias y laterales de acceso controlado [RT 9], 30 km/h en zonas de tránsito calmado [RT 9], 20 km/h en zonas escolares, de hospitales, asilos, albergues y casas hogar [RT 9], y 10 km/h en estacionamientos y vías peatonales con acceso a vehículos [RT 9]. Los vehículos que transportan sustancias tóxicas o peligrosas van a 30 km/h en cualquier vía, salvo en los supuestos de las fracciones V y VI [RT 9].\n\nExceder los límites de 80, 50 y 40 km/h se sanciona con multa de 10, 15 o 20 UMA ($1,173.10, $1,759.65 o $2,346.20) y tres puntos a la licencia [RT 9]. En zonas de 30, 20 y 10 km/h la multa es la misma, pero con seis puntos a la licencia [RT 9]. Para transporte público de pasajeros y carga, en las zonas de 30, 20 y 10 km/h, la multa es de 20, 25 o 30 UMA ($2,346.20, $2,932.75 o $3,519.30) y seis puntos [RT 9]. Si el vehículo transporta sustancias peligrosas y excede su límite, la multa es de 100, 200 o 300 UMA ($11,731.00, $23,462.00 o $35,193.00) [RT 9].\n\nSi la infracción la capta un sistema tecnológico, se sancionan de uno a cinco puntos a la matrícula en lugar de puntos a la licencia, y rebasar el límite por más de 40% implica la sanción máxima con cinco puntos [RT 9]. Los artículos citados no mencionan arresto ni remisión al depósito por exceso de velocidad.",
+  "fuentes": [
+   "RT:9"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Coinciden los seis límites de velocidad, las multas de 10, 15 o 20 UMA con tres o seis puntos a la licencia y la regla de uno a cinco puntos a la matrícula por cámara (cinco si se excede en más de 40%); los datos adicionales no contradicen la respuesta correcta.",
+  "segundos": 8.431
+ },
+ {
+  "n": 8,
+  "pregunta": "Se llevaron mi coche al corralón, ¿cuánto cuesta sacarlo y qué necesito?",
+  "esperados": [
+   "RT:67",
+   "CFCDMX:230",
+   "CFCDMX:231"
+  ],
+  "referencia": "Pagas la grúa ($1,101 si es de hasta 3.5 toneladas, $1,995 si es mayor), $104 por cada día de almacenaje y las sanciones pendientes (arts. 230 y 231 del Código Fiscal de la Ciudad de México); para la devolución debes acreditar la propiedad o legal posesión, llevar las llaves, tener tarjeta de circulación vigente, no deber tenencia ni derechos de control vehicular del año anterior y tener póliza de seguro vigente (art. 67 del Reglamento de Tránsito). Si no lo retiras en un mes desde que quedó a tu disposición, se considera abandonado a favor de la Ciudad.",
+  "respuesta": "El arrastre cuesta $1,101.00 si la grúa es de hasta 3.5 toneladas, o $1,995.00 si es mayor [CFCDMX 230], y el almacenaje cuesta $104.00 por cada día desde que el coche ingresa al depósito [CFCDMX 231]. Además hay que cumplir la sanción de la infracción que originó la remisión, cuyo monto depende del artículo infringido y que los artículos citados no permiten determinar sin saber el motivo [RT 67] [RT 50]. Para la devolución se necesita comprobar la propiedad o legal posesión, llevar las llaves y pagar las sanciones y derechos [RT 67]. Seguridad Ciudadana también verifica en sistema que haya tarjeta de circulación vigente, que no haya adeudos de Tenencia ni de derechos de control vehicular del ejercicio fiscal anterior, y que exista póliza de seguro de responsabilidad civil vigente; si no aparece en el sistema, hay que presentar esos documentos físicamente en el depósito [RT 67]. Conviene no tardar: si pasa un mes desde que el vehículo quedó a su disposición sin retirarlo, causa abandono a favor de la Ciudad de México [CFCDMX 231].",
+  "fuentes": [
+   "CFCDMX:230",
+   "CFCDMX:231",
+   "RT:67",
+   "RT:50"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Incluye los montos de la grúa ($1,101 y $1,995), el almacenaje de $104 diarios, el pago de sanciones, los requisitos del art. 67 (propiedad o posesión, llaves, tarjeta de circulación, sin adeudos de tenencia ni control vehicular del año anterior, póliza vigente) y el abandono al mes, sin contradecir la respuesta correcta.",
+  "segundos": 8.36
+ },
+ {
+  "n": 9,
+  "pregunta": "¿Me hacen descuento si pago rápido la multa de tránsito?",
+  "esperados": [
+   "RT:62"
+  ],
+  "referencia": "Sí: si pagas dentro de los 30 días naturales siguientes a la notificación de la boleta tienes 50% de descuento, salvo en las sanciones de los artículos 30, fracción XXI, y 33, fracción II (art. 62). Se paga en las oficinas de la Tesorería o en centros autorizados, incluidos medios electrónicos.",
+  "respuesta": "Sí. Si pagas dentro de los treinta días naturales contados desde la notificación de la boleta de sanción, te descuentan el 50% del monto de la multa [RT 62]. El pago se hace en las oficinas de la Administración Tributaria de la Tesorería o en centros autorizados, incluidos medios electrónicos [RT 62].\n\nEl descuento no aplica a las sanciones de los artículos 30, fracción XXI, y 33, fracción II [RT 62]. Si vence el plazo sin pagar, deberás cubrir además los demás créditos fiscales que establece el Código Fiscal de la Ciudad de México [RT 62].\n\nLos artículos citados no dicen cuánto sería el descuento en pesos para una multa concreta, porque eso depende de la infracción.",
+  "fuentes": [
+   "RT:62"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Indica el 50% de descuento si se paga dentro de los 30 días naturales siguientes a la notificación, las excepciones de los artículos 30, fracción XXI, y 33, fracción II, y los lugares de pago, sin contradecir la respuesta correcta.",
+  "segundos": 5.773
+ },
+ {
+  "n": 10,
+  "pregunta": "¿Cuánto es la multa por circular en Hoy No Circula?",
+  "esperados": [
+   "RT:47"
+  ],
+  "referencia": "Circular en los días y horarios en que los programas ambientales restringen tu vehículo se multa con 20, 25 o 30 veces la UMA, igual que emitir humo ostensiblemente contaminante (art. 47). Quedan exentos los vehículos de emergencia, los de tecnologías sustentables, transporte escolar y servicios funerarios, los particulares que llevan o son conducidos por personas con discapacidad con autorización o placa, y los casos de emergencia médica.",
+  "respuesta": "Circular en un vehículo con restricción ambiental (Hoy No Circula) o en eco zonas en los días y horas correspondientes se sanciona con una multa de 20, 25 o 30 UMA, es decir, $2,346.20, $2,932.75 o $3,519.30 pesos en 2026 [RT 47]. La misma multa aplica a quien emita humo ostensiblemente contaminante, sin importar en qué entidad esté matriculado el vehículo [RT 47]. Quedan exceptuados, entre otros, los vehículos de emergencia, los que usan tecnologías sustentables, el transporte escolar, los servicios funerarios y los casos de emergencia médica acreditada [RT 47]. Los artículos citados no mencionan puntos a la licencia, arresto ni remisión al depósito para esta infracción.",
+  "fuentes": [
+   "RT:47"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la multa de 20, 25 o 30 UMA del art. 47, menciona el humo ostensiblemente contaminante y las principales excepciones (omite a las personas con discapacidad, pero dice 'entre otros') sin contradecir la respuesta correcta.",
+  "segundos": 11.777
+ },
+ {
+  "n": 11,
+  "pregunta": "¿Qué pasa si circulo sin la verificación vehicular vigente?",
+  "esperados": [
+   "RT:45",
+   "RT:67"
+  ],
+  "referencia": "Todo vehículo motorizado debe llevar holograma y constancia de verificación vigente, salvo motocicletas y VEMEPE (art. 45, fracción III). No traerlos se multa con 20, 25 o 30 veces la UMA y el vehículo puede ser remitido al depósito (art. 67, fracción IV).",
+  "respuesta": "Circular sin holograma y constancia de verificación vehicular vigentes incumple el artículo 45, fracción III, del Reglamento de Tránsito. Esta obligación no aplica a motocicletas ni VEMEPE, y los vehículos de los estados de la Comisión Ambiental de la Megalópolis también deben portarlos [RT 45]. La multa es de 20, 25 o 30 UMA, es decir, $2,346.20, $2,932.75 o $3,519.30 en 2026 [RT 45]. Además, el artículo 67 prevé la remisión al depósito para quien transgreda cualquier fracción del artículo 45 [RT 67]. Los artículos citados no mencionan puntos a la licencia ni arresto por esta infracción.",
+  "fuentes": [
+   "RT:45",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la obligación del art. 45 fr. III con sus excepciones, la multa de 20, 25 o 30 UMA y la remisión al depósito, sin contradecir la respuesta correcta; solo atribuye la multa al art. 45 en lugar del art. 67 fr. IV, un error de cita menor.",
+  "segundos": 5.424
+ },
+ {
+  "n": 12,
+  "pregunta": "¿Las motos pueden circular entre carriles?",
+  "esperados": [
+   "RT:21"
+  ],
+  "referencia": "No, salvo cuando el tránsito está detenido y buscan colocarse en el área de espera o en un lugar visible para reiniciar la marcha, sin invadir los pasos peatonales (art. 21, fracción IV). La multa es de 10, 15 o 20 veces la UMA y un punto a la licencia.",
+  "respuesta": "No, por regla general está prohibido: a las motocicletas y VEMEPE se les prohíbe circular entre carriles [RT 21]. La excepción es cuando el tránsito vehicular esté detenido y la moto busque colocarse en el área de espera para vehículos no motorizados, motocicletas y VEMEPE, o en un lugar visible para reiniciar la marcha, sin invadir los pasos peatonales [RT 21].\n\nSi se infringe, la multa es de 10, 15 o 20 UMA, es decir $1,173.10, $1,759.65 o $2,346.20 pesos, y se aplica un punto a la licencia para conducir [RT 21]. La remisión al depósito de la fracción IV no aparece en el artículo 67: ese artículo solo la prevé para las fracciones II y III del artículo 21, así que los artículos citados no la mencionan para este caso [RT 67].",
+  "fuentes": [
+   "RT:21",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Indica la prohibición de circular entre carriles con la misma excepción del art. 21, fracción IV, y la misma sanción de 10, 15 o 20 UMA y un punto a la licencia, sin contradecir la respuesta correcta.",
+  "segundos": 4.404
+ },
+ {
+  "n": 13,
+  "pregunta": "¿Qué multa hay si voy en moto sin casco?",
+  "esperados": [
+   "RT:37",
+   "RT:67"
+  ],
+  "referencia": "El motociclista debe usar casco de motocicleta certificado, bien colocado y abrochado, y asegurarse de que su acompañante también lo porte (art. 37, fracción III, inciso d)). No hacerlo se multa con 10, 15 o 20 veces la UMA y tres puntos a la licencia, y la moto se remite al depósito (art. 67, fracción III Bis).",
+  "respuesta": "Circular en moto sin casco protector infringe el inciso d) de la fracción III del artículo 37, que obliga a usar casco diseñado para motocicleta, bien colocado y abrochado, y a asegurarse de que el acompañante también lo porte [RT 37]. La multa es de 10, 15 o 20 UMA, es decir $1,173.10, $1,759.65 o $2,346.20 pesos (mínimo, medio y máximo), más tres puntos a la licencia para conducir [RT 37]. Además, el artículo 67 fracción III Bis manda al depósito las motocicletas y VEMEPE que transgredan la fracción III, inciso d) del artículo 37, así que tu moto podría ser remitida al depósito [RT 67].",
+  "fuentes": [
+   "RT:37",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la multa de 10, 15 o 20 UMA, los tres puntos a la licencia y la remisión de la moto al depósito (art. 67 fr. III Bis), sin contradecir la respuesta correcta.",
+  "segundos": 6.981
+ },
+ {
+  "n": 14,
+  "pregunta": "¿Puedo manejar moto con la licencia permanente tipo A?",
+  "esperados": [
+   "RT:44",
+   "RLM:126"
+  ],
+  "referencia": "Solo si tu licencia A permanente se expidió entre el 31 de diciembre de 2003 y el 31 de diciembre de 2007; la tipo A permanente expedida a partir del 16 de noviembre de 2024 no avala conducir motocicletas ni VEMEPE, para eso necesitas licencia A1 o A2 (art. 44, fracción I, inciso b) del Reglamento de Tránsito; art. 126 del Reglamento de la Ley de Movilidad). Manejar sin la licencia que corresponde se multa con 10, 15 o 20 veces la UMA.",
+  "respuesta": "Depende de cuándo se expidió: la licencia permanente tipo A expedida a partir del 16 de noviembre de 2024 no avala conducir motocicletas ni VEMEPE [RT 44]. Solo sirve para moto la permanente tipo A expedida entre el 31 de diciembre de 2003 y el 31 de diciembre de 2007, o las licencias A1 o A2 [RT 44]. La tipo A es para automóviles particulares, mientras que la A1 es para motocicletas y la A2 cubre automóviles y motocicletas [RLM 126]. Conducir moto sin la licencia que corresponde se sanciona con multa de 10, 15 o 20 UMA, es decir $1,173.10, $1,759.65 o $2,346.20 [RT 44], y el vehículo se remite al depósito [RT 67]. Los artículos citados no mencionan puntos a la licencia ni arresto para este caso.",
+  "fuentes": [
+   "RT:44",
+   "RLM:126",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Coincide con la respuesta correcta: la licencia A permanente solo sirve para moto si se expidió entre el 31/12/2003 y el 31/12/2007, la expedida desde el 16/11/2024 no avala motocicletas ni VEMEPE (se requiere A1 o A2), y la multa es de 10, 15 o 20 UMA, con las citas a RT 44 y RLM 126.",
+  "segundos": 7.347
+ },
+ {
+  "n": 15,
+  "pregunta": "¿Los ciclistas pueden circular por la banqueta?",
+  "esperados": [
+   "RT:19"
+  ],
+  "referencia": "No: se prohíbe a ciclistas y conductores de vehículos eléctricos personales y monopatines eléctricos circular por las aceras y áreas peatonales, salvo niños menores de doce años y elementos de seguridad pública; para entrar a su domicilio o a un estacionamiento deben desmontar y caminar (art. 19, fracción I). La sanción es amonestación verbal del agente.",
+  "respuesta": "En general no. El reglamento prohíbe a los conductores de vehículos no motorizados circular sobre las aceras y áreas reservadas al uso exclusivo de peatones [RT 19]. Las excepciones son los niños menores de doce años y los elementos de seguridad pública que conduzcan vehículos no motorizados, y quien ingrese a su domicilio o a un estacionamiento, que debe desmontar y caminar [RT 19]. Si un ciclista incumple, los artículos citados solo prevén que sea amonestado verbalmente y orientado por el agente, sin mencionar multa, puntos a la licencia ni remisión al depósito [RT 19].\n\nSi la pregunta se refiere a una motocicleta o vehículo eléctrico personal, la prohibición es similar, pero con multa de 10, 15 o 20 UMA ($1,173.10, $1,759.65 o $2,346.20) y un punto a la licencia [RT 21].",
+  "fuentes": [
+   "RT:19",
+   "RT:21"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "INCORRECTA",
+  "razon": "Lo dicho sobre ciclistas coincide (prohibición, excepciones y amonestación verbal), pero atribuye a los vehículos eléctricos personales una multa de 10 a 20 UMA y un punto a la licencia, cuando según el art. 19, fracción I, están en la misma prohibición con amonestación verbal.",
+  "segundos": 6.352
+ },
+ {
+  "n": 16,
+  "pregunta": "Si voy en bicicleta y el semáforo está en rojo, ¿me puedo pasar?",
+  "esperados": [
+   "RT:16"
+  ],
+  "referencia": "Solo al cruzar una vía secundaria: con el semáforo en rojo o ante un \"Alto\" o \"Ceda el paso\" puedes seguir de frente si disminuyes la velocidad, volteas a ambos lados y te aseguras de que no se aproximan peatones ni vehículos (art. 16). Si se aproxima alguien o no tienes visibilidad, debes hacer alto total y dar el paso.",
+  "respuesta": "Solo en un caso limitado: si vas a cruzar una vía secundaria cuya intersección tenga el semáforo en rojo (o un señalamiento de \"Alto\" o \"Ceda el paso\"), puedes seguir de frente siempre que disminuyas la velocidad, voltees a ambos lados y te asegures de que no se acercan peatones ni vehículos por la vía transversal [RT 16]. Si hay peatones o vehículos aproximándose, o no hay visibilidad suficiente para cerciorarte, debes hacer alto total, dar el paso o verificar que no viene nadie, y seguir de frente con precaución [RT 16]. Los artículos citados no dicen si esta regla aplica en vías primarias, ni mencionan una multa específica para ciclistas por pasarse un rojo; sobre el semáforo en rojo, el artículo 10 solo prevé sanciones para conductores de vehículos motorizados, y a los no motorizados que no cumplan sus obligaciones los agentes los amonestan verbalmente y los orientan [RT 10].",
+  "fuentes": [
+   "RT:16",
+   "RT:10"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Recoge lo que dice el artículo 16 y no lo contradice: en una vía secundaria se puede seguir de frente si se disminuye la velocidad, se voltea a ambos lados y no se aproximan peatones ni vehículos, y en otro caso hay que hacer alto total y dar el paso.",
+  "segundos": 7.633
+ },
+ {
+  "n": 17,
+  "pregunta": "¿Cuánto es la multa por pasarse un semáforo en rojo?",
+  "esperados": [
+   "RT:10"
+  ],
+  "referencia": "Con luz roja debes detenerte en la línea de alto sin invadir el cruce peatonal ni el área de espera de bicicletas y motos (art. 10, fracción VI, inciso a)); no hacerlo se multa con 10, 15 o 20 veces la UMA y tres puntos a la licencia, o un punto a la matrícula si lo capta una cámara. Entre las 23:00 y las 5:00 horas debes detenerte por completo y, si nadie va a cruzar, puedes continuar aunque siga en rojo (inciso d)).",
+  "respuesta": "Pasarse la luz roja de un semáforo se sanciona con una multa de 10, 15 o 20 UMA, es decir, $1,173.10, $1,759.65 o $2,346.20 pesos en 2026 (mínimo, medio y máximo), y tres puntos a la licencia para conducir [RT 10]. Si la infracción es captada por sistemas tecnológicos, se sanciona con un punto a la matrícula vehicular [RT 10]. La regla exige detenerse en la línea de \"alto\" cuando la luz está en rojo [RT 10]. De noche (23:00 a 5:00 horas) se debe parar totalmente y solo se puede continuar si ningún peatón o vehículo va a cruzar [RT 10]. Los artículos citados no mencionan arresto ni remisión al depósito por esta infracción.",
+  "fuentes": [
+   "RT:10"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la multa correcta de 10, 15 o 20 UMA, los tres puntos a la licencia y el punto a la matrícula si lo capta una cámara, y describe bien la regla nocturna sin contradecir la respuesta correcta.",
+  "segundos": 7.865
+ },
+ {
+  "n": 18,
+  "pregunta": "¿Qué pasa si me meto al carril del Metrobús?",
+  "esperados": [
+   "RT:11",
+   "RT:67"
+  ],
+  "referencia": "Circular por los carriles exclusivos del transporte público, en el sentido de la vía o en contraflujo, se multa con 40, 50 o 60 veces la UMA y seis puntos a la licencia (art. 11, fracción X, inciso a)). Además el vehículo se remite al depósito (art. 67, fracción I Bis).",
+  "respuesta": "Circular sobre el carril exclusivo de transporte público, en el sentido de la vía o en contraflujo, está prohibido [RT 11]. La multa es de 40, 50 o 60 UMA, es decir $4,692.40, $5,865.50 o $7,038.60 en 2026, y seis puntos a la licencia [RT 11]. Además, el vehículo de quien infrinja ese inciso se remite al depósito [RT 67]. Lo mismo aplica si interfieres el carril al dar vuelta a la izquierda, a la derecha o en \"U\" donde haya señalamientos que lo prohíban [RT 11].\n\nSi lo que haces es estacionarte en ese carril, el artículo sobre estacionamiento fija 20, 25 o 30 UMA ($2,346.20, $2,932.75 o $3,519.30) y seis puntos [RT 30]. En ese caso el depósito procede solo si no estás a bordo o te niegas a retirar el vehículo de inmediato [RT 67]. Los artículos citados no mencionan si hay arresto.",
+  "fuentes": [
+   "RT:11",
+   "RT:67",
+   "RT:30"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la multa de 40, 50 o 60 UMA, los seis puntos a la licencia y la remisión al depósito; la información adicional sobre vueltas y estacionamiento no contradice la respuesta correcta.",
+  "segundos": 7.957
+ },
+ {
+  "n": 19,
+  "pregunta": "¿Cuál es la multa por estacionarse en doble fila?",
+  "esperados": [
+   "RT:30",
+   "RT:67"
+  ],
+  "referencia": "Estacionarse en doble o más filas se multa con 10, 15 o 20 veces la UMA y tres puntos a la licencia (art. 30, fracción XII). Se usa grúa para llevar el vehículo al depósito si el conductor no está a bordo o se niega a retirarlo (art. 30, último párrafo, y art. 67, fracción II).",
+  "respuesta": "Estacionarse sobre las vías en doble o más filas se sanciona con una multa de 10, 15 o 20 UMA, es decir $1,173.10, $1,759.65 o $2,346.20 (mínimo, medio y máximo), y tres puntos a la licencia para conducir [RT 30]. Además, en este caso se usa grúa para remitir el vehículo al depósito vehicular [RT 30]. La remisión procede siempre que el conductor no esté a bordo o se niegue a retirarlo inmediatamente después de impuesta la infracción [RT 67].",
+  "fuentes": [
+   "RT:30",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da la multa de 10, 15 o 20 UMA, los tres puntos a la licencia y el uso de grúa cuando el conductor no está a bordo o se niega a retirar el vehículo, sin contradecir la respuesta correcta.",
+  "segundos": 4.472
+ },
+ {
+  "n": 20,
+  "pregunta": "¿Es obligatorio el seguro de auto en la CDMX y qué pasa si no lo traigo?",
+  "esperados": [
+   "RT:46"
+  ],
+  "referencia": "Sí: todo vehículo motorizado, incluidos los VEMEPE, debe tener póliza vigente de responsabilidad civil por daños a terceros, y si no la porta el propietario de un auto particular paga 20, 30 o 40 veces la UMA (art. 46). Puede pedir que se cancele la multa dentro de los 45 días naturales siguientes a que la boleta se publique en estrados.cdmx.gob.mx, presentando ante Seguridad Ciudadana la póliza vigente y los demás requisitos.",
+  "respuesta": "Sí es obligatorio: todo vehículo motorizado de uso particular que circule en la Ciudad debe tener una póliza de seguro de responsabilidad civil vigente [LM 72], que ampare al menos los daños a terceros en su persona y en su patrimonio [RT 46]. Si el propietario de un vehículo particular no porta la póliza vigente, la multa es de 20, 30 o 40 UMA, es decir $2,346.20, $3,519.30 o $4,692.40 [RT 46]. La Ley de Movilidad fija un rango equivalente de 20 a 40 UMA ($2,346.20 a $4,692.40) por conducir sin seguro vigente [LM 250]. El propietario tiene 45 días naturales para contratar la póliza y presentarla ante Seguridad Ciudadana, y con ello se cancela la multa [LM 250]; según el reglamento, el plazo se cuenta desde la publicación de la boleta en estrados electrónicos y se debe presentar solicitud, identificación, tarjeta de circulación y la póliza vigente [RT 46]. Si hay un choque con solo daños materiales y un conductor no tiene seguro, se aplica esa misma sanción [RT 54]. Los artículos citados no mencionan puntos a la licencia, arresto ni remisión al depósito por este motivo.",
+  "fuentes": [
+   "LM:72",
+   "RT:46",
+   "LM:250",
+   "RT:54"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Incluye los datos clave de la respuesta correcta: seguro obligatorio de responsabilidad civil por daños a terceros, multa de 20, 30 o 40 UMA y cancelación al presentar la póliza ante Seguridad Ciudadana dentro de los 45 días naturales siguientes a la publicación en estrados, sin contradecirla (solo omite la mención a los VEMEPE).",
+  "segundos": 7.969
+ },
+ {
+  "n": 21,
+  "pregunta": "¿Los niños pueden ir en el asiento de adelante?",
+  "esperados": [
+   "RT:39"
+  ],
+  "referencia": "Los menores de 12 años o de menos de 1.45 m deben ir en los asientos traseros, en un sistema de retención infantil o asiento elevador certificado; solo si el vehículo no tiene asiento trasero pueden ir adelante, con su sistema de retención y la bolsa de aire desactivada (art. 39). La multa es de 5, 7 o 10 veces la UMA, un punto a la placa y un punto a la licencia.",
+  "respuesta": "En automóviles, los menores de doce años o que midan menos de 1.45 m deben ir en las plazas traseras, en un sistema de retención infantil o asiento elevador [RT 39]. Solo pueden ir adelante si el vehículo no tiene asiento trasero, hay espacio suficiente para instalar un sistema de retención acorde a su peso o talla y se desactiva el sistema de bolsas de aire [RT 39].\n\nQuien no cumpla se expone a una multa de $586.55, $821.17 o $1,173.10 (5, 7 o 10 UMA), un punto de penalización a la placa de matrícula y un punto a la licencia [RT 39]. Los artículos citados no mencionan la remisión del vehículo al depósito por infringir el artículo 39.\n\nEn motocicletas y VEMEPE, el artículo 38 prohíbe transportar pasajeros menores de doce años, salvo ciertos VEMEPE Tipo B [RT 38].",
+  "fuentes": [
+   "RT:39",
+   "RT:38"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Indica que los menores de 12 años o de menos de 1.45 m deben ir atrás con sistema de retención y solo pueden ir adelante si no hay asiento trasero y se desactiva la bolsa de aire, con multa de 5, 7 o 10 UMA, un punto a la placa y un punto a la licencia, sin contradecir la respuesta correcta.",
+  "segundos": 5.34
+ },
+ {
+  "n": 22,
+  "pregunta": "Tuve un choque leve sin heridos, solo daños a los coches, ¿qué debo hacer?",
+  "esperados": [
+   "RT:54"
+  ],
+  "referencia": "Deténganse y permanezcan hasta que un agente tome conocimiento, enciendan las intermitentes, coloquen señalamientos y llamen a la aseguradora; si los vehículos pueden circular, nadie está bajo los efectos del alcohol o drogas y no hay daños a bienes públicos, deben moverlos para liberar la circulación (art. 54). Si no se ponen de acuerdo en la reparación, el agente los remite a la autoridad, y a quien no tenga seguro se le aplica la multa del artículo 46.",
+  "respuesta": "Si solo hubo daños materiales, deben detenerse de inmediato y permanecer en el sitio hasta que un agente tome conocimiento, encender las luces intermitentes, colocar señalamientos para desviar el tráfico y llamar a su aseguradora [RT 54]. Si los vehículos pueden circular, nadie parece estar bajo los efectos del alcohol o narcóticos y no hay daños en bienes públicos, deben moverlos para liberar la vía; no hacerlo se sanciona conforme al artículo 34 fracción VI del RT [RT 54]. El agente les pedirá licencia, tarjeta de circulación y póliza de seguro, marcará o fotografiará la posición final de los vehículos, llenará el formato de hechos de tránsito y esperará a que las aseguradoras acuerden la reparación [RT 58]. Si las partes no se ponen de acuerdo, el agente los remite con sus vehículos ante el Juez Cívico [RT 58]. Si llegan a un acuerdo por escrito, quien acepte la responsabilidad queda eximido de las sanciones del artículo 33 de la LCC, y a quien no sea responsable se le devuelve su vehículo sin mayor trámite [LCC 101]. Los artículos citados no dan el monto de la multa por no tener póliza vigente (solo remiten al artículo 46 del RT) ni la del artículo 34 fracción VI, ni mencionan puntos a la licencia.",
+  "fuentes": [
+   "RT:54",
+   "RT:58",
+   "LCC:101"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "La respuesta recoge las obligaciones del art. 54 (detenerse, intermitentes, señalamientos, aseguradora y mover los vehículos si se cumplen las condiciones), la remisión ante la autoridad si no hay acuerdo y la multa del art. 46 para quien no tenga seguro, sin contradecir la respuesta correcta.",
+  "segundos": 7.357
+ },
+ {
+  "n": 23,
+  "pregunta": "¿Cómo puedo impugnar una multa de tránsito?",
+  "esperados": [
+   "RT:69",
+   "LCC:106"
+  ],
+  "referencia": "Puedes interponer el recurso de inconformidad conforme a la Ley de Procedimiento Administrativo de la Ciudad de México o impugnar la sanción ante el Tribunal de Justicia Administrativa de la Ciudad de México (art. 69 del Reglamento de Tránsito). Si la infracción la captó una cámara, puedes interponer el recurso de revisión vía electrónica ante la Consejería Jurídica y de Servicios Legales (art. 69; art. 106, fracción IV, de la Ley de Cultura Cívica).",
+  "respuesta": "Puedes interponer el recurso de inconformidad ante la autoridad competente, o impugnar la sanción ante el Tribunal de Justicia Administrativa de la Ciudad de México, en los términos de la Ley de Procedimiento Administrativo de la Ciudad de México y de la ley que rige al Tribunal, sin perjuicio del juicio de amparo [RT 69]. Si la infracción atenta contra la seguridad vial y fue captada por sistemas tecnológicos (por ejemplo, fotomultas), puedes interponer el recurso de revisión vía electrónica ante la Consejería Jurídica y de Servicios Legales, en los términos de la Ley de Cultura Cívica [RT 69].\n\nSi la multa es por no portar la póliza de seguro vigente y eres propietario de un vehículo particular, tienes 45 días naturales desde que la boleta se publique en https://estrados.cdmx.gob.mx/ para solicitar su cancelación ante Seguridad Ciudadana, con solicitud en el formato autorizado, identificación oficial, tarjeta de circulación y póliza vigente, entre otros requisitos [RT 46]. Los artículos citados no detallan plazos ni pasos de los demás recursos; para eso habría que consultar la Ley de Procedimiento Administrativo y la Ley de Cultura Cívica, que no se incluyen aquí.",
+  "fuentes": [
+   "RT:69",
+   "RT:46"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Menciona el recurso de inconformidad conforme a la Ley de Procedimiento Administrativo, la impugnación ante el Tribunal de Justicia Administrativa y el recurso de revisión electrónico ante la Consejería Jurídica para infracciones captadas por cámaras (art. 69), y la información adicional no contradice la respuesta correcta.",
+  "segundos": 7.342
+ },
+ {
+  "n": 24,
+  "pregunta": "¿Se permite dar vuelta continua a la derecha?",
+  "esperados": [
+   "RT:10"
+  ],
+  "referencia": "No: la vuelta continua a la derecha y a la izquierda está prohibida salvo que un señalamiento la permita expresamente, y entonces debes ceder el paso a los peatones y a los vehículos de la vía a la que entras (art. 10, fracción X). La multa es de 10, 15 o 20 veces la UMA y tres puntos a la licencia, o un punto a la matrícula si la capta una cámara.",
+  "respuesta": "No, por regla general la vuelta continua a la derecha (y a la izquierda) está prohibida, salvo que exista un señalamiento que expresamente la permita; en ese caso hay que ceder el paso a los peatones que estén cruzando y a los vehículos que transiten por la vía a la que se pretende incorporar [RT 10].\n\nQuien la infrinja con un vehículo motorizado recibe una multa de 10, 15 o 20 UMA (mínimo $1,173.10, medio $1,759.65 y máximo $2,346.20 en 2026) y tres puntos a la licencia para conducir; si la infracción la capta un sistema tecnológico, se sanciona con un punto a la matrícula vehicular [RT 10].\n\nLos artículos citados no mencionan la remisión del vehículo al depósito para esta fracción: el artículo 67 que remite a ellos solo la prevé para el artículo 11 (fracciones III inciso b y X incisos a y d), no para el artículo 10 [RT 67].",
+  "fuentes": [
+   "RT:10",
+   "RT:67"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Coincide con la respuesta correcta: la vuelta continua está prohibida salvo señalamiento, se debe ceder el paso, y la sanción es de 10, 15 o 20 UMA con tres puntos a la licencia o un punto a la matrícula si la capta una cámara, sin contradicciones.",
+  "segundos": 8.218
+ },
+ {
+  "n": 25,
+  "pregunta": "¿Qué pasa si me estaciono en un lugar para personas con discapacidad?",
+  "esperados": [
+   "RT:30"
+  ],
+  "referencia": "Está prohibido, salvo para vehículos con placas para personas con discapacidad o para subir o bajar a una persona con discapacidad por un máximo de 20 minutos (art. 30, fracción XV). La multa es de 20, 25 o 30 veces la UMA y seis puntos a la licencia, y se usa grúa para llevar el vehículo al depósito.",
+  "respuesta": "Estacionarse en un cajón exclusivo para personas con discapacidad, identificado con marcas en el pavimento, guarnición y señalamiento vertical, se sanciona con multa de 20, 25 o 30 UMA ($2,346.20, $2,932.75 o $3,519.30 en 2026) y seis puntos a la licencia [RT 30]. La excepción son los vehículos con placas de matrícula para personas con discapacidad y los que solo suben o bajan a una persona con discapacidad por un máximo de 20 minutos [RT 30]. Además, el vehículo se remite al depósito con grúa [RT 30], siempre que el conductor no esté a bordo o se niegue a retirarlo inmediatamente después de imponerse la infracción [RT 67]. Si pagas dentro de los treinta días naturales posteriores a la notificación de la boleta, te corresponde un 50% de descuento; pasado ese plazo debes cubrir los demás créditos fiscales del Código Fiscal [RT 62]. Los artículos citados no mencionan arresto para esta infracción.",
+  "fuentes": [
+   "RT:30",
+   "RT:67",
+   "RT:62"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Incluye la multa de 20, 25 o 30 UMA, los seis puntos, la excepción por placas o por subir o bajar a una persona con discapacidad hasta 20 minutos y la remisión al depósito con grúa, sin contradecir la respuesta correcta.",
+  "segundos": 6.635
+ },
+ {
+  "n": 26,
+  "pregunta": "¿Cuánto cuesta sacar la licencia de manejo en la CDMX?",
+  "esperados": [
+   "CFCDMX:229",
+   "RLM:126"
+  ],
+  "referencia": "Según el art. 229 del Código Fiscal: la licencia tipo A para autos cuesta $1,142 ($1,500 la tipo A permanente), la tipo A1 para motocicletas $572, la tipo A2 para autos y motocicletas $1,142, y el permiso para conducir $587. Las licencias A, A1 y A2 que no son permanentes duran tres años (art. 126 del Reglamento de la Ley de Movilidad).",
+  "respuesta": "El costo depende del tipo de licencia. La licencia tipo A para vehículos particulares cuesta $1,142 por expedición o renovación; la tipo A con vigencia permanente, $1,500; la A1 para motocicletas, $572; y la A2 para vehículos particulares y motocicletas, $1,142 [CFCDMX 229]. El permiso para conducir vehículos particulares, con vigencia única, cuesta $587 [CFCDMX 229]. Las licencias tarjetón cuestan por dos o tres años: tipo B (taxis) $1,418 o $2,133; tipo C (pasajeros), D (carga) y E $2,054 o $3,086 [CFCDMX 229]. La reposición cuesta lo mismo que la expedición [CFCDMX 229]. Los artículos citados no mencionan el costo de las evaluaciones o cursos que la Secretaría pide como requisito [RLM 127], ni la equivalencia de estos derechos en UMA.",
+  "fuentes": [
+   "CFCDMX:229",
+   "RLM:127"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Da todos los montos del art. 229 sin contradecirlos ($1,142 tipo A, $1,500 permanente, $572 A1, $1,142 A2 y $587 el permiso), aunque omite la vigencia de tres años, un dato secundario para la pregunta sobre el costo.",
+  "segundos": 8.484
+ },
+ {
+  "n": 27,
+  "pregunta": "¿Un menor de edad puede manejar en la Ciudad de México?",
+  "esperados": [
+   "RLM:132",
+   "RT:44"
+  ],
+  "referencia": "Los mayores de 16 y menores de 18 años pueden conducir solo vehículos que requieren licencia tipo A, con un permiso temporal de la Secretaría, entre las 06:00 y las 22:00 horas y nunca en transporte público, mercantil, privado de pasajeros o de carga; el permiso vence al cumplir la mayoría de edad (art. 132 del Reglamento de la Ley de Movilidad). Los menores no pueden conducir motocicletas ni VEMEPE (art. 44, fracción I, inciso a) del Reglamento de Tránsito).",
+  "respuesta": "Sí, pero solo con un permiso temporal para conducir, y únicamente automóviles. Los menores de 16 y menores de 18 años pueden conducir solo vehículos automotores que requieran licencia Tipo A, con permiso temporal expedido por la Secretaría [RLM 132]. Ese permiso autoriza conducir entre las 06:00 y las 22:00 horas, y restringe conducir durante manifestaciones y concentraciones similares, así como vehículos de transporte público, mercantil o privado de pasajeros o de carga [RLM 132]. Las motocicletas y los VEMEPE no pueden ser conducidos por menores de edad [RT 44]. Para tramitarlo se requiere, entre otros documentos, la solicitud con declaración de quien ejerce la patria potestad, una carta responsiva y la constancia de un curso de manejo [RLM 133]. Si un menor conduce sin portar el permiso, la multa es de 10, 15 o 20 UMA ($1,173.10, $1,759.65 o $2,346.20) [RT 44]; los artículos citados no mencionan puntos a la licencia ni remisión al depósito para ese caso.\n\nNota: la Ley de Movilidad define el permiso para personas mayores de quince y menores de dieciocho años [LM 9], mientras que el reglamento habla de mayores de 16 [RLM 132]. Los artículos dados no aclaran esa diferencia de edad.",
+  "fuentes": [
+   "RLM:132",
+   "RT:44",
+   "RLM:133",
+   "LM:9"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Recoge el permiso temporal de la Secretaría solo para vehículos de licencia tipo A, el horario de 06:00 a 22:00, la prohibición de transporte público, mercantil, privado de pasajeros o de carga, y que los menores no pueden conducir motocicletas ni VEMEPE; el 'menores de 16' es una errata evidente, ya que la nota aclara que el reglamento habla de mayores de 16, y solo omite que el permiso vence al cumplir la mayoría de edad, sin contradecir la respuesta correcta.",
+  "segundos": 6.198
+ },
+ {
+  "n": 28,
+  "pregunta": "¿De qué depende que me pongan la multa mínima, media o máxima?",
+  "esperados": [
+   "RT:64"
+  ],
+  "referencia": "Lo decide en automático el Sistema Integral de Administración de Infracciones según tus sanciones pendientes de cumplir: mínima con cero o una, media con dos o tres, y máxima con cuatro o más o si el vehículo tiene placas de otra entidad o de otro país (art. 64). Los agentes no aplican este criterio directamente.",
+  "respuesta": "Depende del criterio de reincidencia: cuántas sanciones pendientes de cumplimiento tengas al cometer la infracción [RT 64]. Con cero o una sanción pendiente se impone la mínima; con dos o tres, la media; y con cuatro o más, la máxima [RT 64]. También se aplica la máxima si conduces un vehículo con placas de otra entidad federativa o país [RT 64].\n\nEl agente no decide el monto: lo determina de forma automatizada el Sistema Integral de Administración de Infracciones [RT 64]. El agente debe informarte las sanciones mínima, media y máxima de la conducta y que el sistema fijará el monto según la reincidencia [RT 59]. Además, puedes simular el monto de una posible infracción en la aplicación móvil o la página de la Secretaría de Seguridad Ciudadana [RT 64].",
+  "fuentes": [
+   "RT:64",
+   "RT:59"
+  ],
+  "criterios": [],
+  "citaEsperado": true,
+  "veredicto": "CORRECTA",
+  "razon": "Recoge todos los datos de la respuesta correcta sin contradecirla: el monto lo fija en automático el Sistema Integral de Administración de Infracciones según las sanciones pendientes (mínima con 0-1, media con 2-3, máxima con 4 o más o con placas de otra entidad o país), y el agente no lo decide.",
+  "segundos": 6.071
+ }
+]

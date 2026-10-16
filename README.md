@@ -158,13 +158,35 @@ Answers, judged by Claude Opus against each reference answer:
 | t2  | synonyms, the chunk after each chosen chunk, an absence rule in the prompt  | 75.0%   | 3.6%  | 21.4%      |
 | t3  | top six articles of the hybrid search, whole; paragraphs that cite them     | 82.1%   | 7.1%  | 10.7%      |
 | t4  | t3 with Claude Sonnet instead of Haiku                                      | 89.3%   | 3.6%  | 7.1%       |
+| t5  | t4, and paragraphs citing the two best articles always come                 | 92.9%   | 3.6%  | 3.6%       |
+| t6  | t5, and paragraphs covering a cited article whole ("todas las fracciones")  | 96.4%   | 0.0%  | 3.6%       |
 
 - t3 over t1: +14.3 to +50.0 points correct (paired). The first failures were mostly the right article with the
   fine in a chunk the answer never saw: a fracción's sanction comes paragraphs after the rule.
 - The citation graph feeds answers here: article 67 lists every case that sends a car to the depósito by the
   fracción it cites, so an answer about a motorcycle without a helmet gets that paragraph next to article 37.
 - Remaining misses are mostly the depósito when the question shares no word with article 67's paragraph.
-- Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions.
+- Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions. From t5 to t6 the one changed verdict was a
+  question the new rule doesn't touch, so it is run-to-run variation; t6's rule exists for questions like "¿qué pasa
+  si traigo un porta placas que tapa la placa?", where article 67 sends the car to the depósito for any fracción of
+  article 45 but shares no word with the question.
+
+## Preguntas frecuentes, related articles and search engines
+
+- **Preguntas frecuentes** (`/preguntas`, `faq/<site>.json`, `scripts/faq.ts`): questions answered ahead of time
+  with Claude through the local bridge and published as pages; the answer box serves them for the same question
+  without calling a model. They start from the answers a judge marked correct (165 tax answers from r3, 27 traffic
+  answers from t6) and grow with `scripts/faq.ts preguntar`, which marks its answers as not yet checked. Answering
+  visitors' own questions live goes through the Worker's model (Claude with an API key, gpt-oss otherwise), never
+  through the Claude Code login on this machine.
+- **Related articles** (`scripts/relacionados.ts`): for each article, the four closest by mean embedding that
+  neither cite nor are cited by it, computed offline from the cached vectors. They link an obligation to its
+  sanction in another document: the movilidad regulation's article on plates (RLM 116) to the traffic regulation's
+  fine and depósito for plates (RT 45), which no citation connects.
+- **Search engines**: the Worker renders every article, rule and question page with its own title, description,
+  canonical URL, schema.org data (Legislation, QAPage) and text, so crawlers don't need to run the app.
+  `/sitemap.xml` lists every article and question; `/robots.txt` points to it and keeps `/graphql` out. Set
+  `GOOGLE_SITE_VERIFICATION` to add Search Console's verification tag.
 
 ## Engineering notes
 
@@ -216,6 +238,11 @@ CORPUS=transito node scripts/embed.ts gemma && CORPUS=transito node scripts/vect
 CORPUS=transito npm run eval
 CORPUS=transito DEV_URL=http://localhost:8788 node scripts/eval-respuestas.ts t3 "…" --modelo=claude-haiku-5-5
 npm run seed:transito:remote && npm run deploy:transito
+
+# after embedding: related articles, then the published questions (both take CORPUS=transito)
+node scripts/relacionados.ts && npx wrangler d1 execute fundamento --env= --remote --file data/relacion.sql
+node scripts/faq.ts importar eval/respuestas.r3.json
+node scripts/faq.ts preguntar "¿…?" && node scripts/faq.ts subir
 ```
 
 Sources (texto vigente, read 2026-10-15): Cámara de Diputados PDFs of the LISR (last reformed DOF 01-04-2024),
