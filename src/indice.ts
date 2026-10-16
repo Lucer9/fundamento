@@ -184,10 +184,17 @@ export type Modo = 'KEYWORD' | 'VECTOR' | 'HYBRID'
  * per article, plus the closest SAT criterios. Each list gets its own quota because ranked together, rules that
  * paraphrase the law pushed the law itself down (hit@1 45.7% → 29.5%). Vector-only where keyword fusion lowered
  * accuracy (tax law). Where fusion helped (traffic law, CORPUS.modo HYBRID), answers read the top six articles of a
- * hybrid search instead, the same ranking the site shows.
+ * hybrid search instead, the same ranking the site shows. If the query can't be embedded (Workers AI out of allowance),
+ * answers fall back to the best keyword articles of each list, without SAT criterios.
  */
 export async function contexto(env: Env, d: Db, query: string, criterios: number, excluir: number | null, maximo = 3) {
-  const v = await embeber(env, d, query)
+  const v = await embeber(env, d, query).catch(() => null)
+  if (!v) {
+    d.degradado = true
+    const cuotas = CORPUS.listas.length > 1 ? [4, 2] : [6]
+    const hits = await Promise.all(CORPUS.listas.map((l, i) => buscar(env, d, query, 'KEYWORD', null, cuotas[i] ?? 2, l.leyes)))
+    return { trozos: CORPUS.siguiente ? await conSiguiente(d, hits.flat()) : hits.flat(), criterios: [] }
+  }
   if (CORPUS.modo === 'HYBRID') {
     const [hits, crit] = await Promise.all([buscar(env, d, query, 'HYBRID', null, 6), criterios ? criteriosHits(env, d, v, criterios, excluir) : []])
     return { trozos: CORPUS.siguiente ? await conSiguiente(d, hits) : hits, criterios: crit }
