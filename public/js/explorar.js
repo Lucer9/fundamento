@@ -1,4 +1,4 @@
-import { cuenta, deLa, DOCS, editor, errorHtml, esAborto, esDoc, etiqueta, familia, familiasPresentes, fecha, fechaLargaDe, gaceta, gql, html, nf, opcionesDocs, ruta, SITIO, tema, titular, ubicacionCorta } from './lib.js'
+import { cuenta, deLa, DOCS, editor, errorHtml, esAborto, esDoc, etiquetaCorta, familia, familiasPresentes, fecha, fechaLargaDe, gaceta, gql, html, nf, opcionesDocs, ruta, SITIO, tema, titular, ubicacionCorta } from './lib.js'
 import { cargarGrafo, montarRed } from './red.js'
 
 const DETALLE = `query Explorar($law: LawCode) {
@@ -174,7 +174,7 @@ function citadosHtml(lista) {
     ({ count, article: a }, i) => html`<li>
       <a href="${ruta(a.law.code, a.number)}">
         <span class="bar-rank">${i + 1}</span>
-        <span class="bar-label"><span class="bar-key">${etiqueta(a.key)}</span><span class="bar-loc">${a.title ?? ubicacionCorta(a.location)}</span></span>
+        <span class="bar-label"><span class="bar-key">${etiquetaCorta(a.key)}</span><span class="bar-loc">${a.title ?? ubicacionCorta(a.location)}</span></span>
         <span class="bar-n">${count}</span>
         <span class="bar-track" aria-hidden="true"><span style="width:${((count / max) * 100).toFixed(1)}%"></span></span>
       </a>

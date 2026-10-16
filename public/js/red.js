@@ -1,4 +1,4 @@
-import { corto, DOCS, esc, etiqueta, familia, familiasPresentes, gql, rutaClave, ubicacionCorta } from './lib.js'
+import { corto, DOCS, esc, etiquetaCorta, familia, familiasPresentes, gql, rutaClave, ubicacionCorta } from './lib.js'
 
 const GRAFO = `{ laws { code name articleKeys } citations { from to } }`
 const UBICACION = `query Ubicacion($l: LawCode!, $n: String!) { article(law: $l, number: $n) { title location } }`
@@ -242,7 +242,7 @@ export function montarRed(root, { navigate, ley = '' }) {
       g.fill()
     }
     rotulos(g, T, G, false)
-    const texto = etiqueta(foco.key)
+    const texto = etiquetaCorta(foco.key)
     g.font = `600 ${w < 480 ? 11 : 12}px "Schibsted Grotesk", sans-serif`
     const tw = g.measureText(texto).width
     const c = Math.cos(foco.a)
@@ -290,7 +290,7 @@ export function montarRed(root, { navigate, ley = '' }) {
     }
     ubicar(foco)
     const vis = n => n.a != null
-    info.innerHTML = `<strong class="net-key">${esc(etiqueta(foco.key))}</strong><span class="muted">${esc(corto(foco.ley))}</span><span class="net-loc">${foco.loc == null ? '…' : esc(foco.loc)}</span><span class="net-counts"><span class="net-out">Cita ${foco.sale.length}</span><span class="net-in">Lo citan ${foco.entra.length}</span>${foco.sale.some(n => !vis(n)) || foco.entra.some(n => !vis(n)) ? '<span class="muted">(algunas, en documentos ocultos)</span>' : ''}</span><a class="net-open" href="${rutaClave(foco.key)}">Abrir</a>`
+    info.innerHTML = `<strong class="net-key">${esc(etiquetaCorta(foco.key))}</strong><span class="muted">${esc(corto(foco.ley))}</span><span class="net-loc">${foco.loc == null ? '…' : esc(foco.loc)}</span><span class="net-counts"><span class="net-out">Cita ${foco.sale.length}</span><span class="net-in">Lo citan ${foco.entra.length}</span>${foco.sale.some(n => !vis(n)) || foco.entra.some(n => !vis(n)) ? '<span class="muted">(algunas, en documentos ocultos)</span>' : ''}</span><a class="net-open" href="${rutaClave(foco.key)}">Abrir</a>`
   }
 
   const elegir = (n, pin = fijo) => {

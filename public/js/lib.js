@@ -49,15 +49,18 @@ const TEMAS = {
   fundamento: {
     acento: 'guinda',
     icono: ICONO_F,
+    pregunta: '¿Qué quieres saber de tus impuestos?',
     asistente: { nombre: 'SATGPT', html: 'SAT<span class="ia">GPT</span>', aviso: 'No es el SAT ni asesoría fiscal. Lee los artículos antes de decidir.' },
   },
   semaforo: {
     acento: 'verde',
     icono: ICONO_S,
+    principal: 'RT',
+    pregunta: '¿Qué quieres saber del reglamento?',
     asistente: { nombre: 'Educación vIAl', html: 'Educación v<span class="ia">IA</span>l', aviso: 'No es una autoridad ni asesoría legal. Lee los artículos antes de decidir.' },
   },
 }
-const NEUTRO = { acento: 'color', icono: ICONO_F, asistente: { nombre: 'el asistente', html: 'Asistente', aviso: 'Puede equivocarse. Lee los artículos.' } }
+const NEUTRO = { acento: 'color', icono: ICONO_F, pregunta: '¿Qué quieres saber?', asistente: { nombre: 'el asistente', html: 'Asistente', aviso: 'Puede equivocarse. Lee los artículos.' } }
 export const tema = () => TEMAS[SITIO.slug] ?? NEUTRO
 export const asistente = () => tema().asistente
 
@@ -238,11 +241,21 @@ export const rutaClave = key => {
   const [ley, n] = key.split(':')
   return ruta(ley, n)
 }
-export const etiqueta = key => {
+/** "LISR:27" → "LISR 27", compact for charts and graphs; rules read "Regla 2.7.1.21". */
+export const etiquetaCorta = key => {
   const i = key.indexOf(':')
   const ley = key.slice(0, i)
   const n = key.slice(i + 1)
   return familia(ley) === 'reglas' ? `Regla ${n}` : `${ley} ${numero(n)}`
+}
+
+/** "LISR:27" → "Art. 27 LISR", the way Mexican texts cite; the site's main document drops its code ("RT:67" → "Art. 67"). */
+export const etiqueta = key => {
+  const i = key.indexOf(':')
+  const ley = key.slice(0, i)
+  const n = key.slice(i + 1)
+  if (familia(ley) === 'reglas') return `Regla ${n}`
+  return ley === tema().principal ? `Art. ${numero(n)}` : `Art. ${numero(n)} ${ley}`
 }
 
 export const titulo = (ley, n) => `${unidad(ley)} ${numero(n)}`
@@ -421,23 +434,29 @@ export function citasHtml(text, criterios = []) {
   const porNumero = new Map(criterios.map(c => [String(c.number), c]))
   const chip = r => {
     const ley = r.match(/^([A-Z]{2,8})\s+(\d[\w.-]*)$/)
-    if (ley && esDoc(ley[1])) return `<a class="cite" href="${ruta(ley[1], ley[2])}" title="${esc(`${DOCS[ley[1]].nombre}, ${titulo(ley[1], ley[2]).toLowerCase()}`)}">${esc(etiqueta(`${ley[1]}:${ley[2]}`)).replace(' ', '&nbsp;')}</a>`
+    if (ley && esDoc(ley[1])) return `<a class="cite" href="${ruta(ley[1], ley[2])}" title="${esc(`${DOCS[ley[1]].nombre}, ${titulo(ley[1], ley[2]).toLowerCase()}`)}">${esc(etiqueta(`${ley[1]}:${ley[2]}`)).replaceAll(' ', '&nbsp;')}</a>`
     const sat = r.match(/^SAT\s+(\d+)$/)
     if (!sat) return null
     const c = porNumero.get(sat[1])
     return `<a class="cite cite--sat" href="#sat-${sat[1]}"${c ? ` title="${esc(c.title)}"` : ''}>${c?.id ? esc(c.id) : `SAT&nbsp;${sat[1]}`}</a>`
   }
-  return text
-    .split(/\n+/)
-    .filter(p => p.trim())
-    .map(par =>
-      html`<p>${raw(
-        esc(par.replace(/⟨([^⟩]*)⟩/g, '($1)')).replace(/[\[【]([^\]】]+)[\]】]/g, (todo, dentro) => {
-          const refs = dentro.split(/[,;]\s*/).map(r => chip(r.trim().replace(/\u2011/g, '-')))
-          return refs.some(r => !r) ? todo : `<span class="cites">${refs.join('')}</span>`
-        }),
-      )}</p>`,
-    )
+  const linea = t =>
+    esc(t.replace(/⟨([^⟩]*)⟩/g, '($1)'))
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/[\[【]([^\]】]+)[\]】]/g, (todo, dentro) => {
+        const refs = dentro.split(/[,;]\s*/).map(r => chip(r.trim().replace(/\u2011/g, '-')))
+        return refs.some(r => !r) ? todo : `<span class="cites">${refs.join('')}</span>`
+      })
+  const bloques = []
+  for (const l of text.split(/\n+/).map(l => l.trim()).filter(Boolean)) {
+    const punto = l.match(/^[-•*]\s+(.*)$/)
+    if (punto) {
+      const ultimo = bloques[bloques.length - 1]
+      if (Array.isArray(ultimo)) ultimo.push(punto[1])
+      else bloques.push([punto[1]])
+    } else bloques.push(l)
+  }
+  return bloques.map(b => (Array.isArray(b) ? html`<ul>${b.map(p => html`<li>${raw(linea(p))}</li>`)}</ul>` : html`<p>${raw(linea(b))}</p>`))
 }
 
 /** Lowercase, accentless, punctuation-free text, for comparing questions. */

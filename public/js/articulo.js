@@ -27,7 +27,7 @@ export default {
   async mount(main, ctx) {
     const ley = ctx.match[1].toUpperCase()
     const n = decodeURIComponent(ctx.match[2])
-    titular(`${etiqueta(`${ley}:${n}`)} · ${corto(ley)}`)
+    titular(`${titulo(ley, n)} · ${corto(ley)}`)
     if (!ctx.ssr)
       main.innerHTML = html`<article class="art" aria-busy="true">
       <header class="art-head">
@@ -71,7 +71,7 @@ export default {
       </section>`
       return
     }
-    titular(`${a.title ? `${etiqueta(a.key)}. ${a.title}` : etiqueta(a.key)} · ${corto(a.law.code)}`)
+    titular(`${a.title ? `${titulo(a.law.code, a.number)}. ${a.title}` : titulo(a.law.code, a.number)} · ${corto(a.law.code)}`)
     const esRegla = familia(a.law.code) === 'reglas'
     const criterios = a.criteria ?? []
     const multas = a.fines ?? []

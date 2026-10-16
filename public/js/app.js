@@ -1,4 +1,5 @@
 import { cargarSitio, DOCS, editor, esAborto, esDoc, fechaLargaDe, html, pesos, SITIO, tema, tieneCriterios, titular } from './lib.js'
+import { iniciarConversa } from './conversa.js'
 
 const main = document.getElementById('main')
 const LEY = /^\/([A-Za-z][A-Za-z0-9]*)\/([^/]+)\/?$/
@@ -135,6 +136,7 @@ function vestir() {
 }
 
 history.scrollRestoration = 'manual'
+document.addEventListener('navegar', e => navigate(e.detail))
 addEventListener('popstate', () => {
   if (location.pathname + location.search !== ultima) render({ restaurar: history.state?.y ?? 0 })
 })
@@ -142,6 +144,7 @@ SITIO.conservarTitulo = !!main.querySelector(':scope > .ssr')
 cargarSitio().then(
   () => {
     vestir()
+    iniciarConversa()
     render()
   },
   e => {
