@@ -2,23 +2,42 @@ import { EnvelopArmorPlugin } from '@escape.tech/graphql-armor'
 import { GraphQLError } from 'graphql'
 import { createSchema, createYoga, type Plugin } from 'graphql-yoga'
 import { NOMBRES, type Hit } from './buscar.ts'
-import { buscar, cargar, clave, db, loaders, type Criterio, type Ctx, type Env, type Familia, type Fila, type Modo } from './indice.ts'
+import { multas } from './cdmx.ts'
+import { CORPUS, PUBLICO_EVAL, PUBLICO_RESPUESTAS } from './corpus.ts'
+import { buscar, cargar, clave, db, loaders, type Criterio, type Ctx, type Env, type Fila, type Modo } from './indice.ts'
 import { LEYES, derogado, type Ley } from './parse.ts'
 import { responder } from './responder.ts'
 import { typeDefs } from './schema.graphql.ts'
 
 type Tipo = 'NORMATIVE' | 'IMPROPER_PRACTICE'
 const ANEXO: Record<Tipo, number> = { NORMATIVE: 7, IMPROPER_PRACTICE: 3 }
-const FAMILIA: Record<string, Familia> = { LAW: 'ley', REGULATION: 'reglamento', RULES: 'reglas' }
+const FAMILIA: Record<string, string> = { LAW: 'ley', REGULATION: 'reglamento', RULES: 'reglas' }
+
+/** Documents a search keeps: those named in `laws` plus every document of the `kinds` asked for; null keeps all. */
+const documentos = (laws: Ley[] = [], kinds: string[] = []) => {
+  const leyes = [...laws, ...Object.keys(LEYES).filter(l => kinds.some(k => FAMILIA[k] === LEYES[l].tipo))]
+  return leyes.length ? leyes : null
+}
 
 const resolvers = {
   Query: {
+    site: () => ({
+      name: CORPUS.sitio.nombre,
+      tagline: CORPUS.sitio.lema,
+      description: CORPUS.sitio.descripcion,
+      examples: CORPUS.sitio.ejemplos,
+      disclaimer: CORPUS.sitio.aviso,
+      lists: CORPUS.listas.map(l => ({ title: l.titulo, note: l.nota, laws: l.leyes })),
+      uma: CORPUS.uma ? { value: CORPUS.uma.valor, since: CORPUS.uma.desde, source: CORPUS.uma.fuente } : null,
+      evalPath: `/${PUBLICO_EVAL.replace('public/', '')}`,
+      answersEvalPath: `/${PUBLICO_RESPUESTAS.replace('public/', '')}`,
+    }),
     laws: () => (Object.keys(NOMBRES) as Ley[]).map(code => ({ code })),
     law: (_: unknown, { code }: { code: Ley }) => ({ code }),
     article: (_: unknown, a: { law: Ley; number: string }, ctx: Ctx) => ctx.load.articulo.load(clave(a.law, a.number)),
-    search: async (_: unknown, a: { query: string; mode: Modo; law?: Ley; kinds?: string[]; first: number }, ctx: Ctx) => {
+    search: async (_: unknown, a: { query: string; mode: Modo; law?: Ley; laws?: Ley[]; kinds?: string[]; first: number }, ctx: Ctx) => {
       if (!(await ctx.env.SEARCH_LIMITER.limit({ key: ctx.ip })).success) throw new GraphQLError('Demasiadas búsquedas, espera un minuto.')
-      return buscar(ctx.env, ctx.db, a.query, a.mode, a.law ?? null, a.first, a.kinds?.length ? a.kinds.map(k => FAMILIA[k]) : null)
+      return buscar(ctx.env, ctx.db, a.query, a.mode, a.law ?? null, a.first, documentos(a.laws, a.kinds))
     },
     answer: (_: unknown, a: { question: string }, ctx: Ctx) => responder(ctx, a.question),
     mostCited: (_: unknown, a: { first: number; law?: Ley }, ctx: Ctx) =>
@@ -60,6 +79,7 @@ const resolvers = {
   },
   Law: {
     name: (l: { code: Ley }) => NOMBRES[l.code],
+    shortName: (l: { code: Ley }) => LEYES[l.code].corto,
     kind: (l: { code: Ley }) => ({ ley: 'LAW', reglamento: 'REGULATION', reglas: 'RULES' })[LEYES[l.code].tipo],
     regulates: (l: { code: Ley }) => (LEYES[l.code].reglamenta ? { code: LEYES[l.code].reglamenta } : null),
     source: (l: { code: Ley }) => LEYES[l.code].pdf,
@@ -85,6 +105,7 @@ const resolvers = {
     law: (r: Fila) => ({ code: r.ley }),
     number: (r: Fila) => r.id,
     title: (r: Fila) => r.titulo ?? null,
+    fines: (r: Fila) => (CORPUS.uma ? multas(r.texto).map(m => ({ start: m.inicio, end: m.fin, times: m.veces })) : []),
     location: (r: Fila) => JSON.parse(r.ubicacion),
     text: (r: Fila) => r.texto,
     repealed: (r: Fila) => derogado(r.texto),
@@ -101,6 +122,7 @@ const resolvers = {
   SearchHit: {
     article: (h: Hit, _: unknown, ctx: Ctx) => ctx.load.articulo.load(clave(h.ley, h.id)),
     passage: (h: Hit) => h.texto ?? '',
+    fines: (h: Hit) => (CORPUS.uma ? multas(h.texto ?? '').map(m => ({ start: m.inicio, end: m.fin, times: m.veces })) : []),
   },
   Answer: {
     sources: (a: { keys: string[] }, _: unknown, ctx: Ctx) => cargar(ctx, a.keys),
@@ -183,6 +205,26 @@ export default {
       const { model, input } = await request.json<{ model: string; input: unknown }>()
       return Response.json(await env.AI.run(model as keyof AiModels, input as never))
     }
-    return env.ASSETS.fetch(request)
+    const res = await env.ASSETS.fetch(request)
+    return res.headers.get('content-type')?.includes('text/html') ? marca(res) : res
   },
 } satisfies ExportedHandler<Env>
+
+/** The shared index.html carries the active site's name, description and theme, for browser tabs, link previews and a first paint without the other site's colours. */
+function marca(res: Response) {
+  const { nombre, lema, descripcion } = CORPUS.sitio
+  const contenido = (valor: string) => ({ element: (e: Element) => void e.setAttribute('content', valor) })
+  return new HTMLRewriter()
+    .on('html', { element: e => void e.setAttribute('data-site', CORPUS.prefijo) })
+    .on('a.wordmark', {
+      element: e => {
+        e.setInnerContent(nombre)
+        e.setAttribute('aria-label', `${nombre}, inicio`)
+      },
+    })
+    .on('title', { element: e => void e.setInnerContent(`${nombre} · ${lema}`) })
+    .on('meta[name="description"]', contenido(descripcion))
+    .on('meta[property="og:title"]', contenido(nombre))
+    .on('meta[property="og:description"]', contenido(descripcion))
+    .transform(res)
+}

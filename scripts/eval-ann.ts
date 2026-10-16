@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, porArticulo, recortar, type Hit } from '../src/buscar.ts'
+import { ANEXOS } from '../src/parse.ts'
+import { DATA, EVAL, PUBLICO_EVAL } from '../src/corpus.ts'
 
 /**
  * Production parity: replays the cached gemma embeddings of the plain-language questions against the real
@@ -9,13 +11,15 @@ import { MODELOS, porArticulo, recortar, type Hit } from '../src/buscar.ts'
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
 const { dims: DIMS, indice } = MODELOS.gemma
-const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
+const db = new DatabaseSync(`${DATA}/fundamento.db`, { readOnly: true })
 const frag = new Map((db.prepare(`select huella, ley, id from fragmento`).all() as (Hit & { huella: string })[]).map(f => [f.huella, f]))
-const criterios = db.prepare(`select n from criterio c where exists (select 1 from criterio_cita cc where cc.n = c.n) order by n`).all() as { n: number }[]
-const preguntas = new Map((JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { n: number; esperados: string[] }[]).map(p => [p.n, p]))
-const evalJson = JSON.parse(readFileSync('public/eval.json', 'utf8'))
+const preguntas = new Map((JSON.parse(readFileSync(`${EVAL}/preguntas.json`, 'utf8')) as { n: number; esperados: string[] }[]).map(p => [p.n, p]))
+const criterios = ANEXOS
+  ? (db.prepare(`select n from criterio c where exists (select 1 from criterio_cita cc where cc.n = c.n) order by n`).all() as { n: number }[])
+  : [...preguntas.values()].map(p => ({ n: p.n }))
+const evalJson = JSON.parse(readFileSync(PUBLICO_EVAL, 'utf8'))
 const exactos = (evalJson.naturales.preguntas as { rangos: Record<string, number | null> }[]).map(p => p.rangos['vector gemma'])
-const b = readFileSync('data/emb/gemma.naturales.f32')
+const b = readFileSync(`${DATA}/emb/gemma.naturales.f32`)
 const v = new Float32Array(b.buffer, b.byteOffset, b.byteLength / 4)
 
 const aprox: (number | null)[] = []
@@ -35,4 +39,4 @@ const pct = (x: number) => `${(100 * x).toFixed(1)}%`
 console.log(`n=${aprox.length}  exact hit@1 ${pct(hit(exactos, 1))} hit@5 ${pct(hit(exactos, 5))} hit@10 ${pct(hit(exactos, 10))}`)
 console.log(`       Vectorize hit@1 ${pct(hit(aprox, 1))} hit@5 ${pct(hit(aprox, 5))} hit@10 ${pct(hit(aprox, 10))}`)
 console.log(`same rank on ${iguales}/${aprox.length} questions`)
-writeFileSync('eval/ann.json', JSON.stringify({ fecha: new Date().toISOString().slice(0, 10), n: aprox.length, exactos, aprox }) + '\n')
+writeFileSync(`${EVAL}/ann.json`, JSON.stringify({ fecha: new Date().toISOString().slice(0, 10), n: aprox.length, exactos, aprox }) + '\n')

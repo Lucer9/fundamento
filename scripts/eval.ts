@@ -1,7 +1,8 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, SQL_FTS, consultaFts, porArticulo, rrf, type Hit, type Modelo } from '../src/buscar.ts'
-import { LEYES } from '../src/parse.ts'
+import { ANEXOS } from '../src/parse.ts'
+import { CORPUS, DATA, EVAL, PUBLICO_EVAL } from '../src/corpus.ts'
 
 /**
  * Asks every SAT criterio's title as a question and records the rank of the first article the criterio
@@ -13,19 +14,34 @@ import { LEYES } from '../src/parse.ts'
  * Writes public/eval.json for the site.
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
-const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
-const criterios = (
-  db.prepare(`select c.n, c.anexo, c.id, c.materia, c.tema, json_group_array(cc.ley || ':' || cc.id) as esperados
-              from criterio c join criterio_cita cc using (n) group by c.n order by c.n`).all() as {
-    n: number
-    anexo: number
-    id: string
-    materia: string
-    tema: string
-    esperados: string
-  }[]
-).map(c => ({ ...c, esperados: JSON.parse(c.esperados) as string[] }))
-const rowids = JSON.parse(readFileSync('data/emb/rowids.json', 'utf8')) as number[]
+const db = new DatabaseSync(`${DATA}/fundamento.db`, { readOnly: true })
+type Pregunta = { n: number; pregunta: string; esperados: string[]; modelo?: string }
+const naturales = new Map((JSON.parse(readFileSync(`${EVAL}/preguntas.json`, 'utf8')) as Pregunta[]).map(p => [p.n, p]))
+
+/**
+ * What each question should find. With SAT criterios (fiscal), each criterio's own citations; otherwise the
+ * articles written next to each hand-checked question in <eval>/preguntas.json.
+ */
+const criterios = ANEXOS
+  ? (
+      db.prepare(`select c.n, c.anexo, c.id, c.materia, c.tema, json_group_array(cc.ley || ':' || cc.id) as esperados
+                  from criterio c join criterio_cita cc using (n) group by c.n order by c.n`).all() as {
+        n: number
+        anexo: number
+        id: string
+        materia: string
+        tema: string
+        esperados: string
+      }[]
+    ).map(c => ({ ...c, esperados: JSON.parse(c.esperados) as string[] }))
+  : [...naturales.values()].map(p => ({ n: p.n, anexo: 0, id: '', materia: p.esperados[0].split(':')[0], tema: p.pregunta, esperados: p.esperados }))
+
+/** The site's first search list (fiscal: the laws): " · leyes" rows rank only its documents. A one-list site ranks everything together. */
+const LISTA = CORPUS.listas[0]
+const UNA_LISTA = CORPUS.listas.length === 1
+const SUFIJO = ` · ${LISTA.titulo.toLowerCase()}`
+const enLista = (h: Hit) => LISTA.leyes.includes(h.ley)
+const rowids = JSON.parse(readFileSync(`${DATA}/emb/rowids.json`, 'utf8')) as number[]
 const frag = new Map(
   (db.prepare(`select rowid, ley, id, texto from fragmento`).all() as (Hit & { rowid: number })[]).map(f => [f.rowid, f]),
 )
@@ -64,7 +80,7 @@ function vecinos(docs: Float32Array, q: Float32Array, qi: number, dims: number, 
 
 /** Cross-encoder rerank of the top 20 with bge-reranker-base; results cached in data/emb/rerank.json. */
 async function reordenar(base: Hit[][]): Promise<Hit[][]> {
-  const archivo = 'data/emb/rerank.json'
+  const archivo = `${DATA}/emb/rerank.json`
   const cache: Record<string, string[]> = existsSync(archivo) ? JSON.parse(readFileSync(archivo, 'utf8')) : {}
   const out: Hit[][] = []
   for (const [i, c] of criterios.entries()) {
@@ -90,23 +106,23 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
   const metodos: Record<string, Hit[][]> = {}
   const kw = consultas.map(q => porArticulo(fts.all(consultaFts(q), 200) as Hit[]))
   metodos.keyword = kw
-  metodos['keyword · leyes'] = consultas.map(q => porArticulo((fts.all(consultaFts(q), 1000) as Hit[]).filter(h => LEYES[h.ley].tipo === 'ley')))
+  if (!UNA_LISTA) metodos[`keyword${SUFIJO}`] = consultas.map(q => porArticulo((fts.all(consultaFts(q), 1000) as Hit[]).filter(enLista)))
   for (const m of Object.keys(MODELOS) as Modelo[]) {
     const { dims, indice } = MODELOS[m]
-    const f = `data/emb/${m}.docs.f32`
+    const f = `${DATA}/emb/${m}.docs.f32`
     if (!existsSync(f) || statSync(f).size !== rowids.length * dims * 4) {
       console.log(`${m}: sin vectores para este corpus (node scripts/embed.ts ${m})`)
       continue
     }
     const docs = cargar(f, dims)
-    const qs = cargar(`data/emb/${m}.${archivo}.f32`, dims)
+    const qs = cargar(`${DATA}/emb/${m}.${archivo}.f32`, dims)
     for (const [nombre, d] of indice < dims ? ([[`${m} ${dims}d`, dims], [m, indice]] as const) : ([[m, dims]] as const)) {
       const [D, Q] = d < dims ? [cortar(docs, dims, d), cortar(qs, dims, d)] : [docs, qs]
       const vec = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d)))
       metodos[`vector ${nombre}`] = vec
       if (d === indice) metodos[`hybrid ${nombre}`] = vec.map((v, i) => rrf([kw[i], v]))
-      if (d === indice && m === 'gemma')
-        metodos[`vector ${nombre} · leyes`] = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d, 100, h => LEYES[h.ley].tipo === 'ley')))
+      if (d === indice && m === 'gemma' && !UNA_LISTA)
+        metodos[`vector ${nombre}${SUFIJO}`] = consultas.map((_, i) => porArticulo(vecinos(D, Q, i, d, 100, enLista)))
     }
   }
   if (metodos['vector bge-m3']) {
@@ -116,8 +132,7 @@ async function metodosPara(consultas: string[], archivo: 'preguntas' | 'naturale
   return metodos
 }
 
-const naturales = new Map((JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { n: number; pregunta: string; modelo?: string }[]).map(p => [p.n, p]))
-const porTitulo = await metodosPara(criterios.map(c => c.tema), 'preguntas', process.argv.includes('--rerank'))
+const porTitulo = ANEXOS ? await metodosPara(criterios.map(c => c.tema), 'preguntas', process.argv.includes('--rerank')) : {}
 const porPregunta = await metodosPara(criterios.map(c => naturales.get(c.n)!.pregunta), 'naturales', false)
 
 type Rangos = (number | null)[]
@@ -138,7 +153,7 @@ function intervalo(a: Rangos, metrica: (rs: Rangos) => number, b?: Rangos) {
 
 /**
  * Scores every method on the questions in `idx`. Δhit@5 compares each method with keyword search over the same
- * documents: rows marked "· leyes" against "keyword · leyes", the rest against "keyword".
+ * documents: rows limited to the first search list (" · leyes") against keyword search on that list, the rest against "keyword".
  */
 function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], consulta: (i: number) => string, modelo?: (i: number) => string | undefined) {
   const filas = Object.entries(metodos).map(([nombre, hits]) => {
@@ -150,7 +165,7 @@ function medir(titulo: string, metodos: Record<string, Hit[][]>, idx: number[], 
     const mrr = (rs = rangos) => rs.reduce<number>((s, r) => s + (r ? 1 / r : 0), 0) / rs.length
     return { nombre, hit1: hit(1), hit5: hit(5), hit10: hit(10), mrr: mrr(), ic5: intervalo(rangos, rs => hit(5, rs)), icMrr: intervalo(rangos, mrr), rangos }
   })
-  const base = (f: (typeof filas)[number]) => filas.find(b => b.nombre === (f.nombre.endsWith(' · leyes') ? 'keyword · leyes' : 'keyword')) ?? filas[0]
+  const base = (f: (typeof filas)[number]) => filas.find(b => b.nombre === (f.nombre.endsWith(SUFIJO) ? `keyword${SUFIJO}` : 'keyword')) ?? filas[0]
   const hit5 = (rs: Rangos) => rs.filter(r => r !== null && r <= 5).length / rs.length
   for (const f of filas) Object.assign(f, { delta5: intervalo(f.rangos, hit5, base(f).rangos) })
   const pct = (x: number) => `${(100 * x).toFixed(1)}%`.padStart(6)
@@ -188,37 +203,41 @@ function comparar(metodos: Record<string, Hit[][]>, a: string, b: string, idx: n
   return { a, b, hit1: intervalo(ra, hit(1), rb), hit5: intervalo(ra, hit(5), rb), mrr: intervalo(ra, mrr, rb) }
 }
 
-const anexo = (a: number) => criterios.flatMap((c, i) => (c.anexo === a ? [i] : []))
-const ajuste = medir('Anexo 7, criterio titles', porTitulo, anexo(7), i => criterios[i].tema)
-const reserva = medir('Anexo 3, criterio titles (held out)', porTitulo, anexo(3), i => criterios[i].tema)
 const comunes = medir(
-  'Plain-language questions, both annexes',
+  ANEXOS ? 'Plain-language questions, both annexes' : 'Hand-checked plain-language questions',
   porPregunta,
   criterios.map((_, i) => i),
   i => naturales.get(criterios[i].n)!.pregunta,
   i => naturales.get(criterios[i].n)!.modelo,
 )
+const naturalesJson = {
+  nombre: ANEXOS ? 'Preguntas en lenguaje común, una por cada criterio de los anexos 7 y 3' : 'Preguntas de conductores, revisadas a mano contra el texto',
+  ...comunes,
+  comparaciones: [
+    [`vector gemma${SUFIJO}`, `keyword${SUFIJO}`],
+    [`vector gemma${SUFIJO}`, 'vector gemma'],
+    ['vector gemma', 'vector gemma 768d'],
+    ['vector gemma', 'vector bge-m3'],
+    ['vector gemma', 'vector qwen3'],
+    ['vector bge-m3', 'hybrid bge-m3'],
+    ['vector gemma', 'hybrid gemma'],
+  ]
+    .filter(par => par.every(m => porPregunta[m]))
+    .map(([a, b]) => comparar(porPregunta, a, b, criterios.map((_, i) => i), i => criterios[i].esperados)),
+}
+const anexo = (a: number) => criterios.flatMap((c, i) => (c.anexo === a ? [i] : []))
 writeFileSync(
-  'public/eval.json',
+  PUBLICO_EVAL,
   JSON.stringify({
     fecha: new Date().toISOString().slice(0, 10),
-    nombre: 'Anexo 7 de la RMF 2026 (criterios normativos)',
-    ...ajuste,
-    holdout: { nombre: 'Anexo 3 de la RMF 2026 (prácticas fiscales indebidas)', ...reserva },
-    naturales: {
-      nombre: 'Preguntas en lenguaje común, una por cada criterio de los anexos 7 y 3',
-      ...comunes,
-      comparaciones: [
-        ['vector gemma · leyes', 'keyword · leyes'],
-        ['vector gemma · leyes', 'vector gemma'],
-        ['vector gemma', 'vector gemma 768d'],
-        ['vector gemma', 'vector bge-m3'],
-        ['vector gemma', 'vector qwen3'],
-        ['vector bge-m3', 'hybrid bge-m3'],
-        ['vector gemma', 'hybrid gemma'],
-      ]
-        .filter(par => par.every(m => porPregunta[m]))
-        .map(([a, b]) => comparar(porPregunta, a, b, criterios.map((_, i) => i), i => criterios[i].esperados)),
-    },
+    enUso: UNA_LISTA ? 'vector gemma' : `vector gemma${SUFIJO}`,
+    ...(ANEXOS
+      ? {
+          nombre: 'Anexo 7 de la RMF 2026 (criterios normativos)',
+          ...medir('Anexo 7, criterio titles', porTitulo, anexo(7), i => criterios[i].tema),
+          holdout: { nombre: 'Anexo 3 de la RMF 2026 (prácticas fiscales indebidas)', ...medir('Anexo 3, criterio titles (held out)', porTitulo, anexo(3), i => criterios[i].tema) },
+        }
+      : {}),
+    naturales: naturalesJson,
   }),
 )

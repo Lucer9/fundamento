@@ -1,26 +1,11 @@
+import { CORPUS } from './corpus.ts'
+
 export const typeDefs = /* GraphQL */ `
-  "Every document in the index: four federal tax laws, the 2026 income law, four regulations and the 2026 Miscelánea."
+  "Every document in the index, in display order."
   enum LawCode {
-    "Ley del Impuesto sobre la Renta"
-    LISR
-    "Ley del Impuesto al Valor Agregado"
-    LIVA
-    "Ley del Impuesto Especial sobre Producción y Servicios"
-    LIEPS
-    "Código Fiscal de la Federación"
-    CFF
-    "Ley de Ingresos de la Federación para 2026"
-    LIF
-    "Reglamento de la Ley del ISR"
-    RLISR
-    "Reglamento de la Ley del IVA"
-    RLIVA
-    "Reglamento de la Ley del IEPS"
-    RLIEPS
-    "Reglamento del Código Fiscal de la Federación"
-    RCFF
-    "Resolución Miscelánea Fiscal para 2026 (SAT's compiled edition): numbered rules instead of articles"
-    RMF
+${Object.entries(CORPUS.docs)
+  .map(([codigo, d]) => `    "${d.nombre}"\n    ${codigo}`)
+  .join('\n')}
   }
 
   enum LawKind {
@@ -41,12 +26,45 @@ export const typeDefs = /* GraphQL */ `
     HYBRID
   }
 
+  "The site this API serves: its name, how search splits results into lists, and the UMA for fines."
+  type Site {
+    name: String!
+    tagline: String!
+    description: String!
+    "One line for the footer: what the site is not."
+    disclaimer: String!
+    "Example questions for the home page."
+    examples: [String!]!
+    "Search result lists in order; ask for each with search(laws:)."
+    lists: [SearchList!]!
+    "Unidad de Medida y Actualización used to turn fines written in UMA into pesos; null where the corpus has none."
+    uma: Uma
+    "Static files with this corpus's search and answer eval results."
+    evalPath: String!
+    answersEvalPath: String!
+  }
+
+  type SearchList {
+    title: String!
+    note: String!
+    laws: [LawCode!]!
+  }
+
+  type Uma {
+    "Pesos per UMA, daily value."
+    value: Float!
+    "Date the value took effect (YYYY-MM-DD)."
+    since: String!
+    source: String!
+  }
+
   type Query {
+    site: Site!
     laws: [Law!]!
     law(code: LawCode!): Law
     article(law: LawCode!, number: String!): Article
-    "Plain-language search. One hit per article with the passage that matched best; articles the query names (LISR 151, artículo 29-A del CFF) come first. kinds keeps only some kinds of document: ask for [LAW] and [REGULATION, RULES] separately, because in one ranking the rules crowd out the law they apply."
-    search(query: String!, mode: SearchMode = VECTOR, law: LawCode, kinds: [LawKind!], first: Int = 10): [SearchHit!]!
+    "Plain-language search. One hit per article with the passage that matched best; articles the query names (LISR 151, artículo 29-A del CFF) come first. laws (or kinds) keeps only some documents: ask for each of site.lists separately, because in one ranking the rules crowd out the law they apply."
+    search(query: String!, mode: SearchMode = VECTOR, law: LawCode, laws: [LawCode!], kinds: [LawKind!], first: Int = 10): [SearchHit!]!
     "A short answer grounded in retrieved articles. Every citation in the text is one of the sources."
     answer(question: String!): Answer!
     "Articles other articles point to most."
@@ -62,6 +80,8 @@ export const typeDefs = /* GraphQL */ `
   type Law {
     code: LawCode!
     name: String!
+    "Short label for badges and filters, e.g. Ley del ISR."
+    shortName: String!
     kind: LawKind!
     "For a regulation, the law it carries out."
     regulates: Law
@@ -88,6 +108,8 @@ export const typeDefs = /* GraphQL */ `
     amendedOn: [String!]!
     "Dates SAT's Resolución Miscelánea Fiscal updated or compiled peso amounts (fines, thresholds) in the article. Inflation updates, not amendments."
     amountsUpdatedOn: [String!]!
+    "Fines written in multiples of the UMA, as character spans in text; empty where the site has no UMA (site.uma)."
+    fines: [Fine!]!
     "Character spans in text that cite another article."
     links: [Link!]!
     cites: [Article!]!
@@ -102,6 +124,13 @@ export const typeDefs = /* GraphQL */ `
     to: ID!
   }
 
+  type Fine {
+    start: Int!
+    end: Int!
+    "UMA multiples: three tiers (minimum, middle, maximum), a range's two ends, or one amount."
+    times: [Float!]!
+  }
+
   type Link {
     start: Int!
     end: Int!
@@ -112,6 +141,8 @@ export const typeDefs = /* GraphQL */ `
     article: Article!
     score: Float!
     passage: String!
+    "Fines in the passage, as spans relative to it (see Article.fines)."
+    fines: [Fine!]!
   }
 
   type Answer {

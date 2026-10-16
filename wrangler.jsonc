@@ -4,11 +4,12 @@
   "main": "src/worker.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
+  "define": { "__CORPUS__": "\"fiscal\"" },
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/graphql", "/dev/*"]
+    "run_worker_first": true
   },
   "d1_databases": [{ "binding": "DB", "database_name": "fundamento", "database_id": "e2288d86-4719-436f-878e-4e342ca0a50b" }],
   "vectorize": [{ "binding": "VEC", "index_name": "fundamento-gemma-512", "remote": true }],
@@ -22,5 +23,23 @@
     "ANSWER_MODEL": "@cf/openai/gpt-oss-120b",
     "DAILY_ANSWERS": "30"
   },
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  "env": {
+    "transito": {
+      "name": "semaforo",
+      "define": { "__CORPUS__": "\"transito\"" },
+      "d1_databases": [{ "binding": "DB", "database_name": "semaforo", "database_id": "e1494c76-df03-4d90-8041-0b2b24888aa5" }],
+      "vectorize": [{ "binding": "VEC", "index_name": "semaforo-gemma-512", "remote": true }],
+      "ai": { "binding": "AI" },
+      "ratelimits": [
+        { "name": "SEARCH_LIMITER", "namespace_id": "4333", "simple": { "limit": 60, "period": 60 } },
+        { "name": "ANSWER_LIMITER", "namespace_id": "4334", "simple": { "limit": 5, "period": 60 } }
+      ],
+      "vars": {
+        "MODEL": "gemma",
+        "ANSWER_MODEL": "@cf/openai/gpt-oss-120b",
+        "DAILY_ANSWERS": "30"
+      }
+    }
+  }
 }

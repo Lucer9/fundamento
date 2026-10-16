@@ -5,7 +5,7 @@ const DIVISION = /^(Título|Capítulo|Sección)\s+\d+(?:\.\d+)*\.\s/
 const RUIDO = [/^NOTA: Este documento constituye/, /^de dar a conocer el texto actualizado/, /^del Contribuyente\. Para sustentar/, /^Página \d+ de \d+$/]
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
 
-/** The paragraph that closes most rules, listing what it rests on: "CFF 4o., 17-D, LISR 27, RMF 2.1.39., 2.9.3." */
+/** The paragraph that closes most rules, listing what it rests on, as in rule 2.1.1: "CFF 4o., 17-D, 17-I, 21, 146, 146-A, LCF 13, 14, RMF 2.1.39., 2.9.3." */
 export const FUNDAMENTO = /^[A-Z]{2,}[A-Za-z]*\s+(?:\d|[A-ZÁÉÍÓÚ][a-záéíóú]+\s+[Tt]ransitorio)/
 
 type Linea = { p: number; x: number; y: number; t: string; abre: boolean }
@@ -19,7 +19,7 @@ type Linea = { p: number; x: number; y: number; t: string; abre: boolean }
  * paragraph. Compilation notes in the far margin ("Regla 2.12.4. - Reformada en la Primera RMRMF ... DOF el 09 de
  * julio de 2026") become the rule's amendment dates. Stops at the transitorios.
  */
-export function parseRmf(raw: string): (Articulo & { titulo: string })[] {
+export function parseRmf(raw: string, ley: Ley = 'RMF'): (Articulo & { titulo: string })[] {
   const todas = raw
     .split('\n')
     .map(l => {
@@ -74,7 +74,7 @@ export function parseRmf(raw: string): (Articulo & { titulo: string })[] {
     const pars: string[] = []
     cur.lineas.forEach((l, i) => (i && !l.abre ? (pars[pars.length - 1] += ' ' + l.t) : pars.push(l.t)))
     out.push({
-      ley: 'RMF',
+      ley,
       id: cur.id,
       orden: out.length,
       ubicacion: cur.ubicacion,
@@ -128,8 +128,8 @@ export function fundamentos(texto: string): Mencion[] {
       let ley: Ley | null = null
       for (const m of par.matchAll(/(?<![\p{L}\d.\/-])(?:([A-Z][A-Za-z]{1,9})(\s+(?:19|20)\d\d(?!\d))?|(\d+(?:\.\d+)*)o?((?:-[A-Z])*(?:[- ](?:Bis|Ter|Quáter|Quinquies|Sexies))?))(?![\p{L}\d\/])/gu)) {
         if (m[1]) ley = !m[2] && m[1] in LEYES ? (m[1] as Ley) : null
-        else if (ley && (ley === 'RMF') === m[3].includes('.'))
-          out.push({ ley, id: ley === 'RMF' ? m[3] : normId(m[3], m[4]), inicio: pos + m.index, fin: pos + m.index + m[0].length })
+        else if (ley && (LEYES[ley].formato === 'rmf') === m[3].includes('.'))
+          out.push({ ley, id: LEYES[ley].formato === 'rmf' ? m[3] : normId(m[3], m[4]), inicio: pos + m.index, fin: pos + m.index + m[0].length })
       }
     }
     pos += par.length + 1

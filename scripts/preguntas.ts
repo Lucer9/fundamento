@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { ai, claude, texto } from './dev.ts'
+import { DATA, EVAL } from '../src/corpus.ts'
 
 /**
  * Turns every SAT criterio into the question an ordinary taxpayer would ask, without the answer,
@@ -10,8 +11,8 @@ import { ai, claude, texto } from './dev.ts'
  * annexes), so a re-ingest that renumbers criterios keeps
  * every question and refreshes its number and expected articles; reruns only write questions for new criterios.
  */
-const ARCHIVO = 'eval/preguntas.json'
-const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
+const ARCHIVO = `${EVAL}/preguntas.json`
+const db = new DatabaseSync(`${DATA}/fundamento.db`, { readOnly: true })
 const criterios = db
   .prepare(
     `select c.n, c.anexo, c.id, c.tema, c.texto, json_group_array(cc.ley || ':' || cc.id) as esperados

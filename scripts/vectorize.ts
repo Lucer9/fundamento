@@ -4,6 +4,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { MODELOS, encabezado, indiceVec, recortar, type Modelo } from '../src/buscar.ts'
 import { LEYES, type Ley } from '../src/parse.ts'
 import { huella } from './huella.ts'
+import { DATA } from '../src/corpus.ts'
 
 /**
  * Upserts one model's embeddings into its Vectorize index (src/buscar.ts indiceVec: fundamento-gemma-512), straight
@@ -20,10 +21,10 @@ import { huella } from './huella.ts'
 const modelo = (process.argv[2] ?? 'gemma') as Modelo
 const { dims, indice, documento } = MODELOS[modelo]
 const nombre = indiceVec(modelo)
-const b = readFileSync(`data/emb/${modelo}.cache.f32`)
+const b = readFileSync(`${DATA}/emb/${modelo}.cache.f32`)
 const v = new Float32Array(b.buffer, b.byteOffset, b.byteLength / 4)
-const cache = new Map((JSON.parse(readFileSync(`data/emb/${modelo}.cache.json`, 'utf8')) as string[]).map((h, i) => [h, v.subarray(i * dims, (i + 1) * dims)]))
-const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
+const cache = new Map((JSON.parse(readFileSync(`${DATA}/emb/${modelo}.cache.json`, 'utf8')) as string[]).map((h, i) => [h, v.subarray(i * dims, (i + 1) * dims)]))
+const db = new DatabaseSync(`${DATA}/fundamento.db`, { readOnly: true })
 const frags = db
   .prepare(`select f.huella, f.ley, f.id, f.texto, a.ubicacion, a.titulo from fragmento f join articulo a using (ley, id) order by f.rowid`)
   .all() as { huella: string; ley: Ley; id: string; texto: string; ubicacion: string; titulo: string | null }[]
@@ -34,7 +35,7 @@ const lineas = frags.flatMap(f => {
   if (!vec) return faltan.push(`${f.ley}:${f.id}`), []
   return [JSON.stringify({ id: f.huella, values: recortar(vec, indice), metadata: { tipo: 'ley', familia: LEYES[f.ley].tipo, ley: f.ley, articulo: f.id } })]
 })
-const crit = `data/emb/${modelo}.criterios.f32`
+const crit = `${DATA}/emb/${modelo}.criterios.f32`
 if (existsSync(crit)) {
   const c = readFileSync(crit)
   const cv = new Float32Array(c.buffer, c.byteOffset, c.byteLength / 4)
@@ -43,11 +44,11 @@ if (existsSync(crit)) {
 }
 if (faltan.length) console.log(`sin vector todavía (${faltan.length}): ${[...new Set(faltan)].join(', ')}`)
 
-const archivo = `data/emb/${nombre}.ndjson`
+const archivo = `${DATA}/emb/${nombre}.ndjson`
 writeFileSync(archivo, lineas.join('\n'))
 execFileSync('npx', ['wrangler', 'vectorize', 'upsert', nombre, '--file', archivo], { stdio: 'inherit' })
 
-const subidos = `data/emb/${nombre}.subidos.json`
+const subidos = `${DATA}/emb/${nombre}.subidos.json`
 const ahora = new Set(lineas.map(l => (JSON.parse(l) as { id: string }).id))
 const sobran = existsSync(subidos) ? (JSON.parse(readFileSync(subidos, 'utf8')) as string[]).filter(id => !ahora.has(id)) : []
 for (let i = 0; i < sobran.length; i += 100)

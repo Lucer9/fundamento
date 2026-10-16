@@ -6,12 +6,14 @@ import { encabezado, terminos } from '../src/buscar.ts'
 import { huella } from './huella.ts'
 import { ANEXOS, LEYES, derogado, fragmentos, menciones, parseCriterios, parseLey, type Ley } from '../src/parse.ts'
 import { fundamentos, parseRmf } from '../src/rmf.ts'
+import { parseCdmx } from '../src/cdmx.ts'
+import { CORPUS, DATA } from '../src/corpus.ts'
 
-const RAW = 'data/raw'
+const RAW = `${DATA}/raw`
 mkdirSync(RAW, { recursive: true })
 
 /**
- * Downloads a PDF once into data/raw and extracts its text with macOS PDFKit (macOS only; pdfjs-dist would make this
+ * Downloads a PDF once into <data>/raw and extracts its text with macOS PDFKit (macOS only; pdfjs-dist would make this
  * portable). `lineas` keeps each visual line's position (scripts/pdf-lineas.js), which the Miscelánea needs.
  */
 async function texto(url: string, nombre: string, lineas = false) {
@@ -28,16 +30,23 @@ async function texto(url: string, nombre: string, lineas = false) {
 
 const leyes = Object.keys(LEYES) as Ley[]
 const articulos = (
-  await Promise.all(leyes.map(async l => (l === 'RMF' ? parseRmf(await texto(LEYES[l].pdf, l, true)) : parseLey(await texto(LEYES[l].pdf, l), l))))
+  await Promise.all(
+    leyes.map(async l => {
+      const { formato, pdf, articulos } = LEYES[l]
+      if (formato === 'rmf') return parseRmf(await texto(pdf, l, true), l)
+      if (formato === 'cdmx') return parseCdmx(await texto(pdf, l, true), l, { articulos })
+      return parseLey(await texto(pdf, l), l)
+    }),
+  )
 ).flat()
 const existe = new Set(articulos.map(a => `${a.ley}:${a.id}`))
 const enlaces = articulos.flatMap(a =>
-  [...menciones(a.texto, a.ley), ...(a.ley === 'RMF' ? fundamentos(a.texto) : [])]
+  [...menciones(a.texto, a.ley), ...(LEYES[a.ley].formato === 'rmf' ? fundamentos(a.texto) : [])]
     .filter(m => existe.has(`${m.ley}:${m.id}`) && !(m.ley === a.ley && m.id === a.id))
     .map(m => ({ de_ley: a.ley, de_id: a.id, inicio: m.inicio, fin: m.fin, a_ley: m.ley, a_id: m.id })),
 )
 const criterios = (
-  await Promise.all(([7, 3] as const).map(async anexo => parseCriterios(await texto(ANEXOS[anexo], `anexo${anexo}`)).map(c => ({ ...c, anexo }))))
+  await Promise.all(([7, 3] as const).map(async anexo => (ANEXOS ? parseCriterios(await texto(ANEXOS[anexo], `anexo${anexo}`)).map(c => ({ ...c, anexo })) : [])))
 )
   .flat()
   .map(c => ({ ...c, citas: c.citas.filter(r => existe.has(`${r.ley}:${r.id}`)) }))
@@ -97,9 +106,9 @@ const seed = [
   ),
 ].join('\n')
 
-writeFileSync('data/seed.sql', seed)
-rmSync('data/fundamento.db', { force: true })
-const db = new DatabaseSync('data/fundamento.db')
+writeFileSync(`${DATA}/seed.sql`, seed)
+rmSync(`${DATA}/fundamento.db`, { force: true })
+const db = new DatabaseSync(`${DATA}/fundamento.db`)
 db.exec(seed)
 db.close()
 
@@ -108,4 +117,4 @@ console.log(`articulos: ${porLey}`)
 console.log(`enlaces: ${enlaces.length} menciones → ${new Set(enlaces.map(e => `${e.de_ley}:${e.de_id}>${e.a_ley}:${e.a_id}`)).size} aristas`)
 console.log(`fragmentos: ${frags.length} (de ${articulos.filter(a => !derogado(a.texto)).length} artículos vigentes)`)
 console.log(`criterios: anexo 7 ${criterios.filter(c => c.anexo === 7).length}, anexo 3 ${criterios.filter(c => c.anexo === 3).length}`)
-console.log(`data/seed.sql ${(seed.length / 1e6).toFixed(1)} MB, data/fundamento.db`)
+console.log(`${CORPUS.clave}: ${DATA}/seed.sql ${(seed.length / 1e6).toFixed(1)} MB, ${DATA}/fundamento.db`)

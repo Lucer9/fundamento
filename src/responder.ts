@@ -1,18 +1,37 @@
 import { GraphQLError } from 'graphql'
 import { encabezado } from './buscar.ts'
-import type { Ley } from './parse.ts'
+import { multas } from './cdmx.ts'
+import { CORPUS } from './corpus.ts'
+import { LEYES, type Ley } from './parse.ts'
 import { cargar, contexto, type Ctx, type Env } from './indice.ts'
 
-const SISTEMA = `Eres "fundamento", un buscador de la legislación fiscal federal mexicana: leyes (LISR, LIVA, LIEPS, CFF, LIF), sus reglamentos (RLISR, RLIVA, RLIEPS, RCFF) y la Resolución Miscelánea Fiscal 2026 (RMF).
-Responde en español, en dos a cinco frases, usando solo los artículos y reglas que se te dan.
-Después de cada afirmación cita su fuente entre corchetes con su clave exacta, por ejemplo [LISR 151], [CFF 29-A], [RLISR 264], [RMF 3.17.1] o [SAT 12].
-Las leyes mandan sobre los reglamentos y los reglamentos sobre las reglas de la Miscelánea; cuando una regla da una facilidad u opción, dilo así.
-Los criterios del SAT son la interpretación oficial de la autoridad: si uno responde la pregunta, apóyate en él y cítalo.
-Si los artículos solo responden una parte, responde esa parte y di qué falta; si no responden nada, dilo en una frase.
-No inventes reglas, plazos ni cifras que no aparezcan en los artículos, y no des asesoría personalizada.
-Escribe texto plano, sin markdown.`
+const SISTEMA = CORPUS.prompt
 
-const REF = /(RLISR|RLIVA|RLIEPS|RCFF|LISR|LIVA|LIEPS|CFF|LIF|RMF|SAT)\D{0,20}?(\d+(?:\.\d+)*(?:-[A-Za-z]+)*)/i
+/** A citation inside brackets: a document code of the corpus (or SAT, for criterios) and an article or rule number. */
+const REF = new RegExp(
+  String.raw`(${[...Object.keys(LEYES), 'SAT'].sort((a, b) => b.length - a.length).join('|')})\D{0,20}?(\d+(?:\.\d+)*(?:-[A-Za-z]+)*)`,
+  'i',
+)
+
+const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' })
+
+/**
+ * A passage with each fine's peso amount written next to it, "⟨$3,519.30, $3,753.92 o $4,105.85 en 2026⟩", so the
+ * model quotes pesos without doing arithmetic. Two numbers are a range, three are the minimum, middle and maximum tiers.
+ */
+function conPesos(texto: string) {
+  if (!CORPUS.uma) return texto
+  const { valor, desde } = CORPUS.uma
+  let out = ''
+  let pos = 0
+  for (const m of multas(texto)) {
+    const pesos = m.veces.map(v => MXN.format(v * valor))
+    const lista = pesos.length === 2 ? pesos.join(' a ') : pesos.length > 2 ? `${pesos.slice(0, -1).join(', ')} o ${pesos.at(-1)}` : pesos[0]
+    out += `${texto.slice(pos, m.fin)} ⟨${lista} en ${desde.slice(0, 4)}⟩`
+    pos = m.fin
+  }
+  return out + texto.slice(pos)
+}
 
 async function sha256(s: string) {
   const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))
@@ -69,7 +88,7 @@ export async function responder(ctx: Ctx, pregunta: string) {
   const articulos = orden
     .map(k => {
       const [ley, id] = k.split(':') as [Ley, string]
-      const texto = trozos.filter(h => `${h.ley}:${h.id}` === k).map(h => h.texto).join('\n[…]\n')
+      const texto = trozos.filter(h => `${h.ley}:${h.id}` === k).map(h => conPesos(h.texto ?? '')).join('\n[…]\n')
       return `[${ley} ${id}] ${encabezado(ley, id, JSON.parse(filas.get(k)?.ubicacion ?? '[]'), filas.get(k)?.titulo)}\n${texto}`
     })
     .join('\n\n')

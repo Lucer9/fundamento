@@ -1,72 +1,23 @@
-export type Ley = 'LISR' | 'LIVA' | 'LIEPS' | 'CFF' | 'LIF' | 'RLISR' | 'RLIVA' | 'RLIEPS' | 'RCFF' | 'RMF'
+import { CORPUS } from './corpus.ts'
+
+/** A document code of the active corpus (src/corpus.ts): LISR, RMF, RT… */
+export type Ley = string
 export type Ref = { ley: Ley; id: string }
 export type Articulo = Ref & { orden: number; ubicacion: string[]; texto: string; reformas: string[]; actualizaciones: string[]; titulo?: string }
 export type Criterio = { id: string | null; materia: Ley; tema: string; texto: string; citas: Ref[] }
 
-const BIBLIO = 'https://www.diputados.gob.mx/LeyesBiblio'
-const RMF = 'https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rmf'
-const ANEXOS_RMF = `${RMF}/anexos`
+/** Every document in the active corpus, in display order. */
+export const LEYES = CORPUS.docs
+const CODIGOS = Object.keys(LEYES)
 
-/**
- * Every document in the index. Laws and regulations come from the Cámara de Diputados (texto vigente); the
- * Resolución Miscelánea Fiscal is SAT's compiled 2026 edition, whose numbered rules stand in for articles.
- */
-export const LEYES: Record<Ley, { titulo: string; nombre: string; tipo: 'ley' | 'reglamento' | 'reglas'; pdf: string; reglamenta?: Ley }> = {
-  LISR: { titulo: 'LEY DEL IMPUESTO SOBRE LA RENTA', nombre: 'Ley del Impuesto sobre la Renta', tipo: 'ley', pdf: `${BIBLIO}/pdf/LISR.pdf` },
-  LIVA: { titulo: 'LEY DEL IMPUESTO AL VALOR AGREGADO', nombre: 'Ley del Impuesto al Valor Agregado', tipo: 'ley', pdf: `${BIBLIO}/pdf/LIVA.pdf` },
-  LIEPS: {
-    titulo: 'LEY DEL IMPUESTO ESPECIAL SOBRE PRODUCCIÓN Y SERVICIOS',
-    nombre: 'Ley del Impuesto Especial sobre Producción y Servicios',
-    tipo: 'ley',
-    pdf: `${BIBLIO}/pdf/LIEPS.pdf`,
-  },
-  CFF: { titulo: 'CÓDIGO FISCAL DE LA FEDERACIÓN', nombre: 'Código Fiscal de la Federación', tipo: 'ley', pdf: `${BIBLIO}/pdf/CFF.pdf` },
-  LIF: {
-    titulo: 'LEY DE INGRESOS DE LA FEDERACIÓN PARA EL EJERCICIO FISCAL DE 2026',
-    nombre: 'Ley de Ingresos de la Federación para 2026',
-    tipo: 'ley',
-    pdf: `${BIBLIO}/pdf/LIF_2026.pdf`,
-  },
-  RLISR: {
-    titulo: 'REGLAMENTO DE LA LEY DEL IMPUESTO SOBRE LA RENTA',
-    nombre: 'Reglamento de la Ley del Impuesto sobre la Renta',
-    tipo: 'reglamento',
-    pdf: `${BIBLIO}/regley/Reg_LISR_060516.pdf`,
-    reglamenta: 'LISR',
-  },
-  RLIVA: {
-    titulo: 'REGLAMENTO DE LA LEY DEL IMPUESTO AL VALOR AGREGADO',
-    nombre: 'Reglamento de la Ley del Impuesto al Valor Agregado',
-    tipo: 'reglamento',
-    pdf: `${BIBLIO}/regley/Reg_LIVA_250914.pdf`,
-    reglamenta: 'LIVA',
-  },
-  RLIEPS: {
-    titulo: 'REGLAMENTO DE LA LEY DEL IMPUESTO ESPECIAL SOBRE PRODUCCIÓN Y SERVICIOS',
-    nombre: 'Reglamento de la Ley del Impuesto Especial sobre Producción y Servicios',
-    tipo: 'reglamento',
-    pdf: `${BIBLIO}/regley/Reg_LIEPS.pdf`,
-    reglamenta: 'LIEPS',
-  },
-  RCFF: {
-    titulo: 'REGLAMENTO DEL CÓDIGO FISCAL DE LA FEDERACIÓN',
-    nombre: 'Reglamento del Código Fiscal de la Federación',
-    tipo: 'reglamento',
-    pdf: `${BIBLIO}/regley/Reg_CFF.pdf`,
-    reglamenta: 'CFF',
-  },
-  RMF: {
-    titulo: 'RESOLUCIÓN MISCELÁNEA FISCAL PARA 2026',
-    nombre: 'Resolución Miscelánea Fiscal para 2026',
-    tipo: 'reglas',
-    pdf: `${RMF}/compiladas/Compilado_Primera_Modificacion_a_la-Resolucion_Miscelanea_Fiscal_para_2026.pdf`,
-  },
-}
+/** "The Reglamento de la Ley X": the reglamento of `ley` that isn't known by a name of its own. */
+const reglamentoDe = (ley: Ley | null) => CODIGOS.find(l => LEYES[l].reglamenta === ley && !LEYES[l].nombra) ?? null
 
-const reglamentoDe = (ley: Ley | null) => (Object.keys(LEYES) as Ley[]).find(l => LEYES[l].reglamenta === ley) ?? null
+/** The corpus document whose rules are numbered like 2.7.1.21 (the Miscelánea), if any. */
+const REGLAS = CODIGOS.find(l => LEYES[l].formato === 'rmf') ?? null
 
-/** Anexo 7: criterios normativos (how SAT reads the law). Anexo 3: criterios no vinculativos (practices SAT calls improper). */
-export const ANEXOS = { 7: `${ANEXOS_RMF}/Anexo_7_RMF2026-09012026.pdf`, 3: `${ANEXOS_RMF}/Anexo_3_RMF2026-09012026.pdf` } as const
+/** SAT annexes whose criterios grade the search: 7, criterios normativos; 3, criterios no vinculativos. Only the fiscal corpus has them. */
+export const ANEXOS = CORPUS.anexos
 
 const WORDS = 'Bis|Ter|Quáter|Quinquies|Sexies|BIS|TER|QUÁTER|QUINQUIES|SEXIES'
 const SUF = String.raw`(?:\.?-[A-Z](?![a-záéíóú])|[- ](?:${WORDS}))*`
@@ -87,8 +38,11 @@ const QUAL = new RegExp(
     String.raw`)(?!\p{L})`,
   'gu',
 )
-const LAW =
-  /(?<!\p{L})(?:de|del)\s+(?:(?:la|el)\s+)?(?:(esta|este|presente|dich[ao]|citad[ao]|mism[ao]|referid[ao])\s+)?(Ley|Código|RLISR|RLIVA|RLIEPS|RCFF|LISR|LIVA|LIEPS|CFF|LIF|RMF|ordenamiento|Reglamento|Decreto|Resolución|Constitución|Convenio|Tratado|Acuerdo|Norma)(?!\p{L})([^,;:()]{0,60})/u
+const LAW = new RegExp(
+  String.raw`(?<!\p{L})(?:de|del)\s+(?:(?:la|el)\s+)?(?:(esta|este|presente|dich[ao]|citad[ao]|mism[ao]|referid[ao])\s+)?` +
+    String.raw`(Ley|Código|${[...CODIGOS].sort((a, b) => b.length - a.length).join('|')}|ordenamiento|Reglamento|Decreto|Resolución|Constitución|Convenio|Tratado|Acuerdo|Norma)(?!\p{L})([^,;:()]{0,60})`,
+  'u',
+)
 const STOP = /[;:(]|\.\s+\p{Lu}/u
 const NOISE = [
   /^\d+ de \d+$/,
@@ -104,7 +58,7 @@ const MISCELANEA = /miscel[aá]nea|actualizad[ao]s?\b|compilad[ao]s?\b/i
 const DIVISION = /^(T[IÍ]TULO|CAP[IÍ]TULO|SECCI[OÓ]N)\s+\S+/
 const MARCA = /^(?:[IVXLC]+\.|[a-z]\)|\d+\.)\s/
 const ID_CRITERIO = /\b\d+\/(?:[A-Z]+\/)+[A-Z]+\b/g
-const MATERIA: Record<string, Ley> = { 'del CFF': 'CFF', 'de la Ley del ISR': 'LISR', 'de la Ley del IVA': 'LIVA', 'de la Ley del IEPS': 'LIEPS', 'de la LIF': 'LIF' }
+const MATERIA: Record<string, Ley> = CORPUS.materias ?? {}
 
 const esMayus = (l: string) => l === l.toUpperCase() && /\p{Lu}/u.test(l)
 
@@ -122,32 +76,32 @@ export function parrafos(lines: string[]) {
   return out.join('\n')
 }
 
-/** Which law a "Ley ..." phrase names, from the words after it. */
-function cualLey(r: string): Ley | null {
-  if (/^\s*(del )?impuesto sobre la renta|^\s*del isr\b/.test(r)) return 'LISR'
-  if (/^\s*(del )?impuesto al valor agregado|^\s*del iva\b/.test(r)) return 'LIVA'
-  if (/^\s*(del )?impuesto especial sobre producción y servicios|^\s*del ieps\b/.test(r)) return 'LIEPS'
-  if (/^\s*de ingresos de la federación/.test(r)) return 'LIF'
-  return null
+/** The document a name like "Ley del Impuesto sobre la Renta" refers to: its opening word and the lowercased words after it (Doc.nombra). */
+function nombrado(palabra: string, r: string): Ley | null {
+  return CODIGOS.find(l => LEYES[l].nombra?.palabra === palabra && LEYES[l].nombra!.resto.test(r)) ?? null
 }
 
 function resolver(det: string | undefined, word: string, rest: string, self: Ley | null, last: Ley | null): Ley | null {
-  if (det && /^(esta|este|presente)$/.test(det)) return word === 'Reglamento' && self && LEYES[self].tipo === 'ley' ? reglamentoDe(self) : self
+  if (det && /^(esta|este|presente)$/.test(det)) {
+    if (word === 'Reglamento' && self && LEYES[self].tipo === 'ley') return reglamentoDe(self)
+    return word === 'Ley' && self && LEYES[self].tipo === 'reglamento' ? (LEYES[self].reglamenta ?? self) : self
+  }
   if (det) return last
   const r = rest.toLowerCase()
-  if (word in LEYES) return word as Ley
-  const nombrada = /^\s*(?:(?:del?|sobre|para)(?!\p{L})|\p{Lu})/u.test(rest)
-  if (word === 'Ley') return cualLey(r) ?? (!nombrada && self ? (LEYES[self].reglamenta ?? null) : null)
-  if (word === 'Código') return /^\s*(civil|penal|de comercio|nacional|federal)/.test(r) ? null : 'CFF'
+  if (word in LEYES) return word
+  const nombrada = /^\s*(?:(?:del?|sobre|para|que)(?!\p{L})|\p{Lu})/u.test(rest)
+  if (word === 'Ley') return nombrado('Ley', r) ?? (!nombrada && self ? (LEYES[self].laLey ?? LEYES[self].reglamenta ?? null) : null)
   if (word === 'Reglamento') {
+    const propio = nombrado('Reglamento', r)
+    if (propio) return propio
     if (/^\s*de esta ley/.test(r)) return reglamentoDe(self)
-    if (/^\s*del (código|cff)/.test(r)) return 'RCFF'
+    const del = r.match(/^\s*del\s+(\p{L}+)(.*)/u)
+    if (del) return reglamentoDe(del[1] === 'código' ? nombrado('Código', del[2]) : (CODIGOS.find(l => l.toLowerCase() === del[1]) ?? null))
     const de = r.match(/^\s*de la ley(.*)/)
-    if (de) return reglamentoDe(cualLey(de[1]))
+    if (de) return reglamentoDe(nombrado('Ley', de[1]))
     return !nombrada && self && LEYES[self].tipo === 'reglamento' ? self : null
   }
-  if (word === 'Resolución') return /^\s*miscelánea fiscal/.test(r) ? 'RMF' : null
-  return null
+  return word === 'Código' || word === 'Resolución' ? nombrado(word, r) : null
 }
 
 export type Mencion = Ref & { inicio: number; fin: number }
@@ -155,15 +109,15 @@ export type Mencion = Ref & { inicio: number; fin: number }
 /**
  * Every article mentioned in a passage, resolved to a document in the index, with its character span.
  * A reference with no law named before the sentence ends counts as `self`; pass null to drop those.
- * Ranges ("artículos 27 a 31") yield only their ends. "regla 2.7.1.21." always means the Miscelánea.
+ * Ranges ("artículos 27 a 31") yield only their ends. "regla 2.7.1.21." always means the Miscelánea, where the corpus has one.
  */
 export function menciones(texto: string, self: Ley | null): Mencion[] {
   const t = texto.replace(/\s/g, ' ')
   const out: Mencion[] = []
-  for (const m of t.matchAll(/(?<!\p{L})[Rr]eglas?\s+(?=\d+\.\d)/gu)) {
+  for (const m of REGLAS ? t.matchAll(/(?<!\p{L})[Rr]eglas?\s+(?=\d+\.\d)/gu) : []) {
     const base = m.index + m[0].length
     const lista = t.slice(base, base + 200).match(/^(?:\d+(?:\.\d+)+\.?(?:,?\s*(?:y|e|o|así como)?\s*(?=\d+\.\d))?)+/)?.[0] ?? ''
-    for (const n of lista.matchAll(/\d+(?:\.\d+)+/g)) out.push({ ley: 'RMF', id: n[0], inicio: base + n.index, fin: base + n.index + n[0].length })
+    for (const n of lista.matchAll(/\d+(?:\.\d+)+/g)) out.push({ ley: REGLAS!, id: n[0], inicio: base + n.index, fin: base + n.index + n[0].length })
   }
   let last = self
   for (const m of t.matchAll(/(?<!\p{L})[Aa]rt[íi]culos?\s+(?=\d)/gu)) {
@@ -189,12 +143,7 @@ export function citas(texto: string, self: Ley | null): Ref[] {
   return [...new Map(menciones(texto, self).map(({ ley, id }) => [`${ley}:${id}`, { ley, id }])).values()]
 }
 
-const ALIAS: Record<string, Ley> = {
-  ...(Object.fromEntries(Object.keys(LEYES).map(l => [l, l])) as Record<Ley, Ley>),
-  ISR: 'LISR',
-  IVA: 'LIVA',
-  IEPS: 'LIEPS',
-}
+const ALIAS: Record<string, Ley> = { ...Object.fromEntries(CODIGOS.map(l => [l, l])), ...CORPUS.alias }
 const CODIGO = `(${Object.keys(ALIAS)
   .sort((a, b) => b.length - a.length)
   .flatMap(c => [c, c.toLowerCase()])
@@ -210,11 +159,13 @@ export function referencias(q: string): Ref[] {
   const out = new Map(citas(q, null).map(r => [`${r.ley}:${r.id}`, r]))
   for (const m of q.matchAll(CORTA)) {
     const ley = ALIAS[(m[1] ?? m[6]).toUpperCase()]
-    if (ley === 'RMF') continue
+    if (ley === REGLAS) continue
     const id = normId(m[2] ?? m[4], m[3] ?? m[5])
     out.set(`${ley}:${id}`, { ley, id })
   }
-  for (const m of q.matchAll(/(?<!\p{L})(?:RMF|rmf|[Rr]egla)\s*(\d+(?:\.\d+)+)/gu)) out.set(`RMF:${m[1]}`, { ley: 'RMF', id: m[1] })
+  if (REGLAS)
+    for (const m of q.matchAll(new RegExp(String.raw`(?<!\p{L})(?:${REGLAS}|${REGLAS.toLowerCase()}|[Rr]egla)\s*(\d+(?:\.\d+)+)`, 'gu')))
+      out.set(`${REGLAS}:${m[1]}`, { ley: REGLAS, id: m[1] })
   return [...out.values()]
 }
 

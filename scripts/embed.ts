@@ -4,6 +4,7 @@ import { MODELOS, encabezado, type Modelo } from '../src/buscar.ts'
 import type { Ley } from '../src/parse.ts'
 import { embeberLocal } from './embeddings.ts'
 import { huella } from './huella.ts'
+import { DATA, EVAL } from '../src/corpus.ts'
 
 /**
  * Embeds every chunk, criterio, criterio title and plain-language eval question (eval/preguntas.json) with each
@@ -15,9 +16,9 @@ import { huella } from './huella.ts'
  */
 const DEV = process.env.DEV_URL ?? 'http://localhost:8787'
 const LOTE = 50
-mkdirSync('data/emb', { recursive: true })
+mkdirSync(`${DATA}/emb`, { recursive: true })
 
-const db = new DatabaseSync('data/fundamento.db', { readOnly: true })
+const db = new DatabaseSync(`${DATA}/fundamento.db`, { readOnly: true })
 const frags = db
   .prepare(
     `select f.rowid, f.ley, f.id, f.texto, a.ubicacion, a.titulo from fragmento f join articulo a using (ley, id) order by f.rowid`,
@@ -27,15 +28,15 @@ const preguntas = (db.prepare(`select tema from criterio order by n`).all() as {
 const criterios = (db.prepare(`select id, anexo, tema, texto from criterio order by n`).all() as { id: string; anexo: number; tema: string; texto: string }[]).map(
   c => [`${c.anexo === 3 ? 'Práctica fiscal indebida' : 'Criterio normativo'} del SAT ${c.id}`.trim(), `${c.tema}\n${c.texto}`.slice(0, 2000)] as const,
 )
-const naturales = existsSync('eval/preguntas.json') ? (JSON.parse(readFileSync('eval/preguntas.json', 'utf8')) as { pregunta: string }[]).map(p => p.pregunta) : []
+const naturales = existsSync(`${EVAL}/preguntas.json`) ? (JSON.parse(readFileSync(`${EVAL}/preguntas.json`, 'utf8')) as { pregunta: string }[]).map(p => p.pregunta) : []
 
 
 function leerCache(nombre: string, dims: number) {
   const cache = new Map<string, Float32Array>()
-  if (!existsSync(`data/emb/${nombre}.cache.json`)) return cache
-  const b = readFileSync(`data/emb/${nombre}.cache.f32`)
+  if (!existsSync(`${DATA}/emb/${nombre}.cache.json`)) return cache
+  const b = readFileSync(`${DATA}/emb/${nombre}.cache.f32`)
   const v = new Float32Array(b.buffer, b.byteOffset, b.byteLength / 4)
-  ;(JSON.parse(readFileSync(`data/emb/${nombre}.cache.json`, 'utf8')) as string[]).forEach((h, i) => cache.set(h, v.slice(i * dims, (i + 1) * dims)))
+  ;(JSON.parse(readFileSync(`${DATA}/emb/${nombre}.cache.json`, 'utf8')) as string[]).forEach((h, i) => cache.set(h, v.slice(i * dims, (i + 1) * dims)))
   return cache
 }
 
@@ -44,8 +45,8 @@ function guardarCache(nombre: string, cache: Map<string, Float32Array>) {
   const dims = cache.get(claves[0])!.length
   const v = new Float32Array(claves.length * dims)
   claves.forEach((k, i) => v.set(cache.get(k)!, i * dims))
-  writeFileSync(`data/emb/${nombre}.cache.f32`, v)
-  writeFileSync(`data/emb/${nombre}.cache.json`, JSON.stringify(claves))
+  writeFileSync(`${DATA}/emb/${nombre}.cache.f32`, v)
+  writeFileSync(`${DATA}/emb/${nombre}.cache.json`, JSON.stringify(claves))
 }
 
 async function embeber(id: string, textos: string[]) {
@@ -76,7 +77,7 @@ const REMOTO = process.argv.includes('--remoto')
 const elegidos = process.argv.slice(2).filter(a => !a.startsWith('--'))
 for (const nombre of (elegidos.length ? elegidos : Object.keys(MODELOS)) as Modelo[]) {
   const m = MODELOS[nombre]
-  const qs = `data/emb/${nombre}.preguntas.f32`
+  const qs = `${DATA}/emb/${nombre}.preguntas.f32`
   const t0 = Date.now()
   const cache = leerCache(nombre, m.dims)
   let nuevos = 0
@@ -92,10 +93,10 @@ for (const nombre of (elegidos.length ? elegidos : Object.keys(MODELOS)) as Mode
     textos.forEach((t, i) => out.set(cache.get(huella(t))!, i * m.dims))
     return out
   }
-  writeFileSync(`data/emb/${nombre}.docs.f32`, await vectores(frags.map(f => m.documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion), f.titulo), f.texto))))
+  writeFileSync(`${DATA}/emb/${nombre}.docs.f32`, await vectores(frags.map(f => m.documento(encabezado(f.ley, f.id, JSON.parse(f.ubicacion), f.titulo), f.texto))))
   writeFileSync(qs, await vectores(preguntas.map(m.consulta)))
-  writeFileSync(`data/emb/${nombre}.naturales.f32`, await vectores(naturales.map(m.consulta)))
-  writeFileSync(`data/emb/${nombre}.criterios.f32`, await vectores(criterios.map(([t, x]) => m.documento(t, x))))
+  writeFileSync(`${DATA}/emb/${nombre}.naturales.f32`, await vectores(naturales.map(m.consulta)))
+  writeFileSync(`${DATA}/emb/${nombre}.criterios.f32`, await vectores(criterios.map(([t, x]) => m.documento(t, x))))
   console.log(`${nombre}: ${frags.length} fragmentos + ${preguntas.length} criterios, ${nuevos} textos nuevos (${((Date.now() - t0) / 1000).toFixed(0)} s)`)
 }
-writeFileSync('data/emb/rowids.json', JSON.stringify(frags.map(f => f.rowid)))
+writeFileSync(`${DATA}/emb/rowids.json`, JSON.stringify(frags.map(f => f.rowid)))

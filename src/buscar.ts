@@ -1,3 +1,4 @@
+import { CORPUS } from './corpus.ts'
 import { LEYES, type Ley } from './parse.ts'
 
 const VACIAS = new Set(
@@ -73,8 +74,8 @@ export function recortar(v: ArrayLike<number>, d: number): number[] {
   return x.map(t => t / n)
 }
 
-/** Vectorize index holding a model's vectors. */
-export const indiceVec = (m: Modelo) => `fundamento-${m}${MODELOS[m].indice < MODELOS[m].dims ? `-${MODELOS[m].indice}` : ''}`
+/** Vectorize index holding a model's vectors for the active corpus: fundamento-gemma-512, semaforo-gemma-512. */
+export const indiceVec = (m: Modelo) => `${CORPUS.prefijo}-${m}${MODELOS[m].indice < MODELOS[m].dims ? `-${MODELOS[m].indice}` : ''}`
 export type Hit = { ley: Ley; id: string; score: number; texto?: string; rowid?: number }
 
 /** Chunk hits sorted best-first → one hit per article, keeping its best chunk. */

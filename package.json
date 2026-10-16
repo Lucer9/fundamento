@@ -3,15 +3,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node src/check.ts",
+    "check": "node src/check.ts && node src/check-cdmx.ts",
     "typecheck": "tsc",
     "ingest": "node scripts/ingest.ts",
     "embed": "node scripts/embed.ts",
     "eval": "node scripts/eval.ts",
-    "dev": "wrangler dev --port 8787",
+    "dev": "wrangler dev --env=\"\" --port 8787",
     "seed:local": "wrangler d1 execute fundamento --local --file data/seed.sql",
     "seed:remote": "wrangler d1 execute fundamento --remote --file data/seed.sql",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy --env=\"\"",
+    "ingest:transito": "CORPUS=transito node scripts/ingest.ts",
+    "dev:transito": "wrangler dev --env transito --port 8788 --persist-to .wrangler/state-transito",
+    "seed:transito:local": "wrangler d1 execute semaforo --env transito --local --persist-to .wrangler/state-transito --file data/transito/seed.sql",
+    "seed:transito:remote": "wrangler d1 execute semaforo --env transito --remote --file data/transito/seed.sql",
+    "deploy:transito": "wrangler deploy --env transito"
   },
   "dependencies": {
     "@escape.tech/graphql-armor": "^3.2.0",

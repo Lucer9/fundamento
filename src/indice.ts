@@ -1,7 +1,8 @@
 import DataLoader from 'dataloader'
 import { GraphQLError } from 'graphql'
 import { MODELOS, SQL_FTS, consultaFts, porArticulo, recortar, rrf, type Hit, type Modelo } from './buscar.ts'
-import { LEYES, referencias, type Ley } from './parse.ts'
+import { CORPUS } from './corpus.ts'
+import { referencias, type Ley } from './parse.ts'
 
 export interface Env {
   DB: D1Database
@@ -24,9 +25,6 @@ export type Criterio = { n: number; anexo: number; id: string; materia: Ley; tem
 
 /** Per-request ledger: D1 access that counts round trips, whether search fell back to keywords, and query embeddings already computed. */
 export type Db = { n: number; degradado: boolean; vectores: Map<string, Promise<number[]>>; all<T>(sql: string, ...params: unknown[]): Promise<T[]> }
-
-/** Law, regulation or Miscelánea rule (LEYES[x].tipo). */
-export type Familia = (typeof LEYES)[Ley]['tipo']
 
 export type Ctx = {
   env: Env
@@ -158,9 +156,9 @@ function embeber(env: Env, d: Db, query: string) {
   return d.vectores.get(query)!
 }
 
-/** Closest law chunks, optionally only from some families; Vectorize applies the filter before ranking. */
-async function vectorHits(env: Env, d: Db, vector: number[], familias: Familia[] | null = null): Promise<Hit[]> {
-  const { matches } = await env.VEC.query(vector, { topK: 100, filter: { tipo: 'ley', ...(familias ? { familia: { $in: familias } } : {}) } })
+/** Closest law chunks, optionally only from some documents; Vectorize applies the filter before ranking. */
+async function vectorHits(env: Env, d: Db, vector: number[], leyes: Ley[] | null = null): Promise<Hit[]> {
+  const { matches } = await env.VEC.query(vector, { topK: 100, filter: { tipo: 'ley', ...(leyes ? { ley: { $in: leyes } } : {}) } })
   const rows = await d.all<Hit & { rowid: number; huella: string }>(
     `select rowid, huella, ley, id, texto from fragmento where huella in (select value from json_each(?1))`,
     JSON.stringify(matches.map(m => m.id)),
@@ -180,16 +178,18 @@ async function criteriosHits(env: Env, d: Db, vector: number[], k: number, exclu
 export type Modo = 'KEYWORD' | 'VECTOR' | 'HYBRID'
 
 /**
- * What an answer is written from: the closest chunks by embedding, 6 from the laws and 4 from the reglamentos and
- * the Miscelánea (at most `maximo` per article), plus the closest SAT criterios. Laws get their own quota because
- * ranked together, rules that paraphrase the law pushed the law itself down (hit@1 45.7% → 29.5%). Vector-only,
- * because on plain-language questions keyword fusion lowered top-1 accuracy.
+ * What an answer is written from: the closest chunks by embedding, 6 from the corpus's first search list (the laws;
+ * the Reglamento de Tránsito) and 4 from the second (reglamentos and Miscelánea; the related laws), at most `maximo`
+ * per article, plus the closest SAT criterios. Each list gets its own quota because ranked together, rules that
+ * paraphrase the law pushed the law itself down (hit@1 45.7% → 29.5%). Vector-only, because on plain-language
+ * questions keyword fusion lowered top-1 accuracy.
  */
 export async function contexto(env: Env, d: Db, query: string, criterios: number, excluir: number | null, maximo = 3) {
   const v = await embeber(env, d, query)
+  const [primera, segunda] = CORPUS.listas
   const [leyes, resto, crit] = await Promise.all([
-    vectorHits(env, d, v, ['ley']),
-    vectorHits(env, d, v, ['reglamento', 'reglas']),
+    vectorHits(env, d, v, primera.leyes),
+    segunda ? vectorHits(env, d, v, segunda.leyes) : [],
     criterios ? criteriosHits(env, d, v, criterios, excluir) : [],
   ])
   const tomar = (hits: Hit[], total: number) => {
@@ -202,7 +202,7 @@ export async function contexto(env: Env, d: Db, query: string, criterios: number
       })
       .slice(0, total)
   }
-  return { trozos: [...tomar(leyes, 6), ...tomar(resto, 4)], criterios: crit }
+  return { trozos: segunda ? [...tomar(leyes, 6), ...tomar(resto, 4)] : tomar(leyes, 10), criterios: crit }
 }
 
 /** Articles the query names outright ("LISR 151", "artículo 29-A del CFF"), as hits, if they exist. */
@@ -218,10 +218,10 @@ async function nombrados(d: Db, query: string): Promise<Hit[]> {
 
 /**
  * One hit per article, best first; articles the query names come first. HYBRID fuses both rankings with reciprocal
- * rank fusion. `familias` keeps only laws, reglamentos or Miscelánea rules (the site asks for laws and the rest
- * separately: one mixed ranking let the rules crowd out the law).
+ * rank fusion. `leyes` keeps only some documents (the site asks for each of CORPUS.listas separately: one mixed
+ * ranking let the rules crowd out the law).
  */
-export async function buscar(env: Env, d: Db, query: string, modo: Modo, ley: Ley | null, primeros: number, familias: Familia[] | null = null) {
+export async function buscar(env: Env, d: Db, query: string, modo: Modo, ley: Ley | null, primeros: number, leyes: Ley[] | null = null) {
   if (query.length > 500) throw new GraphQLError('La búsqueda admite hasta 500 caracteres.')
   const [fijos, kw, vec] = await Promise.all([
     nombrados(d, query),
@@ -229,7 +229,7 @@ export async function buscar(env: Env, d: Db, query: string, modo: Modo, ley: Le
     modo === 'KEYWORD'
       ? []
       : embeber(env, d, query)
-          .then(v => vectorHits(env, d, v, familias))
+          .then(v => vectorHits(env, d, v, leyes))
           .then(porArticulo)
           .catch(() => {
             d.degradado = true
@@ -239,6 +239,6 @@ export async function buscar(env: Env, d: Db, query: string, modo: Modo, ley: Le
   const hits = d.degradado || modo === 'KEYWORD' ? (kw.length || modo === 'KEYWORD' ? kw : porArticulo(await textoHits(d, query))) : modo === 'HYBRID' ? rrf([kw, vec!]) : vec!
   const vistos = new Set(fijos.map(h => `${h.ley}:${h.id}`))
   return [...fijos, ...hits.filter(h => !vistos.has(`${h.ley}:${h.id}`))]
-    .filter(h => (!ley || h.ley === ley) && (!familias || familias.includes(LEYES[h.ley].tipo)))
+    .filter(h => (!ley || h.ley === ley) && (!leyes || leyes.includes(h.ley)))
     .slice(0, Math.min(Math.max(primeros, 1), 50))
 }
