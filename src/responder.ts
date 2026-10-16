@@ -8,6 +8,9 @@ import { cargar, citantes, contexto, type Ctx } from './indice.ts'
 
 const SISTEMA = CORPUS.prompt
 
+/** Part of the answer cache key: bump it when retrieval or the prompt changes, so cached answers don't outlive them. */
+const VERSION = '2026-10-16 búsqueda híbrida con reescritura'
+
 /** A citation inside brackets: a document code of the corpus (or SAT, for criterios) and an article or rule number. */
 const REF = new RegExp(
   String.raw`(${[...Object.keys(LEYES), 'SAT'].sort((a, b) => b.length - a.length).join('|')})\D{0,20}?(\d+(?:\.\d+)*(?:-[A-Za-z]+)*)`,
@@ -58,7 +61,7 @@ export async function responder(ctx: Ctx, pregunta: string) {
   const q = pregunta.trim().replace(/\s+/g, ' ')
   if (q.length < 3 || q.length > 300) throw new GraphQLError('La pregunta debe tener entre 3 y 300 caracteres.')
   const modelo = ctx.modeloRespuesta
-  const clave = await sha256(`${modelo}\n${q.toLowerCase()}`)
+  const clave = await sha256(`${modelo}\n${VERSION}\n${q.toLowerCase()}`)
   if (!ctx.evaluando) {
     const [publicada] = await ctx.db.all<{ respuesta: string; fuentes: string; modelo: string }>(
       `select respuesta, fuentes, modelo from faq where lower(pregunta) = ?1`,
