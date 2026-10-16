@@ -1,0 +1,170 @@
+[
+ {
+  "n": 1,
+  "pregunta": "¿Cuál es la multa por usar el celular mientras manejo?",
+  "esperados": ["RT:38"],
+  "respuesta": "Está prohibido usar el teléfono celular o cualquier dispositivo de comunicación con el vehículo en movimiento (art. 38, fracción II, inciso e) del Reglamento de Tránsito). La multa es de 30, 32 o 35 veces la UMA, más tres puntos a la licencia y un punto a la matrícula vehicular."
+ },
+ {
+  "n": 2,
+  "pregunta": "¿Qué multa me ponen si no uso el cinturón de seguridad?",
+  "esperados": ["RT:37"],
+  "respuesta": "El conductor debe ponerse el cinturón y asegurarse de que todos los pasajeros lo usen (art. 37, fracción II, inciso b)). Si no lo hace, la multa es de 5, 7 o 10 veces la UMA y un punto a la licencia, o un punto a la matrícula si la infracción la capta una cámara."
+ },
+ {
+  "n": 3,
+  "pregunta": "¿Qué me pasa si me agarran en el alcoholímetro con más alcohol del permitido?",
+  "esperados": ["RT:50", "RT:51", "LM:68"],
+  "respuesta": "El límite es 0.8 gramos de alcohol por litro de sangre o 0.4 miligramos por litro de aire espirado (cero para transporte público, escolar, de personal, de carga, de sustancias peligrosas y de emergencia); si lo rebasas, la sanción es arresto administrativo inconmutable de 20 a 36 horas, seis puntos a la licencia y el vehículo va al depósito (art. 50 del Reglamento de Tránsito). La primera vez, además, la licencia se suspende un año y debes tomar un tratamiento contra las adicciones (art. 68, fracción III, de la Ley de Movilidad)."
+ },
+ {
+  "n": 4,
+  "pregunta": "Si me sancionan por segunda vez por manejar borracho, ¿me quitan la licencia?",
+  "esperados": ["LM:67", "LM:68"],
+  "respuesta": "Si es la segunda sanción en un año, la licencia se cancela de forma definitiva (art. 67, fracción I, de la Ley de Movilidad); si es la segunda en menos de tres años, se suspende tres años con tratamiento contra las adicciones (art. 68, fracción IV), y la tercera sanción en tres años también la cancela (art. 67, fracción II). Quien maneje con la licencia cancelada, aunque tenga una de otro estado o país, recibe una sanción de 180 veces la UMA y el vehículo va al depósito (art. 68)."
+ },
+ {
+  "n": 5,
+  "pregunta": "¿Cuántos puntos puedo acumular en mi licencia antes de que me la cancelen?",
+  "esperados": ["RT:66"],
+  "respuesta": "La licencia se cancela al acumular 12 puntos de penalización; cada punto dura un año desde la fecha de la boleta y la licencia solo se puede volver a expedir tres años después (art. 66). Si manejas con la licencia cancelada, el vehículo va al depósito y la multa es de 180 veces la UMA."
+ },
+ {
+  "n": 6,
+  "pregunta": "¿Cómo funcionan las fotocívicas? ¿Me cobran multa si me capta una cámara?",
+  "esperados": ["RT:64", "LCC:28", "LCC:34"],
+  "respuesta": "Las infracciones captadas por los sistemas tecnológicos restan puntos a la placa, que empieza con 10: cada una resta un punto (cinco si rebasas el límite de velocidad en más de 40%) y las sanciones van de amonestación a cursos en línea, taller de sensibilización presencial y bloques de 2 horas de trabajo comunitario, sin exceder 36 horas (art. 64 del Reglamento; arts. 28, fracción XVIII, y 34 de la Ley de Cultura Cívica). Son multas en dinero cuando se trata de invasión de carriles confinados o de placas de personas morales, transporte público, carga, taxis u otra entidad o país."
+ },
+ {
+  "n": 7,
+  "pregunta": "¿Cuáles son los límites de velocidad en la Ciudad de México?",
+  "esperados": ["RT:9"],
+  "respuesta": "Si no hay otra señal: 80 km/h en carriles centrales de vías de acceso controlado, 50 en vías primarias, 40 en vías secundarias y laterales, 30 en zonas de tránsito calmado, 20 en zonas escolares, de hospitales, asilos, albergues y casas hogar, y 10 en estacionamientos y vías peatonales (art. 9). Exceder el límite cuesta 10, 15 o 20 veces la UMA con tres puntos a la licencia (seis en las zonas de 30, 20 y 10 km/h), y si lo capta una cámara de uno a cinco puntos a la matrícula, cinco cuando se rebasa en más de 40%."
+ },
+ {
+  "n": 8,
+  "pregunta": "Se llevaron mi coche al corralón, ¿cuánto cuesta sacarlo y qué necesito?",
+  "esperados": ["RT:67", "CFCDMX:230", "CFCDMX:231"],
+  "respuesta": "Pagas la grúa ($1,101 si es de hasta 3.5 toneladas, $1,995 si es mayor), $104 por cada día de almacenaje y las sanciones pendientes (arts. 230 y 231 del Código Fiscal de la Ciudad de México); para la devolución debes acreditar la propiedad o legal posesión, llevar las llaves, tener tarjeta de circulación vigente, no deber tenencia ni derechos de control vehicular del año anterior y tener póliza de seguro vigente (art. 67 del Reglamento de Tránsito). Si no lo retiras en un mes desde que quedó a tu disposición, se considera abandonado a favor de la Ciudad."
+ },
+ {
+  "n": 9,
+  "pregunta": "¿Me hacen descuento si pago rápido la multa de tránsito?",
+  "esperados": ["RT:62"],
+  "respuesta": "Sí: si pagas dentro de los 30 días naturales siguientes a la notificación de la boleta tienes 50% de descuento, salvo en las sanciones de los artículos 30, fracción XXI, y 33, fracción II (art. 62). Se paga en las oficinas de la Tesorería o en centros autorizados, incluidos medios electrónicos."
+ },
+ {
+  "n": 10,
+  "pregunta": "¿Cuánto es la multa por circular en Hoy No Circula?",
+  "esperados": ["RT:47"],
+  "respuesta": "Circular en los días y horarios en que los programas ambientales restringen tu vehículo se multa con 20, 25 o 30 veces la UMA, igual que emitir humo ostensiblemente contaminante (art. 47). Quedan exentos los vehículos de emergencia, los de tecnologías sustentables, transporte escolar y servicios funerarios, los particulares que llevan o son conducidos por personas con discapacidad con autorización o placa, y los casos de emergencia médica."
+ },
+ {
+  "n": 11,
+  "pregunta": "¿Qué pasa si circulo sin la verificación vehicular vigente?",
+  "esperados": ["RT:45", "RT:67"],
+  "respuesta": "Todo vehículo motorizado debe llevar holograma y constancia de verificación vigente, salvo motocicletas y VEMEPE (art. 45, fracción III). No traerlos se multa con 20, 25 o 30 veces la UMA y el vehículo puede ser remitido al depósito (art. 67, fracción IV)."
+ },
+ {
+  "n": 12,
+  "pregunta": "¿Las motos pueden circular entre carriles?",
+  "esperados": ["RT:21"],
+  "respuesta": "No, salvo cuando el tránsito está detenido y buscan colocarse en el área de espera o en un lugar visible para reiniciar la marcha, sin invadir los pasos peatonales (art. 21, fracción IV). La multa es de 10, 15 o 20 veces la UMA y un punto a la licencia."
+ },
+ {
+  "n": 13,
+  "pregunta": "¿Qué multa hay si voy en moto sin casco?",
+  "esperados": ["RT:37", "RT:67"],
+  "respuesta": "El motociclista debe usar casco de motocicleta certificado, bien colocado y abrochado, y asegurarse de que su acompañante también lo porte (art. 37, fracción III, inciso d)). No hacerlo se multa con 10, 15 o 20 veces la UMA y tres puntos a la licencia, y la moto se remite al depósito (art. 67, fracción III Bis)."
+ },
+ {
+  "n": 14,
+  "pregunta": "¿Puedo manejar moto con la licencia permanente tipo A?",
+  "esperados": ["RT:44", "RLM:126"],
+  "respuesta": "Solo si tu licencia A permanente se expidió entre el 31 de diciembre de 2003 y el 31 de diciembre de 2007; la tipo A permanente expedida a partir del 16 de noviembre de 2024 no avala conducir motocicletas ni VEMEPE, para eso necesitas licencia A1 o A2 (art. 44, fracción I, inciso b) del Reglamento de Tránsito; art. 126 del Reglamento de la Ley de Movilidad). Manejar sin la licencia que corresponde se multa con 10, 15 o 20 veces la UMA."
+ },
+ {
+  "n": 15,
+  "pregunta": "¿Los ciclistas pueden circular por la banqueta?",
+  "esperados": ["RT:19"],
+  "respuesta": "No: se prohíbe a ciclistas y conductores de vehículos eléctricos personales y monopatines eléctricos circular por las aceras y áreas peatonales, salvo niños menores de doce años y elementos de seguridad pública; para entrar a su domicilio o a un estacionamiento deben desmontar y caminar (art. 19, fracción I). La sanción es amonestación verbal del agente."
+ },
+ {
+  "n": 16,
+  "pregunta": "Si voy en bicicleta y el semáforo está en rojo, ¿me puedo pasar?",
+  "esperados": ["RT:16"],
+  "respuesta": "Solo al cruzar una vía secundaria: con el semáforo en rojo o ante un \"Alto\" o \"Ceda el paso\" puedes seguir de frente si disminuyes la velocidad, volteas a ambos lados y te aseguras de que no se aproximan peatones ni vehículos (art. 16). Si se aproxima alguien o no tienes visibilidad, debes hacer alto total y dar el paso."
+ },
+ {
+  "n": 17,
+  "pregunta": "¿Cuánto es la multa por pasarse un semáforo en rojo?",
+  "esperados": ["RT:10"],
+  "respuesta": "Con luz roja debes detenerte en la línea de alto sin invadir el cruce peatonal ni el área de espera de bicicletas y motos (art. 10, fracción VI, inciso a)); no hacerlo se multa con 10, 15 o 20 veces la UMA y tres puntos a la licencia, o un punto a la matrícula si lo capta una cámara. Entre las 23:00 y las 5:00 horas debes detenerte por completo y, si nadie va a cruzar, puedes continuar aunque siga en rojo (inciso d))."
+ },
+ {
+  "n": 18,
+  "pregunta": "¿Qué pasa si me meto al carril del Metrobús?",
+  "esperados": ["RT:11", "RT:67"],
+  "respuesta": "Circular por los carriles exclusivos del transporte público, en el sentido de la vía o en contraflujo, se multa con 40, 50 o 60 veces la UMA y seis puntos a la licencia (art. 11, fracción X, inciso a)). Además el vehículo se remite al depósito (art. 67, fracción I Bis)."
+ },
+ {
+  "n": 19,
+  "pregunta": "¿Cuál es la multa por estacionarse en doble fila?",
+  "esperados": ["RT:30", "RT:67"],
+  "respuesta": "Estacionarse en doble o más filas se multa con 10, 15 o 20 veces la UMA y tres puntos a la licencia (art. 30, fracción XII). Se usa grúa para llevar el vehículo al depósito si el conductor no está a bordo o se niega a retirarlo (art. 30, último párrafo, y art. 67, fracción II)."
+ },
+ {
+  "n": 20,
+  "pregunta": "¿Es obligatorio el seguro de auto en la CDMX y qué pasa si no lo traigo?",
+  "esperados": ["RT:46"],
+  "respuesta": "Sí: todo vehículo motorizado, incluidos los VEMEPE, debe tener póliza vigente de responsabilidad civil por daños a terceros, y si no la porta el propietario de un auto particular paga 20, 30 o 40 veces la UMA (art. 46). Puede pedir que se cancele la multa dentro de los 45 días naturales siguientes a que la boleta se publique en estrados.cdmx.gob.mx, presentando ante Seguridad Ciudadana la póliza vigente y los demás requisitos."
+ },
+ {
+  "n": 21,
+  "pregunta": "¿Los niños pueden ir en el asiento de adelante?",
+  "esperados": ["RT:39"],
+  "respuesta": "Los menores de 12 años o de menos de 1.45 m deben ir en los asientos traseros, en un sistema de retención infantil o asiento elevador certificado; solo si el vehículo no tiene asiento trasero pueden ir adelante, con su sistema de retención y la bolsa de aire desactivada (art. 39). La multa es de 5, 7 o 10 veces la UMA, un punto a la placa y un punto a la licencia."
+ },
+ {
+  "n": 22,
+  "pregunta": "Tuve un choque leve sin heridos, solo daños a los coches, ¿qué debo hacer?",
+  "esperados": ["RT:54"],
+  "respuesta": "Deténganse y permanezcan hasta que un agente tome conocimiento, enciendan las intermitentes, coloquen señalamientos y llamen a la aseguradora; si los vehículos pueden circular, nadie está bajo los efectos del alcohol o drogas y no hay daños a bienes públicos, deben moverlos para liberar la circulación (art. 54). Si no se ponen de acuerdo en la reparación, el agente los remite a la autoridad, y a quien no tenga seguro se le aplica la multa del artículo 46."
+ },
+ {
+  "n": 23,
+  "pregunta": "¿Cómo puedo impugnar una multa de tránsito?",
+  "esperados": ["RT:69", "LCC:106"],
+  "respuesta": "Puedes interponer el recurso de inconformidad conforme a la Ley de Procedimiento Administrativo de la Ciudad de México o impugnar la sanción ante el Tribunal de Justicia Administrativa de la Ciudad de México (art. 69 del Reglamento de Tránsito). Si la infracción la captó una cámara, puedes interponer el recurso de revisión vía electrónica ante la Consejería Jurídica y de Servicios Legales (art. 69; art. 106, fracción IV, de la Ley de Cultura Cívica)."
+ },
+ {
+  "n": 24,
+  "pregunta": "¿Se permite dar vuelta continua a la derecha?",
+  "esperados": ["RT:10"],
+  "respuesta": "No: la vuelta continua a la derecha y a la izquierda está prohibida salvo que un señalamiento la permita expresamente, y entonces debes ceder el paso a los peatones y a los vehículos de la vía a la que entras (art. 10, fracción X). La multa es de 10, 15 o 20 veces la UMA y tres puntos a la licencia, o un punto a la matrícula si la capta una cámara."
+ },
+ {
+  "n": 25,
+  "pregunta": "¿Qué pasa si me estaciono en un lugar para personas con discapacidad?",
+  "esperados": ["RT:30"],
+  "respuesta": "Está prohibido, salvo para vehículos con placas para personas con discapacidad o para subir o bajar a una persona con discapacidad por un máximo de 20 minutos (art. 30, fracción XV). La multa es de 20, 25 o 30 veces la UMA y seis puntos a la licencia, y se usa grúa para llevar el vehículo al depósito."
+ },
+ {
+  "n": 26,
+  "pregunta": "¿Cuánto cuesta sacar la licencia de manejo en la CDMX?",
+  "esperados": ["CFCDMX:229", "RLM:126"],
+  "respuesta": "Según el art. 229 del Código Fiscal: la licencia tipo A para autos cuesta $1,142 ($1,500 la tipo A permanente), la tipo A1 para motocicletas $572, la tipo A2 para autos y motocicletas $1,142, y el permiso para conducir $587. Las licencias A, A1 y A2 que no son permanentes duran tres años (art. 126 del Reglamento de la Ley de Movilidad)."
+ },
+ {
+  "n": 27,
+  "pregunta": "¿Un menor de edad puede manejar en la Ciudad de México?",
+  "esperados": ["RLM:132", "RT:44"],
+  "respuesta": "Los mayores de 16 y menores de 18 años pueden conducir solo vehículos que requieren licencia tipo A, con un permiso temporal de la Secretaría, entre las 06:00 y las 22:00 horas y nunca en transporte público, mercantil, privado de pasajeros o de carga; el permiso vence al cumplir la mayoría de edad (art. 132 del Reglamento de la Ley de Movilidad). Los menores no pueden conducir motocicletas ni VEMEPE (art. 44, fracción I, inciso a) del Reglamento de Tránsito)."
+ },
+ {
+  "n": 28,
+  "pregunta": "¿De qué depende que me pongan la multa mínima, media o máxima?",
+  "esperados": ["RT:64"],
+  "respuesta": "Lo decide en automático el Sistema Integral de Administración de Infracciones según tus sanciones pendientes de cumplir: mínima con cero o una, media con dos o tres, y máxima con cuatro o más o si el vehículo tiene placas de otra entidad o de otro país (art. 64). Los agentes no aplican este criterio directamente."
+ }
+]

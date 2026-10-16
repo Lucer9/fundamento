@@ -7,6 +7,9 @@ own criteria are attached to the articles they interpret, and you can ask questi
 
 Live: https://fundamento.carlosaguirre.workers.dev · GraphQL explorer: `/graphql`
 
+The same engine also runs **semáforo**, a search over Mexico City traffic law: https://semaforo.carlosaguirre.workers.dev
+(see [semáforo](#semáforo-the-same-engine-on-mexico-city-traffic-law)).
+
 ```
  Cámara de Diputados PDFs ─┐                                 ┌─ D1 (SQLite)
  SAT Miscelánea 2026 PDF ──┤ scripts/ingest.ts (PDFKit)      │   articulo (2,577), enlace (6,342 citations),
@@ -96,13 +99,58 @@ Tried and dropped:
 | keyword weighted ×0.5 in fusion          | best on Anexo 7, not on the held-out set             |
 | gemma cut to 256 dimensions              | hit@5 76.3% → 72.3%                                  |
 
+## semáforo: the same engine on Mexico City traffic law
+
+semáforo indexes the Reglamento de Tránsito de la Ciudad de México (70 articles, last reformed GOCDMX 30-06-2026),
+the Ley de Movilidad (264), its reglamento (254), the Ley de Cultura Cívica (143) and the Código Fiscal CDMX articles
+on license, tow-truck and corralón fees (229–231), from the Consejería Jurídica's PDFs: 1,247 chunks and 136
+citation links. Fines written as multiples of the UMA are shown in 2026 pesos (UMA $117.31, INEGI).
+`src/corpus.ts` holds everything that differs between the two sites; `wrangler deploy --env transito` builds this one.
+
+There are no SAT criteria to grade it, so its test set is 28 driver questions written and checked by hand against
+the text (`eval/transito/preguntas.json`), each with the articles that answer it and a reference answer.
+
+| method (n = 28)                      | hit@1 | hit@5 | hit@10 | MRR@10 |
+|--------------------------------------|-------|-------|--------|--------|
+| keyword, with street-word synonyms   | 46.4% | 85.7% | 92.9%  | 0.637  |
+| vector gemma 512 d                   | 71.4% | 89.3% | 89.3%  | 0.778  |
+| **hybrid gemma (live)**              | 67.9% | 100%  | 100%   | 0.807  |
+
+What carried over from fundamento and what didn't, measured:
+
+- **One list, not two.** The reglamento ranked alone scored 82.1% top-5 against 89.3% for one ranking over all five
+  documents: the other laws don't paraphrase the reglamento the way the Miscelánea paraphrases the tax laws.
+- **Hybrid wins here.** Vectors missed three questions whose answer turns on exact wording (seat belt, Hoy No
+  Circula, the Metrobús lane); keyword search found all three and lost none (paired top-5 difference 0 to +21
+  points, so 28 questions can't fully separate them).
+- **Synonyms.** Drivers say corralón, fotocívicas, alcoholímetro and Hoy No Circula; the reglamento says depósito
+  vehicular, sistemas tecnológicos, aire espirado and programas ambientales. Adding the law's wording to the query
+  (`CORPUS.sinonimos`) lifted keyword top-5 from 71.4% to 85.7%.
+- Vectorize matched exact search on 28 of 28 questions.
+
+Answers, judged by Claude Opus against each reference answer:
+
+| run | what changed                                                                | correct | wrong | incomplete |
+|-----|-----------------------------------------------------------------------------|---------|-------|------------|
+| t1  | fundamento's setup (Haiku)                                                  | 50.0%   | 10.7% | 39.3%      |
+| t2  | synonyms, the chunk after each chosen chunk, an absence rule in the prompt  | 75.0%   | 3.6%  | 21.4%      |
+| t3  | top six articles of the hybrid search, whole; paragraphs that cite them     | 82.1%   | 7.1%  | 10.7%      |
+| t4  | t3 with Claude Sonnet instead of Haiku                                      | 89.3%   | 3.6%  | 7.1%       |
+
+- t3 over t1: +14.3 to +50.0 points correct (paired). The first failures were mostly the right article with the
+  fine in a chunk the answer never saw: a fracción's sanction comes paragraphs after the rule.
+- The citation graph feeds answers here: article 67 lists every case that sends a car to the depósito by the
+  fracción it cites, so an answer about a motorcycle without a helmet gets that paragraph next to article 37.
+- Remaining misses are mostly the depósito when the question shares no word with article 67's paragraph.
+- Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions.
+
 ## Engineering notes
 
 - **The Miscelánea's PDF** prints rule numbers in a margin column, so plain text extraction batches them at page
   tops, away from their rules. `scripts/pdf-lineas.js` reads each line with its position; line spacing is bimodal
   (≤14 pt inside a paragraph, ≥16 pt between), so paragraphs come from gaps, a rule's title is the paragraph above
-  its number, and its closing reference line ("CFF 29, 29-A, RCFF 39, RMF 2.7.1.23.") becomes links. 1,215 rules,
-  8 without a title.
+  its number, and its closing reference line (rule 2.1.1 ends "CFF 4o., 17-D, 17-I, 21, 146, 146-A, LCF 13, 14, RMF
+  2.1.39., 2.9.3.") becomes links. 1,215 rules, 8 without a title.
 - **Citations:** the parser turns "los artículos 79, fracción XIX y 82 de esta Ley" into links with character
   spans. Inside a reglamento, "la Ley" means the law it regulates; "Reglamento de esta Ley", "del Reglamento del
   CFF" and "regla 2.7.1.21." resolve too.
@@ -137,6 +185,13 @@ npm run eval && node scripts/eval-ann.ts                                    # re
 node scripts/preguntas.ts                                                   # plain-language questions
 node scripts/eval-respuestas.ts r2 "con criterios" --modelo=claude-haiku-5-5   # answer accuracy, judged by Claude Opus
 npm run deploy
+
+# semáforo: the same steps with CORPUS=transito (data/transito, eval/transito)
+npm run ingest:transito && npm run seed:transito:local && npm run dev:transito   # :8788
+CORPUS=transito node scripts/embed.ts gemma && CORPUS=transito node scripts/vectorize.ts gemma
+CORPUS=transito npm run eval
+CORPUS=transito DEV_URL=http://localhost:8788 node scripts/eval-respuestas.ts t3 "…" --modelo=claude-haiku-5-5
+npm run seed:transito:remote && npm run deploy:transito
 ```
 
 Sources (texto vigente, read 2026-10-15): Cámara de Diputados PDFs of the LISR (last reformed DOF 01-04-2024),
