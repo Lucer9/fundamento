@@ -1,7 +1,8 @@
 ObjC.import('PDFKit')
 /**
  * PDF text as visual lines, for layouts where plain extraction scrambles the order (the RMF prints rule numbers
- * in a margin column). Fragments on the same baseline are joined left to right. Output: one "page\tx\ty\ttext" per line (PDF points, y grows upward).
+ * in a margin column). Fragments within 3 pt of the same baseline are joined left to right (a bold heading can sit
+ * a couple of points below the text it opens). Output: one "page\tx\ty\ttext" per line (PDF points, y grows upward).
  * Usage: osascript -l JavaScript scripts/pdf-lineas.js file.pdf
  */
 function run(argv) {
@@ -21,10 +22,13 @@ function run(argv) {
     const merged = []
     for (const f of frags) {
       const last = merged[merged.length - 1]
-      if (last && Math.abs(last.y - f.y) < 3) last.t += ' ' + f.t
-      else merged.push({ x: f.x, y: f.y, t: f.t })
+      if (last && Math.abs(last.y - f.y) < 3) last.partes.push(f)
+      else merged.push({ y: f.y, partes: [f] })
     }
-    for (const m of merged) out.push(`${p + 1}\t${Math.round(m.x)}\t${Math.round(m.y)}\t${m.t}`)
+    for (const m of merged) {
+      m.partes.sort((a, b) => a.x - b.x)
+      out.push(`${p + 1}\t${Math.round(m.partes[0].x)}\t${Math.round(m.y)}\t${m.partes.map(f => f.t).join(' ')}`)
+    }
   }
   return out.join('\n')
 }
