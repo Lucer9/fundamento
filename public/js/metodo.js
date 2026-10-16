@@ -32,7 +32,7 @@ const conjuntos = ev =>
       corto: 'Lenguaje común',
       sub: 'uso real',
       frase: 'En las preguntas en lenguaje común',
-      rol: 'Un modelo (gpt-oss-120b) escribió una pregunta a partir de cada criterio, sin revelar la respuesta, y se califica con los mismos artículos. Es lo más parecido al uso real.',
+      rol: `Un modelo (gpt-oss-120b) escribió una pregunta a partir de cada criterio, sin revelar la respuesta, y se califica con los mismos artículos. Es lo más parecido al uso real.${autores(ev.naturales)}`,
     },
     { ...ev, clave: 'anexo7', corto: 'Anexo 7', sub: 'ajuste', frase: 'En el Anexo 7', rol: 'El título de cada criterio es la pregunta. Con estas preguntas se ajustaron los métodos.' },
     ev.holdout && {
@@ -45,6 +45,13 @@ const conjuntos = ev =>
     },
   ].filter(Boolean)
 
+/** One sentence on who wrote the plain-language questions, from `preguntas[].modelo` when eval.json carries it. */
+function autores(s) {
+  const otros = s.preguntas.filter(p => p.modelo && !/gpt-oss/i.test(p.modelo))
+  if (otros.length) return ` ${otros.length} de las ${s.n} las escribió ${[...new Set(otros.map(p => p.modelo))].join(' y ')}.`
+  return s.n === 189 ? ' 16 de las 189, las de los criterios nuevos del IEPS y la LIF, las escribió Claude Opus.' : ''
+}
+
 const puntos = x => `${x >= 0 ? '+' : '−'}${Math.abs(x * 100).toFixed(1)}`
 
 const iv = ([lo, hi]) => `${puntos(lo)} a ${puntos(hi)}`
@@ -55,6 +62,10 @@ const cruzaCero = ([lo, hi]) => lo <= 0 && hi >= 0
  * claims, its entry in `naturales.comparaciones`) exist, so a smaller rerun drops the claim instead of
  * keeping a stale number.
  */
+const sinAlcance = n => n.replace(/ · .+$/, '')
+const modelo = n => sinAlcance(n).replace(/^(vector|hybrid|keyword)\s*/, '').replace(/ \d+d$/, '')
+const efecto = ([lo, hi], mejor, peor, igual) => (lo > 0 ? mejor : hi < 0 ? peor : igual)
+
 function hallazgos(cs) {
   const set = k => cs.find(c => c.clave === k)
   const m = (s, n) => s?.metodos.find(x => x.nombre === n)
@@ -64,23 +75,38 @@ function hallazgos(cs) {
   const par = (a, b) => comparaciones.find(c => c.a === a && c.b === b)
   const out = []
   const prod = m(com, EN_USO)
-  const kw = m(com, BASE)
-  if (prod?.delta5 && kw)
-    out.push(`En preguntas en lenguaje común, los vectores superan por mucho a las palabras clave: ${nombre(EN_USO).toLowerCase()} trae un artículo esperado entre los 5 primeros resultados ${((prod.hit5 - kw.hit5) * 100).toFixed(1)} puntos más seguido (intervalo pareado de 95%: ${iv(prod.delta5)}).`)
+  const alcance = EN_USO.includes(' · ') ? EN_USO.slice(EN_USO.indexOf(' · ')) : ''
+  const base = nombre(sinAlcance(EN_USO)).toLowerCase()
+
+  const contraPalabras = par(EN_USO, `keyword${alcance}`)
+  const kw = contraPalabras ? m(com, contraPalabras.b) : !alcance && m(com, BASE)
+  const iv5 = contraPalabras?.hit5 ?? (!alcance && prod?.delta5)
+  if (prod && kw && iv5)
+    out.push(`En preguntas en lenguaje común, los vectores superan por mucho a las palabras clave: ${alcance ? 'buscando solo en las leyes, ' : ''}${base} trae un artículo esperado entre los 5 primeros resultados ${((prod.hit5 - kw.hit5) * 100).toFixed(1)} puntos más seguido que la búsqueda por palabras (intervalo pareado de 95%: ${iv(iv5)}).`)
+
+  const separar = alcance && par(EN_USO, sinAlcance(EN_USO))
+  const mezcla = separar && m(com, separar.b)
+  if (prod && mezcla && separar.hit1)
+    out.push(`Separar las leyes de los reglamentos y la Miscelánea ${efecto(separar.hit1, 'mejoró', 'empeoró', 'no cambió de forma medible')} el primer resultado: con ${base}, el artículo esperado quedó en primer lugar en ${pct(prod.hit1)} de las preguntas buscando solo en las leyes, contra ${pct(mezcla.hit1)} con todos los documentos en una sola lista (diferencia pareada de 95%: ${iv(separar.hit1)} puntos).${separar.hit1[0] > 0 ? ' Por eso los resultados se muestran en dos listas.' : ''}`)
+
   const fusion = comparaciones.find(c => /^vector /.test(c.a) && c.b === c.a.replace(/^vector /, 'hybrid ') && c.hit1?.[0] > 0)
-  if (fusion && m(com, fusion.a) && m(com, fusion.b)) {
-    const modelo = fusion.a.replace(/^vector /, '')
-    out.push(`Sumar palabras clave a los vectores (búsqueda híbrida) bajó hit@1 en esas preguntas: con ${modelo}, ${pct(m(com, fusion.a).hit1)} solo con vectores contra ${pct(m(com, fusion.b).hit1)} en híbrida (diferencia pareada de 95%: ${iv(fusion.hit1)} puntos a favor de vectores).${/^vector /.test(EN_USO) ? ' Por eso el sitio usa solo vectores.' : ''}`)
-  }
-  const rivales = comparaciones.filter(c => c.a === EN_USO && /^vector /.test(c.b) && !c.b.startsWith(`${EN_USO} `) && c.hit5 && cruzaCero(c.hit5))
-  if (rivales.length) out.push(`Con este número de preguntas no se puede separar ${nombre(EN_USO).toLowerCase()} de ${rivales.map(c => nombre(c.b).toLowerCase()).join(' ni de ')}: los intervalos pareados de hit@5 cruzan el cero.`)
-  const recorte = par(EN_USO, `${EN_USO} 768d`)
-  if (recorte?.hit5)
+  if (fusion && m(com, fusion.a) && m(com, fusion.b))
+    out.push(`Sumar palabras clave a los vectores (búsqueda híbrida) bajó hit@1: con ${modelo(fusion.a)}, ${pct(m(com, fusion.a).hit1)} solo con vectores contra ${pct(m(com, fusion.b).hit1)} en híbrida (diferencia pareada de 95%: ${iv(fusion.hit1)} puntos a favor de vectores).${/^vector /.test(EN_USO) ? ' Por eso el sitio usa solo vectores.' : ''}`)
+
+  const rivales = comparaciones.filter(c => /^vector /.test(c.a) && /^vector /.test(c.b) && modelo(c.a) === modelo(EN_USO) && modelo(c.b) !== modelo(c.a) && c.hit5 && cruzaCero(c.hit5))
+  if (rivales.length) out.push(`Con este número de preguntas no se puede separar ${modelo(EN_USO)} de ${rivales.map(c => modelo(c.b)).join(' ni de ')}: los intervalos pareados de hit@5 cruzan el cero.`)
+
+  const recorte = comparaciones.find(c => c.b === `${c.a} 768d` && c.hit5)
+  if (recorte)
     out.push(
-      cruzaCero(recorte.hit5)
-        ? `Recortar los vectores de 768 a 512 dimensiones no cambió el resultado de forma medible: la diferencia pareada en hit@5 (512 menos 768) va de ${iv(recorte.hit5)} puntos.`
-        : `Recortar los vectores de 768 a 512 dimensiones ${recorte.hit5[0] > 0 ? 'mejoró' : 'empeoró'} hit@5: la diferencia pareada (512 menos 768) va de ${iv(recorte.hit5)} puntos.`,
+      efecto(
+        recorte.hit5,
+        `Recortar los vectores de 768 a 512 dimensiones no costó precisión: con 512, ${modelo(recorte.a)} acertó entre los 5 primeros al menos igual de seguido (diferencia pareada, 512 menos 768: ${iv(recorte.hit5)} puntos).`,
+        `Recortar los vectores de 768 a 512 dimensiones costó precisión en hit@5 (diferencia pareada, 512 menos 768: ${iv(recorte.hit5)} puntos).`,
+        `Recortar los vectores de 768 a 512 dimensiones no cambió el resultado de forma medible (diferencia pareada en hit@5, 512 menos 768: ${iv(recorte.hit5)} puntos).`,
+      ),
     )
+
   const v7 = m(a7, 'vector bge-m3')
   const r7 = m(a7, 'vector bge-m3 + rerank')
   if (v7 && r7 && r7.hit1 < v7.hit1) out.push(`Reordenar los resultados con un modelo reranker empeoró la búsqueda: en el Anexo 7, hit@1 bajó de ${pct(v7.hit1)} a ${pct(r7.hit1)}.`)
@@ -152,7 +178,7 @@ export default {
         <div><dt>MRR</dt><dd>Promedio de 1 / posición del primer acierto.</dd></div>
         <div><dt>Rangos</dt><dd>Intervalos de confianza de 95% por bootstrap.</dd></div>
       </dl>
-      <p class="muted small">Resultados del ${ev.fecha}. Este sitio usa búsqueda vectorial con embeddinggemma-300m${orden.includes(`${EN_USO} 768d`) ? ', recortada a 512 dimensiones' : ''} (<strong>${nombre(EN_USO).toLowerCase()}</strong> en las tablas); los artículos que la pregunta nombra van primero.</p></aside>
+      <p class="muted small">Resultados del ${ev.fecha}. Este sitio usa búsqueda vectorial con embeddinggemma-300m${orden.some(n => / 768d$/.test(n)) ? ', recortada a 512 dimensiones' : ''}${EN_USO.endsWith(' · leyes') ? ', con las leyes en una lista aparte de los reglamentos y la Miscelánea' : ''} (<strong>${nombre(EN_USO).toLowerCase()}</strong> en las tablas); los artículos que la pregunta nombra van primero.</p></aside>
       ${puntosClave.length ? html`<section class="findings" aria-labelledby="hall-h"><h2 class="section-h" id="hall-h">Lo que muestran los números</h2><ol>${puntosClave.map(t => html`<li>${t}</li>`)}</ol></section>` : ''}`
     const pedido = ctx.params.get('conjunto')
     const alias = { reservado: 'anexo3', ajuste: 'anexo7' }

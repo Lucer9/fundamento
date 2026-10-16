@@ -1,9 +1,9 @@
 import { anunciar, badge, corto, cuenta, DOCS, EN_USO, errorHtml, esAborto, esc, esDoc, etiqueta, extracto, gql, html, niveles, opcionesDocs, pct, raw, request, ruta, terminos, TIPO_CRITERIO, titulo } from './lib.js'
 
 const MODOS = [
-  { id: 'semantica', api: 'VECTOR', nombre: 'Semántica' },
-  { id: 'hibrida', api: 'HYBRID', nombre: 'Híbrida' },
-  { id: 'palabras', api: 'KEYWORD', nombre: 'Palabras' },
+  { id: 'semantica', api: 'VECTOR', nombre: 'Semántica', frase: 'semántica' },
+  { id: 'hibrida', api: 'HYBRID', nombre: 'Híbrida', frase: 'híbrida' },
+  { id: 'palabras', api: 'KEYWORD', nombre: 'Palabras', frase: 'por palabras' },
 ]
 
 const EJEMPLOS = [
@@ -15,12 +15,14 @@ const EJEMPLOS = [
   '¿Cuándo prescribe un crédito fiscal?',
 ]
 
-const SEARCH = `query Buscar($q: String!, $mode: SearchMode, $law: LawCode) {
-  search(query: $q, mode: $mode, law: $law, first: 10) {
-    score passage
-    article { key number title law { code name } location repealed }
-  }
-}`
+const HIT = `fragment hit on SearchHit { score passage article { key number title law { code name } location repealed } }`
+const DOS_LISTAS = `query Buscar($q: String!, $mode: SearchMode) {
+  leyes: search(query: $q, mode: $mode, kinds: [LAW], first: 10) { ...hit }
+  reglas: search(query: $q, mode: $mode, kinds: [REGULATION, RULES], first: 5) { ...hit }
+} ${HIT}`
+const UN_DOCUMENTO = `query Buscar($q: String!, $mode: SearchMode, $law: LawCode) {
+  leyes: search(query: $q, mode: $mode, law: $law, first: 10) { ...hit }
+} ${HIT}`
 const ANSWER = `query Responder($q: String!) {
   answer(question: $q) { text model cached sources { key number law { code } } criteria { number id kind title } }
 }`
@@ -128,10 +130,12 @@ function inicio(ctx) {
     slot.innerHTML = html`<dl class="figures-row">
       <div><dt>artículos y reglas vigentes en ${laws.length} documentos</dt><dd>${stats.articles.toLocaleString('es-MX')}</dd></div>
       <div><dt>citas entre artículos, cada una un enlace</dt><dd>${stats.citations.toLocaleString('es-MX')}</dd></div>
-      ${prod ? html`<div><dt>de ${set.n} preguntas en lenguaje común, escritas a partir de criterios del SAT, traen entre sus 5 primeros resultados un artículo que el criterio cita. <a href="/como-funciona">Cómo se mide</a></dt><dd>${pct(prod.hit5, 0)}</dd></div>` : ''}
+      ${prod ? html`<div><dt>de ${set.n} preguntas en lenguaje común, escritas a partir de criterios del SAT, traen ${EN_USO.endsWith(' · leyes') ? 'entre los 5 primeros artículos de ley uno' : 'entre sus 5 primeros resultados un artículo'} que el criterio cita. <a href="/como-funciona">Cómo se mide</a></dt><dd>${pct(prod.hit5, 0)}</dd></div>` : ''}
     </dl>`
   })
 }
+
+const esqueleto = n => html`<ol class="hits" aria-hidden="true">${Array.from({ length: n }, () => html`<li class="hit hit--skeleton"><span class="sk sk-s"></span><span class="sk sk-m"></span><span class="sk"></span><span class="sk sk-l"></span></li>`)}</ol>`
 
 function resultados(s, ctx) {
   el.querySelector('[data-slot=top]').innerHTML = html`<h1 class="sr-only" tabindex="-1">Resultados para «${s.q}»</h1>`
@@ -140,57 +144,89 @@ function resultados(s, ctx) {
     below.innerHTML = html`<div class="results-layout">
       <aside class="answer" aria-labelledby="answer-h"><h2 class="label" id="answer-h">Respuesta breve</h2><div class="answer-body" data-slot="answer"></div></aside>
       <section class="results" aria-labelledby="results-h" data-slot="results"></section>
+      <section class="results results--reglas" id="reglas" aria-labelledby="reglas-h" data-slot="reglas"></section>
     </div>`
   }
   respuesta(s.q, below.querySelector('[data-slot=answer]'))
 
   const slot = below.querySelector('[data-slot=results]')
+  const otra = below.querySelector('[data-slot=reglas]')
   const llave = `${s.modo.api}|${s.ley}|${s.q}`
   let p = busquedas.get(llave)
   if (!p) {
-    p = request(SEARCH, { q: s.q, mode: s.modo.api, law: s.ley || null })
+    p = s.ley ? request(UN_DOCUMENTO, { q: s.q, mode: s.modo.api, law: s.ley }) : request(DOS_LISTAS, { q: s.q, mode: s.modo.api })
     busquedas.set(llave, p)
     p.catch(() => busquedas.delete(llave))
   }
+  const encabezado = s.ley ? corto(s.ley) : 'Leyes'
   slot.setAttribute('aria-busy', 'true')
-  slot.innerHTML = html`<div class="results-head"><h2 id="results-h" class="label">Artículos</h2></div>
-    <ol class="hits" aria-hidden="true">${[0, 1, 2, 3].map(() => html`<li class="hit hit--skeleton"><span class="sk sk-s"></span><span class="sk sk-m"></span><span class="sk"></span><span class="sk"></span><span class="sk sk-l"></span></li>`)}</ol>`
+  slot.innerHTML = html`<div class="results-head"><h2 id="results-h" class="label">${encabezado}</h2></div>${esqueleto(4)}`
+  otra.hidden = !!s.ley
+  if (!s.ley) otra.innerHTML = html`${reglasHead()}${esqueleto(2)}`
   return p.then(
-    ({ data: { search }, extensions }) => {
+    ({ data, extensions }) => {
       if (ctx.signal.aborted) return
       slot.removeAttribute('aria-busy')
-      slot.innerHTML = listaHtml(search, s, extensions?.degraded)
-      anunciar(search.length ? `${cuenta(search.length, 'artículo')} encontrados.` : 'Sin resultados.')
+      const leyes = data.leyes ?? []
+      const reglas = data.reglas ?? []
+      slot.innerHTML = listaHtml(leyes, s, { encabezado, degradada: extensions?.degraded, reglas: s.ley ? null : reglas.length })
+      if (!s.ley) {
+        otra.innerHTML = reglasHtml(reglas, s, leyes.length)
+        otra.hidden = !otra.childElementCount
+      }
+      anunciar(
+        s.ley
+          ? leyes.length ? `${cuenta(leyes.length, 'resultado')} en ${corto(s.ley)}.` : 'Sin resultados.'
+          : leyes.length || reglas.length ? `${cuenta(leyes.length, 'artículo')} de ley y ${nfCorto(reglas.length)} de reglamentos y Miscelánea.` : 'Sin resultados.',
+      )
     },
     e => {
       if (esAborto(e) || ctx.signal.aborted) return
       slot.removeAttribute('aria-busy')
-      slot.innerHTML = html`<div class="results-head"><h2 id="results-h" class="label">Artículos</h2></div>${errorHtml(e, 'No se pudo buscar')}`
+      slot.innerHTML = html`<div class="results-head"><h2 id="results-h" class="label">${encabezado}</h2></div>${errorHtml(e, 'No se pudo buscar')}`
+      otra.hidden = true
     },
   )
 }
 
-function listaHtml(hits, s, degradada) {
+const nfCorto = n => (n === 1 ? 'uno' : String(n))
+
+const reglasHead = () => html`<div class="results-head results-head--reglas"><h2 id="reglas-h" class="label">Reglamentos y Miscelánea</h2></div>
+  <p class="reglas-nota">Cómo los reglamentos y las reglas del SAT aplican la ley. En el orden legal van después de ella: primero la ley, luego su reglamento y al final la Miscelánea.</p>`
+
+function hitHtml(h, i, s, stems, compacto) {
+  const a = h.article
+  const ns = niveles(a.location)
+  const ultimo = ns[ns.length - 1]
+  const href = `${ruta(a.law.code, a.number)}?${new URLSearchParams({ q: s.q })}`
+  return html`<li class="hit${compacto ? ' hit--compact' : ''}">
+    <span class="hit-rank" aria-hidden="true">${i + 1}</span>
+    <div class="hit-body">
+      <p class="hit-meta">${badge(a.law.code)}${compacto ? '' : html`<span class="hit-law">${a.law.name}</span>`}</p>
+      <h3 class="hit-title"><a href="${href}" data-pasaje="${h.passage}">${titulo(a.law.code, a.number)}</a>${a.repealed ? html` <span class="tag">Derogado</span>` : ''}</h3>
+      ${a.title ? html`<p class="hit-rule">${a.title}</p>` : ''}
+      ${!compacto && ns.length ? html`<p class="hit-loc">${ns.filter(n => n.label).map(n => n.label).join(' › ')}${ultimo?.name ? html`<span class="hit-loc-name"> · ${ultimo.name}</span>` : ''}</p>` : ''}
+      <p class="hit-passage">${extracto(h.passage, stems, compacto ? 200 : 300)}</p>
+    </div>
+  </li>`
+}
+
+function listaHtml(hits, s, { encabezado, degradada, reglas }) {
   const stems = terminos(s.q)
-  const filtro = [degradada ? 'por palabras' : s.modo.nombre.toLowerCase(), s.ley ? `solo ${corto(s.ley)}` : ''].filter(Boolean).join(', ')
-  const head = html`${degradada ? html`<p class="degraded" role="status">Búsqueda por palabras: el modelo semántico no está disponible en este momento.</p>` : ''}<div class="results-head"><h2 id="results-h" class="label">Artículos</h2><p class="results-count">${cuenta(hits.length, 'resultado')} <span class="muted">· búsqueda ${filtro}</span></p></div>`
-  if (!hits.length) return html`${head}<div class="empty"><p>No encontramos artículos para esa búsqueda.</p><p class="muted">Prueba con otras palabras o con una pregunta más corta.</p></div>`
-  return html`${head}<ol class="hits">${hits.map((h, i) => {
-    const a = h.article
-    const ns = niveles(a.location)
-    const ultimo = ns[ns.length - 1]
-    const href = `${ruta(a.law.code, a.number)}?${new URLSearchParams({ q: s.q })}`
-    return html`<li class="hit">
-      <span class="hit-rank" aria-hidden="true">${i + 1}</span>
-      <div class="hit-body">
-        <p class="hit-meta">${badge(a.law.code)}<span class="hit-law">${a.law.name}</span></p>
-        <h3 class="hit-title"><a href="${href}" data-pasaje="${h.passage}">${titulo(a.law.code, a.number)}</a>${a.repealed ? html` <span class="tag">Derogado</span>` : ''}</h3>
-        ${a.title ? html`<p class="hit-rule">${a.title}</p>` : ''}
-        ${ns.length ? html`<p class="hit-loc">${ns.filter(n => n.label).map(n => n.label).join(' › ')}${ultimo?.name ? html`<span class="hit-loc-name"> · ${ultimo.name}</span>` : ''}</p>` : ''}
-        <p class="hit-passage">${extracto(h.passage, stems)}</p>
-      </div>
-    </li>`
-  })}</ol>`
+  const filtro = [degradada ? 'por palabras' : s.modo.frase, s.ley ? `solo ${corto(s.ley)}` : ''].filter(Boolean).join(', ')
+  const salto = reglas ? html`<a class="jump" href="#reglas">${nfCorto(reglas)} de reglamentos y Miscelánea</a>` : ''
+  const head = html`${degradada ? html`<p class="degraded" role="status">Búsqueda por palabras: el modelo semántico no está disponible en este momento.</p>` : ''}<div class="results-head"><h2 id="results-h" class="label">${encabezado}</h2><p class="results-count">${cuenta(hits.length, s.ley ? 'resultado' : 'artículo')} <span class="muted">· búsqueda ${filtro}</span></p></div>${salto}`
+  if (!hits.length)
+    return reglas
+      ? html`${head}<p class="empty empty--small">Ningún artículo de ley coincide con esta búsqueda.</p>`
+      : html`${head}<div class="empty"><p>No encontramos artículos para esa búsqueda.</p><p class="muted">Prueba con otras palabras o con una pregunta más corta.</p></div>`
+  return html`${head}<ol class="hits">${hits.map((h, i) => hitHtml(h, i, s, stems, false))}</ol>`
+}
+
+function reglasHtml(hits, s, leyes) {
+  if (!hits.length) return leyes ? html`${reglasHead()}<p class="empty empty--small">Ningún reglamento ni regla de la Miscelánea coincide.</p>` : ''
+  const stems = terminos(s.q)
+  return html`${reglasHead()}<ol class="hits">${hits.map((h, i) => hitHtml(h, i, s, stems, true))}</ol>`
 }
 
 function citasHtml(text, criterios) {

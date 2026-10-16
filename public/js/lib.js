@@ -1,4 +1,4 @@
-export const EN_USO = 'vector gemma'
+export const EN_USO = 'vector gemma · leyes'
 
 export const TIPO_CRITERIO = { NORMATIVE: 'Criterio normativo', IMPROPER_PRACTICE: 'Práctica indebida' }
 
