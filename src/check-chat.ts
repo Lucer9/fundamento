@@ -55,17 +55,22 @@ assert.deepEqual(piezas, ['Todo junto.'])
 const L = Object.keys(LEYES)[0]
 const permitidas = new Set([`${L} 27`, `${L} 28`, 'SAT 12'])
 const crudo = `  **Sí**, se puede [${L} 27] y [${L} 99; ${L} 28] , salvo [XYZ 1] . Ver【${L} 27】—fin [SAT 12].  `
-const esperado = `Sí, se puede [${L} 27] y [${L} 28], salvo. Ver [${L} 27]-fin [SAT 12].`
+const esperado = `**Sí**, se puede [${L} 27] y [${L} 28], salvo. Ver [${L} 27]-fin [SAT 12].`
+const secciones = `**Qué hacer:**\n- Pide la boleta [${L} 27] [XYZ 3].\n- Paga en línea.\n\n**Lo que no debe pasar:** que te pidan dinero.`
+const seccionesLimpias = `**Qué hacer:**\n- Pide la boleta [${L} 27].\n- Paga en línea.\n\n**Lo que no debe pasar:** que te pidan dinero.`
 const abierto = `Dice [${L} 27 y luego ${'x'.repeat(250)} sin cerrar`
 for (const [entrada, salida] of [
   [crudo, esperado],
   [abierto, abierto],
   [`Nada citable [XYZ 9]`, 'Nada citable'],
+  [secciones, seccionesLimpias],
 ]) {
   for (const piezas of cortes(entrada)) {
     const l = limpiador(permitidas)
     const salidas = [...piezas.map(p => l.empujar(p)), l.cerrar()]
     assert.equal(salidas.join(''), salida, JSON.stringify(piezas))
+    const llenas = salidas.filter(Boolean)
+    for (let i = 1; i < llenas.length; i++) assert.ok(!(llenas[i - 1].endsWith('*') && llenas[i].startsWith('*')), `'**' llegó partido: ${JSON.stringify(piezas)}`)
     assert.equal(l.texto, salida)
     if (entrada === crudo) assert.deepEqual(l.usadas, [`${L} 27`, `${L} 28`, 'SAT 12'])
   }

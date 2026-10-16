@@ -130,9 +130,9 @@ export async function fuentes(ctx: Ctx, consulta: string) {
 
 /**
  * Cleans model text into an answer as it streams: each bracketed citation keeps only references in `permitidas` and
- * disappears when none remain, so the API never returns a citation it can't back; dashes, odd spaces and markdown
- * bold are normalized. Text a later piece could still change (an open bracket, trailing spaces, trailing '*') waits
- * for it. `usadas` lists the references kept, in order of first use.
+ * disappears when none remain, so the API never returns a citation it can't back; dashes and odd spaces are
+ * normalized, while **bold** and line breaks (the front end's sections and bullets) pass through. Text a later piece
+ * could still change (an open bracket, trailing spaces, a trailing '*' that may be half of '**') waits for it. `usadas` lists the references kept, in order of first use.
  */
 export function limpiador(permitidas: Set<string>) {
   const usadas: string[] = []
@@ -152,8 +152,7 @@ export function limpiador(permitidas: Set<string>) {
         for (const r of refs) if (!usadas.includes(r)) usadas.push(r)
         return refs.length ? `[${refs.join(', ')}]` : ''
       })
-      .replace(/\s+([.,;])/g, '$1')
-      .replace(/\*\*/g, '')
+      .replace(/[ \t]+([.,;])/g, '$1')
   const soltar = (final: boolean) => {
     let corte = pendiente.length
     if (!final) {
