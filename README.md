@@ -160,13 +160,16 @@ Answers, judged by Claude Opus against each reference answer:
 | t4  | t3 with Claude Sonnet instead of Haiku                                      | 89.3%   | 3.6%  | 7.1%       |
 | t5  | t4, and paragraphs citing the two best articles always come                 | 92.9%   | 3.6%  | 3.6%       |
 | t6  | t5, and paragraphs covering a cited article whole ("todas las fracciones")  | 96.4%   | 0.0%  | 3.6%       |
+| t7  | t6 with Claude Haiku                                                        | 89.3%   | 0.0%  | 10.7%      |
 
 - t3 over t1: +14.3 to +50.0 points correct (paired). The first failures were mostly the right article with the
   fine in a chunk the answer never saw: a fracción's sanction comes paragraphs after the rule.
 - The citation graph feeds answers here: article 67 lists every case that sends a car to the depósito by the
   fracción it cites, so an answer about a motorcycle without a helmet gets that paragraph next to article 37.
 - Remaining misses are mostly the depósito when the question shares no word with article 67's paragraph.
-- Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions. From t5 to t6 the one changed verdict was a
+- Sonnet over Haiku: 0 to +17.9 points, not separable at 28 questions either way (t4 vs t3, t6 vs t7); Haiku's
+  misses are omissions, never wrong facts. semáforo answers live with Sonnet ($0.006 an answer on average, $0.009
+  at most, against Haiku's $0.003), since its answers are about fines and the corralón; fundamento with Haiku. From t5 to t6 the one changed verdict was a
   question the new rule doesn't touch, so it is run-to-run variation; t6's rule exists for questions like "¿qué pasa
   si traigo un porta placas que tapa la placa?", where article 67 sends the car to the depósito for any fracción of
   article 45 but shares no word with the question.
@@ -210,8 +213,8 @@ Answers, judged by Claude Opus against each reference answer:
   anything else is removed. Answers read 6 law chunks, 4 from the reglamentos and the Miscelánea, and the closest
   SAT criterios; they are cached per question, rate limited per IP (5 a minute) and capped per day
   (`DAILY_ANSWERS`, 30 per site). With an `ANTHROPIC_API_KEY` secret the Worker answers with Claude
-  (`CLAUDE_MODEL`, Haiku: about $0.002 an answer, at most $0.004 in the eval runs); without one, with gpt-oss-120b
-  on Workers AI. In dev, `.dev.vars` points both at the local Claude bridge.
+  (`CLAUDE_MODEL`: Haiku on fundamento, about $0.002 an answer; Sonnet on semáforo, about $0.006); without one, with
+  gpt-oss-120b on Workers AI. In dev, `.dev.vars` points both at the local Claude bridge.
 - **Degradation:** if Workers AI is unavailable, search falls back to keyword results and says so in
   `extensions.degraded`.
 - **Abuse limits:** graphql-armor caps depth, aliases, tokens and cost.
