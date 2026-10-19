@@ -212,8 +212,12 @@ export async function sitemap(env: Env, origen: string) {
   return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, max-age=86400' } })
 }
 
-/** Crawl everything but the API, and say where the sitemap is. */
+/**
+ * Crawl everything but the chat and the dev routes, and say where the sitemap is. Pages render from /graphql, so it
+ * stays open: Google's renderer obeys robots.txt for the page's own fetches, and with /graphql blocked every page
+ * showed the "No se pudo conectar" banner, which Google read as a soft 404. /chat stays closed because answers cost money.
+ */
 export const robots = (origen: string) =>
-  new Response(`User-agent: *\nAllow: /\nDisallow: /graphql\nDisallow: /dev/\n\nSitemap: ${origen}/sitemap.xml\n`, {
+  new Response(`User-agent: *\nAllow: /\nDisallow: /chat\nDisallow: /dev/\n\nSitemap: ${origen}/sitemap.xml\n`, {
     headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=86400' },
   })
