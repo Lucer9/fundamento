@@ -254,6 +254,9 @@ const yoga = createYoga<{ env: Env }>({
   },
 })
 
+/** Search Console's verification file. Google gives one token per account, so it verifies both sites; it is served exactly, never through the page template. */
+const VERIFICACION_GOOGLE = 'google0b2e92a84e7b3f0c.html'
+
 export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url)
@@ -272,6 +275,7 @@ export default {
     }
     if (url.pathname === '/robots.txt') return robots(url.origin)
     if (url.pathname === '/sitemap.xml') return sitemap(env, url.origin)
+    if (url.pathname === `/${VERIFICACION_GOOGLE}`) return new Response(`google-site-verification: ${VERIFICACION_GOOGLE}`, { headers: { 'content-type': 'text/html; charset=utf-8' } })
     const res = await env.ASSETS.fetch(request)
     return res.headers.get('content-type')?.includes('text/html') ? conSeguridad(await pagina(res, env, url)) : res
   },
